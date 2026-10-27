@@ -423,6 +423,24 @@
   /* Mein Aufenthalt: Anreise (Waesche) und Reinigungs-Checkliste */
   .willkommen { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-left: 6px solid var(--accent); border-radius: 10px; padding: 4px 14px; }
   .willkommen p { margin: 10px 0; }
+  /* Redner vor «Liebi Fraue und Mane»: Arme heben sich zusammen nach vorn, der Mund klappt auf und zu */
+  .rd-kopfzeile { display: flex; align-items: center; gap: 0; }
+  .rd { width: 76px; height: 76px; flex: none; }
+  .rd-arm { fill: none; stroke: #0E1012; stroke-width: 6; stroke-linecap: round; transform-box: view-box; }
+  .rd-un.rd-l { transform-origin: 32px 62px; animation: rd-ul 4s ease-in-out infinite; }
+  .rd-un.rd-r { transform-origin: 68px 62px; animation: rd-ur 4s ease-in-out infinite; }
+  .rd-hd { transform-box: fill-box; transform-origin: center; }
+  .rd-hd.rd-l { animation: rd-hl 4s ease-in-out infinite; }
+  .rd-hd.rd-r { animation: rd-hr 4s ease-in-out infinite; }
+  .rd-kopf { transform-box: view-box; transform-origin: 50px 38px; animation: rd-nick 4s ease-in-out infinite; }
+  .rd-mund { transform-box: fill-box; transform-origin: 50% 0%; animation: rd-sprech 0.9s linear infinite; }
+  @keyframes rd-ul { 0%, 12% { transform: rotate(0deg) scaleY(1); } 38%, 70% { transform: rotate(34deg) scaleY(-0.5); } 92%, 100% { transform: rotate(0deg) scaleY(1); } }
+  @keyframes rd-ur { 0%, 12% { transform: rotate(0deg) scaleY(1); } 38%, 70% { transform: rotate(-34deg) scaleY(-0.5); } 92%, 100% { transform: rotate(0deg) scaleY(1); } }
+  @keyframes rd-hl { 0%, 12% { transform: translate(0, 0) scale(1); } 38%, 70% { transform: translate(3.6px, -17px) scale(1.18); } 92%, 100% { transform: translate(0, 0) scale(1); } }
+  @keyframes rd-hr { 0%, 12% { transform: translate(0, 0) scale(1); } 38%, 70% { transform: translate(-3.6px, -17px) scale(1.18); } 92%, 100% { transform: translate(0, 0) scale(1); } }
+  @keyframes rd-nick { 0%, 12%, 92%, 100% { transform: rotate(0deg); } 38%, 70% { transform: rotate(3deg); } }
+  @keyframes rd-sprech { 0% { transform: scaleY(0.12); } 10% { transform: scaleY(1); } 20% { transform: scaleY(0.3); } 32% { transform: scaleY(0.85); } 44% { transform: scaleY(0.1); } 56% { transform: scaleY(1); } 68% { transform: scaleY(0.45); } 80% { transform: scaleY(0.9); } 90% { transform: scaleY(0.2); } 100% { transform: scaleY(0.12); } }
+  @media (prefers-reduced-motion: reduce) { .rd * { animation: none !important; } .rd-mund { transform: scaleY(0.45); } }
   details[id^="b-"] > summary { scroll-margin-top: 8px; }
   .verlink { font: inherit; font-size: .85rem; color: inherit; background: none; border: 0; text-decoration: underline; opacity: .85; padding: 8px 12px; min-height: 36px; cursor: pointer; }
   .vh { border: 1px solid var(--line, #8886); border-radius: 10px; padding: 10px 14px; background: var(--surface); }
@@ -553,7 +571,7 @@
     <details class="card" id="b-benutzung">
       <summary>📖 Benutzung</summary>
       <div class="rows">
-        <div class="willkommen"><p><b>Liebe Kinder</b></p><p>Mir ist bewusst, dass bei der ersten Benutzung alles etwas kompliziert scheint. Euch interessieren ja vor allem die Preise. Gebt euren Wunschtermin ein und wer alles dabei sein soll. Wenn alle Felder grün sind, seht ihr die Kosten und wer wie viel bezahlt. Lest trotzdem irgendwann noch die Anleitung durch. Und wer findet das Osterei zuerst? 😉</p><p>Gruess, Papi</p></div>
+        <div class="willkommen"><p class="rd-kopfzeile"><svg class="rd" viewBox="0 0 100 100" role="img" aria-label="Redner am Pult" focusable="false"><rect x="34" y="42" width="32" height="34" rx="6" fill="#0E1012"/><path d="M44 42 L50 54 L56 42 Z" fill="#F4F6F5"/><path d="M50 46 L48.3 56 L50 60 L51.7 56 Z" fill="#B3342B"/><path class="rd-arm" d="M35 50 L32 62"/><path class="rd-arm rd-un rd-l" d="M32 62 V74"/><circle class="rd-hd rd-l" cx="32" cy="74" r="4" fill="#E9B999"/><path class="rd-arm" d="M65 50 L68 62"/><path class="rd-arm rd-un rd-r" d="M68 62 V74"/><circle class="rd-hd rd-r" cx="68" cy="74" r="4" fill="#E9B999"/><g class="rd-kopf"><circle cx="50" cy="30" r="10" fill="#E9B999"/><path d="M40 28 C40 19 60 19 60 28 C57 24 43 24 40 28 Z" fill="#BFC4C8"/><circle cx="46" cy="31" r="3" fill="none" stroke="#26384A" stroke-width="1.2"/><circle cx="54" cy="31" r="3" fill="none" stroke="#26384A" stroke-width="1.2"/><path d="M49 31 H51" stroke="#26384A" stroke-width="1.2"/><ellipse class="rd-mund" cx="50" cy="36.2" rx="3.2" ry="2.4" fill="#5A1F1F"/></g><path d="M26 78 L74 78 L71 98 L29 98 Z" fill="#7A5230"/><rect x="20" y="72" width="60" height="6" rx="2" fill="#94673F"/><rect x="44" y="82" width="12" height="9" rx="1.5" fill="#D52B1E"/><path d="M50 84 V89 M47.5 86.5 H52.5" stroke="#fff" stroke-width="1.6"/><path d="M50 72 V67" stroke="#3A3F44" stroke-width="1.6"/><circle cx="50" cy="65.5" r="2.4" fill="#3A3F44"/></svg><b>Liebi Fraue und Mane</b></p><p>Mir ist bewusst, dass bei der ersten Benutzung alles etwas kompliziert scheint. Euch interessieren ja vor allem die Preise. Gebt euren Wunschtermin ein und wer alles dabei sein soll. Wenn alle Felder grün sind, seht ihr die Kosten und wer wie viel bezahlt. Lest trotzdem irgendwann noch die Anleitung durch. Und wer findet das Osterei zuerst? 😉</p><p>Gruess, Papi</p></div>
         <p><b>Nur für die Familie:</b> Der Link bleibt in der Familie und wird nicht weitergegeben oder geteilt. Zur Familie gehören meine Kinder, ihre Partner und die Enkelkinder.</p>
         <p><b>Nur über die App:</b> Buchungen nimmt Papi nur noch über den TSCHENT-O-MAT an, nicht mehr mündlich, per Kurier oder Rauchzeichen. Was nicht in der App steht, gilt nicht. Eine Anfrage ist verbindlich: Mit dem Senden bestätigst du, dass du den Aufenthalt zu diesen Bedingungen buchst.</p>
         <p><b>TSCHENT-O-MAT ist interaktiv.</b> Von oben nach unten ausfüllen. Die Felder hängen zusammen: Eure Wahl bestimmt, was bei den nächsten Feldern zur Auswahl steht.</p>
@@ -693,7 +711,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.13.2.1";
+let VERSION = "2.13.3.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
