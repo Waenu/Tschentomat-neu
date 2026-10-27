@@ -214,7 +214,7 @@
   .acc:has(.acc-t) { border: 2px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
   .acc-t { background: none; border: 0; font: inherit; font-size: var(--t-title); font-weight: 700; color: inherit; padding: 0; text-align: left; cursor: pointer; display: flex; flex: 1; align-items: center; min-height: 44px; }
   #trinkTgl { font-weight: 400; }
-  details[open] > summary .sym, .acc:has(.acc-t[aria-expanded="true"]) .sym { border-color: var(--accent-fg); }
+  details[open] > summary .sym, .acc:has(.acc-t[aria-expanded="true"]) .sym { --ac: var(--accent-fg); }
   .acc-t::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
   .acc-t[aria-expanded="true"]::after { content: "▴\00a0\00a0💡"; }
 
@@ -373,6 +373,44 @@
   #meldenKasten .st { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border: 2px solid currentColor; border-radius: 99px; padding: 1px 8px; white-space: nowrap; margin-top: 2px; }
   #meldenKasten .st.idee { color: var(--muted); } #meldenKasten .st.geplant { color: var(--marke); } #meldenKasten .st.arbeit { color: #C98A1B; } #meldenKasten .st.fertig { color: var(--accent); }
   #meldenKasten .idl b { display: block; }
+  .zk { position: relative; }
+  .zi { display: inline-block; transform-origin: 50% 50%; }
+  .zi-besen { transform-origin: 72% 12%; animation: ziKehr 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zi-eimer { transform-origin: 18% 88%; animation: ziKippt 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zi-tropf { position: absolute; left: 1px; top: 12px; width: 4px; height: 6px; border-radius: 50% 50% 60% 60%; background: #4DA3E8; opacity: 0; animation: ziTropf 6s ease-in infinite; animation-delay: var(--d, 0s); }
+  .zi-tropf.b { left: 6px; animation-name: ziTropf2; }
+  .zi-fam { animation: ziHupf 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zi-flug { animation: ziFlug 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zi-rolle { animation: ziRolle 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zi-stopp { animation: ziPuls 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .zuw .lk-dach { animation: ziKlick 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .offw .lk-dach { transform-box: view-box; transform-origin: 17px 14px; transform: rotate(24deg); animation: ziAuf 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  @keyframes ziKehr { 0%, 22%, 100% { transform: rotate(0); } 3% { transform: rotate(-26deg); } 7% { transform: rotate(24deg); } 11% { transform: rotate(-26deg); } 15% { transform: rotate(24deg); } 19% { transform: rotate(-8deg); } }
+  @keyframes ziKippt { 0%, 40%, 100% { transform: rotate(0); } 8% { transform: rotate(-78deg); } 24% { transform: rotate(-78deg); } 30% { transform: rotate(6deg); } 35% { transform: rotate(-3deg); } }
+  @keyframes ziTropf { 0%, 8% { opacity: 0; transform: translateY(0); } 10% { opacity: 1; } 22% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
+  @keyframes ziTropf2 { 0%, 12% { opacity: 0; transform: translateY(0); } 14% { opacity: 1; } 26% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
+  @keyframes ziHupf { 0%, 14%, 100% { transform: translateY(0); } 3% { transform: translateY(-3px); } 6% { transform: translateY(0); } 9% { transform: translateY(-3px); } 12% { transform: translateY(0); } }
+  @keyframes ziKlick { 0%, 12%, 100% { transform: translateY(0); } 3% { transform: translateY(-2.5px); } 6% { transform: translateY(1px); } 9% { transform: translateY(0); } }
+  @keyframes ziAuf { 0%, 4%, 24%, 100% { transform: rotate(24deg); } 12%, 16% { transform: rotate(46deg); } }
+  @keyframes ziFlug { 0%, 18%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 3% { transform: translate(-2px, 2px) rotate(-8deg); } 10% { transform: translate(10px, -9px) rotate(6deg); opacity: 0; } 10.1% { transform: translate(-10px, 9px); opacity: 0; } 17% { transform: translate(0, 0); opacity: 1; } }
+  @keyframes ziRolle { 0%, 16%, 100% { transform: scale(1, 1); } 4% { transform: scale(1, 0.55); } 9% { transform: scale(1, 1.25); } 13% { transform: scale(1, 0.92); } }
+  @keyframes ziPuls { 0%, 18%, 100% { transform: scale(1); } 4% { transform: scale(1.3); } 8% { transform: scale(0.9); } 12% { transform: scale(1.2); } 16% { transform: scale(1); } }
+  /* Staffel-Läufer: eigene Figur, läuft auf jedem Handy von links nach rechts */
+  .rn { width: 16px; height: 18px; display: block; flex: none; overflow: visible; }
+  .rn path { transform-box: view-box; }
+  .rn-a1, .rn-b2 { transform-origin: 10px 7.5px; animation: ziSchritt .34s ease-in-out infinite alternate; }
+  .rn-a2, .rn-b1 { transform-origin: 10px 7.5px; animation: ziSchritt .34s ease-in-out infinite alternate-reverse; }
+  .rn-b1, .rn-b2 { transform-origin: 8px 12.5px; }
+  @keyframes ziSchritt { from { transform: rotate(-32deg); } to { transform: rotate(32deg); } }
+  .laeufer { position: absolute; left: 0; top: 50%; margin-top: -9px; display: flex; gap: 3px; animation: ziLauf 3.6s linear infinite; }
+  @keyframes ziLauf { from { left: -40px; } to { left: 100%; } }
+  .exb .rn { width: 13px; height: 15px; margin-right: 2px; }
+  @media (prefers-reduced-motion: reduce) { .zi, .zi-tropf, .zuw .lk-dach, .offw .lk-dach, .rn path, .laeufer { animation: none !important; } .zi-tropf { display: none; } }
+  /* Ameisenpfad um verlinkende Symbole */
+  @property --ameise { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes ziAmeise { to { --ameise: 360deg; } }
+  .sym::after { content: ""; position: absolute; inset: -1.5px; border-radius: 8px; padding: 1.5px; background: repeating-conic-gradient(from var(--ameise), var(--ac, var(--accent)) 0 9deg, transparent 9deg 18deg); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask-composite: exclude; pointer-events: none; animation: ziAmeise 8s linear infinite; }
+  @media (prefers-reduced-motion: reduce) { .sym::after { animation: none; } }
   .bigbtn .bi { font-size: 1.7rem; line-height: 1; flex: 0 0 2.4rem; width: 2.4rem; text-align: center; }
   a.bigbtn { text-decoration: none; box-sizing: border-box; }
   #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
@@ -435,8 +473,8 @@
   details.sub .bc ul { padding-left: 20px; }
   .bar { display: none; }
   body.rechner-an .bar { display: block; }
-  .sym { margin-right: 4px; font: inherit; background: none; color: inherit; border: 1.5px dotted var(--accent); border-radius: 8px; padding: 0 5px; cursor: pointer; }
-  .pay button.sym { margin: 0 4px; min-height: 0; width: auto; padding: 0 5px; font: inherit; border: 1.5px dotted var(--accent); border-radius: 8px; display: inline; }
+  .sym { position: relative; margin-right: 4px; font: inherit; background: none; color: inherit; border: 1.5px solid transparent; border-radius: 8px; padding: 0 5px; cursor: pointer; }
+  .pay button.sym { margin: 0 4px; min-height: 0; width: auto; padding: 0 5px; font: inherit; border: 1.5px solid transparent; border-radius: 8px; display: inline; }
   /* Bedienzeichen im Text: wie im Original, aber in Textgrösse und ohne die Zeilen zu dehnen */
   .zei { display: inline-block; font: inherit; font-size: 0.88em; font-weight: 700; line-height: 1.1; padding: 0 0.45em; border-radius: 0.6em; vertical-align: baseline; white-space: nowrap; box-sizing: border-box; position: relative; }
   .zei.pfeil { border: 2px solid var(--accent); color: var(--accent); padding: 0 0.5em; }
@@ -560,9 +598,9 @@
   .bk .zk { margin-right: 0; flex: none; }
   .bkn { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .exb .zk { height: 18px; min-width: 20px; font-size: .75rem; }
-  .bk-leg .zk { height: 18px; min-width: 22px; font-size: .75rem; margin: 0; }
+  .bk-leg .zk { margin: 0; }
   .lk { width: 14px; height: 17px; display: block; }
-  .exb .lk, .bk-leg .lk { width: 11px; height: 14px; }
+  .exb .lk { width: 11px; height: 14px; }
   .lk-dach { fill: none; stroke: #B8C4C1; stroke-width: 3.4; stroke-linecap: round; }
   .lk-body { fill: #F0C84A; stroke: rgba(0,0,0,.35); stroke-width: 1; }
   .lk-loch { fill: rgba(0,0,0,.55); }
@@ -570,7 +608,7 @@
   .leg-det { margin: 10px 0 0; }
   .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .bk-leg span { display: inline-flex; align-items: center; gap: 6px; }
-  .bk-leg i { flex: none; width: 50px; height: 22px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
+  .bk-leg i { position: relative; overflow: hidden; flex: none; width: 64px; height: 28px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
   .bk-leg .k-gruen { background: var(--gruen); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
   .bk-leg .k-gelb { background: var(--gelb); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
   .bk-leg .k-konf { box-shadow: 0 0 0 2.5px #C0392B; }
@@ -591,7 +629,6 @@
 
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="lkZu" viewBox="0 0 24 30"><path class="lk-dach" d="M7 14 V9 a5 5 0 0 1 10 0 V14"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></symbol><symbol id="lkOffen" viewBox="0 0 24 30"><path class="lk-dach" d="M17 14 V9 a5 5 0 0 0 -10 0 V11" transform="rotate(24 17 14)"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></symbol></defs></svg>
 <div id="vorschau" style="background:#C98A00;color:#1a1200;text-align:center;font:700 14px system-ui,sans-serif;padding:6px 10px;padding-top:calc(6px + env(safe-area-inset-top,0px))">VORSCHAU 2.0.0.0 · nicht die gültige Version</div>
 <div class="wrap">
   <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
@@ -720,7 +757,7 @@
     <details class="leg-det" id="calLegDet"><summary>🎨 Legende</summary>
     <div class="cal-leg" id="calHoch"></div>
     <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
-    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk"><svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg></b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk"><svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg></b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk">👨‍👦</b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk">✈️</b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk">📜</b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk">🚫</b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk" data-z="🔒"></b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk" data-z="🔓"></b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk" data-z="👨‍👦"></b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk" data-z="✈️"></b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk" data-z="📜"></b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk" data-z="🚫"></b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw" data-run="1"></i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk" data-z="🧹"></b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk" data-z="🪣"></b></i>die Eltern reinigen</span></div>
     </details>
     <p class="cal-sel" id="calSel" role="status"></p>
     <p class="note h" id="calSpitz" hidden></p>
@@ -756,8 +793,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.18.0.1";
-const LK_ZU = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg>', LK_OFFEN = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg>';
+let VERSION = "2.19.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1216,7 +1252,7 @@ function bildLuecke() {
   return h + '<p class="exbild-cap">Beispiel: Der erste Airbnb-Gast reist am ' + wd[(start + vor) % 7] + ' ' + an + '. ab, der nächste kommt am ' + wd[(start + vor + n) % 7] + ' ' + ab + '. Dazwischen liegen ' + n + ' freie Nächte, das ist die Lücke. Ihr bucht sie ganz: Anreise ' + wd[(start + vor) % 7] + ' ' + an + '., Abreise ' + wd[(start + vor + n) % 7] + ' ' + ab + '. (' + n + ' Nächte, ' + P.lueckeRabatt + ' Prozent günstiger).</p></div>';
 }
 function bildStaffel() {
-  const bar = (k, t, f) => '<div class="exb ' + k + '" style="flex:' + f + '">' + (k === "selbst" ? '<b class="zk">🧹</b>' : k === "eltern" ? '<b class="zk">🪣</b>' : "") + t + '</div>';
+  const bar = (k, t, f) => '<div class="exb ' + k + '" style="flex:' + f + '">' + (k === "selbst" ? zkB("🧹") : k === "eltern" ? zkB("🪣") : "") + t + '</div>';
   let h = '<div class="exbild" role="img" aria-label="Beispiel einer Familienstaffel">';
   h += '<p class="extl">So läuft die Staffel</p><div class="exrow">' + bar("selbst", "Jerome", 3) + bar("selbst", "Deborah", 3) + bar("selbst", "Manuel", 3) + bar("occ", "Airbnb", 3) + '</div>';
   h += '<p class="exbild-cap">Alle reinigen selbst. Erst wenn der Airbnb-Gast kommt, fällt die Endreinigung an. Manuel bezahlt die Rechnung und holt die Anteile von Jerome und Deborah zurück.</p>';
@@ -1237,19 +1273,19 @@ function bildVorbehalt() {
   let h = '<div class="exbild" role="img" aria-label="Beispiel eines Termins mit Vorbehalt"><div class="exgrid" style="grid-template-columns:repeat(' + tot + ',minmax(0,1fr))">';
   h += '<div class="extl exmark" style="grid-column:1;grid-row:1">heute</div>';
   h += '<div class="extl exmark" style="grid-column:' + (v + 1) + ';grid-row:1;grid-column-end:span 4;white-space:nowrap">heute +' + v + ' Tage</div>';
-  h += '<div class="exb gruen mit" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;padding:0 4px"><b class="zk">' + LK_ZU + '</b></div>';
-  h += '<div class="exb gelb ein" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">' + LK_OFFEN + '</b>Termin mit Vorbehalt</div>';
+  h += '<div class="exb gruen mit" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;padding:0 4px">' + zkB("🔒") + '</div>';
+  h += '<div class="exb gelb ein" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2">' + zkB("🔓") + 'Termin mit Vorbehalt</div>';
   h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">grün</div>';
   h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gelb</div></div>';
   return h + '<p class="exbild-cap">Der grüne Teil ist gesichert 🔒: Dort kann kein neuer Airbnb-Gast mehr einchecken. Der gelbe Teil ist noch nicht gesichert 🔓. Jeden Tag wächst der grüne Teil ein Stück weiter, bis der ganze Balken grün ist.</p>' +
-    '<p class="extl" style="margin-top:12px">Bei einem Konflikt</p><div class="exrow"><div class="exb gelb konf" style="flex:1"><b class="zk">' + LK_OFFEN + '</b>Termin mit Vorbehalt</div></div><p class="exbild-cap">Ein roter Rand zeigt: Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen.</p></div>';
+    '<p class="extl" style="margin-top:12px">Bei einem Konflikt</p><div class="exrow"><div class="exb gelb konf" style="flex:1">' + zkB("🔓") + 'Termin mit Vorbehalt</div></div><p class="exbild-cap">Ein roter Rand zeigt: Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen.</p></div>';
 }
 function bildKalender() {
   const wd = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
   let h = '<div class="exbild" role="img" aria-label="Beispiel der Balken im Kalender"><div class="exgrid" style="grid-template-columns:repeat(7,minmax(0,1fr))">';
   wd.forEach((w) => { h += '<div class="cal-wd">' + w + '</div>'; });
   for (let i = 1; i <= 7; i++) h += '<div class="cal-d ' + (i >= 6 ? "occ" : "") + '" style="cursor:default;display:flex;align-items:center;justify-content:center">' + i + '</div>';
-  h += '<div class="exb selbst" style="grid-column:1/span 2"><b class="zk">🧹</b>Jerome</div><div class="exb stf" style="grid-column:3/span 2">🏃🏃 offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
+  h += '<div class="exb selbst" style="grid-column:1/span 2">' + zkB("🧹") + 'Jerome</div><div class="exb stf" style="grid-column:3/span 2">' + RUN + RUN + ' offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
   h += '</div><p class="exbild-cap">Grün: gesichert (🧹 ihr reinigt selbst, 🪣 die Eltern reinigen). Gelb: noch nicht gesichert, Termin mit Vorbehalt. Gestrichelt 🏃🏃: Die Familienstaffel ist noch offen. Gestreift: Airbnb-Gast. Die Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben.</p></div>';
   return h;
 }
@@ -1477,6 +1513,26 @@ function staffelWarnung(d) {
 // ===== Namen der Airbnb-Gäste (Vorname und Initiale), öffentlich in gaeste.json =====
 function belegtEnde(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(n)) n = addDays(n, 1); return n; }   // erster freier Tag = Abreisetag
 const FAM_SYM = "👨‍👦", TYP_SYM = { airbnb: "✈️", extern: "📜", fam: FAM_SYM, block: "🚫" }, TYP_TXT = { airbnb: "Airbnb-Gast", extern: "Gast mit Vertrag", fam: "Familie (von Hand)", block: "Blockiert" };
+// Symbole in Balken, Legende und Beispielen: jedes bewegt sich kurz, dann ist Ruhe (Beginn je Symbol versetzt)
+const RUN = '<svg class="rn" viewBox="0 0 18 20" aria-hidden="true" focusable="false"><circle cx="11.5" cy="3" r="2.4" fill="#E9B999"></circle><path d="M10 6.5 L8 12.5" stroke="#F28C28" stroke-width="3" stroke-linecap="round" fill="none"></path><path class="rn-a1" d="M10 7.5 L13.5 10 L15.5 8.5" stroke="#F28C28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path class="rn-a2" d="M10 7.5 L6.5 9.5 L4.5 8" stroke="#F28C28" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path class="rn-b1" d="M8 12.5 L11.5 15 L10.5 19" stroke="#4C7FD6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path class="rn-b2" d="M8 12.5 L5 15.5 L2 15" stroke="#4C7FD6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>';
+let ZK_N = 0;
+function zkI(z) {
+  const d = ' style="--d:' + ((ZK_N++ * 0.9) % 6).toFixed(1) + 's"';
+  const lock = (offen) => '<svg class="lk ' + (offen ? "offw" : "zuw") + '"' + d + ' viewBox="0 0 24 30" aria-hidden="true" focusable="false"><path class="lk-dach" d="' + (offen ? "M17 14 V9 a5 5 0 0 0 -10 0 V11" : "M7 14 V9 a5 5 0 0 1 10 0 V14") + '"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></svg>';
+  if (z === "🔒") return lock(false);
+  if (z === "🔓") return lock(true);
+  if (z === "🧹") return '<span class="zi zi-besen"' + d + ">🧹</span>";
+  if (z === "🪣") return '<span class="zi zi-eimer"' + d + '>🪣</span><i class="zi-tropf"' + d + '></i><i class="zi-tropf b"' + d + "></i>";
+  if (z === FAM_SYM) return '<span class="zi zi-fam"' + d + ">" + z + "</span>";
+  if (z === "✈️") return '<span class="zi zi-flug"' + d + ">" + z + "</span>";
+  if (z === "📜") return '<span class="zi zi-rolle"' + d + ">" + z + "</span>";
+  if (z === "🚫") return '<span class="zi zi-stopp"' + d + ">" + z + "</span>";
+  return z;
+}
+const zkB = (z) => '<b class="zk">' + zkI(z) + "</b>";
+const LAEUFER = '<span class="laeufer">' + RUN + RUN + "</span>";
+document.querySelectorAll("[data-z]").forEach((e) => { e.innerHTML = zkI(e.dataset.z); });
+document.querySelectorAll("[data-run]").forEach((e) => { e.innerHTML = LAEUFER; });
 const typNorm = (t) => (t === "extern" || t === "block" || t === "fam" ? t : "airbnb");
 const typKnoepfe = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Buchung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + TYP_SYM[k] + " " + { airbnb: "Airbnb", extern: "Vertrag", fam: "Familie", block: "Blockiert" }[k] + "</button>").join("") + "</div>";
 const typWahl = (id) => { const b = document.querySelector("#" + id + " .typ.on"); return typNorm(b && b.getAttribute("data-typ")); };
@@ -1583,7 +1639,7 @@ function zeichneBalken() {
   g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
   const ks = Array.from(zell.keys()).sort();
   if (!ks.length) return;
-  const zk = (z) => '<b class="zk">' + (z === "🔒" ? LK_ZU : z === "🔓" ? LK_OFFEN : z) + "</b>";
+  const zk = zkB;
   // klasse: "gruen" (gesichert), "gelb" (mit Vorbehalt, noch nicht gesichert) oder "sw" (Staffel offen), dazu "konf"
   // sf: bei Terminen mit Vorbehalt der erste noch nicht gesicherte Tag; rz: Zeichen fuer die Reinigung
   const zeichne = (von, bis, vonMitte, bisMitte, klasse, text, sf, rz) => {
@@ -1609,7 +1665,7 @@ function zeichneBalken() {
         return (f ? zk(FAM_SYM) : "") + zk(schloss) + (r ? zk(rz) : "") + (n ? '<span class="bkn">' + esc(text) + "</span>" : "");
       };
       if (klasse === "air") { mk("air", links, breite, breite >= 26 ? zk(rz) + (breite >= 60 ? esc(text) : "") : ""); return; }
-      if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? "🏃🏃" : ""); return; }
+      if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? LAEUFER : ""); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
       if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
       let sfPx = 0;
