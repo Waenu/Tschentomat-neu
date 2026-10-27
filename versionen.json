@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.7.1.0", "datum": "2026-10-27", "titel": "Gästenamen: so, wie du sie eingibst", "punkte": ["Der Name wird nicht mehr gekürzt, er steht so im Kalender, wie Papi ihn eingibt", "Gästenamen werden nie automatisch gelöscht, nur von Hand mit Nachfrage", "Fehlermeldungen erscheinen direkt unter dem Formular"] },
     { "v": "2.7.0.0", "datum": "2026-10-27", "titel": "Namen der Airbnb-Gäste im Kalender", "punkte": ["Papi trägt unter «Ansichten» den Namen eines Airbnb-Gastes ein; die App kürzt den Nachnamen auf die Initiale (z. B. Maria K.)", "Der Name erscheint für alle als Balken im Kalender und in der Legende", "Die Namen liegen in gaeste.json; Gäste nach der Abreise werden beim nächsten Speichern entfernt"] },
     { "v": "2.6.4.0", "datum": "2026-10-27", "titel": "Staffel im Kalender: Ameisenpfad", "punkte": ["Die gestrichelte Linie bei der Staffel läuft jetzt als Ameisenpfad um den Balken", "Bei eingestellter «Bewegung reduzieren» steht sie still"] },
     { "v": "2.6.3.0", "datum": "2026-10-27", "titel": "Animierte Menü-Symbole", "punkte": ["Kalender: das oberste Blatt fällt ab", "Auge zwinkert, Glühbirne blendet ein und aus, Feuer lodert", "Bei eingestellter «Bewegung reduzieren» stehen die Symbole still"] },

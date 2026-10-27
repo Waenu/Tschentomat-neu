@@ -669,7 +669,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.7.0.0";
+let VERSION = "2.7.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1374,13 +1374,7 @@ function gaesteBalken() {
   const l = GAESTE.filter((x) => BELEGT_AIR.has(x.arr)).slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
   return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name }; });
 }
-function gastKurz(n) {
-  const t = String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ");
-  if (!t) return "";
-  const a = t.split(" ");
-  const k = a.length >= 2 ? a.slice(0, -1).join(" ") + " " + a[a.length - 1][0].toUpperCase() + "." : a[0];
-  return k.slice(0, 24);
-}
+function gastKurz(n) { return String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ").slice(0, 30); }   // Name bleibt, wie er eingegeben wird
 function gaesteAn(j) {
   if (!j || !Array.isArray(j.gaeste)) return false;
   GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name) }));
@@ -2297,8 +2291,7 @@ async function ghGaeste(fn) {
     if (g.status === 404) { /* Datei gibt es noch nicht: wird neu angelegt */ }
     else if (g.ok) { const d = await g.json(); sha = d.sha; j = JSON.parse(unb64(d.content)); if (!Array.isArray(j.gaeste)) j.gaeste = []; }
     else throw new Error("GitHub antwortet mit Fehler " + g.status + ".");
-    const h = heuteKey();
-    j.gaeste = fn(j.gaeste).filter((x) => !(x.arr < h && belegtEnde(x.arr) < h)).sort((p, q) => (p.arr < q.arr ? -1 : 1));   // vergangene Gäste verschwinden
+    j.gaeste = fn(j.gaeste).sort((p, q) => (p.arr < q.arr ? -1 : 1));   // vergangene Gäste verschwinden
     const body = { message: "Gästenamen aktualisiert (App)", content: b64(JSON.stringify({ gaeste: j.gaeste }, null, 2) + "\n"), branch: "main" };
     if (sha) body.sha = sha;
     const r = await fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, kopf), body: JSON.stringify(body) });
@@ -2371,10 +2364,11 @@ function gaesteFormular() {
   if (BELEGT_AIR) Array.from(BELEGT_AIR).sort().forEach((k) => { if (!BELEGT_AIR.has(addDays(k, -1)) && belegtEnde(k) >= h) starts.push(k); });
   const opt = starts.slice(0, 40).map((k) => { const g = GAESTE.find((x) => x.arr === k); return '<option value="' + k + '">' + esc(fmtTag(k)) + " bis " + esc(fmtTag(belegtEnde(k))) + (g ? " · " + esc(g.name) : "") + "</option>"; }).join("");
   let t = vkSek("👤 Airbnb-Gäste", GAESTE.length);
-  t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Die App kürzt den Nachnamen auf die Initiale («Maria Keller» wird «Maria K.»). Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum unten bei «Anderes Datum».</p>';
-  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select><input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria Keller" autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
+  t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Gib den Namen so ein, wie er im Kalender stehen soll, z. B. «Maria K.». Die App ändert ihn nicht und löscht nichts von selbst. Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum unten bei «Anderes Datum».</p>';
+  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select><input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
   const gl = GAESTE.slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
   t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
+  if (bestFehler) t += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   return t;
 }
 function bestZeigen() {
@@ -2418,7 +2412,7 @@ function bestZeigen() {
     if (zeigG) s += gaesteFormular();
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, "", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
-    if (bestFehler) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
+    if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   }
   k.innerHTML = s;
 }
