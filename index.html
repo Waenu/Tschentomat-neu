@@ -620,7 +620,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.1.0.1";
+let VERSION = "2.1.0.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1131,7 +1131,7 @@ function begriffeFuellen() {
     "<li>Nutzt die Familienstaffel, um die Reinigungskosten möglichst zu drücken: Je mehr Reisegruppen nacheinander kommen, desto weniger zahlt jede Reisegruppe.</li>" +
     "<li>Sind Geschwister gleichzeitig dort, regeln sie die Kosten untereinander.</li></ul>");
   set("bc-rechnen", "<p>Die Eltern legen die Preise fest. Eine Tabelle für alles gibt es nicht, darum hier die Grundidee:</p><ul>" +
-    "<li><b>Übernachtungen:</b> Die Familie zahlt pauschal " + chf(P.famPausch) + " pro Nacht, jeder Gast " + chf(P.gast) + " (" + chf(P.gastZimmer) + " im Zimmer eines Familienmitglieds). Mit Gästen wird die Familie entlastet.</li>" +
+    "<li><b>Übernachtungen:</b> Die Familie zahlt pauschal " + chf(P.famPausch) + " pro Nacht, jeder Gast " + chf(P.gast) + " (" + chf(P.gastZimmer) + " im Zimmer eines Familienmitglieds, das Familienmitglied zahlt dann nur noch " + chf(P.famAnteil) + " pro Nacht). Mit Gästen wird die Familie entlastet.</li>" +
     "<li><b>Endreinigung:</b> dazu kommen " + chf(P.reinigung) + ", aufgeteilt nach eurer Auswahl. " + symBtn("b-endrein", "🪣") + "</li>" +
     (P.mindestpreisWoche > 0 ? "<li><b>Mindestpreis:</b> Mit Gästen ab " + P.mindestpreisAbNaechte + " Nächten entfällt der Anteil der Familie, soweit das Total nicht unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte sinkt (bei anderen Längen anteilig). Darunter zahlt die Familie nur den Rest. Mehr Gäste oder mehr Nächte werden nie günstiger." + (P.festBodenWoche > 0 && FEST_MONATE.length ? " Im " + esc(festTxt()) + " gilt der dortige Mindestpreis. " + symBtn("b-februar", "⛷️") : "") + "</li>" : "") +
     "<li><b>Rabatte:</b> Zimmer 1 unberührt und Lücken stehen unter «So sparst du Geld». " + symBtn("b-sparen", "💸") + "</li></ul>" +

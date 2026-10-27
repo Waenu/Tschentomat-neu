@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.1.0.2", "datum": "2026-10-27", "titel": "Text", "punkte": ["Wie wird gerechnet: Familienmitglied zahlt CHF 25, wenn ein Gast im selben Zimmer schläft"] },
     { "v": "2.1.0.1", "datum": "2026-10-27", "titel": "Hilfekapitel überarbeitet", "punkte": ["«So sparst du Geld» ist jetzt eine kurze Liste mit Sprung-Symbolen, ohne Doppelungen", "«Preisberechnung» heisst «Wie wird gerechnet» und erklärt nur die Grundidee"] },
     { "v": "2.1.0.0", "datum": "2026-10-27", "titel": "Texte, Testmodus-Knopf, Anleitung", "punkte": ["«Mit Vorbehalt» statt «unter Vorbehalt» überall", "Benutzung beginnt mit dem Kasten «Liebe Kinder»", "Neu in Benutzung: Buchungen nur über die App, Anfrage ist verbindlich", "«Reinigungskosten» statt «Reinigung» bei der Aufteilung", "Reisegruppe: Satz neu formuliert", "Aufgeklapptes Thema der Anleitung rutscht an den oberen Rand", "Testmodus-Knopf unter dem Tokenfeld", "Seite für Suchmaschinen gesperrt"] },
     { "v": "2.0.0.0", "datum": "2026-10-27", "titel": "Vorschau-Version gestartet", "punkte": ["Eigene Vorschau neben der gültigen Version, mit eigenem Speicher und eigenen Daten", "Versionshistorie eingebaut"] },
