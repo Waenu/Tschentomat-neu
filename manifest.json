@@ -1,6 +1,6 @@
 {
-  "name": "TSCHENT-O-MAT",
-  "short_name": "TSCHENT-O-MAT",
+  "name": "TSCHENT-O-MAT Vorschau",
+  "short_name": "TOM Vorschau",
   "description": "Preisrechner Chalet Tschenten, Adelboden",
   "start_url": "./",
   "scope": "./",

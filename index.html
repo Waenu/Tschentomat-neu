@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TSCHENT-O-MAT</title>
+<title>TSCHENT-O-MAT Vorschau 2.0.0.0</title>
 <meta name="theme-color" content="#1F5D4D">
-<meta name="apple-mobile-web-app-title" content="TSCHENT-O-MAT">
+<meta name="apple-mobile-web-app-title" content="TOM Vorschau">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
@@ -458,6 +458,7 @@
 
 </head>
 <body>
+<div id="vorschau" style="background:#C98A00;color:#1a1200;text-align:center;font:700 14px system-ui,sans-serif;padding:6px 10px;padding-top:calc(6px + env(safe-area-inset-top,0px))">VORSCHAU 2.0.0.0 · nicht die gültige Version</div>
 <div class="wrap">
   <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
   <header class="sign">
@@ -606,7 +607,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "1.10.5";
+let VERSION = "2.0.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -884,7 +885,7 @@ const diffDays = (a, b) => Math.round((dparse(b) - dparse(a)) / 86400000);
 let TESTHEUTE = null;
 try { const p = new URLSearchParams(location.search).get("heute"); if (/^\d{4}-\d{2}-\d{2}$/.test(p || "")) TESTHEUTE = p; } catch (e) {}
 let TESTMERKEN = false;   // Testmodus per Dreifach-Tipp im Kopf eingeschaltet: bleibt auf diesem Gerät, bis «Echt» getippt wird
-try { const m = localStorage.getItem("tm_testheute"); if (!TESTHEUTE && /^\d{4}-\d{2}-\d{2}$/.test(m || "")) { TESTHEUTE = m; TESTMERKEN = true; } } catch (e) {}
+try { const m = localStorage.getItem("tm2_testheute"); if (!TESTHEUTE && /^\d{4}-\d{2}-\d{2}$/.test(m || "")) { TESTHEUTE = m; TESTMERKEN = true; } } catch (e) {}
 const heuteDate = () => { if (TESTHEUTE) { const q = TESTHEUTE.split("-").map(Number); return new Date(q[0], q[1] - 1, q[2]); } return new Date(); };
 const heuteKey = () => { const n = heuteDate(); return dkey(n.getFullYear(), n.getMonth(), n.getDate()); };
 const WT_VOLL = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
@@ -1478,13 +1479,13 @@ async function ladeBelegt() {
   try {
     const ctl = new AbortController();
     const to = setTimeout(() => ctl.abort(), 4000);
-    const r = await fetch("belegt.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    const r = await fetch("/Tschentomat/belegt.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
     clearTimeout(to);
     if (!r.ok) throw new Error("http " + r.status);
     const j = await r.json();
-    if (nimm(j)) { try { localStorage.setItem("tm_belegt", JSON.stringify(j)); } catch (e) {} }
+    if (nimm(j)) { try { localStorage.setItem("tm2_belegt", JSON.stringify(j)); } catch (e) {} }
   } catch (e) {
-    try { const c = localStorage.getItem("tm_belegt"); if (c) nimm(JSON.parse(c)); } catch (e2) {}
+    try { const c = localStorage.getItem("tm2_belegt"); if (c) nimm(JSON.parse(c)); } catch (e2) {}
   }
 }
 
@@ -1497,7 +1498,7 @@ function putzText() {
 
 const ABS = ["Jerome", "Deborah", "Miriam", "Manuel"];
 let ABSENDER = "";
-try { const a = localStorage.getItem("tm_absender"); if (a && ABS.indexOf(a) >= 0) ABSENDER = a; } catch (e) {}
+try { const a = localStorage.getItem("tm2_absender"); if (a && ABS.indexOf(a) >= 0) ABSENDER = a; } catch (e) {}
 
 function anfrageText(r) {
   const x = r.d;
@@ -1831,7 +1832,7 @@ document.getElementById("result").addEventListener("change", (e) => {
   if (e.target && e.target.id === "risikoOk") { RISIKO_OK = e.target.checked ? risikoKey() : ""; render(); return; }
   if (e.target && e.target.id === "absender") {
     ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
-    try { localStorage.setItem("tm_absender", ABSENDER); } catch (e2) {}
+    try { localStorage.setItem("tm2_absender", ABSENDER); } catch (e2) {}
     aufentZeigen();
     render();
   }
@@ -1883,9 +1884,9 @@ async function ladeEinstellungen() {
     if (!r.ok) throw new Error("http " + r.status);
     const j = await r.json();
     wendeEinstellungenAn(j);
-    try { localStorage.setItem("tm_einstellungen", JSON.stringify(j)); } catch (e) {}
+    try { localStorage.setItem("tm2_einstellungen", JSON.stringify(j)); } catch (e) {}
   } catch (e) {
-    try { const c = localStorage.getItem("tm_einstellungen"); if (c) wendeEinstellungenAn(JSON.parse(c)); } catch (e2) {}
+    try { const c = localStorage.getItem("tm2_einstellungen"); if (c) wendeEinstellungenAn(JSON.parse(c)); } catch (e2) {}
   }
 }
 // ===== Mein Aufenthalt: Anreise (Wäsche) und Reinigungs-Checkliste =====
@@ -1903,15 +1904,15 @@ const BUCH_TAG = new Map();   // Nacht -> Name
 const DKEY = /^\d{4}-\d{2}-\d{2}$/;
 function aufentLaden() {
   try {
-    const j = JSON.parse(localStorage.getItem("tm_aufenthalt"));
+    const j = JSON.parse(localStorage.getItem("tm2_aufenthalt"));
     if (j && DKEY.test(j.arr) && DKEY.test(j.dep)) AUFENT = { arr: j.arr, dep: j.dep, sb: j.sb === true, lg: j.lg === true, pers: Math.max(1, Number(j.pers) || 1) };
   } catch (e) {}
-  try { const h = JSON.parse(localStorage.getItem("tm_haken")); if (h && typeof h === "object") HAKEN = h; } catch (e) {}
+  try { const h = JSON.parse(localStorage.getItem("tm2_haken")); if (h && typeof h === "object") HAKEN = h; } catch (e) {}
 }
 function aufentSichern() {
   try {
-    if (AUFENT) localStorage.setItem("tm_aufenthalt", JSON.stringify(AUFENT)); else localStorage.removeItem("tm_aufenthalt");
-    localStorage.setItem("tm_haken", JSON.stringify(HAKEN));
+    if (AUFENT) localStorage.setItem("tm2_aufenthalt", JSON.stringify(AUFENT)); else localStorage.removeItem("tm2_aufenthalt");
+    localStorage.setItem("tm2_haken", JSON.stringify(HAKEN));
   } catch (e) {}
 }
 function buchungenAn(j) {
@@ -1935,9 +1936,9 @@ async function ladeBuchungen() {
     clearTimeout(to);
     if (!r.ok) throw new Error("http " + r.status);
     const j = await r.json();
-    if (buchungenAn(j)) { try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e) {} }
+    if (buchungenAn(j)) { try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e) {} }
   } catch (e) {
-    try { const c = localStorage.getItem("tm_buchungen"); if (c) buchungenAn(JSON.parse(c)); } catch (e2) {}
+    try { const c = localStorage.getItem("tm2_buchungen"); if (c) buchungenAn(JSON.parse(c)); } catch (e2) {}
   }
 }
 // Der Aufenthalt, der gerade gilt: der nächste (nach Anreise) aus den bestätigten und der lokal gemerkten Anfrage
@@ -2055,9 +2056,9 @@ document.getElementById("aufStatus").addEventListener("click", aufentWeg);
   aufentWeg(e);
 }));
 // ===== Bestätigen durch die Eltern: Link aus der Anfrage, Eintrag in buchungen.json über die GitHub-Schnittstelle =====
-const GH_REPO = "Waenu/Tschentomat", GH_DATEI = "buchungen.json";
+const GH_REPO = "Waenu/Tschentomat-neu", GH_DATEI = "buchungen.json";
 let TOKEN = "";
-try { TOKEN = localStorage.getItem("tm_token") || ""; } catch (e) {}
+try { TOKEN = localStorage.getItem("tm2_token") || ""; } catch (e) {}
 function bestLink(name, arr, dep, selbst, pers, luecke) {
   return location.origin + location.pathname + "?b=" + [name, arr, dep, selbst ? 1 : 0, pers].concat(luecke ? ["L"] : []).join("_");
 }
@@ -2097,7 +2098,7 @@ async function ghAendern(fn) {
 function listeLaden(k) { try { const l = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(l) ? l.filter((x) => x && ABS.indexOf(x.name) >= 0 && DKEY.test(x.arr) && DKEY.test(x.dep)) : []; } catch (e) { return []; } }
 function listeSichern(k, l) { try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
 const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
-let OFFEN = listeLaden("tm_offen"), ABGEL = listeLaden("tm_abgelehnt");
+let OFFEN = listeLaden("tm2_offen"), ABGEL = listeLaden("tm2_abgelehnt");
 let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, bestBusy = false, zeigAns = false;
 function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", unter Vorbehalt" : ""); }
 function bestZeigen() {
@@ -2110,13 +2111,13 @@ function bestZeigen() {
     else {
       ABGEL = ABGEL.filter((x) => bKey(x) !== key);
       if (!OFFEN.some((x) => bKey(x) === key)) OFFEN.push(link);
-      listeSichern("tm_offen", OFFEN); listeSichern("tm_abgelehnt", ABGEL);
+      listeSichern("tm2_offen", OFFEN); listeSichern("tm2_abgelehnt", ABGEL);
       bestMsg = "📨 Neue Anfrage von " + esc(link.name) + " ist unten bei «Offene Anfragen».";
     }
     try { history.replaceState(null, "", location.pathname); } catch (e) {}
   }
   OFFEN = OFFEN.filter((x) => x.dep >= h && !BUCH.some((y) => bKey(y) === bKey(x)));
-  listeSichern("tm_offen", OFFEN);
+  listeSichern("tm2_offen", OFFEN);
   if (!TOKEN && !bestMsg) { k.hidden = true; k.innerHTML = ""; kn.hidden = true; return; }
   kn.hidden = false; kn.classList.toggle("on", zeigAns); kn.setAttribute("aria-expanded", zeigAns ? "true" : "false");
   k.hidden = !zeigAns;
@@ -2161,7 +2162,7 @@ async function bescheidVermerken(key) {
   const jetzt = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes());
   try {
     const j = await ghAendern((l) => l.map((y) => (bKey(y) === key ? Object.assign({}, y, { bescheid: jetzt }) : y)));
-    buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+    buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
     bestFehler = "";
   } catch (err) { bestFehler = "Der Vermerk «Bescheid gegeben» konnte nicht gespeichert werden: " + (err && err.message ? err.message : "Fehler"); }
   bestZeigen();
@@ -2170,7 +2171,7 @@ document.getElementById("btnAnsichten").addEventListener("click", () => { zeigAn
 document.getElementById("bestKasten").addEventListener("change", (e) => {
   if (e.target && e.target.id === "ansichtAls") {
     ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
-    try { localStorage.setItem("tm_absender", ABSENDER); } catch (e2) {}
+    try { localStorage.setItem("tm2_absender", ABSENDER); } catch (e2) {}
     aufentZeigen(); render(); bestZeigen();
   }
 });
@@ -2188,8 +2189,8 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
     bestBusy = true; bestFehler = "";
     try {
       const j = await ghAendern((l) => l.filter((y) => bKey(y) !== w));
-      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
-      ABGEL = ABGEL.filter((y) => y !== x); OFFEN.push(x); listeSichern("tm_abgelehnt", ABGEL); listeSichern("tm_offen", OFFEN);
+      buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
+      ABGEL = ABGEL.filter((y) => y !== x); OFFEN.push(x); listeSichern("tm2_abgelehnt", ABGEL); listeSichern("tm2_offen", OFFEN);
     } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
     bestBusy = false; bestZeigen(); return;
   }
@@ -2200,8 +2201,8 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
     const btn = e.target.closest("button"); btn.disabled = true; btn.textContent = "Speichere …";
     try {
       const j = await ghAendern((l) => l.filter((y) => bKey(y) !== nein).concat([{ name: x.name, arr: x.arr, dep: x.dep, status: "abgelehnt" }]));
-      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
-      OFFEN = OFFEN.filter((y) => y !== x); ABGEL.push(x); listeSichern("tm_offen", OFFEN); listeSichern("tm_abgelehnt", ABGEL);
+      buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
+      OFFEN = OFFEN.filter((y) => y !== x); ABGEL.push(x); listeSichern("tm2_offen", OFFEN); listeSichern("tm2_abgelehnt", ABGEL);
       const text = "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung.";
       bestMsg = "Abgelehnt und gespeichert: " + esc(x.name) + ", " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ". Im Handy des Kindes erscheint die Absage beim nächsten Öffnen." + bestWaLink(text, bKey(x), "Absage schicken");
       bestBusy = false; bestNeuZeichnen();
@@ -2213,7 +2214,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
     bestBusy = true; bestFehler = "";
     try {
       const j = await ghAendern((l) => l.map((y) => { if (bKey(y) !== fest) return y; const n = Object.assign({}, y); delete n.prov; return n; }));
-      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       bestMsg = "🔒 Jetzt fest. Sperre den Termin in Airbnb, falls noch nicht geschehen.";
     } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
     bestBusy = false; bestNeuZeichnen(); return;
@@ -2229,15 +2230,15 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       if (pv) eintrag.prov = true;
       if (x.luecke) eintrag.luecke = true;
       const j = await ghAendern((l) => l.filter((y) => bKey(y) !== ja).concat([eintrag]));
-      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
-      OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm_offen", OFFEN);
+      buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
+      OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm2_offen", OFFEN);
       const text = bestText({ name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, luecke: x.luecke, prov: pv });
       bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle." + (pv ? " <b>Unter Vorbehalt: nicht in Airbnb sperren.</b>" : "") + bestWaLink(text, bKey(x));
     } else {
       const [name, arr, dep] = del.split("|");
       if (!confirm("Aufenthalt von " + name + " (" + fmtTag(arr) + " bis " + fmtTag(dep) + ") wirklich entfernen?")) { bestBusy = false; bestZeigen(); return; }
       const j = await ghAendern((l) => l.filter((y) => bKey(y) !== del));
-      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       bestMsg = "Entfernt: " + esc(name) + ", " + esc(fmtTag(arr)) + " bis " + esc(fmtTag(dep)) + ".";
     }
     bestBusy = false; bestNeuZeichnen();
@@ -2257,10 +2258,10 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   if (e.target.closest("#tokSave")) {
     const v = document.getElementById("tokIn").value.trim();
     if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(v)) { m.textContent = "Das sieht nicht wie ein GitHub-Token aus. Es beginnt mit github_pat_."; return; }
-    TOKEN = v; try { localStorage.setItem("tm_token", TOKEN); } catch (e2) {}
+    TOKEN = v; try { localStorage.setItem("tm2_token", TOKEN); } catch (e2) {}
     tokZeigen(true); bestZeigen(); aufentZeigen();
   } else if (e.target.closest("#tokDel")) {
-    TOKEN = ""; try { localStorage.removeItem("tm_token"); } catch (e2) {}
+    TOKEN = ""; try { localStorage.removeItem("tm2_token"); } catch (e2) {}
     tokZeigen(true); bestZeigen(); aufentZeigen();
   }
 });
@@ -2326,8 +2327,8 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   const knopf = document.getElementById("hilfeKnopf"), blase = document.getElementById("calBlase"), grid = document.getElementById("calGrid"), cal = document.getElementById("cal");
   if (!knopf || !blase || !grid || !cal) return;
   let an = true, erst = false;
-  try { const v = localStorage.getItem("tm_hilfe"); if (v === "0") an = false; if (v === null) erst = true; } catch (e) {}
-  const speichern = () => { try { localStorage.setItem("tm_hilfe", an ? "1" : "0"); } catch (e) {} };
+  try { const v = localStorage.getItem("tm2_hilfe"); if (v === "0") an = false; if (v === null) erst = true; } catch (e) {}
+  const speichern = () => { try { localStorage.setItem("tm2_hilfe", an ? "1" : "0"); } catch (e) {} };
   const START = "<b>💡 Hilfe ist an.</b> Tippe einen Tag an, dann erklärt er sich. Mit gestrichelten Symbolen wie " + symBtn("b-luecke", "🧩") + " springst du zur ausführlichen Erklärung. Mehr dazu unter «Benutzung» " + symBtn("b-benutzung", "📖") + ". Mit dem «?»-Knopf unten rechts schaltest du die Hilfe aus.";
   const zeigen = (html, zelle) => {
     blase.innerHTML = '<div class="txt">' + html + '</div><button type="button" id="calBlaseZu" aria-label="Hilfe schliessen">✕</button>';
@@ -2413,7 +2414,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
     const STUFEN = [["klein", 0.92], ["mittel", 1], ["gross", 1.18]];
     const fb = document.getElementById("fsBtn");
     let stufe = 1;
-    try { const g = localStorage.getItem("tm_schrift"); const i = STUFEN.findIndex((x) => x[0] === g); if (i >= 0) stufe = i; } catch (e) {}
+    try { const g = localStorage.getItem("tm2_schrift"); const i = STUFEN.findIndex((x) => x[0] === g); if (i >= 0) stufe = i; } catch (e) {}
     const wende = () => {
       document.documentElement.style.setProperty("--fs", String(STUFEN[stufe][1]));
       document.documentElement.setAttribute("data-fs", STUFEN[stufe][0]);
@@ -2423,7 +2424,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
     wende();
     fb.addEventListener("click", () => {
       stufe = (stufe + 1) % STUFEN.length;
-      try { localStorage.setItem("tm_schrift", STUFEN[stufe][0]); } catch (e) {}
+      try { localStorage.setItem("tm2_schrift", STUFEN[stufe][0]); } catch (e) {}
       wende();
     });
   }
@@ -2431,12 +2432,12 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
     const btn = document.getElementById("themeBtn");
     const dunkel = () => (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
     const zeige = () => { btn.textContent = dunkel() ? "☀️" : "🌙"; btn.dataset.mode = dunkel() ? "dark" : "light"; btn.title = dunkel() ? "Hellmodus" : "Dunkelmodus"; };
-    try { const t = localStorage.getItem("tm_theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+    try { const t = localStorage.getItem("tm2_theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
     zeige();
     btn.addEventListener("click", () => {
       const neu = dunkel() ? "light" : "dark";
       document.documentElement.dataset.theme = neu;
-      try { localStorage.setItem("tm_theme", neu); } catch (e) {}
+      try { localStorage.setItem("tm2_theme", neu); } catch (e) {}
       zeige();
     });
   }
@@ -2447,13 +2448,13 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
       if (zeiten.length < 3) return;
       zeiten = [];
       try {
-        if (TESTMERKEN || localStorage.getItem("tm_testheute")) localStorage.removeItem("tm_testheute");
-        else { const n = new Date(); localStorage.setItem("tm_testheute", n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0")); }
+        if (TESTMERKEN || localStorage.getItem("tm2_testheute")) localStorage.removeItem("tm2_testheute");
+        else { const n = new Date(); localStorage.setItem("tm2_testheute", n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0")); }
       } catch (e) {}
       location.href = location.pathname;
     });
   })();
-  document.getElementById("ver").textContent = "Version " + VERSION + " · gültig ab " + GUELTIG_AB;
+  document.getElementById("ver").textContent = "Vorschau Version " + VERSION + " · gültig ab " + GUELTIG_AB;
   initKalenderMonat();
   berechneLuecken();
   build(); render(); renderKalender(); aufentZeigen(); bestZeigen();
@@ -2464,14 +2465,14 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
     const lab = document.createElement("span"); lab.textContent = "TEST";
     const inp = document.createElement("input"); inp.type = "date"; inp.setAttribute("aria-label", "Testdatum wählen");
     inp.style.cssText = "font:inherit;padding:3px 6px;border-radius:8px;border:0;color:#222;background:#fff;min-width:0";
-    const merke = () => { if (TESTMERKEN) { try { localStorage.setItem("tm_testheute", TESTHEUTE); } catch (e) {} } };
+    const merke = () => { if (TESTMERKEN) { try { localStorage.setItem("tm2_testheute", TESTHEUTE); } catch (e) {} } };
     const neu = (monatSpringen) => { inp.value = heuteKey(); if (monatSpringen) initKalenderMonat(); berechneLuecken(); render(); renderKalender(); aufentZeigen(); bestZeigen(); };   // Auswahl und Formular bleiben, wie sie sind
     inp.onchange = () => { if (/^\d{4}-\d{2}-\d{2}$/.test(inp.value)) { TESTHEUTE = inp.value; merke(); neu(true); } };
     const setze = mk("📍 Tag setzen", () => {
       if (!ARR) { lab.textContent = "Erst Tag antippen"; setTimeout(() => { lab.textContent = "TEST"; }, 2500); return; }
       TESTHEUTE = ARR; ARR = ""; DEP = ""; S.nights = null; merke(); neu(false);
     });
-    tb.append(lab, mk("◀", () => { TESTHEUTE = addDays(heuteKey(), -1); merke(); neu(false); }), inp, mk("▶", () => { TESTHEUTE = addDays(heuteKey(), 1); merke(); neu(false); }), setze, mk("Echt", () => { try { localStorage.removeItem("tm_testheute"); } catch (e) {} location.href = location.pathname; }));
+    tb.append(lab, mk("◀", () => { TESTHEUTE = addDays(heuteKey(), -1); merke(); neu(false); }), inp, mk("▶", () => { TESTHEUTE = addDays(heuteKey(), 1); merke(); neu(false); }), setze, mk("Echt", () => { try { localStorage.removeItem("tm2_testheute"); } catch (e) {} location.href = location.pathname; }));
     document.body.prepend(tb); document.body.style.paddingTop = (tb.offsetHeight + 4) + "px"; inp.value = heuteKey();
   }
 });
