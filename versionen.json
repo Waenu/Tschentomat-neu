@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.8.1.1", "datum": "2026-10-27", "titel": "Hilfe: Browser am Computer", "punkte": ["Unter «Benutzung» steht, dass am PC Chrome oder Edge empfohlen ist und Firefox abweichen kann"] },
     { "v": "2.8.1.0", "datum": "2026-10-27", "titel": "Symbole für Airbnb, extern und Familie", "punkte": ["Airbnb ✈️, extern 📜 (Vertrag), Familie 👨‍👦; die Familie bekommt ihr Symbol automatisch", "Papi wählt die Art beim Namen mit zwei Symbol-Knöpfen", "Alle drei stehen in der Legende"] },
     { "v": "2.8.0.0", "datum": "2026-10-27", "titel": "Airbnb, extern und Familie: Namen mit Symbol", "punkte": ["Beim Namen wählt Papi die Art: 🏠 Airbnb oder 🤝 extern (ausserhalb Airbnb)", "Der Balken im Kalender ist grün und zeigt Symbol und Name", "Wird eine Buchung storniert (Tage nicht mehr belegt), entfernt die App den Namen beim nächsten Öffnen durch Papi selbst", "Bei fehlerhaft geladener Belegung wird nie etwas entfernt"] },
     { "v": "2.7.3.0", "datum": "2026-10-27", "titel": "Legende unter dem Kalender einklappbar", "punkte": ["Die Legende hat die Überschrift «🎨 Legende» und ist zugeklappt, bis man sie antippt", "Gleiche Farbe wie «Benutzung»"] },
