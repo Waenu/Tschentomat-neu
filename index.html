@@ -469,6 +469,9 @@
   #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
   #calGrid.papi .cal-d.occ:disabled { pointer-events: none; }
   #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
+  #calGrid.gmode .cal-d:disabled { pointer-events: none; }
+  #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #calBlase .gd .btn { min-height: 44px; padding: 4px 12px; }
   .gtyp { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .gtyp .btn.typ { width: 100%; justify-content: center; min-height: 48px; }
   .gtyp .btn.typ.on { background: var(--accent); color: var(--accent-fg); }
@@ -681,7 +684,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.8.1.1";
+let VERSION = "2.9.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1095,6 +1098,7 @@ function lueckeVon(k) { for (const [st, en] of GAPSTART) if (k >= st && k < en) 
 function initKalenderMonat() { const n = heuteDate(); calY = n.getFullYear(); calM = n.getMonth(); }
 
 function kalenderKlick(k) {
+  if (GFORM && GFORM.mode) { gastTagWahl(k); return; }
   if (!ARR || (ARR && DEP)) { if (kannAnreise(k)) { ARR = k; DEP = ""; } }
   else if (k === ARR) { ARR = ""; }
   else if (kannAbreise(k)) { DEP = k; }
@@ -1385,36 +1389,67 @@ const FAM_SYM = "👨‍👦", TYP_SYM = { airbnb: "✈️", extern: "📜" }, T
 const typKnoepfe = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Buchung"><button type="button" class="btn typ' + (t !== "extern" ? " on" : "") + '" data-typ="airbnb">' + TYP_SYM.airbnb + ' Airbnb</button><button type="button" class="btn typ' + (t === "extern" ? " on" : "") + '" data-typ="extern">' + TYP_SYM.extern + ' Extern</button></div>';
 const typWahl = (id) => { const b = document.querySelector("#" + id + " .typ.on"); return b && b.getAttribute("data-typ") === "extern" ? "extern" : "airbnb"; };
 document.addEventListener("click", (ev) => { const b = ev.target.closest(".gtyp .typ"); if (!b) return; b.parentNode.querySelectorAll(".typ").forEach((x) => x.classList.toggle("on", x === b)); });
+const gastEnde = (x) => { const re = belegtEnde(x.arr); return x.dep && x.dep > x.arr && x.dep < re ? x.dep : re; };   // Abreisetag des Gastes: eigene Abreise oder Ende der Belegung
 function gaesteBalken() {
   if (!BELEGT_AIR) return [];
   const l = GAESTE.filter((x) => BELEGT_AIR.has(x.arr)).slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
-  return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name, typ: x.typ }; });
+  return l.map((x, i) => { let end = gastEnde(x); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name, typ: x.typ }; });
 }
 function gastKurz(n) { return String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ").slice(0, 30); }   // Name bleibt, wie er eingegeben wird
 function gastLaufStart(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(addDays(n, -1))) n = addDays(n, -1); return n; }
-function gastEintragFuer(k) { const rs = gastLaufStart(k); const l = GAESTE.filter((x) => x.arr >= rs && x.arr <= k).sort((p, q) => (p.arr < q.arr ? -1 : 1)); return l.length ? l[l.length - 1] : null; }
+function gastEintragFuer(k) { const l = GAESTE.filter((x) => BELEGT_AIR && BELEGT_AIR.has(x.arr) && x.arr <= k && k < gastEnde(x)).sort((p, q) => (p.arr < q.arr ? -1 : 1)); return l.length ? l[l.length - 1] : null; }
+let GFORM = null;   // Eingabe zu einem Namen im Kalender: {k, alt, arr, dep, name, typ, mode}
 function gastFormularFuer(k) {
   if (!TOKEN || !BELEGT_AIR || !BELEGT_AIR.has(k)) return "";
-  const e = gastEintragFuer(k), key = e ? e.arr : gastLaufStart(k);
-  return '<div class="gb"><b>👤 Name der Belegung</b>' + typKnoepfe("gbTyp", e && e.typ) + '<input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(e ? e.name : "") + '">' +
-    '<button type="button" class="btn main" data-gbs="' + key + '">💾 Speichern (Aufenthalt ab ' + esc(fmtTag(key)) + ')</button>' +
-    (k !== key ? '<button type="button" class="btn" data-gbs="' + k + '">➕ Neuer Gast ab ' + esc(fmtTag(k)) + '</button>' : "") +
-    (e ? '<button type="button" class="btn quiet" data-gbd="' + key + '">🗑️ Name entfernen</button>' : "") + '<span class="hint" id="gbMsg"></span></div>';
+  const e = gastEintragFuer(k);
+  if (!(GFORM && GFORM.keep && GFORM.k === k)) { GFORM = { k: k, alt: e ? e.arr : "", arr: e ? e.arr : k, dep: e ? gastEnde(e) : belegtEnde(k), name: e ? e.name : "", typ: e ? e.typ : "airbnb", mode: "" }; const g = document.getElementById("calGrid"); if (g) g.classList.remove("gmode"); }
+  GFORM.keep = false;
+  const f = GFORM, zeile = (was, tx, d) => '<div class="gd"><span>' + tx + ': <b>' + esc(fmtTag(d)) + '</b></span><button type="button" class="btn' + (f.mode === was ? " main" : "") + '" data-gm="' + was + '">✏️ ändern</button></div>';
+  return '<div class="gb"><b>👤 Name der Belegung</b>' + typKnoepfe("gbTyp", f.typ) + '<input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(f.name) + '">' +
+    zeile("arr", "Anreise", f.arr) + zeile("dep", "Abreise", f.dep) +
+    (f.mode ? '<span class="hint">👉 Tippe jetzt im Kalender den Tag der ' + (f.mode === "arr" ? "Anreise" : "Abreise") + ' an.</span>' : "") +
+    '<button type="button" class="btn main" data-gbs="1">💾 Speichern</button>' +
+    (e ? '<button type="button" class="btn quiet" data-gbd="' + e.arr + '">🗑️ Name entfernen</button>' : "") + '<span class="hint" id="gbMsg"></span></div>';
 }
+function gastFormMerken() { if (!GFORM) return; const n = document.getElementById("gbName"); if (n) GFORM.name = n.value; if (document.getElementById("gbTyp")) GFORM.typ = typWahl("gbTyp"); }
+function gastTagWahl(k) {
+  const f = GFORM; if (!f || !f.mode) return;
+  const say = (t) => { const m = document.getElementById("gbMsg"); if (m) m.textContent = t; };
+  gastFormMerken();
+  if (f.mode === "arr") {
+    if (!BELEGT_AIR || !BELEGT_AIR.has(k)) { say("Der " + fmtTag(k) + " ist nicht von Airbnb belegt. Tippe einen belegten Tag an."); return; }
+    if (k >= f.dep) f.dep = belegtEnde(k);
+    f.arr = k;
+  } else {
+    if (k <= f.arr) { say("Die Abreise muss nach der Anreise (" + fmtTag(f.arr) + ") liegen."); return; }
+    if (k > belegtEnde(f.arr)) { say("Nach dem " + fmtTag(belegtEnde(f.arr)) + " ist nichts mehr belegt. Tippe einen früheren Tag an."); return; }
+    f.dep = k;
+  }
+  f.mode = ""; f.justSet = true; setTimeout(() => { if (GFORM) GFORM.justSet = false; }, 0);
+  const g = document.getElementById("calGrid"); if (g) g.classList.remove("gmode");
+  f.keep = true; if (window._gastBlase) window._gastBlase(f.k);
+}
+document.addEventListener("click", (ev) => {
+  const b = ev.target.closest("[data-gm]"); if (!b || !GFORM) return;
+  gastFormMerken(); GFORM.mode = GFORM.mode === b.getAttribute("data-gm") ? "" : b.getAttribute("data-gm");
+  const g = document.getElementById("calGrid"); if (g) g.classList.toggle("gmode", !!GFORM.mode);
+  GFORM.keep = true; if (window._gastBlase) window._gastBlase(GFORM.k);
+});
 document.addEventListener("click", async (ev) => {
   const bs = ev.target.closest("[data-gbs]"), bd = ev.target.closest("[data-gbd]");
   if (!bs && !bd) return;
   const msg = document.getElementById("gbMsg"), say = (t) => { if (msg) msg.textContent = t; };
   if (bestBusy) return;
-  const arr = (bs || bd).getAttribute(bs ? "data-gbs" : "data-gbd");
-  if (bd) { const x = GAESTE.find((y) => y.arr === arr); if (!x || !confirm("Name «" + x.name + "» ab " + fmtTag(arr) + " wirklich entfernen?")) return; }
-  const name = bs ? gastKurz((document.getElementById("gbName") || {}).value) : "", typ = typWahl("gbTyp");
+  if (bd) { const arr0 = bd.getAttribute("data-gbd"), x = GAESTE.find((y) => y.arr === arr0); if (!x || !confirm("Name «" + x.name + "» ab " + fmtTag(arr0) + " wirklich entfernen?")) return; }
+  gastFormMerken();
+  const f = GFORM || {}, arr = bs ? f.arr : bd.getAttribute("data-gbd"), alt = f.alt || "", name = bs ? gastKurz(f.name) : "", typ = f.typ === "extern" ? "extern" : "airbnb";
   if (bs && !name) { say("Bitte einen Namen eingeben."); return; }
+  if (bs && (!BELEGT_AIR || !BELEGT_AIR.has(arr) || !(f.dep > arr))) { say("Anreise und Abreise stimmen nicht. Tippe «ändern» und wähle die Tage im Kalender."); return; }
   bestBusy = true; say("Speichere …");
   try {
-    const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat(bs ? [{ arr: arr, name: name, typ: typ }] : []));
+    const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr && !(bs && alt && x.arr === alt)).concat(bs ? [{ arr: arr, dep: f.dep, name: name, typ: typ }] : []));
     gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {}
-    bestBusy = false; zeichneBalken(); bestZeigen(); say(bs ? "✅ Gespeichert. Alle sehen es in 1 bis 2 Minuten." : "Name entfernt.");
+    bestBusy = false; zeichneBalken(); bestZeigen(); if (bs) { GFORM.alt = arr; } else { GFORM = null; } say(bs ? "✅ Gespeichert. Alle sehen es in 1 bis 2 Minuten." : "Name entfernt.");
   } catch (err) { bestBusy = false; say("⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt.")); }
 });
 // Storniert (Tage nicht mehr in der Belegung): der von Hand eingetragene Name verschwindet. Nur Papi, nur bei frisch geladener Belegung.
@@ -1431,7 +1466,7 @@ async function gaesteAufraeumen() {
 }
 function gaesteAn(j) {
   if (!j || !Array.isArray(j.gaeste)) return false;
-  GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name), typ: x.typ === "extern" ? "extern" : "airbnb" }));
+  GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, dep: DKEY.test(x.dep || "") && x.dep > x.arr ? x.dep : "", name: gastKurz(x.name), typ: x.typ === "extern" ? "extern" : "airbnb" }));
   return true;
 }
 async function ladeGaeste() {
@@ -2418,8 +2453,8 @@ function gaesteFormular() {
   if (BELEGT_AIR) Array.from(BELEGT_AIR).sort().forEach((k) => { if (!BELEGT_AIR.has(addDays(k, -1)) && belegtEnde(k) >= h) starts.push(k); });
   const opt = starts.slice(0, 40).map((k) => { const g = GAESTE.find((x) => x.arr === k); return '<option value="' + k + '">' + esc(fmtTag(k)) + " bis " + esc(fmtTag(belegtEnde(k))) + (g ? " · " + esc(g.name) : "") + "</option>"; }).join("");
   let t = vkSek("👤 Gäste mit Namen", GAESTE.length);
-  t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Gib den Namen so ein, wie er im Kalender stehen soll, z. B. «Maria K.». Die App ändert ihn nicht und löscht nichts von selbst. Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum unten bei «Anderes Datum».</p>';
-  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select>' + typKnoepfe("gTyp", "airbnb") + '<input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
+  t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Gib den Namen so ein, wie er im Kalender stehen soll, z. B. «Maria K.». Die App ändert ihn nicht und löscht nichts von selbst. Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum bei «Anderes Datum». Das zweite Datumsfeld ist die Abreise (freiwillig, sonst bis zum Ende der Belegung). Einfacher geht es im Kalender: Tag antippen, dann Anreise und Abreise wählen.</p>';
+  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select>' + typKnoepfe("gTyp", "airbnb") + '<input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gDep" type="date" aria-label="Abreise (freiwillig)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
   const gl = GAESTE.slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
   t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + TYP_SYM[x.typ] + " " + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
   if (bestFehler) t += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
@@ -2554,7 +2589,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
     if (!DKEY.test(arr) || !name) { bestFehler = "Bitte eine Belegung oder ein Datum wählen und einen Namen eingeben."; bestZeigen(); return; }
     if (!BELEGT_AIR || !BELEGT_AIR.has(arr)) { bestFehler = "Am " + fmtTag(arr) + " ist keine Airbnb-Belegung. Wähle den ersten Tag, an dem der Gast eingecheckt ist."; bestZeigen(); return; }
     bestBusy = true; bestFehler = "";
-    try { const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat([{ arr: arr, name: name, typ: typ }])); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "👤 Gespeichert: " + esc(name) + " ab " + esc(fmtTag(arr)) + ". Alle sehen es in 1 bis 2 Minuten."; }
+    try { const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat([Object.assign({ arr: arr, name: name, typ: typ }, DKEY.test(q("gDep")) && q("gDep") > arr ? { dep: q("gDep") } : {})])); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "👤 Gespeichert: " + esc(name) + " ab " + esc(fmtTag(arr)) + ". Alle sehen es in 1 bis 2 Minuten."; }
     catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
     bestBusy = false; bestNeuZeichnen(); return;
   }
@@ -2771,6 +2806,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
     return kopf + (gn ? "<p>" + TYP_SYM[gn.typ] + " " + TYP_TXT[gn.typ] + ": <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + gf;
   }
+  window._gastBlase = (k) => zeigen(text(k), grid.querySelector('[data-k="' + k + '"]'));
   function zelle(e) {
     let c = e.target.closest ? e.target.closest(".cal-d") : null;
     if (c) return c;
@@ -2785,7 +2821,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (an) { zu = false; zeigen(START); } else blase.hidden = true;
     speichern();
   }
-  grid.addEventListener("click", (e) => { const c = zelle(e); if (!an && !(TOKEN && c && c.dataset.k && c.classList.contains("occ") && BELEGT_AIR && BELEGT_AIR.has(c.dataset.k))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
+  grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(TOKEN && c && c.dataset.k && c.classList.contains("occ") && BELEGT_AIR && BELEGT_AIR.has(c.dataset.k))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
   blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; } });
   document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && !zu) zeigen(START); });
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
