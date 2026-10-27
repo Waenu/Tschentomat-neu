@@ -485,6 +485,10 @@
     background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px; background-position: 0 0, 0 100%, 0 0, 100% 0; animation: ameise 0.9s linear infinite; }
   @keyframes ameise { to { background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px; } }
   @media (prefers-reduced-motion: reduce) { .bk.sw, .bk-leg .k-sw { animation: none; } }
+  .bk.air { background: var(--chip); color: var(--chip-fg); box-shadow: 0 0 0 1.5px var(--chip-fg); font-weight: 600; }
+  .bk-leg .k-air { background: var(--chip); color: var(--chip-fg); box-shadow: 0 0 0 1.5px var(--chip-fg); font-size: .6rem; }
+  #bestKasten .vk-gast { display: grid; gap: 8px; }
+  #bestKasten .vk-gast input, #bestKasten .vk-gast select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   .zk { display: inline-block; background: var(--chip); color: var(--chip-fg); border-radius: 5px; padding: 0 2px; margin-right: 3px; line-height: 13px; font-size: .62rem; font-weight: 400; vertical-align: top; margin-top: 2px; }
   .bk-leg-h { margin: 12px 0 0; }
   .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
@@ -630,7 +634,7 @@
     <div class="note h" id="calBlase" role="status" aria-live="polite" hidden></div>
     <div class="cal-leg" id="calHoch"></div>
     <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
-    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legAir" hidden><i class="k-air">M. K.</i>Name des Airbnb-Gastes</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
     <p class="cal-sel" id="calSel" role="status"></p>
     <p class="note h" id="calSpitz" hidden></p>
     <p class="note h" id="calRuhe" hidden></p>
@@ -665,7 +669,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.6.4.0";
+let VERSION = "2.7.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -676,6 +680,7 @@ let KEIN_CHECKIN_SO = true;   // Sonntag ist bei Airbnb nie Check-in-Tag: eine f
 let PROV_AN = true;          // Termine mit Vorbehalt ausserhalb der Staffel-Zeiten (Airbnb-Gast hat Vorrang)
 let VORLAUF = 3;             // Vorlauf in Tagen, den ein Airbnb-Gast braucht (Einstellung in Airbnb)
 let BELEGT_AIR = null;
+let GAESTE = [];            // Namen der Airbnb-Gäste (Vorname und Initiale) aus gaeste.json: {arr, name}
 let MIN_MONATE = {};   // Mindestnächte pro Monat (Monat der Nacht), z.B. {2: 7}
 let FEST_MONATE = [];  // Monate, in denen Familien-Aufenthalte nie mit Vorbehalt stehen (immer fest, in Airbnb gesperrt)       // Airbnb-Belegung ohne Aufenthalte mit Vorbehalt
 let LUECKE_VORLAUF = 4;      // Lücken ausserhalb der Selbstreinigungs-Zeiten sind erst so viele Tage vor Beginn für die Familie sichtbar
@@ -1362,10 +1367,41 @@ function staffelWarnung(d) {
   if (!eigene) return grund + " die laufende Familienstaffel von " + liste(andere) + ". Für " + liste(andere) + " fällt dadurch die Endreinigung jetzt an" + (andere.length === 1 ? "" : " (aufgeteilt unter ihnen)") + kosten + " Deine eigene Reinigung kostet wie üblich " + chf(P.reinigung) + "." + danach + " Sprich dich vorher mit " + (andere.length === 1 ? andere[0] : "ihnen") + " ab.";
   return grund + " deine eigene laufende Familienstaffel zusammen mit " + liste(andere) + ". Für dich und " + liste(andere) + " fällt dadurch die Endreinigung jetzt an (aufgeteilt unter euch)" + kosten + " Deine neue Reinigung kostet zusätzlich wie üblich " + chf(P.reinigung) + "." + danach + " Sprich dich vorher mit " + (andere.length === 1 ? andere[0] : "ihnen") + " ab.";
 }
+// ===== Namen der Airbnb-Gäste (Vorname und Initiale), öffentlich in gaeste.json =====
+function belegtEnde(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(n)) n = addDays(n, 1); return n; }   // erster freier Tag = Abreisetag
+function gaesteBalken() {
+  if (!BELEGT_AIR) return [];
+  const l = GAESTE.filter((x) => BELEGT_AIR.has(x.arr)).slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
+  return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name }; });
+}
+function gastKurz(n) {
+  const t = String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ");
+  if (!t) return "";
+  const a = t.split(" ");
+  const k = a.length >= 2 ? a.slice(0, -1).join(" ") + " " + a[a.length - 1][0].toUpperCase() + "." : a[0];
+  return k.slice(0, 24);
+}
+function gaesteAn(j) {
+  if (!j || !Array.isArray(j.gaeste)) return false;
+  GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name) }));
+  return true;
+}
+async function ladeGaeste() {
+  try {
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 4000);
+    const r = await fetch("gaeste.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    clearTimeout(to);
+    if (!r.ok) throw new Error("http " + r.status);
+    const j = await r.json();
+    if (gaesteAn(j)) { try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e) {} }
+  } catch (e) {
+    try { const c = localStorage.getItem("tm2_gaeste"); if (c) gaesteAn(JSON.parse(c)); } catch (e2) {}
+  }
+}
 function zeichneBalken() {
   const g = document.getElementById("calGrid");
   g.querySelectorAll(".bk").forEach((e) => e.remove());
-  if (!BUCH.length || g.offsetWidth === 0) return;
+  if ((!BUCH.length && !GAESTE.length) || g.offsetWidth === 0) return;
   const zell = new Map();
   g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
   const ks = Array.from(zell.keys()).sort();
@@ -1387,6 +1423,7 @@ function zeichneBalken() {
       const top = (c0.offsetTop + c0.offsetHeight - 20) + "px";
       const mk = (cls, l, w, html) => { const d = document.createElement("div"); d.className = "bk " + cls; d.style.left = l + "px"; d.style.width = w + "px"; d.style.top = top; d.innerHTML = html; g.appendChild(d); return d; };
       const inh = (w, schloss) => (w < 26 ? "" : zk(schloss) + (rz && w >= 46 ? zk(rz) : "") + (w >= 64 ? esc(text) : ""));
+      if (klasse === "air") { mk("air", links, breite, breite >= 40 ? esc(text) : ""); return; }
       if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? "🏃🏃" : ""); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
       if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
@@ -1408,6 +1445,7 @@ function zeichneBalken() {
     });
   };
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
+  gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.name, null, ""));
   BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, b.sb ? "🧹" : "🪣"));
 }
 function renderKalender() {
@@ -1488,6 +1526,7 @@ function renderKalender() {
     el.hidden = h === "";
   }
   document.getElementById("legProv").hidden = !PROV_AN;
+  document.getElementById("legAir").hidden = !GAESTE.length;
   begriffeFuellen();
   const sp = spitzTermin();
   const spEl = document.getElementById("calSpitz");
@@ -2248,6 +2287,28 @@ const zahlOffen = (b) => b.betrag > 0 && !b.bezahlt && !b.prov;   // bei «Termi
 const zahlFrist = (b) => addDays(b.dep, ZAHL_TAGE);
 const zahlFaellig = (b) => zahlOffen(b) && heuteKey() > zahlFrist(b);
 const zahlErinnerbar = (b) => zahlOffen(b) && heuteKey() >= addDays(b.dep, ERINNERUNG_AB);
+async function ghGaeste(fn) {
+  const url = "https://api.github.com/repos/" + GH_REPO + "/contents/gaeste.json";
+  const kopf = { Authorization: "Bearer " + TOKEN, Accept: "application/vnd.github+json" };
+  for (let versuch = 0; versuch < 2; versuch++) {
+    const g = await fetch(url + "?ref=main&t=" + Date.now(), { headers: kopf, cache: "no-store" });
+    if (g.status === 401 || g.status === 403) throw new Error("Das Token wird nicht akzeptiert. Es ist ungültig oder abgelaufen.");
+    let j = { gaeste: [] }, sha;
+    if (g.status === 404) { /* Datei gibt es noch nicht: wird neu angelegt */ }
+    else if (g.ok) { const d = await g.json(); sha = d.sha; j = JSON.parse(unb64(d.content)); if (!Array.isArray(j.gaeste)) j.gaeste = []; }
+    else throw new Error("GitHub antwortet mit Fehler " + g.status + ".");
+    const h = heuteKey();
+    j.gaeste = fn(j.gaeste).filter((x) => !(x.arr < h && belegtEnde(x.arr) < h)).sort((p, q) => (p.arr < q.arr ? -1 : 1));   // vergangene Gäste verschwinden
+    const body = { message: "Gästenamen aktualisiert (App)", content: b64(JSON.stringify({ gaeste: j.gaeste }, null, 2) + "\n"), branch: "main" };
+    if (sha) body.sha = sha;
+    const r = await fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, kopf), body: JSON.stringify(body) });
+    if (r.ok) return j;
+    if ((r.status === 409 || r.status === 422) && versuch === 0) continue;
+    if (r.status === 401 || r.status === 403) throw new Error("Das Token darf in " + GH_REPO + " nicht schreiben.");
+    throw new Error("Speichern fehlgeschlagen (Fehler " + r.status + ").");
+  }
+  throw new Error("Speichern fehlgeschlagen.");
+}
 async function ghAendern(fn) {
   const url = "https://api.github.com/repos/" + GH_REPO + "/contents/" + GH_DATEI;
   const kopf = { Authorization: "Bearer " + TOKEN, Accept: "application/vnd.github+json" };
@@ -2276,6 +2337,7 @@ function listeLaden(k) { try { const l = JSON.parse(localStorage.getItem(k) || "
 function listeSichern(k, l) { try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
 const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
 let OFFEN = listeLaden("tm2_offen"), ABGEL = listeLaden("tm2_abgelehnt");
+let zeigG = false;
 let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, zeigL = false, bestBusy = false, zeigAns = false;
 function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", mit Vorbehalt" : "") + (b.verb ? ", verbindlich" : ""); }
 function vkChips(x, anfrage) {
@@ -2303,6 +2365,17 @@ function festKarte(x) {
   const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 Fest machen</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
   return vkKarte(x, konf ? "rot" : (prov ? "warn" : ""), vkChips(x), st, acts);
+}
+function gaesteFormular() {
+  const h = heuteKey(), starts = [];
+  if (BELEGT_AIR) Array.from(BELEGT_AIR).sort().forEach((k) => { if (!BELEGT_AIR.has(addDays(k, -1)) && belegtEnde(k) >= h) starts.push(k); });
+  const opt = starts.slice(0, 40).map((k) => { const g = GAESTE.find((x) => x.arr === k); return '<option value="' + k + '">' + esc(fmtTag(k)) + " bis " + esc(fmtTag(belegtEnde(k))) + (g ? " · " + esc(g.name) : "") + "</option>"; }).join("");
+  let t = vkSek("👤 Airbnb-Gäste", GAESTE.length);
+  t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Die App kürzt den Nachnamen auf die Initiale («Maria Keller» wird «Maria K.»). Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum unten bei «Anderes Datum».</p>';
+  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select><input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria Keller" autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
+  const gl = GAESTE.slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
+  t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
+  return t;
 }
 function bestZeigen() {
   const k = document.getElementById("bestKasten"), kn = document.getElementById("btnAnsichten"), h = heuteKey(), link = bestLesen();
@@ -2341,6 +2414,8 @@ function bestZeigen() {
     s += vkSek("🔓 Mit Vorbehalt, noch nicht fest", bp.length) + (bp.length ? bp.map(festKarte).join("") : '<p class="hint">Keine Termine mit Vorbehalt.</p>');
     s += vkSek("🔒 Bestätigt, fest", bf.length) + (bf.length ? bf.map(festKarte).join("") : '<p class="hint">Keine festen Aufenthalte.</p>');
     s += '<div class="vk-nav"><button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
+    s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="G">' + (zeigG ? "Airbnb-Gäste ausblenden" : "👤 Airbnb-Gäste (" + GAESTE.length + ")") + "</button></div>";
+    if (zeigG) s += gaesteFormular();
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, "", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
@@ -2424,7 +2499,26 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   const f = (a) => { const el = e.target.closest("[" + a + "]"); return el ? el.getAttribute(a) : null; };
   const find = (l, key) => l.find((x) => bKey(x) === key);
   if (e.target.closest("[data-zu]")) { bestMsg = ""; bestFehler = ""; bestZeigen(); return; }
-  const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else if (z === "L") zeigL = !zeigL; else zeigA = !zeigA; bestZeigen(); return; }
+  const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else if (z === "L") zeigL = !zeigL; else if (z === "G") zeigG = !zeigG; else zeigA = !zeigA; bestZeigen(); return; }
+  if (e.target.closest("[data-gsave]")) {
+    const q = (id) => (document.getElementById(id) || {}).value || "";
+    const arr = q("gDat") || q("gSel"), name = gastKurz(q("gName"));
+    if (!DKEY.test(arr) || !name) { bestFehler = "Bitte eine Belegung oder ein Datum wählen und einen Namen eingeben."; bestZeigen(); return; }
+    if (!BELEGT_AIR || !BELEGT_AIR.has(arr)) { bestFehler = "Am " + fmtTag(arr) + " ist keine Airbnb-Belegung. Wähle den ersten Tag, an dem der Gast eingecheckt ist."; bestZeigen(); return; }
+    bestBusy = true; bestFehler = "";
+    try { const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat([{ arr: arr, name: name }])); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "👤 Gespeichert: " + esc(name) + " ab " + esc(fmtTag(arr)) + ". Alle sehen es in 1 bis 2 Minuten."; }
+    catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
+    bestBusy = false; bestNeuZeichnen(); return;
+  }
+  const gd = f("data-gdel");
+  if (gd) {
+    const x = GAESTE.find((y) => y.arr === gd);
+    if (!x || !confirm("Name «" + x.name + "» ab " + fmtTag(gd) + " wirklich entfernen?")) return;
+    bestBusy = true; bestFehler = "";
+    try { const j = await ghGaeste((l) => l.filter((y) => y.arr !== gd)); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "Name entfernt."; }
+    catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
+    bestBusy = false; bestNeuZeichnen(); return;
+  }
   const w = f("data-wieder");
   if (w) {
     const x = find(ABGEL, w); if (!x) return;
@@ -2663,7 +2757,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
 })();
 aufentLaden();
 try { new ResizeObserver(() => zeichneBalken()).observe(document.getElementById("calGrid")); } catch (e) {}
-Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
+Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen(), ladeGaeste()]).then(() => {
   {
     const STUFEN = [["klein", 0.92], ["mittel", 1], ["gross", 1.18]];
     const fb = document.getElementById("fsBtn");
