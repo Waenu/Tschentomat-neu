@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.21.1.0", "datum": "2026-10-27", "titel": "Hinweisleiste unten in Orange", "punkte": ["Fehlt noch eine Wahl («Bitte wählen …»), ist die Leiste unten orange wie die Felder «– wählen –» statt rot. Echte Fehler bleiben rot"] },
     { "v": "2.21.0.0", "datum": "2026-10-27", "titel": "Meldeformular in der Kinder-Ansicht", "punkte": ["Wählt Papi «Ansicht als» ein Kind, sieht er unter «Wünsche und Fehler» das Formular wie das Kind. Ohne Kinder-Ansicht bleibt es für Papi ausgeblendet"] },
     { "v": "2.20.1.0", "datum": "2026-10-27", "titel": "Hinweis für Papi aufgeräumt", "punkte": ["Der Hinweis «Versteckte Menüs» hat Abstand zu den Knöpfen darüber und passt jetzt in den Rahmen"] },
     { "v": "2.20.0.0", "datum": "2026-10-27", "titel": "Schalter für die Bewegung", "punkte": ["Oben neben Schriftgrösse und Dunkelmodus: ein Knopf ✨, der alle kleinen Animationen aus- und wieder einschaltet; die Wahl merkt sich das Handy", "Ohne eigene Wahl gilt die Einstellung «Bewegung reduzieren» des Handys","Neu in der Verwaltung, nur für Papi sichtbar: Hinweis, wie man die versteckten Menüs einblendet (Token, Testmodus, Kinder-Ansicht)"] },
