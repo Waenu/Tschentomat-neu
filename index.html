@@ -626,7 +626,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.3.2.1";
+let VERSION = "2.4.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -665,6 +665,7 @@ const P = {
   festMinGaeste: 0,     // In den festMonaten (Februar): mindestens so viele Gäste nötig (0 = keine Vorgabe)
   mindestpreisAbNaechte: 0, // Die Entlastung der Familie (Mindestpreis) gilt erst ab dieser Zahl Nächte (0 = immer)
   festBodenWoche: 0,    // In den festMonaten (Februar): Mindest-Gesamtpreis pro 7 Nächte inkl. Reinigung (CHF, 0 = aus). Ersetzt dort mindestpreisWoche. Fehlt etwas bis zum Boden, wird der Rest gleichmässig auf alle Personen verteilt; liegt der Preis darüber, entfällt der Anteil der Familie soweit möglich
+  hochNachtMin: 0,     // Hochsaison (ausserhalb der festMonate): Mindestpreis pro Nacht ohne Reinigung (CHF, 0 = aus). Boden = Nächte x dieser Betrag + Reinigung; sonst gleiche Rechnung wie im Februar. Gilt nur, wenn alle Nächte in der Hochsaison liegen
   mindestpreisWoche: 0, // Boden pro 7 Nächte (CHF, 0 = aus), nur mit Gästen: Übersteigt der Gesamtpreis den Boden (anteilig nach Nächten), entfällt der Anteil der Familie, aber der Gesamtpreis sinkt nie unter den Boden
   lueckeRabatt: 50      // Prozent Ermässigung auf die Übernachtungen, wenn der Aufenthalt in einer Lücke zwischen zwei Airbnb-Buchungen liegt (Reinigung bleibt gleich)
 };
@@ -779,10 +780,13 @@ function calc(s) {
     out.FZ = d.FN * d.nights + d.AF + d.FA;
     out.HZ = d.GE === 0 ? 0 : d.HN * d.nights + d.GS;
     out.WZ = d.WN * d.nights + Math.max(0, d.GE - 1) * d.GS;
-    if (s.festBoden === true && P.festBodenWoche > 0) {
+    const festB = s.festBoden === true && P.festBodenWoche > 0, hochB = !festB && s.hochBoden === true && P.hochNachtMin > 0;
+    if (festB || hochB) {
       // Fest-Monate (Februar): Boden fürs Total (inkl. Reinigung), ersetzt dort den normalen Mindestpreis
-      const boden = Math.ceil(P.festBodenWoche * d.nights / 7);
-      out.FEST = true; out.BODEN = boden;
+      // Hochsaison: Boden = Nächte x hochNachtMin + Reinigung, gleiche Rechnung
+      const boden = festB ? Math.ceil(P.festBodenWoche * d.nights / 7) : P.hochNachtMin * d.nights + d.RE;
+      if (festB) out.FEST = true; else out.HOCH = true;
+      out.BODEN = boden;
       if (out.TOT > boden) {
         const D = Math.min(out.FZ, out.TOT - boden);
         if (D > 0) { out.GRATIS = true; out.TOT0 = out.TOT; out.FZ0 = out.FZ; out.D = D; out.TOT -= D; out.FZ -= D; }
@@ -1001,6 +1005,7 @@ function kalenderKlick(k) {
   S.nights = (ARR && DEP) ? diffDays(ARR, DEP) : null;
   S.festMin = !!(ARR && DEP && P.festMinGaeste > 0 && festStay(ARR, DEP));
   S.festBoden = !!(ARR && DEP && P.festBodenWoche > 0 && festStay(ARR, DEP));
+  S.hochBoden = !!(ARR && DEP && P.hochNachtMin > 0 && !festStay(ARR, DEP) && (() => { for (let k = ARR; k < DEP; k = addDays(k, 1)) if (!istHoch(k)) return false; return true; })());
   S.luecke = !!(ARR && DEP && P.lueckeRabatt > 0 && GAPSTART.get(ARR) === DEP);
   S.selbstOK = ruheStay() && !S.luecke;
   normalize(); render(); renderKalender();
@@ -1779,8 +1784,8 @@ function render() {
   let notes = "";
   if (x.sp) notes += '<p class="note">Zimmer 1 und rotes Bad bleiben unberührt: ' + chf(P.sparEin) + ' weniger pro Nacht, ' + (S.wer === "Nur ich" ? "du zahlst" : "die Familie zahlt") + ' ' + chf(x.FN0) + ' statt ' + chf(P.famPausch) + '.</p>';
   if (x.LR > 0) notes += '<p class="note">Lückenpreis: Alle Nachtpreise sind ' + x.LR + ' Prozent günstiger, auf ganze Franken gerundet.</p>';
-  if (r.GRATIS) notes += '<p class="note"><b>Mindestpreis:</b> ' + (r.FZ === 0 ? (S.wer === "Nur ich" ? "Du zahlst deinen" : "Die Familie zahlt ihren") + ' eigenen Anteil (' + chf(r.FZ0) + ') nicht. ' : (S.wer === "Nur ich" ? "Du zahlst" : "Die Familie zahlt") + ' noch ' + chf(r.FZ) + ' statt ' + chf(r.FZ0) + '. ') + 'Der Gesamtpreis sinkt nie unter ' + chf(r.BODEN) + ' (' + chf(r.FEST ? P.festBodenWoche : P.mindestpreisWoche) + ' pro 7 Nächte). Die Gäste zahlen ihre Anteile wie berechnet.</p>';
-  if (r.AUF) notes += '<p class="note"><b>Mindestpreis im ' + esc(festTxt()) + ':</b> Das Total beträgt mindestens ' + chf(r.BODEN) + ' (' + chf(P.festBodenWoche) + ' pro 7 Nächte, inklusive Endreinigung). ' + (x.GE >= 1 ? 'Der fehlende Betrag von ' + chf(r.AUF) + ' wird gleichmässig auf alle Personen verteilt, dich und die Gäste. Mit mehr Gästen sinkt dein Anteil.' : 'Du zahlst den Mindestpreis. Mit Gästen sinkt dein Anteil.') + '</p>';
+  if (r.GRATIS) notes += '<p class="note"><b>Mindestpreis:</b> ' + (r.FZ === 0 ? (S.wer === "Nur ich" ? "Du zahlst deinen" : "Die Familie zahlt ihren") + ' eigenen Anteil (' + chf(r.FZ0) + ') nicht. ' : (S.wer === "Nur ich" ? "Du zahlst" : "Die Familie zahlt") + ' noch ' + chf(r.FZ) + ' statt ' + chf(r.FZ0) + '. ') + 'Der Gesamtpreis sinkt nie unter ' + chf(r.BODEN) + ' (' + (r.HOCH ? chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung' : chf(r.FEST ? P.festBodenWoche : P.mindestpreisWoche) + ' pro 7 Nächte') + '). Die Gäste zahlen ihre Anteile wie berechnet.</p>';
+  if (r.AUF) notes += '<p class="note"><b>Mindestpreis ' + (r.HOCH ? "in der Hochsaison" : "im " + esc(festTxt())) + ':</b> Das Total beträgt mindestens ' + chf(r.BODEN) + ' (' + (r.HOCH ? chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung' : chf(P.festBodenWoche) + ' pro 7 Nächte, inklusive Endreinigung') + '). ' + (x.GE >= 1 ? 'Der fehlende Betrag von ' + chf(r.AUF) + ' wird gleichmässig auf alle Personen verteilt, dich und die Gäste. Mit mehr Gästen sinkt dein Anteil.' : 'Du zahlst den Mindestpreis. Mit Gästen sinkt dein Anteil.') + '</p>';
   if (x.GE >= 1) notes += '<p class="note">Reinigung aufgeteilt: ' + S.reinig + '.</p>';
   const zahlung = '<div class="pay"><strong>Die Familie überweist den ganzen Betrag: ' + chf(r.TOT + tip) + '</strong>' +
       (tip > 0 ? '<span>davon Trinkgeld für Mami: ' + chf(tip) + ' (freiwillig)</span>' : '') +
