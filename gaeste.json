@@ -52,6 +52,12 @@
       "dep": "2027-02-13",
       "name": "Liselotte Freiburghaus",
       "typ": "extern"
+    },
+    {
+      "arr": "2027-02-21",
+      "dep": "2027-02-27",
+      "name": "Leo van den Berg",
+      "typ": "extern"
     }
   ]
 }
