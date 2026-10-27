@@ -46,6 +46,12 @@
       "dep": "2027-02-06",
       "name": "Beat Galliker",
       "typ": "airbnb"
+    },
+    {
+      "arr": "2027-02-06",
+      "dep": "2027-02-13",
+      "name": "Liselotte Freiburghaus",
+      "typ": "extern"
     }
   ]
 }
