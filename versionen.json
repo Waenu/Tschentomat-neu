@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.7.3.0", "datum": "2026-10-27", "titel": "Legende unter dem Kalender einklappbar", "punkte": ["Die Legende hat die Überschrift «🎨 Legende» und ist zugeklappt, bis man sie antippt", "Gleiche Farbe wie «Benutzung»"] },
     { "v": "2.7.2.0", "datum": "2026-10-27", "titel": "Gästenamen direkt im Kalender eingeben", "punkte": ["Papi tippt einen von Airbnb belegten Tag an und gibt dort den Namen ein, auch ohne eingeschaltete Hilfe", "Bei mehreren Gästen hintereinander: «Neuer Gast ab diesem Tag»", "Name entfernen nur von Hand mit Nachfrage"] },
     { "v": "2.7.1.0", "datum": "2026-10-27", "titel": "Gästenamen: so, wie du sie eingibst", "punkte": ["Der Name wird nicht mehr gekürzt, er steht so im Kalender, wie Papi ihn eingibt", "Gästenamen werden nie automatisch gelöscht, nur von Hand mit Nachfrage", "Fehlermeldungen erscheinen direkt unter dem Formular"] },
     { "v": "2.7.0.0", "datum": "2026-10-27", "titel": "Namen der Airbnb-Gäste im Kalender", "punkte": ["Papi trägt unter «Ansichten» den Namen eines Airbnb-Gastes ein; die App kürzt den Nachnamen auf die Initiale (z. B. Maria K.)", "Der Name erscheint für alle als Balken im Kalender und in der Legende", "Die Namen liegen in gaeste.json; Gäste nach der Abreise werden beim nächsten Speichern entfernt"] },
