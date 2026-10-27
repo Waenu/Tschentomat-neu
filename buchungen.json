@@ -19,7 +19,8 @@
       "dep": "2027-03-20",
       "selbst": true,
       "pers": 4,
-      "betrag": 165
+      "betrag": 165,
+      "bescheid": "2026-10-27T21:25"
     }
   ],
   "logbuch": [
@@ -42,6 +43,10 @@
     {
       "t": "2026-10-27T21:25",
       "text": "Bestätigt: Manuel, Mi 17.03.2027 bis Sa 20.03.2027, CHF 165"
+    },
+    {
+      "t": "2026-10-27T21:25",
+      "text": "Bescheid gegeben: Manuel, Mi 17.03.2027 bis Sa 20.03.2027"
     }
   ]
 }
