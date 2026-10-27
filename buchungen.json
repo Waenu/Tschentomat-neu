@@ -12,6 +12,14 @@
         "2026-10-27T11:10"
       ],
       "bezahlt": "2026-10-27T11:11"
+    },
+    {
+      "name": "Manuel",
+      "arr": "2027-03-17",
+      "dep": "2027-03-20",
+      "selbst": true,
+      "pers": 4,
+      "betrag": 165
     }
   ],
   "logbuch": [
@@ -30,6 +38,10 @@
     {
       "t": "2026-10-27T11:12",
       "text": "Zahlung eingegangen: Jerome, Mo 10.05.2027 bis Mo 17.05.2027, CHF 1000"
+    },
+    {
+      "t": "2026-10-27T21:25",
+      "text": "Bestätigt: Manuel, Mi 17.03.2027 bis Sa 20.03.2027, CHF 165"
     }
   ]
 }
