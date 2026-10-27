@@ -415,6 +415,26 @@
   #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
   .ov-in { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
   .ov h2 { margin: 0; font-size: 1.35rem; }
+  #bestKasten .vk-sec { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; font-weight: 700; }
+  #bestKasten .vk-sec .n { background: var(--accent); color: var(--accent-fg, #fff); border-radius: 999px; padding: 0 8px; font-size: 0.8em; }
+  #bestKasten .vk { background: var(--surface); border: 2px solid var(--accent); border-radius: 14px; padding: 12px; margin: 6px 0; display: flex; flex-direction: column; gap: 8px; }
+  #bestKasten .vk.warn { border-color: #C9A227; }
+  #bestKasten .vk.rot { border-color: #C62828; }
+  #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  #bestKasten .vk-name { font-weight: 700; font-size: 1.05em; }
+  #bestKasten .vk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  #bestKasten .vk-chip { background: rgba(127,127,127,0.18); border-radius: 999px; padding: 2px 10px; font-size: 0.85em; }
+  #bestKasten .vk-chip.v { background: #FFF1C9; color: #5A4300; }
+  #bestKasten .vk-st { display: flex; flex-direction: column; gap: 2px; font-size: 0.88em; }
+  #bestKasten .vk-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #bestKasten .vk-acts .btn, #bestKasten .vk-acts a.btn { width: 100%; box-sizing: border-box; justify-content: center; text-align: center; gap: 8px; min-height: 48px; padding: 6px 8px; }
+  #bestKasten .vk-acts .btn.main { background: var(--accent); color: var(--accent-fg, #fff); }
+  #bestKasten .vk-acts .btn.main svg { fill: currentColor; }
+  #bestKasten .vk-acts .btn.quiet { border-style: dashed; font-weight: 500; opacity: 0.85; }
+  #bestKasten .vk-acts .full { grid-column: 1 / -1; }
+  #bestKasten .vk-acts .hint { grid-column: 1 / -1; }
+  #bestKasten .vk-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  #bestKasten .vk-nav .btn { width: 100%; justify-content: center; border-style: dashed; font-weight: 500; }
   .ov-back { align-self: flex-start; font: inherit; font-weight: 700; color: var(--accent); background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; padding: 8px 14px; min-height: 44px; cursor: pointer; }
   .waesche-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
   .waesche-liste li { display: flex; gap: 12px; align-items: baseline; background: var(--surface); border: 2px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 1.1rem; }
@@ -628,7 +648,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.6.1.2";
+let VERSION = "2.6.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2241,6 +2261,32 @@ const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
 let OFFEN = listeLaden("tm2_offen"), ABGEL = listeLaden("tm2_abgelehnt");
 let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, zeigL = false, bestBusy = false, zeigAns = false;
 function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", mit Vorbehalt" : "") + (b.verb ? ", verbindlich" : ""); }
+function vkChips(x, anfrage) {
+  const c = [];
+  if (anfrage) {} else if (provVon(x)) c.push('<span class="vk-chip v">🔓 mit Vorbehalt</span>');
+  else if (x.verb) c.push('<span class="vk-chip">🔒 verbindlich</span>');
+  else c.push('<span class="vk-chip">🔒 fest</span>');
+  c.push('<span class="vk-chip">' + ((x.selbst || x.sb) ? "🧹 reinigt selbst" : "🪣 Eltern reinigen") + "</span>");
+  if (x.luecke || x.lg) c.push('<span class="vk-chip">ganze Lücke</span>');
+  c.push('<span class="vk-chip">' + x.pers + (x.pers === 1 ? " Person" : " Personen") + "</span>");
+  if (x.betrag > 0) c.push('<span class="vk-chip">💳 ' + (x.bezahlt ? "bezahlt am " + esc(fmtTag(x.bezahlt.slice(0, 10))) : esc(chf(x.betrag)) + " offen") + "</span>");
+  return '<div class="vk-chips">' + c.join("") + "</div>";
+}
+function vkKarte(x, cls, chips, status, acts) {
+  return '<div class="vk' + (cls ? " " + cls : "") + '"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><span class="hint">' + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + "</span></div>" + chips + (status ? '<div class="vk-st hint">' + status + "</div>" : "") + '<div class="vk-acts">' + acts + "</div></div>";
+}
+function vkSek(titel, n) { return '<div class="vk-sec">' + titel + ' <span class="n">' + n + "</span></div>"; }
+function bescheidStatus(x) { const b = x.bescheid || ""; return "<span>" + (b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "✉️ Noch kein Bescheid gegeben") + "</span>"; }
+function bescheidKnopf(x, abgelehnt) { const b = x.bescheid || ""; return bestWaLink(bestText(x, abgelehnt), bKey(x), b ? (abgelehnt ? "Nochmals Absage" : "Nochmals Bescheid") : (abgelehnt ? "Absage schicken" : "Bescheid geben")); }
+function festKarte(x) {
+  const key = esc(bKey(x)), prov = !!x.prov, konf = prov && provKonflikt(x);
+  let st = "";
+  if (prov) st += "<span>" + (konf ? "⚠️ Konflikt mit Airbnb-Gast" : "Nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "")) + "</span>";
+  st += bescheidStatus(x);
+  const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 Fest machen</button>' : "") + bescheidKnopf(x, false) +
+    '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
+  return vkKarte(x, konf ? "rot" : (prov ? "warn" : ""), vkChips(x), st, acts);
+}
 function bestZeigen() {
   const k = document.getElementById("bestKasten"), kn = document.getElementById("btnAnsichten"), h = heuteKey(), link = bestLesen();
   if (link) {
@@ -2267,18 +2313,19 @@ function bestZeigen() {
     const bl = BUCH.filter((x) => x.dep >= h);
     s += '<div class="field"><label for="ansichtAls">👁️ Ansicht als</label><select id="ansichtAls"><option value="">Eltern</option>' + ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + ">" + n + "</option>").join("") + '</select></div><p class="hint">Zeigt dir die Knöpfe und Listen so, wie dieses Kind sie sieht. Nur auf diesem Handy.</p>';
     const kf = bl.filter(provKonflikt);
-    if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin mit Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe unter «Bestätigte» auf «Fest machen».</div>';
+    if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin mit Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe bei «Mit Vorbehalt» auf «Fest machen».</div>';
     const zl = BUCH.filter((x) => zahlOffen(x) && x.dep < h).sort((p, q) => (p.dep < q.dep ? -1 : 1));
-    if (zl.length) s += "<b>💳 Zahlungen offen (" + zl.length + ")</b><ul>" + zl.map((x) => zahlZeile(x)).join("") + "</ul>";
-    s += "<b>📨 Offene Anfragen</b>";
-    s += OFFEN.length ? "<ul>" + OFFEN.map((x) => "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) +
-      '<div class="btns"><button type="button" class="btn" data-ja="' + esc(bKey(x)) + '">✅ Bestätigen</button><button type="button" class="btn" data-nein="' + esc(bKey(x)) + '">✖ Ablehnen</button></div></li>').join("") + "</ul>"
+    if (zl.length) s += vkSek("💳 Zahlungen offen", zl.length) + zl.map((x) => zahlZeile(x)).join("");
+    s += vkSek("📨 Offene Anfragen", OFFEN.length);
+    s += OFFEN.length ? OFFEN.map((x) => vkKarte(x, "", vkChips(x, true), "",
+      '<button type="button" class="btn main" data-ja="' + esc(bKey(x)) + '">✅ Bestätigen</button><button type="button" class="btn" data-nein="' + esc(bKey(x)) + '">✖ Ablehnen</button>')).join("")
       : '<p class="hint">Keine offenen Anfragen. Tippe in einer Anfrage auf den Bestätigungs-Link, dann erscheint sie hier.</p>';
-    s += '<div class="btns"><button type="button" class="btn" data-zeig="B">' + (zeigB ? "Bestätigte ausblenden" : "Bestätigte anzeigen (" + bl.length + ")") + '</button>' +
-      '<button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
+    const bp = bl.filter((x) => x.prov), bf = bl.filter((x) => !x.prov);
+    s += vkSek("🔓 Mit Vorbehalt, noch nicht fest", bp.length) + (bp.length ? bp.map(festKarte).join("") : '<p class="hint">Keine Termine mit Vorbehalt.</p>');
+    s += vkSek("🔒 Bestätigt, fest", bf.length) + (bf.length ? bf.map(festKarte).join("") : '<p class="hint">Keine festen Aufenthalte.</p>');
+    s += '<div class="vk-nav"><button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
-    if (zeigB) s += "<b>✅ Bestätigt</b>" + (bl.length ? "<ul>" + bl.map((x) => "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) + ' <button type="button" class="sym" data-bdel="' + esc(bKey(x)) + '" aria-label="Aufenthalt entfernen">✖</button>' + provZeile(x) + bestBescheidZeile(x, false) + (x.betrag > 0 ? '<br><span class="hint">💳 ' + (x.bezahlt ? "bezahlt am " + esc(fmtTag(x.bezahlt.slice(0, 10))) : esc(chf(x.betrag)) + " noch offen") + "</span>" : "") + "</li>").join("") + "</ul>" : '<p class="hint">Keine bestätigten Aufenthalte.</p>');
-    if (zeigA) s += "<b>✖ Abgelehnt</b>" + (ABGEL.length ? "<ul>" + ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) + ' <button type="button" class="ov-back" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>' + bestBescheidZeile(xx, true) + "</li>"; }).join("") + "</ul>" : '<p class="hint">Keine abgelehnten Anfragen.</p>');
+    if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, "", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   }
   k.innerHTML = s;
@@ -2291,9 +2338,10 @@ function zahlZeile(x) {
   const stand = zahlFaellig(x) ? "⚠️ Frist abgelaufen am " + esc(fmtTag(zahlFrist(x))) : "Frist bis " + esc(fmtTag(zahlFrist(x)));
   const wann = letzte ? "✉️ Erinnert am " + esc(fmtTag(letzte.slice(0, 10))) + ", " + letzte.slice(11, 16) + " Uhr" + (er.length > 1 ? " (" + er.length + " Mal)" : "") : "✉️ Noch nicht erinnert";
   const wa = zahlErinnerbar(x)
-    ? ' <a class="btn" data-erinnert="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(zahlText(x)) + '" target="_blank" rel="noopener">' + WA_SVG + (letzte ? "Erneut erinnern" : "Per WhatsApp erinnern") + "</a>"
+    ? '<a class="btn" data-erinnert="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(zahlText(x)) + '" target="_blank" rel="noopener">' + WA_SVG + (letzte ? "Erneut erinnern" : "Erinnern") + "</a>"
     : '<span class="hint"> Erinnern ist ab dem ' + esc(fmtTag(addDays(x.dep, ERINNERUNG_AB))) + " möglich.</span>";
-  return "<li><b>" + esc(x.name) + "</b>: " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ", <b>" + esc(chf(x.betrag)) + "</b><br><span class=\"hint\">" + stand + " · " + wann + "</span><div class=\"btns\"><button type=\"button\" class=\"btn\" data-bez=\"" + esc(key) + "\">✅ Zahlung eingegangen</button>" + wa + "</div></li>";
+  const st2 = "<span>" + stand + "</span><span>" + wann + "</span>";
+  return vkKarte(x, zahlFaellig(x) ? "warn" : "", '<div class="vk-chips"><span class="vk-chip">' + esc(chf(x.betrag)) + "</span></div>", st2, '<button type="button" class="btn main" data-bez="' + esc(key) + '">✅ Zahlung eingegangen</button>' + wa);
 }
 function provZeile(x) {
   if (!x.prov) return "";
