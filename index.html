@@ -469,7 +469,7 @@
   #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
   #calGrid.papi .cal-d.occ:disabled { pointer-events: none; }
   #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
-  #calBlase .gb input { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
+  #calBlase .gb input, #calBlase .gb select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   #calBlase .gb .btn { width: 100%; justify-content: center; min-height: 48px; }
   #calBlase .gb .btn.quiet { border-style: dashed; font-weight: 500; }
   #calBlase { margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
@@ -490,8 +490,8 @@
     background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px; background-position: 0 0, 0 100%, 0 0, 100% 0; animation: ameise 0.9s linear infinite; }
   @keyframes ameise { to { background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px; } }
   @media (prefers-reduced-motion: reduce) { .bk.sw, .bk-leg .k-sw { animation: none; } }
-  .bk.air { background: var(--chip); color: var(--chip-fg); box-shadow: 0 0 0 1.5px var(--chip-fg); font-weight: 600; }
-  .bk-leg .k-air { background: var(--chip); color: var(--chip-fg); box-shadow: 0 0 0 1.5px var(--chip-fg); font-size: .6rem; }
+  .bk.air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-weight: 600; }
+  .bk-leg .k-air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-size: .6rem; }
   #bestKasten .vk-gast { display: grid; gap: 8px; }
   #bestKasten .vk-gast input, #bestKasten .vk-gast select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   .zk { display: inline-block; background: var(--chip); color: var(--chip-fg); border-radius: 5px; padding: 0 2px; margin-right: 3px; line-height: 13px; font-size: .62rem; font-weight: 400; vertical-align: top; margin-top: 2px; }
@@ -641,7 +641,7 @@
     <details class="leg-det" id="calLegDet"><summary>🎨 Legende</summary>
     <div class="cal-leg" id="calHoch"></div>
     <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
-    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legAir" hidden><i class="k-air">M. K.</i>Name des Airbnb-Gastes</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legAir" hidden><i class="k-air"><b class="zk">🏠</b></i>Airbnb-Gast mit Name</span><span id="legExt" hidden><i class="k-air"><b class="zk">🤝</b></i>externe Buchung mit Name</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
     </details>
     <p class="cal-sel" id="calSel" role="status"></p>
     <p class="note h" id="calSpitz" hidden></p>
@@ -677,7 +677,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.7.3.0";
+let VERSION = "2.8.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -976,7 +976,7 @@ const WT_KURZ = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 const WT_LANG = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 const KAL_MONATE_VORAUS = 24;
 let BELEGT = new Set();
-let BELEGT_OK = false;
+let BELEGT_OK = false, BELEGT_FRISCH = false;   // FRISCH: Belegung eben erfolgreich aus dem Netz geladen (nicht aus dem Zwischenspeicher)
 let ARR = "", DEP = "";
 let calY = 0, calM = 0;
 const pad2 = (n) => String(n).padStart(2, "0");
@@ -1377,10 +1377,12 @@ function staffelWarnung(d) {
 }
 // ===== Namen der Airbnb-Gäste (Vorname und Initiale), öffentlich in gaeste.json =====
 function belegtEnde(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(n)) n = addDays(n, 1); return n; }   // erster freier Tag = Abreisetag
+const TYP_SYM = { airbnb: "🏠", extern: "🤝" }, TYP_TXT = { airbnb: "Airbnb-Gast", extern: "Externe Buchung" };
+const typOpts = (t) => '<option value="airbnb"' + (t !== "extern" ? " selected" : "") + '>' + TYP_SYM.airbnb + ' Airbnb</option><option value="extern"' + (t === "extern" ? " selected" : "") + '>' + TYP_SYM.extern + ' Extern (ausserhalb Airbnb)</option>';
 function gaesteBalken() {
   if (!BELEGT_AIR) return [];
   const l = GAESTE.filter((x) => BELEGT_AIR.has(x.arr)).slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
-  return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name }; });
+  return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name, typ: x.typ }; });
 }
 function gastKurz(n) { return String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ").slice(0, 30); }   // Name bleibt, wie er eingegeben wird
 function gastLaufStart(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(addDays(n, -1))) n = addDays(n, -1); return n; }
@@ -1388,7 +1390,7 @@ function gastEintragFuer(k) { const rs = gastLaufStart(k); const l = GAESTE.filt
 function gastFormularFuer(k) {
   if (!TOKEN || !BELEGT_AIR || !BELEGT_AIR.has(k)) return "";
   const e = gastEintragFuer(k), key = e ? e.arr : gastLaufStart(k);
-  return '<div class="gb"><b>👤 Name des Airbnb-Gastes</b><input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(e ? e.name : "") + '">' +
+  return '<div class="gb"><b>👤 Name der Belegung</b><select id="gbTyp" aria-label="Art der Buchung">' + typOpts(e && e.typ) + '</select><input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(e ? e.name : "") + '">' +
     '<button type="button" class="btn main" data-gbs="' + key + '">💾 Speichern (Aufenthalt ab ' + esc(fmtTag(key)) + ')</button>' +
     (k !== key ? '<button type="button" class="btn" data-gbs="' + k + '">➕ Neuer Gast ab ' + esc(fmtTag(k)) + '</button>' : "") +
     (e ? '<button type="button" class="btn quiet" data-gbd="' + key + '">🗑️ Name entfernen</button>' : "") + '<span class="hint" id="gbMsg"></span></div>';
@@ -1400,18 +1402,30 @@ document.addEventListener("click", async (ev) => {
   if (bestBusy) return;
   const arr = (bs || bd).getAttribute(bs ? "data-gbs" : "data-gbd");
   if (bd) { const x = GAESTE.find((y) => y.arr === arr); if (!x || !confirm("Name «" + x.name + "» ab " + fmtTag(arr) + " wirklich entfernen?")) return; }
-  const name = bs ? gastKurz((document.getElementById("gbName") || {}).value) : "";
+  const name = bs ? gastKurz((document.getElementById("gbName") || {}).value) : "", typ = (document.getElementById("gbTyp") || {}).value === "extern" ? "extern" : "airbnb";
   if (bs && !name) { say("Bitte einen Namen eingeben."); return; }
   bestBusy = true; say("Speichere …");
   try {
-    const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat(bs ? [{ arr: arr, name: name }] : []));
+    const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat(bs ? [{ arr: arr, name: name, typ: typ }] : []));
     gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {}
     bestBusy = false; zeichneBalken(); bestZeigen(); say(bs ? "✅ Gespeichert. Alle sehen es in 1 bis 2 Minuten." : "Name entfernt.");
   } catch (err) { bestBusy = false; say("⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt.")); }
 });
+// Storniert (Tage nicht mehr in der Belegung): der von Hand eingetragene Name verschwindet. Nur Papi, nur bei frisch geladener Belegung.
+async function gaesteAufraeumen() {
+  if (!TOKEN || !BELEGT_FRISCH || !BELEGT_AIR || BELEGT_AIR.size === 0 || bestBusy) return;
+  const h = heuteKey(), weg = GAESTE.filter((x) => x.arr >= h && !BELEGT_AIR.has(x.arr));
+  if (!weg.length) return;
+  try {
+    const j = await ghGaeste((l) => l.filter((x) => !(x.arr >= h && !BELEGT_AIR.has(x.arr))));
+    gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {}
+    bestMsg = "👤 Storniert, Name entfernt: " + weg.map((x) => esc(x.name) + " (ab " + esc(fmtTag(x.arr)) + ")").join(", ") + ".";
+    zeichneBalken(); bestZeigen();
+  } catch (err) { /* beim nächsten Öffnen nochmals */ }
+}
 function gaesteAn(j) {
   if (!j || !Array.isArray(j.gaeste)) return false;
-  GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name) }));
+  GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name), typ: x.typ === "extern" ? "extern" : "airbnb" }));
   return true;
 }
 async function ladeGaeste() {
@@ -1451,7 +1465,7 @@ function zeichneBalken() {
       const top = (c0.offsetTop + c0.offsetHeight - 20) + "px";
       const mk = (cls, l, w, html) => { const d = document.createElement("div"); d.className = "bk " + cls; d.style.left = l + "px"; d.style.width = w + "px"; d.style.top = top; d.innerHTML = html; g.appendChild(d); return d; };
       const inh = (w, schloss) => (w < 26 ? "" : zk(schloss) + (rz && w >= 46 ? zk(rz) : "") + (w >= 64 ? esc(text) : ""));
-      if (klasse === "air") { mk("air", links, breite, breite >= 40 ? esc(text) : ""); return; }
+      if (klasse === "air") { mk("air", links, breite, breite >= 26 ? zk(rz) + (breite >= 60 ? esc(text) : "") : ""); return; }
       if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? "🏃🏃" : ""); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
       if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
@@ -1473,7 +1487,7 @@ function zeichneBalken() {
     });
   };
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
-  gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.name, null, ""));
+  gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.name, null, TYP_SYM[x.typ] || TYP_SYM.airbnb));
   BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, b.sb ? "🧹" : "🪣"));
 }
 function renderKalender() {
@@ -1555,7 +1569,8 @@ function renderKalender() {
     el.hidden = h === "";
   }
   document.getElementById("legProv").hidden = !PROV_AN;
-  document.getElementById("legAir").hidden = !GAESTE.length;
+  document.getElementById("legAir").hidden = !GAESTE.some((x) => x.typ !== "extern");
+  document.getElementById("legExt").hidden = !GAESTE.some((x) => x.typ === "extern");
   begriffeFuellen();
   const sp = spitzTermin();
   const spEl = document.getElementById("calSpitz");
@@ -1681,7 +1696,7 @@ async function ladeBelegt() {
     clearTimeout(to);
     if (!r.ok) throw new Error("http " + r.status);
     const j = await r.json();
-    if (nimm(j)) { try { localStorage.setItem("tm2_belegt", JSON.stringify(j)); } catch (e) {} }
+    if (nimm(j)) { BELEGT_FRISCH = true; try { localStorage.setItem("tm2_belegt", JSON.stringify(j)); } catch (e) {} }
   } catch (e) {
     try { const c = localStorage.getItem("tm2_belegt"); if (c) nimm(JSON.parse(c)); } catch (e2) {}
   }
@@ -2398,11 +2413,11 @@ function gaesteFormular() {
   const h = heuteKey(), starts = [];
   if (BELEGT_AIR) Array.from(BELEGT_AIR).sort().forEach((k) => { if (!BELEGT_AIR.has(addDays(k, -1)) && belegtEnde(k) >= h) starts.push(k); });
   const opt = starts.slice(0, 40).map((k) => { const g = GAESTE.find((x) => x.arr === k); return '<option value="' + k + '">' + esc(fmtTag(k)) + " bis " + esc(fmtTag(belegtEnde(k))) + (g ? " · " + esc(g.name) : "") + "</option>"; }).join("");
-  let t = vkSek("👤 Airbnb-Gäste", GAESTE.length);
+  let t = vkSek("👤 Gäste mit Namen", GAESTE.length);
   t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Gib den Namen so ein, wie er im Kalender stehen soll, z. B. «Maria K.». Die App ändert ihn nicht und löscht nichts von selbst. Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum unten bei «Anderes Datum».</p>';
-  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select><input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
+  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select><select id="gTyp" aria-label="Art der Buchung">' + typOpts("airbnb") + '</select><input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
   const gl = GAESTE.slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
-  t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
+  t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + TYP_SYM[x.typ] + " " + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
   if (bestFehler) t += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   return t;
 }
@@ -2443,7 +2458,7 @@ function bestZeigen() {
     s += vkSek("🔓 Mit Vorbehalt, noch nicht fest", bp.length) + (bp.length ? bp.map(festKarte).join("") : '<p class="hint">Keine Termine mit Vorbehalt.</p>');
     s += vkSek("🔒 Bestätigt, fest", bf.length) + (bf.length ? bf.map(festKarte).join("") : '<p class="hint">Keine festen Aufenthalte.</p>');
     s += '<div class="vk-nav"><button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
-    s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="G">' + (zeigG ? "Airbnb-Gäste ausblenden" : "👤 Airbnb-Gäste (" + GAESTE.length + ")") + "</button></div>";
+    s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="G">' + (zeigG ? "Gäste ausblenden" : "👤 Gäste mit Namen (" + GAESTE.length + ")") + "</button></div>";
     if (zeigG) s += gaesteFormular();
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, "", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
@@ -2531,11 +2546,11 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else if (z === "L") zeigL = !zeigL; else if (z === "G") zeigG = !zeigG; else zeigA = !zeigA; bestZeigen(); return; }
   if (e.target.closest("[data-gsave]")) {
     const q = (id) => (document.getElementById(id) || {}).value || "";
-    const arr = q("gDat") || q("gSel"), name = gastKurz(q("gName"));
+    const arr = q("gDat") || q("gSel"), name = gastKurz(q("gName")), typ = q("gTyp") === "extern" ? "extern" : "airbnb";
     if (!DKEY.test(arr) || !name) { bestFehler = "Bitte eine Belegung oder ein Datum wählen und einen Namen eingeben."; bestZeigen(); return; }
     if (!BELEGT_AIR || !BELEGT_AIR.has(arr)) { bestFehler = "Am " + fmtTag(arr) + " ist keine Airbnb-Belegung. Wähle den ersten Tag, an dem der Gast eingecheckt ist."; bestZeigen(); return; }
     bestBusy = true; bestFehler = "";
-    try { const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat([{ arr: arr, name: name }])); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "👤 Gespeichert: " + esc(name) + " ab " + esc(fmtTag(arr)) + ". Alle sehen es in 1 bis 2 Minuten."; }
+    try { const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat([{ arr: arr, name: name, typ: typ }])); gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {} bestMsg = "👤 Gespeichert: " + esc(name) + " ab " + esc(fmtTag(arr)) + ". Alle sehen es in 1 bis 2 Minuten."; }
     catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
     bestBusy = false; bestNeuZeichnen(); return;
   }
@@ -2750,7 +2765,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     }
     const gf = !stay.length ? gastFormularFuer(k) : "";
     const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
-    return kopf + (gn ? "<p>Airbnb-Gast: <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + gf;
+    return kopf + (gn ? "<p>" + TYP_SYM[gn.typ] + " " + TYP_TXT[gn.typ] + ": <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + gf;
   }
   function zelle(e) {
     let c = e.target.closest ? e.target.closest(".cal-d") : null;
@@ -2837,6 +2852,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen(), ladeGaeste()]).
   initKalenderMonat();
   berechneLuecken();
   build(); render(); renderKalender(); aufentZeigen(); bestZeigen();
+  gaesteAufraeumen();
   if (TESTHEUTE) {   // Testleiste (nur im Testmodus)
     const tb = document.createElement("div");
     tb.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;justify-content:center;padding:6px;background:#C0392B;color:#fff;font:600 14px system-ui";
