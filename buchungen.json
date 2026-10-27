@@ -9,13 +9,6 @@
     },
     {
       "name": "Jerome",
-      "arr": "2026-11-19",
-      "dep": "2026-11-22",
-      "selbst": true,
-      "pers": 2
-    },
-    {
-      "name": "Jerome",
       "arr": "2027-05-10",
       "dep": "2027-05-17",
       "pers": 2,
@@ -27,6 +20,10 @@
     {
       "t": "2026-10-27T11:05",
       "text": "Fest gemacht: Jerome, Mo 10.05.2027 bis Mo 17.05.2027"
+    },
+    {
+      "t": "2026-10-27T11:05",
+      "text": "Entfernt: Jerome, Do 19.11.2026 bis So 22.11.2026"
     }
   ]
 }
