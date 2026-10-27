@@ -626,7 +626,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.5.0.0";
+let VERSION = "2.6.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -674,6 +674,9 @@ const P = {
 };
 const MFG = "Meine Familie und Geschwister";
 const ART_V = "Verbindlich buchen (fest, in Airbnb gesperrt)", ART_P = "Mit Vorbehalt (nicht in Airbnb gesperrt)";
+const ART_S = "Staffel: ihr reinigt selbst, ohne Gäste", ART_N = "Normal: die Eltern reinigen, Gäste möglich";
+// Buchungsarten pro Datum (höchstens zwei): Hochsaison = verbindlich oder mit Vorbehalt, Staffel-Zeit = Staffel oder normal; sonst gibt es nur eine Art, also keine Auswahl
+const artOpts = () => S.verbOK === true ? [ART_V, ART_P] : (S.selbstOK === true ? [ART_S, ART_N] : []);
 const WERL = ["Nur ich", "Ich und Partner", "Ich und 1 Kind", "Ich und 2 Kinder",
               "Ich, Partner und 1 Kind", "Ich, Partner und 2 Kinder", MFG];
 // Ganze Lücke: nur 2 Erwachsene in den Betten (Partner, Bruder oder Schwester), dazu höchstens 1 Kleinkind im Kinderbettchen
@@ -715,7 +718,8 @@ function derive(s) {
   const FP = Math.max(1, base - KK);
   const LG = s.luecke === true;
   const VERB = s.art === ART_V && s.verbOK === true;
-  const frei = (LG || VERB) ? 0 : Math.max(0, P.maxPersonen - FP);
+  const STAF = s.art === ART_S && s.selbstOK === true;
+  const frei = (LG || VERB || STAF) ? 0 : Math.max(0, P.maxPersonen - FP);
   const GE = Math.min(nz(s.gaeste), frei);
   const PT = FP + GE;
   const voll = base + GE > P.sparMaxPers;
@@ -756,6 +760,7 @@ function derive(s) {
 
 function check(s, d) {
   if (typeof s.nights !== "number") return "Bitte wählen: Anreise und Abreise im Kalender";
+  if ((s.verbOK === true || s.selbstOK === true) && artOpts().indexOf(s.art) < 0) return "Bitte wählen: Wie möchtest du buchen?";
   if ((s.luecke ? LWERL : WERL).indexOf(s.wer) < 0) return "Bitte wählen: Wer von der Familie kommt";
   if (s.wer === MFG && typeof s.fam !== "number") return "Bitte wählen: Anzahl Personen der Familie";
   if (d.kkMax > 0 && !d.kkFix && typeof s.kk !== "number") return "Bitte wählen: Kleinkinder im Kinderbettchen oder bei den eigenen Eltern";
@@ -767,9 +772,7 @@ function check(s, d) {
   if (s.gaeste > d.frei) return "Nur noch " + d.frei + " Gast frei. Bitte Gäste neu wählen.";
   if (d.GE > 0 && !d.lock && !d.voll && !isYN(s.zimmer)) return "Bitte wählen: Gast im selben Zimmer";
   if (!d.sparLock && !isYN(s.spar)) return "Bitte wählen: Bleibt Zimmer 1 unberührt";
-  if (d.SM && !isYN(s.selbst)) return "Bitte wählen: Selbstreinigung";
   if (d.GE > 0 && REINIG.indexOf(s.reinig) < 0) return "Bitte wählen: Aufteilung der Reinigung";
-  if (s.verbOK === true && s.art !== ART_V && s.art !== ART_P) return "Bitte wählen: Wie möchtest du buchen?";
   if (d.nights < minFuer(ARR, DEP)) return "Mindestens " + minFuer(ARR, DEP) + " Nächte" + (minFuer(ARR, DEP) > P.minNaechte ? " (in diesem Zeitraum)" : "");
   if (d.nights > P.maxNaechte) return "Höchstens " + P.maxNaechte + " Nächte";
   if (d.FP + d.GE > P.maxPersonen) return "Maximal " + P.maxPersonen + " Personen";
@@ -832,8 +835,10 @@ const gastWort = (n) => n === 1 ? "Gast" : "Gäste";
 
 const FIELDS = [
   { id: "art", label: "📝 Wie möchtest du buchen?", type: "str",
-    hint: () => "Dieser Termin liegt in der Hochsaison. Verbindlich: Der Termin ist fest, die Eltern sperren ihn in Airbnb, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung. Mit Vorbehalt: wie bisher, nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang, mit Gästen möglich.",
-    visible: () => S.verbOK === true, opts: () => [ART_V, ART_P] },
+    hint: () => S.verbOK === true
+      ? "Dieser Termin liegt in der Hochsaison. Verbindlich: Der Termin ist fest, die Eltern sperren ihn in Airbnb, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung. Mit Vorbehalt: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang, mit Gästen möglich."
+      : "Dieser Termin liegt in der Staffel-Zeit und ist fest. Staffel: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Regeln siehe «🧹 Selbstreinigung» im Kalender. Normal: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.",
+    visible: () => artOpts().length > 0, opts: () => artOpts() },
   { id: "wer", label: "👨‍👩‍👧‍👦 Wer von der Familie kommt?", type: "str",
     hint: () => S.luecke
       ? "«Ich» ist Sohn oder Tochter. Familienmitglied ist Partner, Bruder oder Schwester, keine Freunde und keine Gäste. Das Kleinkind ist ein Enkelkind bis etwa 2½ Jahren. Es schläft im Kinderbettchen in Zimmer 3 oder bei den Erwachsenen in Zimmer 2. In den Betten schlafen höchstens 2 Erwachsene. Zimmer 1 und das rote Bad bleiben unberührt."
@@ -858,7 +863,7 @@ const FIELDS = [
     visible: (d) => d.sparGrund === "", opts: () => ["Ja", "Nein"] },
   { id: "selbst", label: "🧹 Bringt ihr frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst?", type: "str",
     hint: () => "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender. Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ").",
-    visible: (d) => d.SM, opts: () => ["Ja", "Nein"] },
+    visible: () => false, opts: () => ["Ja", "Nein"] },
   { id: "reinig", label: "🍰 Wie werden die Reinigungskosten (" + chf(P.reinigung) + ") aufgeteilt?", type: "str",
     hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht.",
     visible: (d) => d.GE > 0, opts: () => REINIG }
@@ -866,7 +871,9 @@ const FIELDS = [
 
 function normalize() {
   notice = "";
-  if (S.art === ART_V && S.verbOK === true) S.gaeste = 0;
+  if (artOpts().indexOf(S.art) < 0) S.art = "";
+  if ((S.art === ART_V && S.verbOK === true) || (S.art === ART_S && S.selbstOK === true)) S.gaeste = 0;
+  if (S.selbstOK === true) S.selbst = S.art === ART_S ? "Ja" : (S.art === ART_N ? "Nein" : "");
   if (S.wer !== MFG) S.fam = null;
   if (typeof S.wer === "string" && S.wer && (S.luecke ? LWERL : WERL).indexOf(S.wer) < 0) { S.wer = ""; notice = S.luecke ? "Bei der ganzen Lücke sind höchstens 2 Erwachsene und 1 Kleinkind möglich. Bitte neu wählen." : "Die Auswahl «Wer von der Familie kommt» passt nicht mehr zum gewählten Datum. Bitte neu wählen."; }
   let d = derive(S);
@@ -1768,7 +1775,7 @@ function render() {
     const hEl = document.getElementById("h-" + f.id);
     if (f.id === "selbst") { hEl.textContent = ""; const r = document.createElement("span"); r.className = "rot"; r.textContent = "Selbst reinigen geht nur ohne Gäste (für euch Kinder mit Partnern und Kindern). Mit Gästen reinigen immer die Eltern."; hEl.appendChild(r); hEl.appendChild(document.createTextNode(" " + f.hint(d))); }
     else hEl.textContent = f.hint(d);
-    if (f.id === (d.SM ? "selbst" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h rot-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
+    if (f.id === (d.SM ? "art" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h rot-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
   });
   const nb = document.getElementById("notice");
   nb.hidden = !notice; nb.textContent = notice;
