@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.1.1.0", "datum": "2026-10-27", "titel": "Neue Farben und Symbole im Kalender", "punkte": ["Balkenfarbe zeigt nur noch die Sicherheit: grün gesichert, gelb noch nicht gesichert (Termin mit Vorbehalt)", "Schloss 🔒 und 🔓 statt Haken und Streifen, Besen 🧹 und Eimer 🪣 für die Reinigung", "Ein Termin mit gesichertem und ungesichertem Teil ist ein einziger Balken: grün mit nach innen gerundetem Ende, gelb mündet darin", "Offene Familienstaffel: eigener grün gestrichelter Balken mit 🏃🏃", "Mai, September und 19. bis 31. Dezember sind rosa (Nebensaison)", "Ausgewählter Tag: schwarz im Hellmodus, weiss im Dunkelmodus", "Legende in Gruppen gegliedert, Hilfetexte und Bilder an die neuen Farben angepasst"] },
     { "v": "2.1.0.4", "datum": "2026-10-27", "titel": "Text", "punkte": ["Versionszeile kürzer, ohne Zeilenumbruch"] },
     { "v": "2.1.0.3", "datum": "2026-10-27", "titel": "Text", "punkte": ["Mit Vorbehalt: Hinweis, dass ein Airbnb-Gast 3 Tage Vorlauf hat (so in Airbnb eingestellt), in der Beschreibung und in der Kalender-Hilfe"] },
     { "v": "2.1.0.2", "datum": "2026-10-27", "titel": "Text", "punkte": ["Wie wird gerechnet: Familienmitglied zahlt CHF 25, wenn ein Gast im selben Zimmer schläft"] },

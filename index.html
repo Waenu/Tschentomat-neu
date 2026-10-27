@@ -24,7 +24,7 @@
     --accent: #1F5D4D;
     --accent-fg: #FFFFFF;
     --marke: #2F6DB0;
-    --bk-selbst: #1B4F9C; --bk-selbst-fg: #FFFFFF; --bk-eltern: #E0A800; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #0E2F66; --bk-eltern-ol: #7A5A00;
+    --bk-selbst: #1B4F9C; --bk-selbst-fg: #FFFFFF; --bk-eltern: #E0A800; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #0E2F66; --bk-eltern-ol: #7A5A00; --gruen: #3FAE6A; --gruen-fg: #06200F; --gruen-ol: #1E7A44; --gelb: #E0A800; --gelb-fg: #2B2000; --gelb-ol: #7A5A00; --chip: #4D5E61; --chip-fg: #FFFFFF; --rosa-bg: #F9D6E4; --rosa-line: #C65A8A; --sel: #000000; --sel-fg: #FFFFFF;
     --head-bg: #1F5D4D;
     --head-fg: #FFFFFF;
     --line: #CBD8D5;
@@ -53,7 +53,7 @@
       --fg: #E5EEEB;
       --muted: #9CB1AC;
       --accent: #7ACBB0;
-      --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A;
+      --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A; --gruen: #52C47F; --gruen-fg: #04170C; --gruen-ol: #8BE0AE; --gelb: #F0C84A; --gelb-fg: #2B2000; --gelb-ol: #F0C84A; --chip: #3B4D50; --chip-fg: #E5EEEB; --rosa-bg: #4A2436; --rosa-line: #E08AB0; --sel: #FFFFFF; --sel-fg: #000000;
     --head-bg: #7ACBB0;
     --head-fg: #08201A;
       --line: #2B4341;
@@ -81,7 +81,7 @@
     --fg: #E5EEEB;
     --muted: #9CB1AC;
     --accent: #7ACBB0;
-    --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A;
+    --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A; --gruen: #52C47F; --gruen-fg: #04170C; --gruen-ol: #8BE0AE; --gelb: #F0C84A; --gelb-fg: #2B2000; --gelb-ol: #F0C84A; --chip: #3B4D50; --chip-fg: #E5EEEB; --rosa-bg: #4A2436; --rosa-line: #E08AB0; --sel: #FFFFFF; --sel-fg: #000000;
     --head-bg: #7ACBB0;
     --head-fg: #08201A;
     --line: #2B4341;
@@ -267,16 +267,18 @@
   .cal-d.past { color: var(--muted); opacity: 0.45; border-style: dashed; }
   .cal-d.off { color: var(--muted); opacity: 0.5; }
   .cal-d.in { background: var(--note-bg); border-color: var(--accent); }
-  .cal-d.sel { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 700; }
+  .cal-d.sel { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); font-weight: 700; }
   .cal-d.sel { text-decoration: none; }
   .cal-d.hoch { background-color: var(--hoch-bg); border-color: #C98A1B; border-width: 2px; }
   .cal-d.occ.hoch { background-color: var(--hoch-bg); }
   .cal-d.spitz { background-color: var(--spitz-bg); border-color: var(--spitz-line); border-width: 2px; }
   .cal-d.occ.spitz { background-color: var(--spitz-bg); }
   .cal-d.sperr { background-color: var(--sperr-bg); border-color: var(--sperr-line); border-width: 2px; color: var(--muted); }
+  .cal-d.rosa { background-color: var(--rosa-bg); border-color: var(--rosa-line); border-width: 2px; }
+  .cal-d.occ.rosa { background-color: var(--rosa-bg); }
   .cal-d.ruhe { background-color: var(--ruhe-bg); border-color: var(--ruhe-line); border-width: 2px; }
   .cal-d.in.ruhe { background-color: var(--note-bg); border-color: var(--accent); }
-  .cal-d.sel.ruhe { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .cal-d.sel.ruhe { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); }
   .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 2px solid; vertical-align: -2px; margin-right: 6px; }
   .sw-hoch { border-color: #C98A1B; background: var(--hoch-bg); }
   .sw-gap { border-color: var(--sperr-line); background: var(--sperr-bg); }
@@ -295,7 +297,7 @@
   .cal-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .cal-leg p { margin: 0; }
   .cal-leg[hidden] { display: none; }
-  .cal-d.sel.hoch, .cal-d.sel.spitz, .cal-d.sel.occ, .cal-d.sel.gap { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .cal-d.sel.hoch, .cal-d.sel.spitz, .cal-d.sel.occ, .cal-d.sel.gap, .cal-d.sel.rosa { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); }
   .cal-d.in.hoch, .cal-d.in.spitz { border-color: var(--accent); }
   .cal-info summary { cursor: pointer; font-weight: 700; color: var(--accent); }
   .cal-info p { margin: 8px 0 0; }
@@ -363,11 +365,11 @@
   .exgap .ex-lab { font-size: var(--t-small); text-align: center; font-weight: 700; padding: 3px 2px; border-radius: 6px; border: 1px solid var(--line); }
   .exgap .ex-lab.gap { background: var(--sperr-bg); border-color: var(--sperr-line); }
   .exb { height: 24px; border-radius: 12px; display: flex; align-items: center; padding: 0 9px; font-size: 0.75rem; font-weight: 700; box-sizing: border-box; white-space: nowrap; overflow: hidden; min-width: 0; }
-  .exb.selbst { background: var(--bk-selbst); color: var(--bk-selbst-fg); box-shadow: 0 0 0 1.5px var(--bk-selbst-ol); }
-  .exb.eltern { background: var(--bk-eltern); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
-  .exb.stf { background: transparent; border: 2px dashed var(--bk-selbst); color: var(--fg); }
+  .exb.selbst, .exb.eltern { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
+  .exb.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
+  .exb .zk { margin-right: 4px; }
+  .exb.stf { background: transparent; border: 2px dashed var(--gruen-ol); color: var(--fg); }
   .exb.occ { background: repeating-linear-gradient(45deg, transparent 0 4px, var(--line) 4px 6px); border: 1px solid var(--line); color: var(--muted); }
-  .exb.prov { background: var(--bk-eltern); background-image: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,.6) 5px 9px); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
   .exb.gast { background: var(--hoch-bg); color: var(--fg); border: 1px solid #C98A1B; }
   .exb.fam { background: var(--accent); color: var(--accent-fg); }
   .exrow { display: flex; gap: 4px; align-items: center; }
@@ -433,28 +435,27 @@
   #calBlase .txt { flex: 1; min-width: 0; }
   #calBlase .txt p { margin: 4px 0 0; }
   #calBlase #calBlaseZu { font: inherit; background: transparent; border: 0; color: var(--muted); padding: 2px 6px; cursor: pointer; }
-  .bk.selbst { background: var(--bk-selbst); color: var(--bk-selbst-fg); }
-  .bk.eltern { background: var(--bk-eltern); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
-  .bk.selbst { box-shadow: 0 0 0 1.5px var(--bk-selbst-ol); }
-  .bk.prov { background-image: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,.6) 5px 9px); background-repeat: no-repeat; background-position: var(--sf, 0px) 0; background-size: calc(100% - var(--sf, 0px)) 100%; }
   .risk { color: var(--error-line); font-weight: 700; }
   label.risiko { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; padding: 10px; border: 2px solid var(--error-line); border-radius: 12px; background: var(--error-bg); color: var(--error-fg); }
   label.risiko input { width: 24px; height: 24px; flex: none; margin-top: 2px; }
-  .bk.prov.voll { background-image: none; }
-  .bk.prov.rest { background-position: 0 0; background-size: 100% 100%; }
+  .bk.gruen { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
+  .bk.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
+  .bk.gruen.mit { box-shadow: none; -webkit-mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); }
+  .bk.gelb.ein { padding-left: 13px; }
   .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
-  .bk .ck { display: inline-block; background: #fff; color: #0B7A32; border-radius: 50%; width: 13px; height: 13px; line-height: 13px; text-align: center; font-size: 10px; font-weight: 900; vertical-align: -1px; margin-left: 3px; }
-  .bk.sw { height: 9px; line-height: 9px; padding: 0; background: transparent; border: 2px dashed var(--bk-selbst); border-radius: 5px; opacity: 1; }
+  .bk.sw { padding: 0 4px; line-height: 13px; text-align: center; background: transparent; border: 2px dashed var(--gruen-ol); border-radius: 9px; opacity: 1; color: var(--fg); font-size: .7rem; }
+  .zk { display: inline-block; background: var(--chip); color: var(--chip-fg); border-radius: 5px; padding: 0 2px; margin-right: 3px; line-height: 13px; font-size: .62rem; font-weight: 400; vertical-align: top; margin-top: 2px; }
   .bk-leg-h { margin: 12px 0 0; }
   .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .bk-leg span { display: inline-flex; align-items: center; gap: 6px; }
-  .bk-leg i { flex: none; width: 26px; height: 11px; border-radius: 6px; display: inline-block; box-sizing: border-box; }
-  .bk-leg .k-selbst { background: var(--bk-selbst); }
-  .bk-leg .k-eltern { background: var(--bk-eltern); }
-  .bk-leg .k-prov { background: var(--bk-eltern); background-image: repeating-linear-gradient(45deg, transparent 0 4px, rgba(255,255,255,.6) 4px 7px); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); position: relative; }
-  .bk-leg .k-ck::after { content: "✓"; position: absolute; right: 3px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; border-radius: 50%; background: #fff; color: #0B7A32; font-size: 9px; font-weight: 900; line-height: 13px; text-align: center; font-style: normal; }
-  .bk-leg .k-sw { border: 2px dashed var(--bk-selbst); }
-  .bk { position: absolute; height: 15px; line-height: 15px; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 0.68rem; font-weight: 700; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; z-index: 2; opacity: 0.92; }
+  .bk-leg i { flex: none; width: 44px; height: 17px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
+  .bk-leg .k-gruen { background: var(--gruen); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
+  .bk-leg .k-gelb { background: var(--gelb); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
+  .bk-leg .k-sw { border: 2px dashed var(--gruen-ol); }
+  .bk-leg .zk { margin: 0; }
+  .leg-h { flex-basis: 100%; margin: 6px 0 0 !important; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .sw-rosa { border-color: var(--rosa-line); background: var(--rosa-bg); }
+  .bk { position: absolute; height: 17px; line-height: 17px; border-radius: 9px; background: var(--accent); color: var(--accent-fg); font-size: 0.68rem; font-weight: 700; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; z-index: 2; opacity: 0.92; }
   #aufStatus { text-align: center; }
   .chk-teil { margin: 10px 0 0; font-size: 1.1rem; color: var(--accent); }
   .chk-danke { background: var(--done-bg); border: 2px solid var(--done-line); border-radius: 10px; padding: 14px; font-size: 1.2rem; font-weight: 700; text-align: center; }
@@ -520,7 +521,7 @@
         <details class="sub" id="b-reisegruppe"><summary>👨‍👩‍👧‍👦 Reisegruppe</summary><div class="bc"><p>Eine Reisegruppe ist jede und jeder aus der Familie, in welcher Konstellation auch immer. Wer zusammen kommt, ist eine Reisegruppe, z. B. Jerome, Rahel, Malik und Jon, Manuel und Sarah, Deborah mit Kindern, Miriam mit Baby oder jemand allein.</p></div></details>
         <details class="sub" id="b-staffel"><summary>🔗 Familienstaffel</summary><div class="bc" id="bc-staffel"><p>Reisegruppen, die die Wohnung nacheinander benutzen, ohne dass die Eltern dazwischen reinigen. Sie endet, sobald die Eltern oder ein Airbnb-Gast kommen, oder wenn jemand von euch nicht selber reinigen will. Wer nicht selber reinigt, verursacht damit den anderen Kosten.</p></div></details>
         <details class="sub" id="b-februar" hidden><summary>⛷️ Februar</summary><div class="bc" id="bc-februar"></div></details>
-        <details class="sub" id="b-prov"><summary>⏳ Termin mit Vorbehalt</summary><div class="bc" id="bc-prov"></div></details>
+        <details class="sub" id="b-prov"><summary>🔓 Termin mit Vorbehalt</summary><div class="bc" id="bc-prov"></div></details>
         <details class="sub" id="b-luecke"><summary>🧩 Lücken</summary><div class="bc" id="bc-luecke"></div></details>
         <details class="sub" id="b-ruhe"><summary>🧹 Selber reinigen</summary><div class="bc" id="bc-ruhe"></div></details>
         <details class="sub" id="b-endrein"><summary>🪣 Endreinigung</summary><div class="bc" id="bc-endrein"></div></details>
@@ -584,8 +585,8 @@
     <div class="cal-grid" id="calGrid"></div>
     <div class="note h" id="calBlase" role="status" aria-live="polite" hidden></div>
     <div class="cal-leg" id="calHoch"></div>
-    <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben:</p>
-    <div class="bk-leg"><span id="legSelbst"><i class="k-selbst"></i>reinigt selbst</span><span id="legEltern"><i class="k-eltern"></i>Reinigung durch Eltern</span><span id="legStaffel"><i class="k-sw"></i>Familienstaffel noch offen</span><span id="legProv"><i class="k-prov"></i>schraffiert: Termin mit Vorbehalt, Airbnb-Gast hat Vorrang (voller Teil: schon sicher)</span><span id="legSicher"><i class="k-prov k-ck"></i><span id="legSicherTxt">ganz sicher: Abreise in höchstens 3 Tagen</span></span></div>
+    <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
     <p class="cal-sel" id="calSel" role="status"></p>
     <p class="note h" id="calSpitz" hidden></p>
     <p class="note h" id="calRuhe" hidden></p>
@@ -620,7 +621,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.1.0.4";
+let VERSION = "2.1.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -918,6 +919,8 @@ function spitzTermin() { if (!(ARR && DEP)) return null; for (let k = ARR; k < D
 const istRuhe = (k) => RUHE.some((a) => k.slice(5) >= a[0] && k.slice(5) <= a[1]);
 // Mit Vorbehalt: Aufenthalte, die nicht ganz in der Staffel-Zeit (Eigene Wäsche) liegen, sperren die Eltern nicht in Airbnb. Ein Airbnb-Gast hat Vorrang.
 const festTxt = () => FEST_MONATE.map((m) => MONATE[m - 1]).join(" und ");
+const NEBEN_MONATE = [5, 9], NEBEN_TAGE = [["12-19", "12-31"]];   // Nebensaison: rosa im Kalender
+const istNeben = (k) => NEBEN_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || NEBEN_TAGE.some((a) => k.slice(5) >= a[0] && k.slice(5) <= a[1]);
 const monatVon = (k) => parseInt(k.slice(5, 7), 10);
 function festStay(arr, dep) { if (!arr || !dep || !FEST_MONATE.length) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (FEST_MONATE.indexOf(monatVon(k)) >= 0) return true; return false; }
 function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; } return m; }
@@ -1016,12 +1019,12 @@ function bildLuecke() {
   return h + '<p class="exbild-cap">Beispiel: Der erste Airbnb-Gast reist am ' + wd[(start + vor) % 7] + ' ' + an + '. ab, der nächste kommt am ' + wd[(start + vor + n) % 7] + ' ' + ab + '. Dazwischen liegen ' + n + ' freie Nächte, das ist die Lücke. Ihr bucht sie ganz: Anreise ' + wd[(start + vor) % 7] + ' ' + an + '., Abreise ' + wd[(start + vor + n) % 7] + ' ' + ab + '. (' + n + ' Nächte, ' + P.lueckeRabatt + ' Prozent günstiger).</p></div>';
 }
 function bildStaffel() {
-  const bar = (k, t, f) => '<div class="exb ' + k + '" style="flex:' + f + '">' + t + '</div>';
+  const bar = (k, t, f) => '<div class="exb ' + k + '" style="flex:' + f + '">' + (k === "selbst" ? '<b class="zk">🧹</b>' : k === "eltern" ? '<b class="zk">🪣</b>' : "") + t + '</div>';
   let h = '<div class="exbild" role="img" aria-label="Beispiel einer Familienstaffel">';
   h += '<p class="extl">So läuft die Staffel</p><div class="exrow">' + bar("selbst", "Jerome", 3) + bar("selbst", "Deborah", 3) + bar("selbst", "Manuel", 3) + bar("occ", "Airbnb", 3) + '</div>';
   h += '<p class="exbild-cap">Alle reinigen selbst. Erst wenn der Airbnb-Gast kommt, fällt die Endreinigung an. Manuel zahlt sie zuerst und holt die Anteile von Jerome und Deborah zurück.</p>';
   h += '<p class="extl" style="margin-top:12px">So endet sie früher</p><div class="exrow">' + bar("selbst", "Jerome", 3) + bar("eltern", "Deborah", 4) + bar("selbst", "Manuel", 3) + '</div>';
-  h += '<p class="exbild-cap">Deborah will nicht selber reinigen, die Eltern reinigen (gelb). Damit endet die Staffel für Jerome, seine Endreinigung ist jetzt fällig. Manuel beginnt danach eine neue Staffel und trägt seine Endreinigung allein.</p></div>';
+  h += '<p class="exbild-cap">Deborah will nicht selber reinigen, die Eltern reinigen (🪣). Damit endet die Staffel für Jerome, seine Endreinigung ist jetzt fällig. Manuel beginnt danach eine neue Staffel und trägt seine Endreinigung allein.</p></div>';
   return h;
 }
 function bildVorbehalt() {
@@ -1029,19 +1032,19 @@ function bildVorbehalt() {
   let h = '<div class="exbild" role="img" aria-label="Beispiel eines Termins mit Vorbehalt"><div class="exgrid" style="grid-template-columns:repeat(' + tot + ',minmax(0,1fr))">';
   h += '<div class="extl exmark" style="grid-column:1;grid-row:1">heute</div>';
   h += '<div class="extl exmark" style="grid-column:' + (v + 1) + ';grid-row:1;grid-column-end:span 4;white-space:nowrap">heute +' + v + ' Tage</div>';
-  h += '<div class="exb prov" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;background-image:none">✓</div>';
-  h += '<div class="exb prov" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2">Termin mit Vorbehalt</div>';
-  h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">voll</div>';
-  h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gestreift</div></div>';
-  return h + '<p class="exbild-cap">Der volle Teil ist sicher: Dort kann kein neuer Airbnb-Gast mehr buchen. Der gestreifte Teil ist noch unsicher. Jeden Tag wächst der volle Teil ein Stück weiter, bis der ganze Balken voll ist.</p></div>';
+  h += '<div class="exb gruen" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;background:var(--gruen);color:var(--gruen-fg);padding:0 4px"><b class="zk">🔒</b></div>';
+  h += '<div class="exb gelb" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">🔓</b>Termin mit Vorbehalt</div>';
+  h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">grün</div>';
+  h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gelb</div></div>';
+  return h + '<p class="exbild-cap">Der grüne Teil ist gesichert 🔒: Dort kann kein neuer Airbnb-Gast mehr buchen. Der gelbe Teil ist noch nicht gesichert 🔓. Jeden Tag wächst der grüne Teil ein Stück weiter, bis der ganze Balken grün ist.</p></div>';
 }
 function bildKalender() {
   const wd = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
   let h = '<div class="exbild" role="img" aria-label="Beispiel der Balken im Kalender"><div class="exgrid" style="grid-template-columns:repeat(7,minmax(0,1fr))">';
   wd.forEach((w) => { h += '<div class="cal-wd">' + w + '</div>'; });
   for (let i = 1; i <= 7; i++) h += '<div class="cal-d ' + (i >= 6 ? "occ" : "") + '" style="cursor:default;display:flex;align-items:center;justify-content:center">' + i + '</div>';
-  h += '<div class="exb selbst" style="grid-column:1/span 2">Jerome</div><div class="exb stf" style="grid-column:3/span 2">Staffel offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
-  h += '</div><p class="exbild-cap">Blau: reinigt selbst. Gelb: Reinigung durch die Eltern. Gestrichelt: Die Familienstaffel ist noch offen. Gestreift: Airbnb-Gast. Die Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben.</p></div>';
+  h += '<div class="exb selbst" style="grid-column:1/span 2"><b class="zk">🧹</b>Jerome</div><div class="exb stf" style="grid-column:3/span 2">🏃🏃 offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
+  h += '</div><p class="exbild-cap">Grün: gesichert (🧹 ihr reinigt selbst, 🪣 die Eltern reinigen). Gelb: noch nicht gesichert, Termin mit Vorbehalt. Gestrichelt 🏃🏃: Die Familienstaffel ist noch offen. Gestreift: Airbnb-Gast. Die Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben.</p></div>';
   return h;
 }
 function bildSparen(bsp) {
@@ -1110,7 +1113,7 @@ function begriffeFuellen() {
   })();
   set("bc-staffel", document.getElementById("bc-staffel").innerHTML.replace(/<div class="exbild"[\s\S]*$/, "") + bildStaffel());
   set("bildKalender", bildKalender());
-  set("bc-prov", "<p>Ausserhalb der Staffel-Zeiten (" + (RUHE.length ? RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") : "keine festgelegt") + ") sperren die Eltern euren Termin <b>nicht in Airbnb</b>. Für ihn gilt ein <b>Vorbehalt</b>: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p><b>Praktisch sicher ✓:</b> Ein Airbnb-Gast hat " + VORLAUF + " Tage Vorlauf (so ist es in Airbnb eingestellt): Er kann frühestens in " + VORLAUF + " Tagen einchecken. Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann kein neuer Gast mehr buchen: Der Balken wird dort <b>voll</b> statt schraffiert und wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken voll und der Haken erscheint. Je länger der Aufenthalt und je weiter voraus, desto später wird er sicher.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen mit Vorbehalt sind im unsicheren Teil gestreift, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
+  set("bc-prov", "<p>Ausserhalb der Staffel-Zeiten (" + (RUHE.length ? RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") : "keine festgelegt") + ") sperren die Eltern euren Termin <b>nicht in Airbnb</b>. Für ihn gilt ein <b>Vorbehalt</b>: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p><b>Praktisch gesichert 🔒:</b> Ein Airbnb-Gast hat " + VORLAUF + " Tage Vorlauf (so ist es in Airbnb eingestellt): Er kann frühestens in " + VORLAUF + " Tagen einchecken. Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann kein neuer Gast mehr buchen: Der Balken wird dort <b>grün</b> (gesichert 🔒) statt gelb (🔓) und der grüne Teil wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken grün. Je länger der Aufenthalt und je weiter voraus, desto später wird er gesichert.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen mit Vorbehalt sind im noch nicht gesicherten Teil gelb, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
   set("bc-wunschtermin", "<p>Den Wunschtermin wählt ihr im Kalender. Wie das geht, steht unter «Erklärung Kalender». Die Farben stehen als Legende unter dem Kalender. " + symBtn("b-kalender", "🗓️") + "</p>");
   set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Einzelne Nächte daraus sind nicht buchbar.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
   set("bc-ruhe", RUHE.length ? bildRuhe() + "<ul><li>Möglich vom " + ruhe.replace(" und ", " und vom ") + ".</li>" +
@@ -1253,7 +1256,10 @@ function zeichneBalken() {
   g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
   const ks = Array.from(zell.keys()).sort();
   if (!ks.length) return;
-  const zeichne = (von, bis, vonMitte, bisMitte, klasse, text, sf) => {
+  const zk = (z) => '<b class="zk">' + z + "</b>";
+  // klasse: "gruen" (gesichert), "gelb" (mit Vorbehalt, noch nicht gesichert) oder "sw" (Staffel offen), dazu "konf"
+  // sf: bei Terminen mit Vorbehalt der erste noch nicht gesicherte Tag; rz: Zeichen fuer die Reinigung
+  const zeichne = (von, bis, vonMitte, bisMitte, klasse, text, sf, rz) => {
     const tage = ks.filter((k) => k >= von && k <= bis);
     if (!tage.length) return;
     const zeilen = new Map();
@@ -1262,37 +1268,33 @@ function zeichneBalken() {
       const c0 = zell.get(arr[0]), c1 = zell.get(arr[arr.length - 1]);
       const links = c0.offsetLeft + (arr[0] === von && vonMitte ? c0.offsetWidth / 2 : 0);
       const rechts = c1.offsetLeft + (arr[arr.length - 1] === bis && bisMitte ? c1.offsetWidth / 2 : c1.offsetWidth);
-      if (rechts - links < 8) return;
-      const d = document.createElement("div");
-      d.className = "bk " + klasse;
-      d.textContent = klasse === "sw" ? "" : text;
-      if (/\bsicher\b/.test(klasse) && rechts - links >= 50) { const ck = document.createElement("span"); ck.className = "ck"; ck.textContent = "✓"; d.appendChild(ck); }
-      if (sf) {   // voller (nicht gestreifter) Teil: Nächte vor sf sind schon sicher
+      const breite = rechts - links;
+      if (breite < 8) return;
+      const top = (c0.offsetTop + c0.offsetHeight - 20) + "px";
+      const mk = (cls, l, w, html) => { const d = document.createElement("div"); d.className = "bk " + cls; d.style.left = l + "px"; d.style.width = w + "px"; d.style.top = top; d.innerHTML = html; g.appendChild(d); return d; };
+      const inh = (w, schloss) => (w < 26 ? "" : zk(schloss) + (rz && w >= 46 ? zk(rz) : "") + (w >= 64 ? esc(text) : ""));
+      if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? "🏃🏃" : ""); return; }
+      const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
+      if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
+      let sfPx = 0;
+      if (sf) {
         let x = links;
         if (sf > arr[arr.length - 1]) x = rechts;
         else if (sf >= arr[0]) { const cs = zell.get(sf); x = cs.offsetLeft + cs.offsetWidth / 2; }
-        d.style.setProperty("--sf", Math.max(0, Math.min(x, rechts) - links) + "px");
+        sfPx = Math.max(0, Math.min(x, rechts) - links);
       }
-      const top = (c0.offsetTop + c0.offsetHeight - (klasse === "sw" ? 14 : 17)) + "px";
-      const sfPx = sf ? parseFloat(d.style.getPropertyValue("--sf")) : 0;
-      if (sf && sfPx > 6 && rechts - links - sfPx > 6) {   // Abriss: voller Teil und gestreifter Teil als zwei getrennte Stücke
-        const LUECKE = 4, d2 = document.createElement("div");
-        d2.className = "bk " + klasse.replace(/\bsicher\b/, "").trim() + " rest";
-        d.className = "bk " + klasse.replace(/\bsicher\b/, "").trim() + " voll";
-        d.textContent = text; d.style.removeProperty("--sf");
-        d.style.left = links + "px"; d.style.width = (sfPx - LUECKE / 2) + "px"; d.style.top = top;
-        d2.style.left = (links + sfPx + LUECKE / 2) + "px"; d2.style.width = (rechts - links - sfPx - LUECKE / 2) + "px"; d2.style.top = top;
-        if (sfPx < 50) { d.textContent = ""; d2.textContent = text; }
-        g.appendChild(d); g.appendChild(d2);
+      if (sf && sfPx >= breite - 6) { mk("gruen", links, breite, inh(breite, "🔒")); return; }          // ganz gesichert
+      if (sf && sfPx >= 18) {                                                                        // ein Termin: gruen mit nach innen gerundetem Ende, gelb muendet darin
+        const R = 9;
+        mk("gruen mit", links, sfPx, inh(sfPx, "🔒"));
+        mk("gelb ein", links + sfPx - R, breite - sfPx + R, (breite - sfPx) >= 20 ? zk("🔓") + (rz && breite - sfPx >= 46 ? zk(rz) : "") + (sfPx < 64 && breite - sfPx >= 100 ? esc(text) : "") : "");
         return;
       }
-      d.style.left = links + "px"; d.style.width = (rechts - links) + "px";
-      d.style.top = top;
-      g.appendChild(d);
+      mk("gelb" + konf, links, breite, inh(breite, "🔓"));
     });
   };
-  schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "Staffel offen"));
-  BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.sb ? "selbst" : "eltern") + (b.prov ? " prov" : "") + (provSicher(b) ? " sicher" : "") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null));
+  schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
+  BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, b.sb ? "🧹" : "🪣"));
 }
 function renderKalender() {
   const heute = heuteKey();
@@ -1333,6 +1335,7 @@ function renderKalender() {
     if (spitzVon(k)) b.classList.add("spitz");
     else if (istHoch(k)) b.classList.add("hoch");
     else if (istRuhe(k) && !BELEGT.has(k)) b.classList.add("ruhe");
+    else if (istNeben(k)) b.classList.add("rosa");
     if (istArr || istDep) b.classList.add("sel");
     if (k === heute) b.classList.add("today");
     b.disabled = !ok;
@@ -1357,19 +1360,19 @@ function renderKalender() {
   {
     const el = document.getElementById("calHoch");
     const hochOn = HOCH.length > 0 || HOCH_MONATE.length > 0;
-    let h = "";
+    let h = '<p class="leg-h">Monate und Zeiten</p>';
     if (hochOn) h += '<p><i class="sw sw-hoch"></i><b>Hochsaison</b>' + (HOCH_MONATE.length ? " (" + HOCH_MONATE.map((m) => MONATE[m - 1]).join(", ") + ")" : "") + "</p>";
-    if (P.lueckeRabatt > 0) h += '<p><i class="sw sw-gap"></i><b>Lücke</b> (' + P.lueckeRabatt + ' % Rabatt) ' + symBtn('b-luecke', '🧩') + '</p>';
-    if (RUHE.length) h += '<p><i class="sw sw-ruhe"></i><b>Eigene Wäsche möglich</b> (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ") " + symBtn("b-ruhe", "🧹") + "</p>";
+    if (RUHE.length) h += '<p><i class="sw sw-ruhe"></i><b>Eigene Wäsche und Staffel möglich</b> (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ") " + symBtn("b-ruhe", "🧹") + "</p>";
+    h += '<p><i class="sw sw-rosa"></i><b>Nebensaison</b> (Mai, September, 19. bis 31. Dezember)</p>';
     if (SPITZ.length) h += '<p><i class="sw sw-spitz"></i><b>Spitzenzeit</b> (Preis auf Anfrage)</p>';
     h += '<p><i class="sw sw-normal"></i><b>Übrige Zeiten:</b> nur mit Endreinigung ' + symBtn("b-endrein", "🪣") + '</p>';
+    h += '<p class="leg-h">Lücken-Hinweis</p>';
+    if (P.lueckeRabatt > 0) h += '<p><i class="sw sw-gap"></i><b>Lücke</b> (' + P.lueckeRabatt + ' % Rabatt) ' + symBtn('b-luecke', '🧩') + '</p>';
     h += '<p><i class="sw sw-occ"></i>nicht verfügbar</p>';
     el.innerHTML = h;
     el.hidden = h === "";
   }
   document.getElementById("legProv").hidden = !PROV_AN;
-  document.getElementById("legSicher").hidden = !PROV_AN;
-  document.getElementById("legSicherTxt").textContent = "ganz sicher: Abreise in höchstens " + VORLAUF + " Tagen (neue Gäste brauchen " + VORLAUF + " Tage Vorlauf)";
   begriffeFuellen();
   const sp = spitzTermin();
   const spEl = document.getElementById("calSpitz");
@@ -1399,7 +1402,7 @@ function renderKalender() {
   if (ARR && DEP) {
     if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison. Bitte wenn möglich einen anderen wählen. Eine Anfrage ist trotzdem möglich. 🙏"); break; }
     if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
-    if (provStay(ARR, DEP)) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "⏳") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
+    if (provStay(ARR, DEP)) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
     if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
   }
@@ -2178,7 +2181,7 @@ function bestZeigen() {
 }
 function provZeile(x) {
   if (!x.prov) return "";
-  const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "⏳ mit Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
+  const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "🔓 mit Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
   return '<br><span class="hint">' + txt + '</span> <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 Fest machen</button>';
 }
 function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
@@ -2393,12 +2396,13 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (k < heute) return kopf + "<p>Dieser Tag liegt in der Vergangenheit.</p>";
     const z = [];
     const stay = BUCH.filter((b) => b.arr <= k && k < b.dep), abr = BUCH.filter((b) => b.dep === k);
-    stay.forEach((b) => z.push("Reserviert für <b>" + esc(b.name) + "</b> (" + (b.sb ? "reinigt selbst, blauer Balken" : "Reinigung durch Eltern, gelber Balken") + (b.prov ? ", mit Vorbehalt" : "") + ")."));
+    stay.forEach((b) => z.push("Reserviert für <b>" + esc(b.name) + "</b> (" + (b.sb ? "reinigt selbst 🧹" : "Reinigung durch Eltern 🪣") + (b.prov ? ", mit Vorbehalt" : "") + ")."));
+    stay.filter((b) => !b.prov).forEach(() => z.push("🔒 <b>Gesichert:</b> Dieser Aufenthalt ist in Airbnb gesperrt."));
     stay.filter((b) => b.prov).forEach((b) => {
-      if (provKonflikt(b)) { z.push("⚠️ <b>Konflikt:</b> Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen. " + symBtn("b-prov", "⏳")); return; }
+      if (provKonflikt(b)) { z.push("⚠️ <b>Konflikt:</b> Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen. " + symBtn("b-prov", "🔓")); return; }
       const S = provSicherBis();
-      if (k < S) z.push("✓ <b>Diese Nacht ist sicher.</b> Du bist sicher bis " + esc(fmtTag(S)) + ", denn ein Airbnb-Gast hat " + VORLAUF + " Tage Vorlauf (so ist es in Airbnb eingestellt) und kann frühestens dann einchecken. " + (b.dep > S ? "Die späteren Nächte (schraffiert) sind noch nicht sicher; jeden Tag wird eine Nacht mehr sicher, der ganze Aufenthalt am " + esc(fmtTag(addDays(b.dep, -VORLAUF))) + ". " : "Der ganze Aufenthalt ist sicher. ") + symBtn("b-prov", "⏳"));
-      else z.push("⏳ <b>Diese Nacht ist noch nicht sicher.</b> Ein Airbnb-Gast kann sie noch buchen und hat dann Vorrang. Sicher wird sie am " + esc(fmtTag(addDays(k, 1 - VORLAUF))) + ". " + symBtn("b-prov", "⏳"));
+      if (k < S) z.push("🔒 <b>Diese Nacht ist gesichert.</b> Du bist gesichert bis " + esc(fmtTag(S)) + ", denn ein Airbnb-Gast hat " + VORLAUF + " Tage Vorlauf (so ist es in Airbnb eingestellt) und kann frühestens dann einchecken. " + (b.dep > S ? "Die späteren Nächte (gelb) sind noch nicht gesichert; jeden Tag wird eine Nacht mehr gesichert, der ganze Aufenthalt am " + esc(fmtTag(addDays(b.dep, -VORLAUF))) + ". " : "Der ganze Aufenthalt ist sicher. ") + symBtn("b-prov", "🔓"));
+      else z.push("🔓 <b>Diese Nacht ist noch nicht gesichert.</b> Ein Airbnb-Gast kann sie noch buchen und hat dann Vorrang. Gesichert wird sie am " + esc(fmtTag(addDays(k, 1 - VORLAUF))) + ". " + symBtn("b-prov", "🔓"));
       if (!provSicherDep(b.dep)) z.push(RISIKO);
     });
     if (!stay.length && BELEGT.has(k)) z.push(!BELEGT.has(addDays(k, -1)) && !BUCH.some((b) => b.arr <= addDays(k, -1) && addDays(k, -1) < b.dep) ? "Von Airbnb belegt: als Anreise nicht buchbar. Als Abreisetag möglich, denn der Airbnb-Gast kommt erst nachmittags." : "Von Airbnb belegt, nicht buchbar.");
@@ -2411,8 +2415,8 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (istRuhe(k) && !GAP.has(k)) z.push("Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
       else if (!stay.length) z.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche».") + "");
       if (festStay(k, addDays(k, 1))) z.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Sicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
-      else if (provStay(k, addDays(k, 1))) { z.push("Ein Aufenthalt wäre hier ein <b>Termin mit Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "⏳")); z.push(RISIKO); }
-      if (schweifListe().some((s) => k >= s.von && k <= s.bis)) z.push("Familienstaffel noch offen (gestrichelter Balken): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
+      else if (provStay(k, addDays(k, 1))) { z.push("Ein Aufenthalt wäre hier ein <b>Termin mit Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "🔓")); z.push(RISIKO); }
+      if (schweifListe().some((s) => k >= s.von && k <= s.bis)) z.push("Familienstaffel noch offen (gestrichelter Balken 🏃🏃): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
       const c = grid.querySelector('[data-k="' + k + '"]');
       if (c && c.classList.contains("off") && ARR && !DEP) z.push("Als Abreise nicht möglich: zu kurz, zu lang oder ein belegter Tag liegt dazwischen.");
     }
