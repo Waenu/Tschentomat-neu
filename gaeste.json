@@ -34,6 +34,12 @@
       "dep": "2027-01-22",
       "name": "Janine Collins",
       "typ": "extern"
+    },
+    {
+      "arr": "2027-01-25",
+      "dep": "2027-01-30",
+      "name": "Luca Banfi",
+      "typ": "airbnb"
     }
   ]
 }
