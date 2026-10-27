@@ -40,6 +40,12 @@
       "dep": "2027-01-30",
       "name": "Luca Banfi",
       "typ": "airbnb"
+    },
+    {
+      "arr": "2027-01-30",
+      "dep": "2027-02-06",
+      "name": "Beat Galliker",
+      "typ": "airbnb"
     }
   ]
 }
