@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.18.0.1", "datum": "2026-10-27", "titel": "Ersteller in zwei Zeilen", "punkte": ["Oben in der Versionshistorie stehen «Idee und Konzept: Wänu» und «Umsetzung: Claude KI» untereinander"] },
     { "v": "2.18.0.0", "datum": "2026-10-27", "titel": "Startseite: immer nur ein Bereich offen", "punkte": ["Ansichten (Auge) folgen dem gleichen Schema wie Anleitung & Infos, Reservieren und Cheminée: Öffnet man einen Bereich, schliessen sich die anderen"] },
     { "v": "2.17.0.0", "datum": "2026-10-27", "titel": "Wünsche und Fehler melden, Liste Geplant und Ideen", "punkte": ["Neu unter «Anleitung & Infos»: Fehler, Wunsch oder Frage mit Vorlage schreiben und per WhatsApp an Papi senden, Version, Handy und gewählte Daten fügt die App selbst an", "Neu: Liste «Geplant und Ideen» aus der Datei ideen.json", "Auf Papis Handy erscheint nur die Liste, nicht das Meldeformular"] },
     { "v": "2.16.0.0", "datum": "2026-10-27", "titel": "Dickere Balken, eigene Schlösser", "punkte": ["Kalender: Die Balken sind höher und die Symbole darin grösser, das Datum steht kleiner weiter oben im Feld", "Schloss geschlossen und offen sind jetzt eigene Zeichnungen: Beim offenen Schloss ist der Bügel angehoben"] },
