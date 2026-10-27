@@ -508,7 +508,7 @@
   @keyframes puls { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
   #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
   #calGrid.papi .cal-d.occ:disabled { pointer-events: none; }
-  #calGrid .cal-d.occ:disabled, #calGrid .cal-d.provtag:disabled { pointer-events: none; }   /* Tipp auf belegte Tage erreicht den Kalender auch ohne Hilfe */
+  #calGrid .cal-d.occ:disabled, #calGrid .cal-d.provtag:disabled, #calGrid .cal-d.past:disabled { pointer-events: none; }   /* Tipp auf belegte Tage erreicht den Kalender auch ohne Hilfe */
   #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
   #calGrid.gmode .cal-d:disabled { pointer-events: none; }
   #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -727,7 +727,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.14.0.2";
+let VERSION = "2.15.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1030,6 +1030,7 @@ const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "A
 const WT_KURZ = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 const WT_LANG = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 const KAL_MONATE_VORAUS = 24;
+const KAL_MONATE_ZURUECK = 12;   // so weit darf man im Kalender zurückblättern (nur zur Ansicht)
 let BELEGT = new Set();
 let BELEGT_OK = false, BELEGT_FRISCH = false;   // FRISCH: Belegung eben erfolgreich aus dem Netz geladen (nicht aus dem Zwischenspeicher)
 let ARR = "", DEP = "";
@@ -1596,7 +1597,7 @@ function renderKalender() {
   const heute = heuteKey();
   const n0 = heuteDate();
   const abstand = (calY - n0.getFullYear()) * 12 + (calM - n0.getMonth());
-  document.getElementById("calPrev").disabled = abstand <= 0;
+  document.getElementById("calPrev").disabled = abstand <= -KAL_MONATE_ZURUECK;
   document.getElementById("calNext").disabled = abstand >= KAL_MONATE_VORAUS;
   document.getElementById("calHeute").disabled = abstand === 0;
   document.getElementById("calTitle").textContent = MONATE[calM] + " " + calY;
