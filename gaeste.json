@@ -22,6 +22,12 @@
       "dep": "2027-01-07",
       "name": "Marianne und ich",
       "typ": "airbnb"
+    },
+    {
+      "arr": "2027-01-07",
+      "dep": "2027-01-10",
+      "name": "Chuenisbärgli Familie",
+      "typ": "fam"
     }
   ]
 }
