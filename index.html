@@ -467,6 +467,11 @@
   #hilfeKnopf.neu { animation: puls 1s ease-in-out 3; }
   @keyframes puls { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
   #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
+  #calGrid.papi .cal-d.occ:disabled { pointer-events: none; }
+  #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
+  #calBlase .gb input { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
+  #calBlase .gb .btn { width: 100%; justify-content: center; min-height: 48px; }
+  #calBlase .gb .btn.quiet { border-style: dashed; font-weight: 500; }
   #calBlase { margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
   #calBlase .txt { flex: 1; min-width: 0; }
   #calBlase .txt p { margin: 4px 0 0; }
@@ -669,7 +674,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.7.1.0";
+let VERSION = "2.7.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1375,6 +1380,32 @@ function gaesteBalken() {
   return l.map((x, i) => { let end = belegtEnde(x.arr); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name }; });
 }
 function gastKurz(n) { return String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ").slice(0, 30); }   // Name bleibt, wie er eingegeben wird
+function gastLaufStart(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(addDays(n, -1))) n = addDays(n, -1); return n; }
+function gastEintragFuer(k) { const rs = gastLaufStart(k); const l = GAESTE.filter((x) => x.arr >= rs && x.arr <= k).sort((p, q) => (p.arr < q.arr ? -1 : 1)); return l.length ? l[l.length - 1] : null; }
+function gastFormularFuer(k) {
+  if (!TOKEN || !BELEGT_AIR || !BELEGT_AIR.has(k)) return "";
+  const e = gastEintragFuer(k), key = e ? e.arr : gastLaufStart(k);
+  return '<div class="gb"><b>👤 Name des Airbnb-Gastes</b><input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(e ? e.name : "") + '">' +
+    '<button type="button" class="btn main" data-gbs="' + key + '">💾 Speichern (Aufenthalt ab ' + esc(fmtTag(key)) + ')</button>' +
+    (k !== key ? '<button type="button" class="btn" data-gbs="' + k + '">➕ Neuer Gast ab ' + esc(fmtTag(k)) + '</button>' : "") +
+    (e ? '<button type="button" class="btn quiet" data-gbd="' + key + '">🗑️ Name entfernen</button>' : "") + '<span class="hint" id="gbMsg"></span></div>';
+}
+document.addEventListener("click", async (ev) => {
+  const bs = ev.target.closest("[data-gbs]"), bd = ev.target.closest("[data-gbd]");
+  if (!bs && !bd) return;
+  const msg = document.getElementById("gbMsg"), say = (t) => { if (msg) msg.textContent = t; };
+  if (bestBusy) return;
+  const arr = (bs || bd).getAttribute(bs ? "data-gbs" : "data-gbd");
+  if (bd) { const x = GAESTE.find((y) => y.arr === arr); if (!x || !confirm("Name «" + x.name + "» ab " + fmtTag(arr) + " wirklich entfernen?")) return; }
+  const name = bs ? gastKurz((document.getElementById("gbName") || {}).value) : "";
+  if (bs && !name) { say("Bitte einen Namen eingeben."); return; }
+  bestBusy = true; say("Speichere …");
+  try {
+    const j = await ghGaeste((l) => l.filter((x) => x.arr !== arr).concat(bs ? [{ arr: arr, name: name }] : []));
+    gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {}
+    bestBusy = false; zeichneBalken(); bestZeigen(); say(bs ? "✅ Gespeichert. Alle sehen es in 1 bis 2 Minuten." : "Name entfernt.");
+  } catch (err) { bestBusy = false; say("⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt.")); }
+});
 function gaesteAn(j) {
   if (!j || !Array.isArray(j.gaeste)) return false;
   GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, name: gastKurz(x.name) }));
@@ -1452,6 +1483,7 @@ function renderKalender() {
   document.getElementById("calTitle").textContent = MONATE[calM] + " " + calY;
   const g = document.getElementById("calGrid");
   g.innerHTML = "";
+  g.classList.toggle("papi", !!TOKEN);
   WT_KURZ.forEach((w) => { const h = document.createElement("div"); h.className = "cal-wd"; h.textContent = w; g.appendChild(h); });
   const erster = new Date(Date.UTC(calY, calM, 1));
   const lead = (erster.getUTCDay() + 6) % 7;
@@ -2713,7 +2745,9 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       const c = grid.querySelector('[data-k="' + k + '"]');
       if (c && c.classList.contains("off") && ARR && !DEP) z.push("Als Abreise nicht möglich: zu kurz, zu lang oder ein belegter Tag liegt dazwischen.");
     }
-    return kopf + z.map((s) => "<p>" + s + "</p>").join("");
+    const gf = !stay.length ? gastFormularFuer(k) : "";
+    const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
+    return kopf + (gn ? "<p>Airbnb-Gast: <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + gf;
   }
   function zelle(e) {
     let c = e.target.closest ? e.target.closest(".cal-d") : null;
@@ -2729,7 +2763,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (an) { zu = false; zeigen(START); } else blase.hidden = true;
     speichern();
   }
-  grid.addEventListener("click", (e) => { if (!an) return; const c = zelle(e); if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
+  grid.addEventListener("click", (e) => { const c = zelle(e); if (!an && !(TOKEN && c && c.dataset.k && c.classList.contains("occ") && BELEGT_AIR && BELEGT_AIR.has(c.dataset.k))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
   blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; } });
   document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && !zu) zeigen(START); });
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
