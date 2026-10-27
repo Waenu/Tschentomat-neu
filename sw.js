@@ -12,7 +12,7 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request).then((r) => {
+    fetch(e.request, { cache: "no-store" }).then((r) => {   // am Browser-Zwischenspeicher vorbei, damit neue Versionen sofort kommen
       const kopie = r.clone();
       caches.open(CACHE).then((c) => c.put(e.request.url.split("?")[0], kopie)).catch(() => {});
       return r;
