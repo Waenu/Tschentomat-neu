@@ -1,0 +1,40 @@
+{
+  "_hinweis": "Liste «Geplant und Ideen» in der App. Status: arbeit, geplant, idee, fertig. Keine geheimen Zugänge hier eintragen.",
+  "eintraege": [
+    {
+      "status": "arbeit",
+      "titel": "Verwaltung weiter aufräumen",
+      "text": "Teile ein- und ausklappen."
+    },
+    {
+      "status": "geplant",
+      "titel": "Eigene Symbole für weitere Knöpfe",
+      "text": "Zum Beispiel Kalenderblatt und Cheminée-Flamme, bewegt wie Koffer und Häkchen."
+    },
+    {
+      "status": "idee",
+      "titel": "Namen der Airbnb-Gäste aus dem Android-Kalender übernehmen",
+      "text": "Zurückgestellt, die Namen trägt Papi von Hand ein."
+    },
+    {
+      "status": "idee",
+      "titel": "Darstellung in Firefox prüfen",
+      "text": "Dort sieht die App am PC nicht richtig aus, am Handy mit Chrome läuft sie."
+    },
+    {
+      "status": "fertig",
+      "titel": "Wünsche und Fehler melden",
+      "text": "Ab Version 2.17.0.0."
+    },
+    {
+      "status": "fertig",
+      "titel": "Dickere Balken, eigene Schlösser",
+      "text": "Ab Version 2.16.0.0."
+    },
+    {
+      "status": "fertig",
+      "titel": "Im Kalender zurückblättern",
+      "text": "Bis 12 Monate, ab Version 2.15.0.0."
+    }
+  ]
+}

@@ -359,6 +359,20 @@
   #kindStreifen .btn { background: #fff; color: #1F5FA8; border: 0; border-radius: 8px; min-height: 44px; padding: 6px 14px; font: inherit; font-weight: 700; cursor: pointer; }
   #bestKasten .vk.offen { border: 3px solid #F28C28; }
   #bestKasten .vk-trenn { border: 0; border-top: 2px solid rgba(127,127,127,0.4); margin: 18px 0 0; }
+  #meldenKasten .typ { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  #meldenKasten .typ button { font: inherit; font-weight: 700; min-height: 48px; border-radius: 10px; border: 2px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; padding: 4px; }
+  #meldenKasten .typ button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+  #meldenKasten textarea { width: 100%; box-sizing: border-box; font: inherit; min-height: 150px; padding: 8px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); resize: vertical; }
+  #meldenKasten .mvor { background: var(--note-bg); border-radius: 10px; padding: 10px 12px; font-size: .88rem; white-space: pre-wrap; overflow-wrap: anywhere; border-left: 4px solid var(--accent); }
+  #meldenKasten a.msend { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 10px; background: var(--accent); color: var(--accent-fg); font-weight: 700; text-decoration: none; }
+  #meldenKasten a.msend[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+  #meldenKasten a.msend svg { width: 22px; height: 22px; fill: currentColor; }
+  #meldenKasten .idl { list-style: none; margin: 0; padding: 0; }
+  #meldenKasten .idl li { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; padding: 8px 0; border-top: 1px solid var(--line); }
+  #meldenKasten .idl li:first-child { border-top: 0; }
+  #meldenKasten .st { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border: 2px solid currentColor; border-radius: 99px; padding: 1px 8px; white-space: nowrap; margin-top: 2px; }
+  #meldenKasten .st.idee { color: var(--muted); } #meldenKasten .st.geplant { color: var(--marke); } #meldenKasten .st.arbeit { color: #C98A1B; } #meldenKasten .st.fertig { color: var(--accent); }
+  #meldenKasten .idl b { display: block; }
   .bigbtn .bi { font-size: 1.7rem; line-height: 1; flex: 0 0 2.4rem; width: 2.4rem; text-align: center; }
   a.bigbtn { text-decoration: none; box-sizing: border-box; }
   #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
@@ -646,6 +660,10 @@
         <details class="sub" id="b-geld"><summary>💰 Geldverwendung</summary><div class="bc" id="bc-geld"></div></details>
       </div>
     </details>
+    <details class="card" id="b-melden">
+      <summary>💬 Wünsche und Fehler</summary>
+      <div class="rows" id="meldenKasten"></div>
+    </details>
     </div>
     <button type="button" class="bigbtn main" id="btnReserv" aria-controls="rechner"><span class="bi" aria-hidden="true"><svg class="an-cal" width="34" height="34" viewBox="0 0 38 38" aria-hidden="true"><rect x="4" y="7" width="30" height="27" rx="4" fill="#fff" stroke="#C62828" stroke-width="2"/><rect x="4" y="7" width="30" height="9" rx="4" fill="#C62828"/><g class="an-unter"><text x="19" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#16302B" font-family="system-ui,sans-serif">2</text></g><g class="an-blatt"><rect x="5" y="17" width="28" height="16" fill="#fff"/><text x="19" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#16302B" font-family="system-ui,sans-serif">1</text></g></svg></span>Ich reserviere jetzt</button>
     <button type="button" class="bigbtn" id="btnAnreise" hidden><span class="bi" aria-hidden="true"><svg class="ik" viewBox="0 0 40 40" focusable="false"><g class="ik-koffer"><path d="M15 12 V8 a2 2 0 0 1 2 -2 h6 a2 2 0 0 1 2 2 V12" fill="none" stroke="#3B7DC4" stroke-width="2.4" stroke-linecap="round"/><rect x="8" y="12" width="24" height="21" rx="4" fill="#3B7DC4"/><path d="M14 16 V29 M26 16 V29" stroke="#fff" stroke-width="1.6" opacity=".55" stroke-linecap="round"/><circle class="ik-rad" cx="14" cy="36" r="2.6" fill="#8A9490"/><circle class="ik-rad" cx="26" cy="36" r="2.6" fill="#8A9490"/></g></svg></span><span class="bt">Anreise-Wäsche<small id="btnAnreiseSub"></small></span></button>
@@ -738,7 +756,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.16.0.0";
+let VERSION = "2.17.0.0";
 const LK_ZU = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg>', LK_OFFEN = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg>';
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
@@ -2375,6 +2393,76 @@ document.addEventListener("toggle", (e) => {
   const sm = d.querySelector(":scope > summary");
   if (sm) setTimeout(() => sm.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
 }, true);
+// ===== Wünsche und Fehler melden (WhatsApp, ohne Nummer) und Liste «Geplant und Ideen» (ideen.json) =====
+(function () {
+  const VORL = { Fehler: "Was wolltest du tun?\n\nWas ist passiert?\n\nWas hätte passieren sollen?\n", Wunsch: "Ich wünsche mir:\n\nDas würde helfen, weil:\n", Frage: "Meine Frage:\n" };
+  const WA_PFAD = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.8-.1 1.3z"/></svg>';
+  const STATUS = { arbeit: "in Arbeit", geplant: "geplant", idee: "Idee", fertig: "erledigt" }, REIHE = ["arbeit", "geplant", "idee", "fertig"];
+  let typ = "Fehler", text = VORL.Fehler, ideen = null, ideenFehler = false;
+  const kasten = document.getElementById("meldenKasten"), karte = document.getElementById("b-melden");
+  function geraet() {
+    const u = navigator.userAgent || "";
+    const os = /Android/.test(u) ? "Android" : /iPhone|iPad/.test(u) ? "iPhone/iPad" : /Windows/.test(u) ? "Windows" : /Macintosh/.test(u) ? "Mac" : /Linux/.test(u) ? "Linux" : "unbekannt";
+    const br = /SamsungBrowser/.test(u) ? "Samsung Internet" : /Edg\//.test(u) ? "Edge" : /Firefox|FxiOS/.test(u) ? "Firefox" : /Chrome|CriOS/.test(u) ? "Chrome" : /Safari/.test(u) ? "Safari" : "Browser";
+    return os + ", " + br + ", Fenster " + window.innerWidth + "×" + window.innerHeight;
+  }
+  function nachricht() {
+    let k = "TSCHENT-O-MAT: " + typ + "\nVon: " + (ABSENDER || "(Name nicht gewählt)") + "\nVersion " + VERSION + "\nHandy: " + geraet();
+    if (typ === "Fehler" && ARR) k += "\nGewählt: " + fmtTag(ARR) + (DEP ? " bis " + fmtTag(DEP) : " (Abreise noch nicht gewählt)");
+    return k + "\n\n" + text.trim();
+  }
+  function aktualisieren() {
+    const ok = text.trim() !== "" && text.trim() !== VORL[typ].trim();
+    const a = document.getElementById("meldSend"), v = document.getElementById("meldVor");
+    if (!a || !v) return;
+    v.textContent = nachricht();
+    a.setAttribute("aria-disabled", ok ? "false" : "true");
+    a.href = ok ? "https://wa.me/?text=" + encodeURIComponent(nachricht()) : "#";
+    document.getElementById("meldHinweis").textContent = ok ? "WhatsApp öffnet sich mit dem fertigen Text. Wähle Papi und tippe auf Senden. Ein Bild fügst du in WhatsApp selbst an." : "Beantworte die Fragen oben, dann wird der Knopf aktiv.";
+  }
+  function liste() {
+    if (ideenFehler) return '<p class="hint">Die Liste konnte nicht geladen werden.</p>';
+    if (!ideen) return '<p class="hint">Laden …</p>';
+    const l = ideen.slice().sort((p, q) => REIHE.indexOf(p.status) - REIHE.indexOf(q.status));
+    return '<ul class="idl">' + l.map((x) => '<li><span class="st ' + esc(REIHE.indexOf(x.status) >= 0 ? x.status : "idee") + '">' + esc(STATUS[x.status] || "Idee") + "</span><div><b>" + esc(x.titel) + "</b>" + (x.text ? '<span class="hint">' + esc(x.text) + "</span>" : "") + "</div></li>").join("") + "</ul>";
+  }
+  function zeichnen() {
+    let h = "";
+    if (!TOKEN) {   // Papi bekommt die Meldungen, er braucht kein Formular
+      h += '<h3>💬 Etwas melden</h3><p class="hint">Deine Nachricht geht per WhatsApp an Papi. Version, Handy und die gewählten Daten fügt die App selbst an.</p>' +
+        '<div class="typ" role="group" aria-label="Art der Meldung">' + ["Fehler", "Wunsch", "Frage"].map((t) => '<button type="button" data-mtyp="' + t + '" aria-pressed="' + (t === typ) + '">' + t + "</button>").join("") + "</div>" +
+        '<label for="meldTxt"><b>Was ist los?</b></label><textarea id="meldTxt"></textarea>' +
+        '<p class="hint">So sieht die Nachricht aus:</p><div class="mvor" id="meldVor" aria-live="polite"></div>' +
+        '<a class="msend" id="meldSend" href="#" target="_blank" rel="noopener" aria-disabled="true">' + WA_PFAD + "<span>Per WhatsApp senden</span></a><p class=\"hint\" id=\"meldHinweis\" role=\"status\"></p>";
+    }
+    h += '<h3>🗒️ Geplant und Ideen</h3><p class="hint">Was schon läuft und was angedacht ist.</p>' + liste();
+    kasten.innerHTML = h;
+    const t = document.getElementById("meldTxt"); if (t) { t.value = text; aktualisieren(); }
+  }
+  kasten.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-mtyp]");
+    if (b) {
+      const alt = typ, neu = b.dataset.mtyp;
+      if (text.trim() === "" || text.trim() === VORL[alt].trim()) text = VORL[neu];
+      typ = neu; zeichnen();
+      return;
+    }
+    if (e.target.closest("#meldSend") && document.getElementById("meldSend").getAttribute("aria-disabled") === "true") e.preventDefault();
+  });
+  kasten.addEventListener("input", (e) => { if (e.target.id === "meldTxt") { text = e.target.value; aktualisieren(); } });
+  karte.addEventListener("toggle", async () => {
+    if (!karte.open) return;
+    zeichnen();
+    if (ideen) return;
+    try {
+      const r = await fetch("ideen.json?v=" + Date.now(), { cache: "no-store" });
+      const j = await r.json();
+      ideen = Array.isArray(j.eintraege) ? j.eintraege : []; ideenFehler = false;
+    } catch (err) { ideenFehler = true; }
+    const t = document.getElementById("meldTxt"); if (t) text = t.value;   // Eingabe bleibt beim Neuzeichnen erhalten
+    zeichnen();
+  });
+})();
 // Versionshistorie (versionen.json, neueste zuoberst)
 (function () {
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
