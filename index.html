@@ -620,7 +620,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.1.0.3";
+let VERSION = "2.1.0.4";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2499,7 +2499,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
       location.href = location.pathname;
     });
   })();
-  document.getElementById("ver").textContent = "Vorschau Version " + VERSION + " · gültig ab " + GUELTIG_AB;
+  document.getElementById("ver").textContent = "Vorschau " + VERSION + " · ab " + GUELTIG_AB;
   initKalenderMonat();
   berechneLuecken();
   build(); render(); renderKalender(); aufentZeigen(); bestZeigen();
