@@ -289,11 +289,6 @@
   .sw-ruhe { border-color: var(--ruhe-line); background: var(--ruhe-bg); }
   .sw-normal { border-color: var(--line); background: transparent; }
   .sw-sperr { border-color: var(--sperr-line); background: var(--sperr-bg); }
-  #famDet > summary { display: block; min-height: 0; border: 0; padding: 0; background: none; font-weight: 400; font-size: var(--t-text); white-space: normal; cursor: pointer; }
-  #famDet > summary::after { content: " ▾"; margin: 0; padding: 0; }
-  #famDet[open] > summary { background: none; color: inherit; border: 0; margin-bottom: 8px; }
-  #famDet[open] > summary::after { content: " ▴"; }
-  #famDet ul { margin: 8px 0 0; }
   .cal-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .cal-leg p { margin: 0; }
   .cal-leg[hidden] { display: none; }
@@ -468,6 +463,7 @@
   @keyframes puls { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
   #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
   #calGrid.papi .cal-d.occ:disabled { pointer-events: none; }
+  #calGrid .cal-d.occ:disabled, #calGrid .cal-d.provtag:disabled { pointer-events: none; }   /* Tipp auf belegte Tage erreicht den Kalender auch ohne Hilfe */
   #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
   #calGrid.gmode .cal-d:disabled { pointer-events: none; }
   #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -656,7 +652,7 @@
     <p class="note h" id="calNormal" hidden></p>
     <div class="note h" id="calLRegeln" hidden></div>
     <div class="note h" id="calWarn" hidden></div>
-    <div class="note h" id="calFam" hidden></div>
+    <p class="hint" id="calTipp">Tippe einen belegten Tag oder Balken an, dann siehst du die Details.</p>
   </section>
 
   <form id="form" onsubmit="return false" autocomplete="off"></form>
@@ -684,7 +680,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.12.0.3";
+let VERSION = "2.13.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1072,7 +1068,6 @@ function ruheStay() {
 const fmtMD = (md) => parseInt(md.slice(3), 10) + ". " + MONATE[parseInt(md.slice(0, 2), 10) - 1];
 const istHoch = (k) => HOCH_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || HOCH.some((a) => k >= a[0] && k <= a[1]);
 let GAP = new Set();           // alle Naechte, die in einer Luecke liegen
-let FAM_OFFEN = false;          // Liste «Bestätigte Aufenthalte» ausgeklappt?
 let GAPSPERR = new Set();       // gesperrte Luecken-Naechte (Familie)
 let GAPSTART = new Map();      // erste Nacht der Luecke -> Abreisetag (Tag der naechsten Belegung)
 function berechneLuecken() {
@@ -2249,15 +2244,6 @@ function aufentZeigen() {
     zb.hidden = zl.length === 0;
     zb.innerHTML = zl.map((b) => '<div class="note h rot-warn"><b>💳 Zahlung offen:</b> Für deinen Aufenthalt vom ' + esc(fmtTag(b.arr)) + ' bis ' + esc(fmtTag(b.dep)) + ' sind <b>' + esc(chf(b.betrag)) + '</b> fällig. Die Frist war am ' + esc(fmtTag(zahlFrist(b))) + '. Bitte überweise jetzt, die Bankverbindung steht unter «Zahlung» ' + symBtn("b-zahlung", "💰") + '. Sobald Papi die Zahlung verbucht hat, verschwindet diese Meldung.</div>').join("");
   }
-  const f = document.getElementById("calFam");
-  if (f && !f.dataset.tg) { f.dataset.tg = "1"; f.addEventListener("toggle", (e) => { if (e.target.id === "famDet") FAM_OFFEN = e.target.open; }, true); }
-  if (f) {
-    const h = heuteKey();
-    const l = BUCH.filter((b) => b.dep >= h);
-    f.hidden = l.length === 0;
-    const lz = l.slice().sort((a, b) => (a.arr < b.arr ? -1 : 1)), kurz = (k) => Number(k.slice(8)) + "." + Number(k.slice(5, 7)) + ".";
-    f.innerHTML = l.length ? '<details id="famDet"' + (FAM_OFFEN ? " open" : "") + '><summary>' + HW + "Bestätigte Aufenthalte (" + lz.length + ")</summary><ul>" + lz.map((b) => "<li><b>" + esc(b.name) + "</b>: " + fmtTag(b.arr) + " bis " + fmtTag(b.dep) + (b.sb ? " (reinigt selbst)" : "") + (b.lg ? " (ganze Lücke)" : "") + (b.prov ? (provKonflikt(b) ? " ⚠️ Konflikt mit Airbnb-Gast" : " (mit Vorbehalt)") : "") + "</li>").join("") + "</ul></details>" : "";
-  }
 }
 function ovOeffnen(id, an) {
   document.getElementById(id).hidden = !an;
@@ -2826,7 +2812,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (an) { zu = false; zeigen(START); } else blase.hidden = true;
     speichern();
   }
-  grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(TOKEN && c && c.dataset.k && c.classList.contains("occ") && BELEGT_AIR && BELEGT_AIR.has(c.dataset.k))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
+  grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(c && c.dataset.k && (c.classList.contains("occ") || c.classList.contains("provtag") || BUCH.some((b) => b.arr <= c.dataset.k && c.dataset.k <= b.dep)))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
   blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; } });
   document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && !zu) zeigen(START); });
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
