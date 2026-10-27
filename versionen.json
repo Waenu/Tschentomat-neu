@@ -1,0 +1,17 @@
+{
+  "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
+  "versionen": [
+    { "v": "2.0.0.0", "datum": "2026-10-27", "titel": "Vorschau-Version gestartet", "punkte": ["Eigene Vorschau neben der gültigen Version, mit eigenem Speicher und eigenen Daten", "Versionshistorie eingebaut"] },
+    { "v": "1.10.5", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Menü-Absatz wieder am Ende", "Bestätigung klarer formuliert"] },
+    { "v": "1.10.4", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Wäsche-Liste unter Begriffe «Selber reinigen» erklärt", "Benutzung mit Verweis darauf"] },
+    { "v": "1.10.3", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Trinkgeld-Text mit Papi", "Hilfetext zu Anreise-Wäsche und Checkliste"] },
+    { "v": "1.10.2", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Februar-Text: bei mehr Nächten anteilig"] },
+    { "v": "1.10.1", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Selbstreinigung klarer (ohne Gäste, wenn erwünscht)", "Kein Meiden-Hinweis im Februar"] },
+    { "v": "1.10.0", "datum": "2026-10-26", "titel": "Februar-Mindestpreis", "punkte": ["Februar: Mindestpreis 1920 statt Mindestgäste und 2500", "Februar-Beispiel für Familie mit Partner und 2 Kindern"] },
+    { "v": "1.9.12", "datum": "2026-10-26", "titel": "Texte", "punkte": ["Februar-Text klarer (Geltung, Beispiel 7 Nächte)"] },
+    { "v": "1.9.11", "datum": "2026-10-26", "titel": "Begriffe", "punkte": ["Neuer Eintrag «Februar» unter Begriffe (Regeln, Gäste, Mindestpreis)", "Sprung-Icons in den Kalender-Hinweisen"] },
+    { "v": "1.9.10", "datum": "2026-10-26", "titel": "Layout", "punkte": ["Icons der grossen Knöpfe bündig übereinander, Text linksbündig"] },
+    { "v": "1.9.9", "datum": "2026-10-26", "titel": "Ansichten", "punkte": ["Ansichten-Kasten einklappbar mit Knopf (Auge)"] },
+    { "v": "bis 1.9.8", "datum": "", "titel": "Aufbau", "punkte": ["Preisrechner, Kalender mit Belegung, Staffelpreise, Lückenpreise, Reinigung, Anfragen per WhatsApp, Bestätigung durch die Eltern, Wäsche- und Reinigungslisten, Hilfe im Kalender, Cheminée-Anleitung", "Detaillierte Einträge dieser frühen Versionen folgen bei Bedarf"] }
+  ]
+}
