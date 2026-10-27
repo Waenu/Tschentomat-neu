@@ -28,6 +28,12 @@
       "dep": "2027-01-10",
       "name": "Chuenisbärgli Familie",
       "typ": "fam"
+    },
+    {
+      "arr": "2027-01-15",
+      "dep": "2027-01-22",
+      "name": "Janine Collins",
+      "typ": "extern"
     }
   ]
 }
