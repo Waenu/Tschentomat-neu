@@ -1,3 +1,9 @@
 {
-  "gaeste": []
+  "gaeste": [
+    {
+      "arr": "2026-12-04",
+      "name": "Andrea",
+      "typ": "airbnb"
+    }
+  ]
 }
