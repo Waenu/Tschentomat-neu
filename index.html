@@ -479,7 +479,12 @@
   .bk.gruen.mit { box-shadow: none; -webkit-mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); }
   .bk.gelb.ein { padding-left: 13px; }
   .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
-  .bk.sw { padding: 0 4px; line-height: 13px; text-align: center; background: transparent; border: 2px dashed var(--gruen-ol); border-radius: 9px; opacity: 1; color: var(--fg); font-size: .7rem; }
+  .bk.sw { padding: 0 4px; line-height: 13px; text-align: center; background: transparent; border: 2px solid transparent; border-radius: 9px; opacity: 1; color: var(--fg); font-size: .7rem; }
+  .bk.sw, .bk-leg .k-sw { background-color: transparent; background-origin: border-box; background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-image: linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%);
+    background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px; background-position: 0 0, 0 100%, 0 0, 100% 0; animation: ameise 0.9s linear infinite; }
+  @keyframes ameise { to { background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px; } }
+  @media (prefers-reduced-motion: reduce) { .bk.sw, .bk-leg .k-sw { animation: none; } }
   .zk { display: inline-block; background: var(--chip); color: var(--chip-fg); border-radius: 5px; padding: 0 2px; margin-right: 3px; line-height: 13px; font-size: .62rem; font-weight: 400; vertical-align: top; margin-top: 2px; }
   .bk-leg-h { margin: 12px 0 0; }
   .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
@@ -487,7 +492,7 @@
   .bk-leg i { flex: none; width: 44px; height: 17px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
   .bk-leg .k-gruen { background: var(--gruen); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
   .bk-leg .k-gelb { background: var(--gelb); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
-  .bk-leg .k-sw { border: 2px dashed var(--gruen-ol); }
+  .bk-leg .k-sw { border: 2px solid transparent; }
   .bk-leg .zk { margin: 0; }
   .leg-h { flex-basis: 100%; margin: 6px 0 0 !important; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
   .sw-rosa { border-color: var(--rosa-line); background: var(--rosa-bg); }
@@ -660,7 +665,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.6.3.0";
+let VERSION = "2.6.4.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";

@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.6.4.0", "datum": "2026-10-27", "titel": "Staffel im Kalender: Ameisenpfad", "punkte": ["Die gestrichelte Linie bei der Staffel läuft jetzt als Ameisenpfad um den Balken", "Bei eingestellter «Bewegung reduzieren» steht sie still"] },
     { "v": "2.6.3.0", "datum": "2026-10-27", "titel": "Animierte Menü-Symbole", "punkte": ["Kalender: das oberste Blatt fällt ab", "Auge zwinkert, Glühbirne blendet ein und aus, Feuer lodert", "Bei eingestellter «Bewegung reduzieren» stehen die Symbole still"] },
     { "v": "2.6.2.0", "datum": "2026-10-27", "titel": "Verwaltung aufgeräumt", "punkte": ["Jeder Eintrag ist eine Karte mit Name, Datum, Kurzinfos und Status", "Alle Knöpfe sind gleich hoch und gleich breit, pro Karte ein Hauptknopf", "Neue Gruppe «Mit Vorbehalt, noch nicht fest» direkt unter den Anfragen, mit «Fest machen» (🔓→🔒)", "Statt des ✖ gibt es einen beschrifteten Knopf «Entfernen» mit Nachfrage", "Bestätigte Aufenthalte sind immer sichtbar; Abgelehnte und Logbuch lassen sich ein- und ausblenden"] },
     { "v": "2.6.1.2", "datum": "2026-10-27", "titel": "Satz zum Familienpreis korrigiert", "punkte": ["Der Satz zum Familienpreis unter «Wie wird gerechnet» ist grammatikalisch korrekt"] },
