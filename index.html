@@ -343,6 +343,21 @@
   @keyframes anBlatt { 0%, 60% { transform: translate(0, 0) rotate(0); opacity: 1; } 64% { transform: translate(0, 0) rotate(-8deg); opacity: 1; } 85%, 100% { transform: translate(10px, 40px) rotate(35deg); opacity: 0; } }
   @keyframes anUnter { 0%, 60% { opacity: 0; } 85%, 100% { opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .an-auge, .an-bulb, .an-fire, .an-blatt, .an-unter { animation: none; } .an-unter { opacity: 0; } }
+  .bigbtn .bi .ik { width: 2.4rem; height: 2.4rem; display: block; overflow: visible; }
+  .ik-koffer { transform-box: fill-box; transform-origin: 50% 100%; animation: ikRoll 5.5s ease-in-out infinite; }
+  .ik-rad { transform-box: fill-box; transform-origin: center; animation: ikDreh 5.5s ease-in-out infinite; }
+  @keyframes ikRoll { 0%, 4% { transform: translateX(0) rotate(0); } 10% { transform: translateX(0) rotate(-12deg); } 22% { transform: translateX(5px) rotate(-12deg); } 34% { transform: translateX(-5px) rotate(-12deg); } 44% { transform: translateX(0) rotate(-12deg); } 50%, 100% { transform: translateX(0) rotate(0); } }
+  @keyframes ikDreh { 0%, 10% { transform: rotate(0); } 22% { transform: rotate(180deg); } 34% { transform: rotate(-180deg); } 44%, 100% { transform: rotate(0); } }
+  .ik-kreis { transform-box: fill-box; transform-origin: center; animation: ikHupf 5.5s ease-in-out infinite; }
+  .ik-haken { stroke-dasharray: 24; stroke-dashoffset: 0; animation: ikZeichne 5.5s ease-in-out infinite; }
+  @keyframes ikHupf { 0%, 4%, 30%, 100% { transform: translateY(0) scale(1); } 10% { transform: translateY(-5px) scale(1.1); } 18% { transform: translateY(0) scale(0.96); } 24% { transform: translateY(-2px) scale(1.03); } }
+  @keyframes ikZeichne { 0%, 6% { stroke-dashoffset: 0; } 8% { stroke-dashoffset: 24; } 30%, 100% { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ik-koffer, .ik-rad, .ik-kreis, .ik-haken { animation: none; } }
+  #kindStreifen { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: #1F5FA8; color: #fff; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
+  #kindStreifen[hidden] { display: none; }
+  #kindStreifen .btn { background: #fff; color: #1F5FA8; border: 0; border-radius: 8px; min-height: 44px; padding: 6px 14px; font: inherit; font-weight: 700; cursor: pointer; }
+  #bestKasten .vk.offen { border: 3px solid #F28C28; }
+  #bestKasten .vk-trenn { border: 0; border-top: 2px solid rgba(127,127,127,0.4); margin: 18px 0 0; }
   .bigbtn .bi { font-size: 1.7rem; line-height: 1; flex: 0 0 2.4rem; width: 2.4rem; text-align: center; }
   a.bigbtn { text-decoration: none; box-sizing: border-box; }
   #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
@@ -564,6 +579,7 @@
   </header>
 
   <nav class="start" aria-label="Start">
+    <div id="kindStreifen" role="status" hidden><span id="kindStreifenTxt"></span><button type="button" class="btn" id="btnZurEltern">Zurück zu Eltern</button></div>
     <button type="button" class="bigbtn blau" id="btnAnsichten" aria-expanded="false" aria-controls="bestKasten" hidden><span class="bi" aria-hidden="true"><span class="an-auge">👁️</span></span>Ansichten</button>
     <div class="note h" id="bestKasten" hidden></div>
     <button type="button" class="bigbtn" id="btnHilfe" aria-expanded="false" aria-controls="hilfe"><span class="bi" aria-hidden="true"><span class="an-bulb">💡</span></span>Anleitung &amp; Infos</button>
@@ -621,8 +637,8 @@
     </details>
     </div>
     <button type="button" class="bigbtn main" id="btnReserv" aria-controls="rechner"><span class="bi" aria-hidden="true"><svg class="an-cal" width="34" height="34" viewBox="0 0 38 38" aria-hidden="true"><rect x="4" y="7" width="30" height="27" rx="4" fill="#fff" stroke="#C62828" stroke-width="2"/><rect x="4" y="7" width="30" height="9" rx="4" fill="#C62828"/><g class="an-unter"><text x="19" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#16302B" font-family="system-ui,sans-serif">2</text></g><g class="an-blatt"><rect x="5" y="17" width="28" height="16" fill="#fff"/><text x="19" y="29" text-anchor="middle" font-size="14" font-weight="700" fill="#16302B" font-family="system-ui,sans-serif">1</text></g></svg></span>Ich reserviere jetzt</button>
-    <button type="button" class="bigbtn" id="btnAnreise" hidden><span class="bi" aria-hidden="true">🧳</span><span class="bt">Anreise-Wäsche<small id="btnAnreiseSub"></small></span></button>
-    <button type="button" class="bigbtn" id="btnCheck" hidden><span class="bi" aria-hidden="true">✅</span><span class="bt">Reinigungs-Checkliste<small id="btnCheckSub"></small></span></button>
+    <button type="button" class="bigbtn" id="btnAnreise" hidden><span class="bi" aria-hidden="true"><svg class="ik" viewBox="0 0 40 40" focusable="false"><g class="ik-koffer"><path d="M15 12 V8 a2 2 0 0 1 2 -2 h6 a2 2 0 0 1 2 2 V12" fill="none" stroke="#3B7DC4" stroke-width="2.4" stroke-linecap="round"/><rect x="8" y="12" width="24" height="21" rx="4" fill="#3B7DC4"/><path d="M14 16 V29 M26 16 V29" stroke="#fff" stroke-width="1.6" opacity=".55" stroke-linecap="round"/><circle class="ik-rad" cx="14" cy="36" r="2.6" fill="#8A9490"/><circle class="ik-rad" cx="26" cy="36" r="2.6" fill="#8A9490"/></g></svg></span><span class="bt">Anreise-Wäsche<small id="btnAnreiseSub"></small></span></button>
+    <button type="button" class="bigbtn" id="btnCheck" hidden><span class="bi" aria-hidden="true"><svg class="ik" viewBox="0 0 40 40" focusable="false"><circle class="ik-kreis" cx="20" cy="20" r="15" fill="#2E9E5B"/><path class="ik-haken" d="M12.5 20.5 L18 26 L28 14.5" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bt">Reinigungs-Checkliste<small id="btnCheckSub"></small></span></button>
     <div id="aufStatus" hidden></div>
     <div id="zahlBox" hidden></div>
     <button type="button" class="bigbtn" id="btnChem" aria-expanded="false" aria-controls="cheminee"><span class="bi" aria-hidden="true"><span class="an-fire">🔥</span></span>Cheminée-Anleitung</button>
@@ -711,7 +727,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.13.3.2";
+let VERSION = "2.14.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2134,7 +2150,7 @@ document.getElementById("result").addEventListener("change", (e) => {
     ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
     try { localStorage.setItem("tm2_absender", ABSENDER); } catch (e2) {}
     aufentZeigen();
-    render();
+    render(); bestZeigen();
   }
 });
 let ZONE_STAND = 0, ZONE_ZEIT = 0;
@@ -2482,7 +2498,7 @@ function festKarte(x) {
   st += bescheidStatus(x);
   const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 Fest machen</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
-  return vkKarte(x, konf ? "rot" : (prov ? "warn" : ""), vkChips(x), st, acts);
+  return vkKarte(x, konf ? "rot" : (!x.bescheid ? "offen" : (prov ? "warn" : "")), vkChips(x), st, acts);
 }
 function gaesteFormular() {
   const h = heuteKey(), starts = [];
@@ -2513,6 +2529,7 @@ function bestZeigen() {
   }
   OFFEN = OFFEN.filter((x) => x.dep >= h && !BUCH.some((y) => bKey(y) === bKey(x)));
   listeSichern("tm2_offen", OFFEN);
+  { const ks = document.getElementById("kindStreifen"); ks.hidden = !(TOKEN && ABSENDER); if (!ks.hidden) document.getElementById("kindStreifenTxt").textContent = "👁️ Du siehst die App als " + ABSENDER; }
   if (!TOKEN && !bestMsg) { k.hidden = true; k.innerHTML = ""; kn.hidden = true; return; }
   kn.hidden = false; kn.classList.toggle("on", zeigAns); kn.setAttribute("aria-expanded", zeigAns ? "true" : "false");
   k.hidden = !zeigAns;
@@ -2520,23 +2537,26 @@ function bestZeigen() {
   if (bestMsg) s += '<p>' + bestMsg + ' <button type="button" class="ov-back" data-zu="1">Schliessen</button></p>';
   if (TOKEN) {
     const bl = BUCH.filter((x) => x.dep >= h);
-    s += '<div class="field"><label for="ansichtAls">👁️ Ansicht als</label><select id="ansichtAls"><option value="">Eltern</option>' + ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + ">" + n + "</option>").join("") + '</select></div><p class="hint">Zeigt dir die Knöpfe und Listen so, wie dieses Kind sie sieht. Nur auf diesem Handy.</p>';
+    s += '<div class="field"><label for="ansichtAls">👁️ Ansicht als</label><select id="ansichtAls"><option value="">Eltern</option>' + ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + ">" + n + "</option>").join("") + '</select></div><p class="hint">Zeigt dir die Startseite so, wie dieses Kind sie sieht. Nur auf diesem Handy. Die Verwaltung bleibt dabei ausgeblendet, denn die Kinder sehen sie nicht.</p>';
+    if (ABSENDER) { k.innerHTML = s; return; }
+    s += '<p class="hint">🟧 Orange Rahmen: Hier musst du noch etwas tun (bestätigen, ablehnen oder Bescheid geben).</p>';
     const kf = bl.filter(provKonflikt);
     if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin mit Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe bei «Mit Vorbehalt» auf «Fest machen».</div>';
     const zl = BUCH.filter((x) => zahlOffen(x) && x.dep < h).sort((p, q) => (p.dep < q.dep ? -1 : 1));
     if (zl.length) s += vkSek("💳 Zahlungen offen", zl.length) + zl.map((x) => zahlZeile(x)).join("");
     s += vkSek("📨 Offene Anfragen", OFFEN.length);
-    s += OFFEN.length ? OFFEN.map((x) => vkKarte(x, "", vkChips(x, true), "",
+    s += OFFEN.length ? OFFEN.map((x) => vkKarte(x, "offen", vkChips(x, true), "",
       '<button type="button" class="btn main" data-ja="' + esc(bKey(x)) + '">✅ Bestätigen</button><button type="button" class="btn" data-nein="' + esc(bKey(x)) + '">✖ Ablehnen</button>')).join("")
       : '<p class="hint">Keine offenen Anfragen. Tippe in einer Anfrage auf den Bestätigungs-Link, dann erscheint sie hier.</p>';
     const bp = bl.filter((x) => x.prov), bf = bl.filter((x) => !x.prov);
     s += vkSek("🔓 Mit Vorbehalt, noch nicht fest", bp.length) + (bp.length ? bp.map(festKarte).join("") : '<p class="hint">Keine Termine mit Vorbehalt.</p>');
     s += vkSek("🔒 Bestätigt, fest", bf.length) + (bf.length ? bf.map(festKarte).join("") : '<p class="hint">Keine festen Aufenthalte.</p>');
+    s += '<hr class="vk-trenn">' + vkSek("📚 Nachschlagen", "") .replace(' <span class="n"></span>', "");
     s += '<div class="vk-nav"><button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
     s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="G">' + (zeigG ? "Gäste ausblenden" : "👤 Gäste mit Namen (" + GAESTE.length + ")") + "</button></div>";
     if (zeigG) s += gaesteFormular();
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
-    if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, "", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
+    if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, xx.bescheid ? "" : "offen", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   }
   k.innerHTML = s;
@@ -2599,6 +2619,10 @@ async function bescheidVermerken(key) {
   } catch (err) { bestFehler = "Der Vermerk «Bescheid gegeben» konnte nicht gespeichert werden: " + (err && err.message ? err.message : "Fehler"); }
   bestZeigen();
 }
+document.getElementById("btnZurEltern").addEventListener("click", () => {
+  ABSENDER = ""; try { localStorage.setItem("tm2_absender", ""); } catch (e2) {}
+  aufentZeigen(); render(); bestZeigen();
+});
 document.getElementById("btnAnsichten").addEventListener("click", () => { zeigAns = !zeigAns; bestZeigen(); });
 document.getElementById("bestKasten").addEventListener("change", (e) => {
   if (e.target && e.target.id === "ansichtAls") {
