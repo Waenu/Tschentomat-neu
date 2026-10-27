@@ -680,7 +680,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.13.0.0";
+let VERSION = "2.13.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -890,9 +890,14 @@ const gastWort = (n) => n === 1 ? "Gast" : "Gäste";
 
 const FIELDS = [
   { id: "art", label: "📝 Wie möchtest du buchen?", type: "str",
-    hint: () => S.verbOK === true
-      ? "Dieser Termin liegt in der Hochsaison. Verbindlich: Der Termin ist fest, die Eltern sperren ihn in Airbnb, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung. Mit Vorbehalt: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang, mit Gästen möglich."
-      : "Dieser Termin liegt in der Staffel-Zeit und ist fest. Staffel: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Regeln siehe «🧹 Selbstreinigung» im Kalender. Normal: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.",
+    hint: () => {
+      if (S.verbOK === true) {
+        const v = "Verbindlich: Der Termin ist fest, die Eltern sperren ihn in Airbnb, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung.", p = "Mit Vorbehalt: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang, mit Gästen möglich.";
+        return "Dieser Termin liegt in der Hochsaison. " + (S.art === ART_V ? v + " Anders wäre «Mit Vorbehalt»: Gäste möglich, aber ein Airbnb-Gast hat Vorrang." : S.art === ART_P ? p + " Anders wäre «Verbindlich»: fest und gesperrt, dafür ohne Gäste." : v + " " + p);
+      }
+      const st = "Staffel: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Regeln siehe «🧹 Selbstreinigung» im Kalender.", no = "Normal: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.";
+      return "Dieser Termin liegt in der Staffel-Zeit und ist fest. " + (S.art === ART_S ? st + " Mit Gästen wäre nur «Normal» möglich." : S.art === ART_N ? no + " Ohne Gäste ginge auch die Staffel: ihr reinigt selbst und spart die Reinigung." : st + " " + no);
+    },
     visible: () => artOpts().length > 0, opts: () => artOpts() },
   { id: "wer", label: "👨‍👩‍👧‍👦 Wer von der Familie kommt?", type: "str",
     hint: () => S.luecke
@@ -914,10 +919,10 @@ const FIELDS = [
       : "Ein Gast im selben Zimmer zahlt " + chf(P.gastZimmer) + " statt " + chf(P.gast) + " pro Nacht. Es sind ein Zimmer und ein Doppelbett weniger zu beziehen und zu reinigen.",
     visible: (d) => d.GE > 0 && !d.lock && !d.voll, opts: () => ["Ja", "Nein"] },
   { id: "spar", label: "🔑 Bleibt Zimmer 1 (Schlafzimmer mit rotem Bad) unberührt?", type: "str",
-    hint: (d) => d.sparGrund === "so" ? "Ihr teilt Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Der Sonderpreis von " + chf(P.famAnteil) + " pro Nacht gilt dafür." : d.sparGrund === "pers" ? "Nicht möglich: Bei mehr als " + P.sparMaxPers + " Personen insgesamt (auch Kleinkinder) wird Zimmer 1 gebraucht." : "Ja: nur Zimmer 2, Zimmer 3 und das blaue Bad werden benutzt. Die Familie zahlt " + chf(P.sparEin) + " weniger pro Nacht (" + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + "). Nein: das ganze Chalet steht zur Verfügung.",
+    hint: (d) => d.sparGrund === "so" ? "Ihr teilt Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Der Sonderpreis von " + chf(P.famAnteil) + " pro Nacht gilt dafür." : d.sparGrund === "pers" ? "Nicht möglich: Bei mehr als " + P.sparMaxPers + " Personen insgesamt (auch Kleinkinder) wird Zimmer 1 gebraucht." : (S.spar === "Nein" ? "Nein: das ganze Chalet steht zur Verfügung. Mit «Ja» zahlt die Familie " + chf(P.sparEin) + " weniger pro Nacht (nur Zimmer 2, Zimmer 3 und das blaue Bad)." : "Ja: nur Zimmer 2, Zimmer 3 und das blaue Bad werden benutzt. Die Familie zahlt " + chf(P.sparEin) + " weniger pro Nacht (" + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + ")." + (S.spar === "Ja" ? "" : " Nein: das ganze Chalet steht zur Verfügung.")),
     visible: (d) => d.sparGrund === "", opts: () => ["Ja", "Nein"] },
   { id: "selbst", label: "🧹 Bringt ihr frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst?", type: "str",
-    hint: () => "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender. Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ").",
+    hint: () => S.selbst === "Nein" ? "Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")." : "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender." + (S.selbst === "Ja" ? "" : " Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")."),
     visible: () => false, opts: () => ["Ja", "Nein"] },
   { id: "reinig", label: "🍰 Wie werden die Reinigungskosten (" + chf(P.reinigung) + ") aufgeteilt?", type: "str",
     hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht.",
