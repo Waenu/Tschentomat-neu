@@ -1,0 +1,26 @@
+{
+  "name": "TSCHENT-O-MAT",
+  "short_name": "TSCHENT-O-MAT",
+  "description": "Preisrechner Chalet Tschenten, Adelboden",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0E1A18",
+  "theme_color": "#1F5D4D",
+  "lang": "de",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

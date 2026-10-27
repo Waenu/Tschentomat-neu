@@ -1,0 +1,2483 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TSCHENT-O-MAT</title>
+<meta name="theme-color" content="#1F5D4D">
+<meta name="apple-mobile-web-app-title" content="TSCHENT-O-MAT">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+  /* Layout: schmale Handy-Spalte, oben ein Schild-Band wie an einer Bergbahnstation, darunter die Fragen von oben nach unten */
+  :root {
+    --bg: #EEF2F1;
+    --surface: #FFFFFF;
+    --fg: #16302B;
+    --muted: #55696A;
+    --accent: #1F5D4D;
+    --accent-fg: #FFFFFF;
+    --marke: #2F6DB0;
+    --bk-selbst: #1B4F9C; --bk-selbst-fg: #FFFFFF; --bk-eltern: #E0A800; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #0E2F66; --bk-eltern-ol: #7A5A00;
+    --head-bg: #1F5D4D;
+    --head-fg: #FFFFFF;
+    --line: #CBD8D5;
+    --missing-bg: #FFEBC9;
+    --missing-line: #D8962B;
+    --done-bg: #DCF1E2;
+    --done-line: #4F9E6E;
+    --error-bg: #FAD7D7;
+    --error-line: #C24545;
+    --error-fg: #7E1D1D;
+    --note-bg: #E4EEEB;
+    --hoch-bg: #FFF1C2;
+    --spitz-bg: #FAD2C8;
+    --spitz-line: #C5432B;
+    --ruhe-bg: #D6E6F7;
+    --ruhe-line: #3A78B8;
+    --sperr-bg: #E6D9F5;
+    --sperr-line: #7A4DB3;
+    --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E1A18;
+      --surface: #16272A;
+      --fg: #E5EEEB;
+      --muted: #9CB1AC;
+      --accent: #7ACBB0;
+      --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A;
+    --head-bg: #7ACBB0;
+    --head-fg: #08201A;
+      --line: #2B4341;
+      --missing-bg: #4B3813;
+      --missing-line: #C98C25;
+      --done-bg: #1B3F2D;
+      --done-line: #4C9A6B;
+      --error-bg: #4C1F1F;
+      --error-line: #D06666;
+      --error-fg: #FFC2C2;
+      --note-bg: #1E3331;
+      --hoch-bg: #3B3213;
+      --spitz-bg: #4B2219;
+      --spitz-line: #E2735C;
+      --ruhe-bg: #16293D;
+      --sperr-bg: #2E2142;
+      --sperr-line: #B591E0;
+      --ruhe-line: #6AA6E3;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E1A18;
+    --surface: #16272A;
+    --fg: #E5EEEB;
+    --muted: #9CB1AC;
+    --accent: #7ACBB0;
+    --accent-fg: #08201A; --marke: #6AA6E3; --bk-selbst: #7DB4F0; --bk-selbst-fg: #07203D; --bk-eltern: #F0C84A; --bk-eltern-fg: #2B2000; --bk-selbst-ol: #7DB4F0; --bk-eltern-ol: #F0C84A;
+    --head-bg: #7ACBB0;
+    --head-fg: #08201A;
+    --line: #2B4341;
+    --missing-bg: #4B3813;
+    --missing-line: #C98C25;
+    --done-bg: #1B3F2D;
+    --done-line: #4C9A6B;
+    --error-bg: #4C1F1F;
+    --error-line: #D06666;
+    --error-fg: #FFC2C2;
+    --note-bg: #1E3331;
+    --hoch-bg: #3B3213;
+    --spitz-bg: #4B2219;
+    --spitz-line: #E2735C;
+      --ruhe-bg: #16293D;
+      --sperr-bg: #2E2142;
+      --sperr-line: #B591E0;
+      --ruhe-line: #6AA6E3;
+    color-scheme: dark;
+  }
+
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  :root { --fs: 1; --t-title: 1.05rem; --t-text: 1rem; --t-small: 0.85rem; }
+  html { font-size: calc(16px * var(--fs)); }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: var(--t-text);
+    line-height: 1.4;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 16px 120px;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+  .sign {
+    position: relative;
+    background: var(--head-bg);
+    color: var(--head-fg);
+    border-radius: 6px;
+    padding: 18px 18px 16px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .themeRow { display: flex; justify-content: flex-end; }
+  .themeRow { gap: 8px; }
+  #fsBtn { height: 44px; min-width: 66px; padding: 0 10px; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 22px; cursor: pointer; font: inherit; display: inline-flex; align-items: baseline; justify-content: center; gap: 3px; line-height: 44px; }
+  #fsBtn span { color: var(--muted); font-weight: 400; line-height: 1; align-self: center; }
+  #fsBtn span.on { color: var(--fg); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  #fsBtn .s1 { font-size: 0.8rem; } #fsBtn .s2 { font-size: 1rem; } #fsBtn .s3 { font-size: 1.3rem; }
+  #themeBtn { width: 44px; height: 44px; font-size: 1.3rem; line-height: 1; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
+  #themeBtn[data-mode="light"] { background: #000; border-color: #000; }
+  #testTip { position: absolute; left: 10px; bottom: 4px; width: 150px; height: 84px; padding: 0; border: 0; background: transparent; opacity: 0; z-index: 2; cursor: default; -webkit-tap-highlight-color: transparent; }
+  .sign .sub { text-align: center; padding: 2px 0; }
+  .sign .sub p { display: inline-block; position: relative; font-weight: 600; }
+  .sign .sub .bg { position: absolute; left: 100%; top: 50%; margin-left: 8px; font-size: 1.9rem; line-height: 1; transform: translateY(-50%) rotate(-14deg); pointer-events: none; }
+  .sign h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: calc(2.6rem / var(--fs));
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .sign .ver { display: inline-block; align-self: center; margin-top: 8px; padding: 3px 10px; border: 2px solid currentColor; border-radius: 4px; font-weight: 700; letter-spacing: 0.04em; opacity: 1; }
+  .sign p { margin: 0; font-size: calc(0.95rem / var(--fs)); letter-spacing: 0.02em; opacity: 0.92; }
+
+  .intro { margin: 0; color: var(--muted); font-size: var(--t-text); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: var(--t-small); color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 14px; height: 14px; border-radius: 3px; border: 2px solid; display: inline-block; }
+  .legend .l-missing { background: var(--missing-bg); border-color: var(--missing-line); }
+  .legend .l-done { background: var(--done-bg); border-color: var(--done-line); }
+
+  .notice {
+    background: var(--error-bg); border: 2px solid var(--error-line); color: var(--error-fg);
+    border-radius: 6px; padding: 10px 12px; font-weight: 600;
+  }
+
+  form { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field label { font-weight: 700; font-size: var(--t-title); }
+  .field select {
+    width: 100%; min-height: 50px;
+    font: inherit; color: var(--fg);
+    padding: 10px 12px;
+    border: 2px solid var(--line); border-radius: 6px;
+    background-color: var(--surface);
+  }
+  .field select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'><path d='M1 1l6 6 6-6' fill='none' stroke='%23556' stroke-width='2'/></svg>");
+    background-repeat: no-repeat; background-position: right 14px center;
+    padding-right: 40px;
+  }
+  .field select.missing { background-color: var(--missing-bg) !important; border-color: var(--missing-line) !important; }
+  .field select.done { background-color: var(--done-bg) !important; border-color: var(--done-line) !important; }
+  .field select.locked { background-color: var(--note-bg) !important; border-color: var(--line) !important; color: var(--muted); opacity: 0.85; }
+  html[data-fs="gross"] .field select#s-wer { font-size: 0.9em; padding-left: 10px; padding-right: 34px; }
+  .field select option { background-color: var(--surface); color: var(--fg); }
+  .field select:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .hint { margin: 0; font-size: var(--t-small); color: var(--muted); }
+  .hint .rot { color: var(--spitz-line); font-weight: 400; }
+  .note.rot { color: var(--spitz-line); font-weight: 400; }
+  .note.h { background: var(--note-bg); border: 2px solid var(--ruhe-line); color: var(--fg); font-weight: 400; }
+  .note.h > b:first-child { font-weight: 700; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .card h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.03em; text-transform: uppercase; }
+  .total { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .total .big { font-family: var(--display); font-weight: 700; font-size: calc(2.4rem / var(--fs)); line-height: 1; font-variant-numeric: tabular-nums; }
+  .total .small { color: var(--muted); font-size: var(--t-small); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 8px 0; border-top: 1px solid var(--line); text-align: left; }
+  td:last-child, th:last-child { text-align: right; }
+  td.sub { color: var(--muted); font-size: var(--t-small); }
+  tr.strong td { font-weight: 700; }
+  .empty { color: var(--muted); margin: 0; }
+  details summary { cursor: pointer; font-weight: 700; font-size: var(--t-title); min-height: 44px; display: flex; align-items: center; border: 2px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
+  details > summary::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
+  details[open] > summary::after { content: "▴\00a0\00a0💡"; }
+  details[open] > summary, .acc:has(.acc-t[aria-expanded="true"]) { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  details[open] > summary { margin-bottom: 8px; }
+  .acc { display: flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 700; font-size: var(--t-title); }
+  details > summary, .acc-t { white-space: nowrap; }
+  .acc:has(.acc-t) { border: 2px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
+  .acc-t { background: none; border: 0; font: inherit; font-size: var(--t-title); font-weight: 700; color: inherit; padding: 0; text-align: left; cursor: pointer; display: flex; flex: 1; align-items: center; min-height: 44px; }
+  #trinkTgl { font-weight: 400; }
+  details[open] > summary .sym, .acc:has(.acc-t[aria-expanded="true"]) .sym { border-color: var(--accent-fg); }
+  .acc-t::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
+  .acc-t[aria-expanded="true"]::after { content: "▴\00a0\00a0💡"; }
+
+  .field input.betrag { width: 100%; min-height: 50px; font: inherit; color: var(--fg); padding: 10px 12px; border: 2px solid var(--line); border-radius: 6px; background-color: var(--surface); }
+  details .rows { display: flex; flex-direction: column; gap: 8px; }
+  .marke { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 28px 0 8px; padding: 10px 0; color: var(--marke); font-family: var(--body); font-weight: 600; font-size: clamp(.78rem, 4.1vw, 1.05rem); letter-spacing: .02em; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; cursor: default; }
+  .marke span[data-z] { padding: 10px 3px; }
+  .marke .pt { padding: 0 .1em; }
+  body.rechner-an #markeStart, body.rechner-an #markeText, body.rechner-an #markeBahn { display: none; }
+  .marke-bahn { position: relative; height: 2.2em; margin: -6px 0 0; overflow: hidden; pointer-events: none; }
+  .bahn-auto, .bahn-haus, .prost { position: absolute; bottom: 0; font-size: 1.5rem; line-height: 1.3; }
+  .bahn-auto { left: 100%; animation: fahren 3s ease-out forwards; }
+  .bahn-haus { left: 8%; animation: einblenden .6s ease-out both; }
+  .prost { left: 50%; margin-left: -.7em; font-size: 1.7rem; animation: prosten 2.4s ease-out forwards; }
+  @keyframes fahren { to { left: 20%; } }
+  @keyframes einblenden { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes prosten { 0% { transform: scale(0) rotate(0); } 30% { transform: scale(1.4) rotate(-14deg); } 45% { transform: scale(1.4) rotate(14deg); } 60% { transform: scale(1.4) rotate(-8deg); } 85% { transform: scale(1.2) rotate(0); opacity: 1; } 100% { transform: scale(1.2); opacity: 0; } }
+  .marke span[data-e] { display: inline-block; padding: 10px 3px; }
+  .marke-text { text-align: center; color: var(--marke); font-size: var(--t-small); min-height: 1.4em; margin: 0 0 18px; }
+  @keyframes atmen { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
+  .atmet { animation: atmen 8s ease-in-out 1; }
+  @keyframes fallen { to { transform: translateY(110vh) rotate(200deg); } }
+  .flocke { position: fixed; top: -2.5rem; font-size: 1.4rem; pointer-events: none; z-index: 60; animation: fallen linear 1 forwards; }
+  @media (prefers-reduced-motion: reduce) { #hilfeKnopf.neu { animation: none; } .atmet { animation: none; } .flocke { display: none; } .bahn-auto { animation: none; left: 20%; } .bahn-haus { animation: none; } .prost { animation: none; } }
+  .eltern-zone { min-height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; font-size: 1.6rem; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; cursor: default; }
+  .eltern-zone span { padding: 8px 14px; }
+  .pay { border: 2px solid var(--accent); border-radius: 6px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .pay strong { font-size: var(--t-title); }
+  .pay .rot-txt { color: var(--spitz-line); }
+  .pay .iban { font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .pay button { margin-top: 4px; font: inherit; font-weight: 700; color: var(--accent); background: transparent; border: 2px solid var(--accent); border-radius: 6px; min-height: 48px; padding: 8px 14px; cursor: pointer; }
+  .split-h { margin: 6px 0 0; font-size: var(--t-title); }
+  #result h2 { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: var(--t-title); font-weight: 700; }
+  .cal h2 { text-align: center; margin: 0; font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: var(--t-title); font-weight: 700; }
+  .cal-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .cal-nav strong { font-size: var(--t-title); }
+  .cal-nav button { font: inherit; font-size: 1.5rem; font-weight: 700; line-height: 1; color: var(--accent); background: transparent; border: 2px solid var(--accent); border-radius: 6px; width: 52px; min-height: 48px; cursor: pointer; }
+  .cal-links { display: flex; gap: 6px; }
+  .cal-nav .cal-heute { width: auto; padding: 0 9px; font-size: 0.95rem; border-color: #F28C28; }
+  .cal-nav #calPrev, .cal-nav #calNext { width: 46px; }
+  .cal-nav strong { flex: 1; text-align: center; min-width: 0; }
+  .cal-nav button:disabled { opacity: 0.3; cursor: default; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .cal-wd { font-size: var(--t-small); color: var(--muted); text-align: center; padding: 2px 0; font-weight: 700; }
+  .cal-d { font: inherit; color: var(--fg); min-height: 46px; padding: 2px 0; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+  .cal-d small { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em; }
+  .cal-d:disabled { cursor: default; }
+  .cal-d.occ { color: var(--muted); background: repeating-linear-gradient(45deg, transparent 0 4px, var(--line) 4px 6px); text-decoration: line-through; }
+  .cal-d.provtag { color: var(--fg); }
+  .cal-d.past { color: var(--muted); opacity: 0.45; border-style: dashed; }
+  .cal-d.off { color: var(--muted); opacity: 0.5; }
+  .cal-d.in { background: var(--note-bg); border-color: var(--accent); }
+  .cal-d.sel { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 700; }
+  .cal-d.sel { text-decoration: none; }
+  .cal-d.hoch { background-color: var(--hoch-bg); border-color: #C98A1B; border-width: 2px; }
+  .cal-d.occ.hoch { background-color: var(--hoch-bg); }
+  .cal-d.spitz { background-color: var(--spitz-bg); border-color: var(--spitz-line); border-width: 2px; }
+  .cal-d.occ.spitz { background-color: var(--spitz-bg); }
+  .cal-d.sperr { background-color: var(--sperr-bg); border-color: var(--sperr-line); border-width: 2px; color: var(--muted); }
+  .cal-d.ruhe { background-color: var(--ruhe-bg); border-color: var(--ruhe-line); border-width: 2px; }
+  .cal-d.in.ruhe { background-color: var(--note-bg); border-color: var(--accent); }
+  .cal-d.sel.ruhe { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 2px solid; vertical-align: -2px; margin-right: 6px; }
+  .sw-hoch { border-color: #C98A1B; background: var(--hoch-bg); }
+  .sw-gap { border-color: var(--sperr-line); background: var(--sperr-bg); }
+  .sw-occ { border-color: var(--line); background: repeating-linear-gradient(45deg, transparent 0 3px, var(--line) 3px 5px); }
+  .sw-spitz { border-color: var(--spitz-line); background: var(--spitz-bg); }
+  .cal-info ul { margin: 6px 0 0; padding-left: 20px; }
+  .cal-info li { margin: 4px 0; }
+  .sw-ruhe { border-color: var(--ruhe-line); background: var(--ruhe-bg); }
+  .sw-normal { border-color: var(--line); background: transparent; }
+  .sw-sperr { border-color: var(--sperr-line); background: var(--sperr-bg); }
+  #famDet > summary { display: block; min-height: 0; border: 0; padding: 0; background: none; font-weight: 400; font-size: var(--t-text); white-space: normal; cursor: pointer; }
+  #famDet > summary::after { content: " ▾"; margin: 0; padding: 0; }
+  #famDet[open] > summary { background: none; color: inherit; border: 0; margin-bottom: 8px; }
+  #famDet[open] > summary::after { content: " ▴"; }
+  #famDet ul { margin: 8px 0 0; }
+  .cal-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: var(--t-small); }
+  .cal-leg p { margin: 0; }
+  .cal-leg[hidden] { display: none; }
+  .cal-d.sel.hoch, .cal-d.sel.spitz, .cal-d.sel.occ, .cal-d.sel.gap { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  .cal-d.in.hoch, .cal-d.in.spitz { border-color: var(--accent); }
+  .cal-info summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+  .cal-info p { margin: 8px 0 0; }
+  .note.spitz { background: var(--spitz-bg); border: 2px solid var(--spitz-line); font-weight: 600; }
+  .cal-d.gap:not(.sel):not(.in) { background: var(--sperr-bg); border-color: var(--sperr-line); border-width: 2px; }
+  .cal-d.today:not(.sel) { border: 3px solid #F28C28; }
+  .cal-sel { margin: 0; font-weight: 700; }
+  .cal-leg .l-gap { background: var(--sperr-bg); border-color: var(--sperr-line); }
+  .cal-leg .l-occ { background: repeating-linear-gradient(45deg, transparent 0 3px, var(--line) 3px 5px); border-color: var(--line); }
+  .cal-leg .l-hoch { border-color: #C98A1B; background: var(--hoch-bg); }
+  .cal-leg .l-ruhe { border-color: var(--ruhe-line); background: var(--ruhe-bg); }
+  .cal-leg .l-spitz { border-color: var(--spitz-line); background: var(--spitz-bg); }
+  a.btn, button.btn, span.btn { font: inherit; font-weight: 700; color: var(--accent); background: transparent; border: 2px solid var(--accent); border-radius: 6px; min-height: 48px; padding: 8px 14px; cursor: pointer; display: inline-flex; align-items: center; text-decoration: none; }
+  .btn.off, button.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .pay .btns { display: flex; flex-direction: column; gap: 10px; align-self: stretch; width: 100%; }
+  .pay .btns .btn, .pay > button, .pay > .btns > button { width: 100%; box-sizing: border-box; justify-content: center; text-align: center; gap: 10px; min-height: 52px; border-radius: 8px; }
+  .pay > button { align-self: stretch; display: flex; align-items: center; }
+  .pay .field { align-self: stretch; width: 100%; }
+  .wa { flex: none; }
+  #trinkOk { width: 100%; min-height: 52px; box-sizing: border-box; font: inherit; font-weight: 700; color: var(--accent); background: transparent; border: 2px solid var(--accent); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+  .note { background: var(--note-bg); border-radius: 6px; padding: 10px 12px; font-size: var(--t-text); margin: 0; }
+
+  button.reset {
+    font: inherit; font-weight: 700; color: var(--accent); background: transparent;
+    border: 2px solid var(--accent); border-radius: 6px; min-height: 48px; padding: 8px 14px; cursor: pointer;
+  }
+
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+    background: var(--accent); color: var(--accent-fg);
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  }
+  .bar .in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; }
+  .bar .lab { font-size: 0.95rem; min-width: 0; }
+  .bar .lab small { font-size: var(--t-small); opacity: 0.9; }
+  #nachOben { position: fixed; left: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+  .start { display: flex; flex-direction: column; gap: 10px; }
+  .bigbtn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; width: 100%; min-height: 96px; font: inherit; font-size: 1.2rem; font-weight: 700; color: var(--accent); background: var(--surface); border: 3px solid var(--accent); border-radius: 12px; cursor: pointer; padding: 10px 16px 10px 24px; }
+  .bigbtn .bi { font-size: 1.7rem; line-height: 1; flex: 0 0 2.4rem; width: 2.4rem; text-align: center; }
+  a.bigbtn { text-decoration: none; box-sizing: border-box; }
+  #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
+  .bigbtn.blau { color: var(--ruhe-line); border-color: var(--ruhe-line); }
+  .bigbtn.blau.on { background: var(--ruhe-line); color: var(--accent-fg); }
+  #bestKasten.note.h { border-width: 3px; border-radius: 12px; padding: 14px 16px; }
+  #ver { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+  .bigbtn.on { background: var(--accent); color: var(--accent-fg); }
+  #hilfe { display: flex; flex-direction: column; gap: 12px; }
+  #hilfe[hidden], #rechner[hidden] { display: none; }
+  #rechner { display: flex; flex-direction: column; gap: 14px; }
+
+  #b-benutzung .rows p { margin: 0; }
+  #b-kalender .note + .note { margin-top: 8px; }
+  #auswahlTxt { display: flex; flex-direction: column; gap: 8px; }
+  #auswahlTxt p { margin: 0; }
+  .exbild { margin: 4px 0 2px; }
+  details.sub .bc .exbild-cap { margin: 8px 0 0; font-size: var(--t-small); color: var(--muted); }
+  details.sub .bc .extl { margin: 0 0 4px; }
+  .exlist { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .exlist div { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 14px; border-bottom: 1px solid var(--line); font-size: var(--t-text); line-height: 1.25; }
+  .exlist div:last-child { border-bottom: 0; }
+  .exr { flex: none; width: 18px; height: 18px; border: 2px solid var(--muted); border-radius: 50%; box-sizing: border-box; }
+  .exr.on { border-color: var(--accent); background: var(--accent); box-shadow: inset 0 0 0 3px var(--surface); }
+  .exgap { display: grid; gap: 4px; }
+  .exgap .cal-d { cursor: default; display: flex; align-items: center; justify-content: center; min-height: 40px; }
+  .exgap .ex-lab { font-size: var(--t-small); text-align: center; font-weight: 700; padding: 3px 2px; border-radius: 6px; border: 1px solid var(--line); }
+  .exgap .ex-lab.gap { background: var(--sperr-bg); border-color: var(--sperr-line); }
+  .exb { height: 24px; border-radius: 12px; display: flex; align-items: center; padding: 0 9px; font-size: 0.75rem; font-weight: 700; box-sizing: border-box; white-space: nowrap; overflow: hidden; min-width: 0; }
+  .exb.selbst { background: var(--bk-selbst); color: var(--bk-selbst-fg); box-shadow: 0 0 0 1.5px var(--bk-selbst-ol); }
+  .exb.eltern { background: var(--bk-eltern); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
+  .exb.stf { background: transparent; border: 2px dashed var(--bk-selbst); color: var(--fg); }
+  .exb.occ { background: repeating-linear-gradient(45deg, transparent 0 4px, var(--line) 4px 6px); border: 1px solid var(--line); color: var(--muted); }
+  .exb.prov { background: var(--bk-eltern); background-image: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,.6) 5px 9px); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
+  .exb.gast { background: var(--hoch-bg); color: var(--fg); border: 1px solid #C98A1B; }
+  .exb.fam { background: var(--accent); color: var(--accent-fg); }
+  .exrow { display: flex; gap: 4px; align-items: center; }
+  .exrow + .exrow { margin-top: 6px; }
+  .exgrid { display: grid; gap: 4px; align-items: center; }
+  .extl { font-size: var(--t-small); color: var(--muted); font-weight: 700; }
+  .exmark { border-left: 2px solid var(--error-line); padding-left: 4px; color: var(--error-fg); }
+  .exyear { position: relative; height: 26px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: transparent; }
+  .exyear i { position: absolute; top: 0; bottom: 0; background: var(--ruhe-line); opacity: .55; border-left: 2px solid var(--ruhe-line); border-right: 2px solid var(--ruhe-line); box-sizing: border-box; }
+  .exmon { display: grid; grid-template-columns: repeat(12, 1fr); font-size: 0.62rem; color: var(--muted); text-align: center; margin-top: 2px; }
+  .exfields { display: flex; flex-direction: column; gap: 8px; }
+  .exf { display: flex; align-items: center; gap: 12px; }
+  .exsel { flex: 0 0 150px; border: 2px solid; border-radius: 8px; padding: 10px 12px; font-size: var(--t-text); }
+  .exsel.missing { background: var(--missing-bg); border-color: var(--missing-line); }
+  .exsel.done { background: var(--done-bg); border-color: var(--done-line); }
+  #b-benutzung .legend { font-size: 1rem; color: var(--fg); }
+  details.sub { margin-top: 6px; }
+  details.sub .bc { padding: 4px 0 8px; display: flex; flex-direction: column; gap: 8px; }
+  details.sub .bc p, details.sub .bc ul { margin: 0; }
+  details.sub .bc ul { padding-left: 20px; }
+  .bar { display: none; }
+  body.rechner-an .bar { display: block; }
+  .sym { margin-right: 4px; font: inherit; background: none; color: inherit; border: 1.5px dotted var(--accent); border-radius: 8px; padding: 0 5px; cursor: pointer; }
+  .pay button.sym { margin: 0 4px; min-height: 0; width: auto; padding: 0 5px; font: inherit; border: 1.5px dotted var(--accent); border-radius: 8px; display: inline; }
+  #zurueck { position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: #9A7400; color: #FFFFFF; border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+  .bar .val { font-family: var(--display); font-weight: 700; font-size: calc(1.9rem / var(--fs)); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .bar.err { background: var(--error-bg); color: var(--error-fg); }
+
+  /* Mein Aufenthalt: Anreise (Waesche) und Reinigungs-Checkliste */
+  .ov { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); overflow-y: auto; padding: 16px; box-sizing: border-box; }
+  .ov[hidden] { display: none; }
+  #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
+  .ov-in { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
+  .ov h2 { margin: 0; font-size: 1.35rem; }
+  .ov-back { align-self: flex-start; font: inherit; font-weight: 700; color: var(--accent); background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; padding: 8px 14px; min-height: 44px; cursor: pointer; }
+  .waesche-liste { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .waesche-liste li { display: flex; gap: 12px; align-items: baseline; background: var(--surface); border: 2px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 1.1rem; }
+  .waesche-liste b { min-width: 2.2em; font-size: 1.3rem; color: var(--accent); }
+  .chk-liste { display: flex; flex-direction: column; gap: 10px; }
+  .chk-item { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; font: inherit; font-size: 1.2rem; font-weight: 600; text-align: left; color: var(--fg); background: var(--surface); border: 2px solid var(--line); border-radius: 10px; padding: 10px 14px; cursor: pointer; }
+  .chk-item .box { flex: none; width: 34px; height: 34px; border: 3px solid var(--accent); border-radius: 8px; display: grid; place-items: center; font-size: 1.3rem; line-height: 1; }
+  .chk-item.erledigt { opacity: .6; text-decoration: line-through; }
+  .chk-item.erledigt .box { background: var(--accent); color: var(--accent-fg); }
+  .chk-alle .chk-item { opacity: 1; text-decoration: none; background: var(--done-bg); border-color: var(--done-line); }
+  .chk-alle .chk-item .box { background: var(--done-line); border-color: var(--done-line); color: #fff; }
+  #calGrid { position: relative; }
+  .note.h.rot-warn { background: var(--error-bg); border: 3px solid var(--error-line); }
+  #hilfeKnopf { position: fixed; right: 16px; bottom: calc(140px + env(safe-area-inset-bottom, 0px)); z-index: 6; width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 3px solid var(--accent); background: var(--surface); color: var(--accent); font: inherit; font-size: 1.5rem; font-weight: 800; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,.35); cursor: pointer; }
+  #hilfeKnopf[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+  #hilfeKnopf[aria-pressed="false"]::after { content: ""; position: absolute; left: 7px; right: 7px; top: 50%; border-top: 3px solid currentColor; transform: rotate(-45deg); }
+  #hilfeKnopf.neu { animation: puls 1s ease-in-out 3; }
+  @keyframes puls { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+  #calGrid.hilfe .cal-d:disabled, #calGrid.hilfe .bk { pointer-events: none; }
+  #calBlase { margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
+  #calBlase .txt { flex: 1; min-width: 0; }
+  #calBlase .txt p { margin: 4px 0 0; }
+  #calBlase #calBlaseZu { font: inherit; background: transparent; border: 0; color: var(--muted); padding: 2px 6px; cursor: pointer; }
+  .bk.selbst { background: var(--bk-selbst); color: var(--bk-selbst-fg); }
+  .bk.eltern { background: var(--bk-eltern); color: var(--bk-eltern-fg); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); }
+  .bk.selbst { box-shadow: 0 0 0 1.5px var(--bk-selbst-ol); }
+  .bk.prov { background-image: repeating-linear-gradient(45deg, transparent 0 5px, rgba(255,255,255,.6) 5px 9px); background-repeat: no-repeat; background-position: var(--sf, 0px) 0; background-size: calc(100% - var(--sf, 0px)) 100%; }
+  .risk { color: var(--error-line); font-weight: 700; }
+  label.risiko { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; padding: 10px; border: 2px solid var(--error-line); border-radius: 12px; background: var(--error-bg); color: var(--error-fg); }
+  label.risiko input { width: 24px; height: 24px; flex: none; margin-top: 2px; }
+  .bk.prov.voll { background-image: none; }
+  .bk.prov.rest { background-position: 0 0; background-size: 100% 100%; }
+  .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
+  .bk .ck { display: inline-block; background: #fff; color: #0B7A32; border-radius: 50%; width: 13px; height: 13px; line-height: 13px; text-align: center; font-size: 10px; font-weight: 900; vertical-align: -1px; margin-left: 3px; }
+  .bk.sw { height: 9px; line-height: 9px; padding: 0; background: transparent; border: 2px dashed var(--bk-selbst); border-radius: 5px; opacity: 1; }
+  .bk-leg-h { margin: 12px 0 0; }
+  .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
+  .bk-leg span { display: inline-flex; align-items: center; gap: 6px; }
+  .bk-leg i { flex: none; width: 26px; height: 11px; border-radius: 6px; display: inline-block; box-sizing: border-box; }
+  .bk-leg .k-selbst { background: var(--bk-selbst); }
+  .bk-leg .k-eltern { background: var(--bk-eltern); }
+  .bk-leg .k-prov { background: var(--bk-eltern); background-image: repeating-linear-gradient(45deg, transparent 0 4px, rgba(255,255,255,.6) 4px 7px); box-shadow: 0 0 0 1.5px var(--bk-eltern-ol); position: relative; }
+  .bk-leg .k-ck::after { content: "✓"; position: absolute; right: 3px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; border-radius: 50%; background: #fff; color: #0B7A32; font-size: 9px; font-weight: 900; line-height: 13px; text-align: center; font-style: normal; }
+  .bk-leg .k-sw { border: 2px dashed var(--bk-selbst); }
+  .bk { position: absolute; height: 15px; line-height: 15px; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 0.68rem; font-weight: 700; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; z-index: 2; opacity: 0.92; }
+  #aufStatus { text-align: center; }
+  .chk-teil { margin: 10px 0 0; font-size: 1.1rem; color: var(--accent); }
+  .chk-danke { background: var(--done-bg); border: 2px solid var(--done-line); border-radius: 10px; padding: 14px; font-size: 1.2rem; font-weight: 700; text-align: center; }
+  .chk-stand { color: var(--muted); }
+  .ov-weg { font: inherit; color: var(--muted); background: none; border: 0; text-decoration: underline; padding: 10px 0; text-align: left; cursor: pointer; }
+  .sign .sub .bg { pointer-events: auto; cursor: pointer; }
+  .bigbtn .bt { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  .bigbtn .bt small { font-size: 0.85rem; font-weight: 400; margin-top: 2px; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
+  <header class="sign">
+    <button type="button" id="testTip" tabindex="-1" aria-hidden="true"></button>
+    <h1>TSCHENT-O-MAT</h1>
+    <div class="sub"><p>Preisrechner Chalet Tschenten<span class="bg" aria-hidden="true">🎰</span></p></div>
+    <p class="ver" id="ver"></p>
+  </header>
+
+  <nav class="start" aria-label="Start">
+    <button type="button" class="bigbtn blau" id="btnAnsichten" aria-expanded="false" aria-controls="bestKasten" hidden><span class="bi" aria-hidden="true">👁️</span>Ansichten</button>
+    <div class="note h" id="bestKasten" hidden></div>
+    <button type="button" class="bigbtn" id="btnHilfe" aria-expanded="false" aria-controls="hilfe"><span class="bi" aria-hidden="true">💡</span>Anleitung &amp; Infos</button>
+    <div id="hilfe" hidden>
+    <details class="card" id="b-benutzung">
+      <summary>📖 Benutzung</summary>
+      <div class="rows">
+        <p><b>Nur für die Familie:</b> Der Link bleibt in der Familie und wird nicht weitergegeben oder geteilt. Zur Familie gehören meine Kinder, ihre Partner und die Enkelkinder.</p>
+        <p><b>TSCHENT-O-MAT ist interaktiv.</b> Von oben nach unten ausfüllen. Die Felder hängen zusammen: Eure Wahl bestimmt, was bei den nächsten Feldern zur Auswahl steht.</p>
+        <p>Mit 💡 lassen sich Menüs auf- und zuklappen.</p>
+        <p>Mit gestrichelten Icons wie <button type="button" class="sym" data-info="b-luecke" aria-label="Beispiel: zur Erklärung springen">🧩</button> springt ihr zur Erklärung. Sie erscheint ausgeklappt. Mit dem gelben Knopf «↩ zurück» geht es an die Ausgangsstelle zurück.</p>
+        <p>Hinweise erkennt ihr am blauen Rahmen. <b>ℹ️ Hinweis</b> erklärt etwas, <b>⚠️ Warnung</b> macht auf etwas aufmerksam, das den Aufenthalt oder den Preis verändert.</p>
+        <p><b>❓ Kalender-Hilfe:</b> Im Kalender schwebt unten rechts ein runder Knopf «?». Ist er grün gefüllt, erklärt sich jeder Tag, den ihr antippt, in einer Box unter dem Kalender. Mit einem Tipp auf den Knopf schaltet ihr die Hilfe aus (der Knopf ist dann durchgestrichen) und wieder ein. Euer Handy merkt sich das. Warnungen bleiben immer sichtbar.</p>
+        <p><b>Nach der Anfrage:</b> Sobald du die Anfrage sendest, merkt sich dein Handy den Aufenthalt. Auf der Startseite erscheinen dann deine Knöpfe <b>✅ Reinigungs-Checkliste</b> (die Arbeiten am Abreisetag) und, bei Selbstreinigung oder ganzer Lücke, <b>🧳 Anreise-Wäsche</b> <button type="button" class="sym" data-info="b-ruhe" aria-label="Zur Erklärung springen">🧹</button>. Zuerst steht bei den Knöpfen «Noch nicht bestätigt». Sobald Papi deine Anfrage bestätigt hat, steht dort «Bestätigt». Das hat mit dem Abhaken nichts zu tun: In den Listen tippst du jeden Punkt an, wenn du ihn erledigt hast. Am Tag nach der Abreise verschwinden die Knöpfe wieder.</p>
+        <p>Der Knopf <b>↑ Menü</b> unten links erscheint, sobald ihr nach unten scrollt. Ein Tipp darauf bringt euch nach oben zu den grossen Schaltflächen. Eure Eingaben bleiben dabei erhalten.</p>
+      </div>
+    </details>
+    <details class="card" id="b-begriffe">
+      <summary>📚 Begriffe</summary>
+      <div class="rows">
+        <details class="sub" id="b-wunschtermin"><summary>📅 Wunschtermin</summary><div class="bc" id="bc-wunschtermin"></div></details>
+        <details class="sub" id="b-kalender"><summary>🗓️ Erklärung Kalender</summary><div class="bc"><p id="calHint"></p><p>Die Farben stehen als Legende direkt unter dem Kalender. Ist die Hilfe «?» an, erklärt sich jeder angetippte Tag.</p><div id="bildKalender"></div></div></details>
+        <details class="sub" id="b-auswahl"><summary>🔽 Auswahlfelder</summary><div class="bc" id="auswahlTxt">
+          <p>Felder und Fragen zeigen, wo ihr steht:</p>
+          <div class="exfields">
+            <div class="exf"><span class="exsel missing">– wählen –</span><span>orange: noch wählen</span></div>
+            <div class="exf"><span class="exsel done">Beispiel ✓</span><span>grün: gewählt</span></div>
+          </div>
+          <p><b>Erst wenn alle Felder grün sind, erscheint das Resultat mit dem Preis.</b></p>
+        </div></details>
+        <details class="sub" id="b-zimmer"><summary>🛌 Zimmer</summary><div class="bc"><ul>
+          <li><b>Zimmer 1:</b> Schlafzimmer mit eigenem Bad (das rote Badezimmer, nur von Zimmer 1 aus zugänglich). Normalerweise von Papi und Mami belegt.</li>
+          <li><b>Zimmer 2:</b> Schlafzimmer mit Doppelbett.</li>
+          <li><b>Zimmer 3:</b> Schlafzimmer mit Etagenbett, für Kinder oder Erwachsene.</li>
+          <li><b>Blaues Badezimmer:</b> von der ganzen Wohnung aus zugänglich.</li>
+        </ul></div></details>
+        <details class="sub" id="b-reisegruppe"><summary>👨‍👩‍👧‍👦 Reisegruppe</summary><div class="bc"><p>Jede und jeder aus der Familie, in welcher Konstellation auch immer. Wer zusammen kommt, ist eine Reisegruppe, z. B. Jerome, Rahel, Malik und Jon, Manuel und Sarah, Deborah mit Kindern, Miriam mit Baby oder jemand allein.</p></div></details>
+        <details class="sub" id="b-staffel"><summary>🔗 Familienstaffel</summary><div class="bc" id="bc-staffel"><p>Reisegruppen, die die Wohnung nacheinander benutzen, ohne dass die Eltern dazwischen reinigen. Sie endet, sobald die Eltern oder ein Airbnb-Gast kommen, oder wenn jemand von euch nicht selber reinigen will. Wer nicht selber reinigt, verursacht damit den anderen Kosten.</p></div></details>
+        <details class="sub" id="b-februar" hidden><summary>⛷️ Februar</summary><div class="bc" id="bc-februar"></div></details>
+        <details class="sub" id="b-prov"><summary>⏳ Termin unter Vorbehalt</summary><div class="bc" id="bc-prov"></div></details>
+        <details class="sub" id="b-luecke"><summary>🧩 Lücken</summary><div class="bc" id="bc-luecke"></div></details>
+        <details class="sub" id="b-ruhe"><summary>🧹 Selber reinigen</summary><div class="bc" id="bc-ruhe"></div></details>
+        <details class="sub" id="b-endrein"><summary>🪣 Endreinigung</summary><div class="bc" id="bc-endrein"></div></details>
+        <details class="sub" id="b-zahlung"><summary>💰 Zahlung</summary><div class="bc" id="bc-zahlung"></div></details>
+        <details class="sub" id="b-trinkgeld"><summary>🐖 Trinkgeld</summary><div class="bc" id="bc-trinkgeld"></div></details>
+        <details class="sub" id="b-sparen"><summary>💸 So sparst du Geld</summary><div class="bc" id="bc-sparen"></div></details>
+        <details class="sub" id="b-rechnen"><summary>🧮 Preisberechnung</summary><div class="bc" id="bc-rechnen"></div></details>
+        <details class="sub" id="b-geld"><summary>💰 Geldverwendung</summary><div class="bc" id="bc-geld"></div></details>
+      </div>
+    </details>
+    </div>
+    <button type="button" class="bigbtn main" id="btnReserv" aria-controls="rechner"><span class="bi" aria-hidden="true">📅</span>Ich reserviere jetzt</button>
+    <button type="button" class="bigbtn" id="btnAnreise" hidden><span class="bi" aria-hidden="true">🧳</span><span class="bt">Anreise-Wäsche<small id="btnAnreiseSub"></small></span></button>
+    <button type="button" class="bigbtn" id="btnCheck" hidden><span class="bi" aria-hidden="true">✅</span><span class="bt">Reinigungs-Checkliste<small id="btnCheckSub"></small></span></button>
+    <div id="aufStatus" hidden></div>
+    <button type="button" class="bigbtn" id="btnChem" aria-expanded="false" aria-controls="cheminee"><span class="bi" aria-hidden="true">🔥</span>Cheminée-Anleitung</button>
+    <div id="cheminee" hidden>
+    <div class="card">
+      <div class="rows">
+        <p>Hoi zäme, so zieht der Rauch nach oben und nicht in die Wohnung. Schlosscode: <b>1397</b> (Tasten in den Ecken, im Uhrzeigersinn).</p>
+        <p><b>Vor dem Anzünden</b></p>
+        <ol>
+          <li><b>Lüftung aus.</b> Dunstabzug und Ventilatoren ausschalten. Läuft ein Bad-Ventilator noch nach, kippt das Fenster neben dem Cheminée.</li>
+          <li><b>Luft.</b> Ascheschublade höchstens 2 cm öffnen, Schieber ganz auf.</li>
+          <li><b>Holz.</b> Maximal 4 Scheiter hinten an der Wand (Holzbalken über dem Cheminée, nicht zu heiss).</li>
+        </ol>
+        <p><b>Beim Feuern</b></p>
+        <ol start="4">
+          <li>Brennt das Feuer richtig gut:
+            <ul>
+              <li>Schublade schliessen, Schieber offen lassen oder höchstens halb schliessen.</li>
+              <li>Fenster wieder schliessen.</li>
+              <li>Dunstabzug und Bad-Ventilatoren dürfen jetzt laufen. Die Ventis stellen selber ab.</li>
+              <li><b>Beim Verlassen des Hauses den Schieber immer ganz öffnen.</b></li>
+            </ul></li>
+        </ol>
+        <p><b>Zieht der Kamin nicht?</b><br>Bei Sonnenschein staut sich Wärme im Kamin (Hitzepfropfen). Legt eine Zeitung bereit. Drückt Rauch in die Stube: Zeitung rollen, anzünden, unter den Kamin halten. Das hilft immer.</p>
+        <p><b>Danach</b></p>
+        <ol start="5">
+          <li><b>Asche</b> nie in den Abfallkübel. Schublade leeren im Aschekübel im Keller (Sunnwendi), Deckel zu, draussen bei der Storenkurbel hinstellen.</li>
+          <li><b>Reinigung:</b> Asche im Brennraum liegen lassen, die sauge ich ab. Die Scheiben reinige ich auch. <b>Kein Putzmittel!</b> Die Scheiben werden sonst trüb, und das lässt sich nicht mehr reparieren.</li>
+        </ol>
+        <p>Viel Freude am Feuer!<br>Gruess, Papi</p>
+      </div>
+    </div>
+    </div>
+    <a class="bigbtn" id="btnBuch" href="https://drive.google.com/drive/folders/1YXXtl4fYd_xgu7LcYMZ3Q1NrWZpwRWBm" target="_blank" rel="noopener noreferrer" hidden><span class="bi" aria-hidden="true">📒</span>Buchhaltung</a>
+    <div id="tokPanel" class="note h" hidden></div>
+  </nav>
+
+  <div id="rechner" hidden>
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <section id="cal" class="card cal" aria-label="Wunschtermin">
+    <h2>Wunschtermin finden <button type="button" class="sym" data-info="b-kalender" aria-label="Zur Erklärung des Kalenders springen">📖</button></h2>
+    <div class="cal-nav">
+      <div class="cal-links"><button type="button" id="calPrev" aria-label="Vorheriger Monat">‹</button><button type="button" id="calHeute" class="cal-heute" aria-label="Zum aktuellen Monat">Heute</button></div>
+      <strong id="calTitle"></strong>
+      <button type="button" id="calNext" aria-label="Nächster Monat">›</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="note h" id="calBlase" role="status" aria-live="polite" hidden></div>
+    <div class="cal-leg" id="calHoch"></div>
+    <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben:</p>
+    <div class="bk-leg"><span id="legSelbst"><i class="k-selbst"></i>reinigt selbst</span><span id="legEltern"><i class="k-eltern"></i>Reinigung durch Eltern</span><span id="legStaffel"><i class="k-sw"></i>Familienstaffel noch offen</span><span id="legProv"><i class="k-prov"></i>schraffiert: Termin unter Vorbehalt, Airbnb-Gast hat Vorrang (voller Teil: schon sicher)</span><span id="legSicher"><i class="k-prov k-ck"></i><span id="legSicherTxt">ganz sicher: Abreise in höchstens 3 Tagen</span></span></div>
+    <p class="cal-sel" id="calSel" role="status"></p>
+    <p class="note h" id="calSpitz" hidden></p>
+    <p class="note h" id="calRuhe" hidden></p>
+    <p class="note h" id="calNormal" hidden></p>
+    <div class="note h" id="calLRegeln" hidden></div>
+    <div class="note h" id="calWarn" hidden></div>
+    <div class="note h" id="calFam" hidden></div>
+  </section>
+
+  <form id="form" onsubmit="return false" autocomplete="off"></form>
+
+  <section id="result" class="card" aria-live="polite"></section>
+
+  <button type="button" class="reset" id="reset">Neu starten</button>
+  </div>
+  <div class="marke" id="markeStart"><span data-e="0">ankommen</span><span class="pt">·</span><span data-e="1">durchatmen</span><span class="pt">·</span><span data-e="2">geniessen</span></div>
+  <div class="marke-bahn" id="markeBahn"></div>
+  <p class="marke-text" id="markeText" role="status" aria-live="polite"></p>
+</div>
+
+<button type="button" id="hilfeKnopf" hidden aria-pressed="true" aria-label="Kalender-Hilfe ein- oder ausschalten">?</button>
+<button type="button" id="zurueck" hidden>↩ zurück</button>
+<button type="button" id="nachOben" hidden aria-label="Nach oben zum Menü">↑ Menü</button>
+<div class="bar" id="bar" role="status"><div class="in"><span class="lab" id="barLab"></span><span class="val" id="barVal"></span></div></div>
+
+<div class="ov" id="ovAnreise" hidden role="dialog" aria-label="Anreise: Wäsche mitnehmen"><div class="ov-in" id="ovAnreiseIn"></div></div>
+<div class="ov" id="ovCheck" hidden role="dialog" aria-label="Reinigungs-Checkliste"><div class="ov-in" id="ovCheckIn"></div></div>
+<script>
+/* ============================================================
+   VERSION UND PREISE  (nur die Zahlen und Texte zwischen den Anführungszeichen ändern)
+   Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
+   ============================================================ */
+// Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
+let VERSION = "1.10.5";
+let GUELTIG_AB = "01.01.2027";
+let IBAN = "CH25 0878 4046 4374 6612 8";
+let BANK = "Spar- und Leihkasse Frutigen (SLF)";
+let ZAHL_TAGE = 7;
+let KEIN_CHECKIN_SO = true;   // Sonntag ist bei Airbnb nie Check-in-Tag: eine freie Strecke, die an einem Sonntag beginnt, zählt erst ab Montag
+let PROV_AN = true;          // Termine unter Vorbehalt ausserhalb der Staffel-Zeiten (Airbnb-Gast hat Vorrang)
+let VORLAUF = 3;             // Vorlauf in Tagen, den ein Airbnb-Gast braucht (Einstellung in Airbnb)
+let BELEGT_AIR = null;
+let MIN_MONATE = {};   // Mindestnächte pro Monat (Monat der Nacht), z.B. {2: 7}
+let FEST_MONATE = [];  // Monate, in denen Familien-Aufenthalte nie unter Vorbehalt stehen (immer fest, in Airbnb gesperrt)       // Airbnb-Belegung ohne Aufenthalte unter Vorbehalt
+let LUECKE_VORLAUF = 4;      // Lücken ausserhalb der Selbstreinigungs-Zeiten sind erst so viele Tage vor Beginn für die Familie sichtbar
+let LUECKE_SPERR = [1, 2];  // Lücken, deren erste Nacht in diesen Monaten liegt, sind für die Familie immer gesperrt (nie freigegeben)
+let LUECKE_MAX = 3;  // Luecken zwischen zwei Buchungen bis zu dieser Zahl Naechte gelten als "Luecke" (Airbnb verlangt mindestens 4)
+let HOCH_MONATE = [];  // Hochsaison: ganze Monate, z.B. [2] fuer Februar (jedes Jahr)
+let SPITZ = [];      // Spitzenzeit (nur hohe Preise, z.B. Skirennen): Liste von ["von", "bis", "Name"]
+let RUHE = [];       // Ruhezeiten, jedes Jahr gleich: Liste von ["MM-TT", "MM-TT"] (von, bis), dort darf die Familie selbst reinigen
+let HOCH = [];       // Hochsaison: Liste von ["JJJJ-MM-TT", "JJJJ-MM-TT"] (von, bis, beide eingeschlossen)
+// CALC-START
+const P = {
+  // Alle Beträge in CHF. Pro Nacht = pro Nacht und Person bzw. Gruppe, wie beschriftet.
+  famPausch: 70,        // Familie pro Nacht
+  gast: 70,             // Gast pro Nacht (eigenes Zimmer)
+  reinigung: 240,       // pro Buchung, pauschal
+  minNaechte: 2,
+  maxNaechte: 14,
+  maxPersonen: 6,       // Betten (Personen mit normalem Bett, ohne Kinder ohne eigenes Bett)
+  gastZimmer: 45,       // Gast im selben Zimmer wie Sohn/Tochter
+  sparMaxPers: 4,       // bis zu dieser Zahl Personen insgesamt (Familie inkl. Kleinkinder + Gäste) kann Zimmer 1 unberührt bleiben
+  sparEin: 15,          // Ermässigung pro Nacht für die Familie, wenn Zimmer 1 (mit rotem Bad) unberührt bleibt
+  famAnteil: 25,        // Familie, wenn Sohn/Tochter das Zimmer mit einem Gast teilt
+  reinigungSelbst: 0,   // Reinigung, wenn die Familie selbst reinigt (frische Waesche mitbringen, Betten selbst beziehen)
+  lueckeMaxPersonen: 2,  // ganze Lücke: höchstens so viele Personen mit Bett (Kleinkinder im Kinderbettchen zusätzlich)
+  lueckeMaxKleinkinder: 1,  // ganze Lücke: höchstens so viele Kleinkinder im Kinderbettchen
+  festMinGaeste: 0,     // In den festMonaten (Februar): mindestens so viele Gäste nötig (0 = keine Vorgabe)
+  mindestpreisAbNaechte: 0, // Die Entlastung der Familie (Mindestpreis) gilt erst ab dieser Zahl Nächte (0 = immer)
+  festBodenWoche: 0,    // In den festMonaten (Februar): Mindest-Gesamtpreis pro 7 Nächte inkl. Reinigung (CHF, 0 = aus). Ersetzt dort mindestpreisWoche. Fehlt etwas bis zum Boden, wird der Rest gleichmässig auf alle Personen verteilt; liegt der Preis darüber, entfällt der Anteil der Familie soweit möglich
+  mindestpreisWoche: 0, // Boden pro 7 Nächte (CHF, 0 = aus), nur mit Gästen: Übersteigt der Gesamtpreis den Boden (anteilig nach Nächten), entfällt der Anteil der Familie, aber der Gesamtpreis sinkt nie unter den Boden
+  lueckeRabatt: 50      // Prozent Ermässigung auf die Übernachtungen, wenn der Aufenthalt in einer Lücke zwischen zwei Airbnb-Buchungen liegt (Reinigung bleibt gleich)
+};
+const MFG = "Meine Familie und Geschwister";
+const WERL = ["Nur ich", "Ich und Partner", "Ich und 1 Kind", "Ich und 2 Kinder",
+              "Ich, Partner und 1 Kind", "Ich, Partner und 2 Kinder", MFG];
+// Ganze Lücke: nur 2 Erwachsene in den Betten (Partner, Bruder oder Schwester), dazu höchstens 1 Kleinkind im Kinderbettchen
+const LWERL = ["Nur ich", "Ich und 1 Familienmitglied", "Ich und Kleinkind", "Ich, Familienmitglied, Kleinkind"];
+const REINIG = [
+  "Nach Personen: ab 2½ Jahren zählt jede Person gleich",
+  "Familie ¼, Gäste ¾",
+  "Hälfte Familie, Hälfte Gäste",
+  "Familie ¾, Gäste ¼",
+  "Gäste zahlen die ganze Reinigung",
+  "Familie zahlt die ganze Reinigung"
+];
+const nz = (v) => (typeof v === "number" && isFinite(v)) ? v : 0;
+const isYN = (v) => v === "Ja" || v === "Nein";
+
+function derive(s) {
+  const wer = s.wer;
+  const lock = /Partner|Familienmitglied/.test(wer) || wer === MFG;
+  let base = 1;
+  if (wer === "Nur ich") base = 1;
+  else if (wer === "Ich und Partner") base = 2;
+  else if (wer === "Ich und 1 Familienmitglied" || wer === "Ich und Kleinkind") base = 2;
+  else if (wer === "Ich, Familienmitglied, Kleinkind") base = 3;
+  else if (wer === "Ich und 1 Kind") base = 2;
+  else if (wer === "Ich und 2 Kinder") base = 3;
+  else if (wer === "Ich, Partner und 1 Kind") base = 3;
+  else if (wer === "Ich, Partner und 2 Kinder") base = 4;
+  else if (wer === MFG) base = nz(s.fam);
+  let kkMax = 0;
+  let kkMust = 0;
+  if (wer === "Ich und Kleinkind" || wer === "Ich, Familienmitglied, Kleinkind") { kkMax = 1; kkMust = 1; }
+  else if (wer === "Ich und 1 Kind" || wer === "Ich, Partner und 1 Kind") kkMax = 1;
+  else if (wer === "Ich und 2 Kinder" || wer === "Ich, Partner und 2 Kinder") kkMax = 2;
+  else if (wer === MFG) kkMax = (typeof s.fam === "number") ? Math.min(2, s.fam - 1) : 0;
+  if (s.luecke === true) kkMax = Math.min(kkMax, P.lueckeMaxKleinkinder);
+  const kkMin = kkMust ? 1 : ((wer === MFG && typeof s.fam === "number") ? Math.min(kkMax, Math.max(0, s.fam - P.maxPersonen)) : 0);
+  const kkFix = kkMax > 0 && kkMin === kkMax;
+  const KK = (typeof s.kk === "number" || kkFix) ? Math.max(kkMin, Math.min(nz(s.kk), kkMax)) : 0;
+  const FP = Math.max(1, base - KK);
+  const LG = s.luecke === true;
+  const frei = LG ? 0 : Math.max(0, P.maxPersonen - FP);
+  const GE = Math.min(nz(s.gaeste), frei);
+  const PT = FP + GE;
+  const voll = base + GE > P.sparMaxPers;
+  const ZE = (lock || voll) ? "Nein" : (s.zimmer === "Ja" ? "Ja" : "Nein");
+  const SO = wer === "Nur ich" && GE >= 1 && ZE === "Ja";
+  const sparGrund = SO ? "so" : (voll ? "pers" : (LG ? "luecke" : ""));
+  const sparLock = sparGrund !== "";
+  const sp = (s.spar === "Ja" && !sparLock) || sparGrund === "luecke";
+  const LR = (s.luecke === true) ? P.lueckeRabatt : 0;
+  const rd = (v) => LR > 0 ? Math.round(v * (100 - LR) / 100) : v;
+  const FN0 = SO ? P.famAnteil : P.famPausch - (sp ? P.sparEin : 0);
+  const FN = rd(FN0);
+  const GN = rd(P.gast);
+  const HN = GE === 0 ? 0 : rd(ZE === "Ja" ? P.gastZimmer : P.gast);
+  const WN = Math.max(0, GE - 1) * GN;
+  const PN = FN + HN + WN;
+  const nights = nz(s.nights);
+  const UE = PN * nights;
+  const AF = 0;
+  const AG = 0;
+  const SM = s.selbstOK === true && GE === 0 && !LG;
+  const SB = SM && s.selbst === "Ja";
+  const RE = SB ? P.reinigungSelbst : P.reinigung;
+  const ri = REINIG.indexOf(s.reinig);
+  let FA = RE;
+  if (GE > 0) {
+    if (ri === 0) FA = RE * FP / (FP + GE);
+    else if (ri === 1) FA = RE / 4;
+    else if (ri === 2) FA = RE / 2;
+    else if (ri === 3) FA = RE * 3 / 4;
+    else if (ri === 4) FA = 0;
+    else if (ri === 5) FA = RE;
+    else FA = RE * FP / (FP + GE);
+  }
+  const GS = GE > 0 ? (RE - FA) / GE : 0;
+  return { LG, lock, voll, base, kkMax, kkMin, kkFix, KK, sp, sparLock, sparGrund, FP, frei, GE, PT, ZE, SO, SM, SB, LR, FN0, FN, GN, HN, WN, PN, nights, UE, AF, AG, RE, FA, GS };
+}
+
+function check(s, d) {
+  if (typeof s.nights !== "number") return "Bitte wählen: Anreise und Abreise im Kalender";
+  if ((s.luecke ? LWERL : WERL).indexOf(s.wer) < 0) return "Bitte wählen: Wer von der Familie kommt";
+  if (s.wer === MFG && typeof s.fam !== "number") return "Bitte wählen: Anzahl Personen der Familie";
+  if (d.kkMax > 0 && !d.kkFix && typeof s.kk !== "number") return "Bitte wählen: Kleinkinder im Kinderbettchen oder bei den eigenen Eltern";
+  if (d.FP > P.maxPersonen) return "Maximal " + P.maxPersonen + " Personen mit Bett. Bitte Personenzahl oder Kinder im Bettchen prüfen.";
+  if (d.LG && d.FP > P.lueckeMaxPersonen) return "Ganze Lücke: höchstens " + P.lueckeMaxPersonen + " Erwachsene in den Betten (zusätzlich höchstens " + P.lueckeMaxKleinkinder + " Kleinkind im Kinderbettchen). Bitte «Wer von der Familie kommt» anpassen.";
+  if (typeof s.gaeste !== "number") return "Bitte wählen: Gäste";
+  if (s.festMin === true && P.festMinGaeste > 0 && d.GE < P.festMinGaeste) return "Im " + festTxt() + " mindestens " + P.festMinGaeste + " Gäste (höchstens " + P.maxPersonen + " Personen mit Bett)";
+  if (s.gaeste > d.frei && d.frei === 0) return "Kein Platz mehr für Gäste. Bitte Gäste neu wählen.";
+  if (s.gaeste > d.frei) return "Nur noch " + d.frei + " Gast frei. Bitte Gäste neu wählen.";
+  if (d.GE > 0 && !d.lock && !d.voll && !isYN(s.zimmer)) return "Bitte wählen: Gast im selben Zimmer";
+  if (!d.sparLock && !isYN(s.spar)) return "Bitte wählen: Bleibt Zimmer 1 unberührt";
+  if (d.SM && !isYN(s.selbst)) return "Bitte wählen: Selbstreinigung";
+  if (d.GE > 0 && REINIG.indexOf(s.reinig) < 0) return "Bitte wählen: Aufteilung der Reinigung";
+  if (d.nights < minFuer(ARR, DEP)) return "Mindestens " + minFuer(ARR, DEP) + " Nächte" + (minFuer(ARR, DEP) > P.minNaechte ? " (in diesem Zeitraum)" : "");
+  if (d.nights > P.maxNaechte) return "Höchstens " + P.maxNaechte + " Nächte";
+  if (d.FP + d.GE > P.maxPersonen) return "Maximal " + P.maxPersonen + " Personen";
+  return "OK";
+}
+
+function calc(s) {
+  const d = derive(s);
+  const msg = check(s, d);
+  const ok = msg === "OK";
+  const out = { d, msg, ok };
+  if (ok) {
+    out.TOT = d.UE + d.AF + d.AG + d.RE;
+    out.FZ = d.FN * d.nights + d.AF + d.FA;
+    out.HZ = d.GE === 0 ? 0 : d.HN * d.nights + d.GS;
+    out.WZ = d.WN * d.nights + Math.max(0, d.GE - 1) * d.GS;
+    if (s.festBoden === true && P.festBodenWoche > 0) {
+      // Fest-Monate (Februar): Boden fürs Total (inkl. Reinigung), ersetzt dort den normalen Mindestpreis
+      const boden = Math.ceil(P.festBodenWoche * d.nights / 7);
+      out.FEST = true; out.BODEN = boden;
+      if (out.TOT > boden) {
+        const D = Math.min(out.FZ, out.TOT - boden);
+        if (D > 0) { out.GRATIS = true; out.TOT0 = out.TOT; out.FZ0 = out.FZ; out.D = D; out.TOT -= D; out.FZ -= D; }
+      } else if (out.TOT < boden) {
+        const A = boden - out.TOT, np = d.FP + d.GE;
+        out.AUF = A; out.TOT0 = out.TOT; out.TOT = boden;
+        out.FZ += A * d.FP / np;
+        if (d.GE > 0) { out.HZ += A / np; out.WZ += A * (d.GE - 1) / np; }
+      }
+    } else if (P.mindestpreisWoche > 0 && d.GE > 0 && d.nights >= P.mindestpreisAbNaechte) {
+      const boden = Math.ceil(P.mindestpreisWoche * d.nights / 7), D = Math.min(out.FZ, Math.max(0, out.TOT - boden));
+      if (D > 0) { out.GRATIS = true; out.BODEN = boden; out.TOT0 = out.TOT; out.FZ0 = out.FZ; out.D = D; out.TOT -= D; out.FZ -= D; }
+    }
+    out.KON = Math.abs(out.FZ + out.HZ + out.WZ - out.TOT) < 0.005;
+  }
+  return out;
+}
+// CALC-END
+
+/* ============ Oberfläche ============ */
+const EMPTY = { luecke: false, selbstOK: false, selbst: "", nights: null, wer: "", fam: null, gaeste: null, zimmer: "", kk: null, spar: "", sparAuto: false, reinig: "" };
+let S = Object.assign({}, EMPTY);
+let notice = "";
+
+const range = (a, b) => { const r = []; for (let i = a; i <= b; i++) r.push(i); return r; };
+const chf = (n) => "CHF " + Math.round(n).toLocaleString("de-CH").replace(/[’']/g, "’") + ".–";
+const gastWort = (n) => n === 1 ? "Gast" : "Gäste";
+
+const FIELDS = [
+  { id: "wer", label: "👨‍👩‍👧‍👦 Wer von der Familie kommt?", type: "str",
+    hint: () => S.luecke
+      ? "«Ich» ist Sohn oder Tochter. Familienmitglied ist Partner, Bruder oder Schwester, keine Freunde und keine Gäste. Das Kleinkind ist ein Enkelkind bis etwa 2½ Jahren. Es schläft im Kinderbettchen in Zimmer 3 oder bei den Erwachsenen in Zimmer 2. In den Betten schlafen höchstens 2 Erwachsene. Zimmer 1 und das rote Bad bleiben unberührt."
+      : "«Ich» ist Sohn oder Tochter, «Kind» ist ein Enkelkind. Hier zählen alle, die mitkommen, auch Kleinkinder. Kleinkinder im Kinderbettchen oder bei den eigenen Eltern gibst du danach an.",
+    opts: () => S.luecke ? LWERL : WERL },
+  { id: "fam", label: "👨‍👩‍👧‍👦 Wie viele Personen aus der Familie kommen?", type: "num",
+    hint: (d) => "Alle zählen, auch Kleinkinder: du selbst, Geschwister, Partner, Enkelkinder. Beispiel: Tochter, Sohn und 2 Enkel sind 4. Kleinkinder im Kinderbettchen oder bei den eigenen Eltern gibst du danach an." + (d.kkFix ? " Bei " + S.fam + " Personen sind " + d.kkMin + " davon Kleinkinder im Kinderbettchen oder bei den eigenen Eltern, das setzt der Rechner automatisch." : ""),
+    visible: (d) => S.wer === MFG, opts: () => range(2, P.maxPersonen + 2) },
+  { id: "kk", label: "👶 Wie viele davon brauchen kein normales Bett und schlafen in einem Kinderbettchen oder bei den eigenen Eltern?", type: "num",
+    hint: () => "Kinder bis etwa 2½ Jahren. Sie belegen kein Bett und zählen bei der Reinigung nicht mit.",
+    visible: (d) => d.kkMax > 0 && !d.kkFix, opts: (d) => range(d.kkMin, d.kkMax) },
+  { id: "gaeste", label: "🧑‍🤝‍🧑 Gäste (ausserhalb der Familie)", type: "num",
+    hint: (d) => (d.frei === 0 ? "Es ist kein Platz mehr frei." : (d.frei === 1 ? "Es ist noch 1 Platz frei." : "Noch " + d.frei + " Plätze frei.") + " Maximal " + P.maxPersonen + " Personen mit Bett.") + (S.festMin ? " Im " + festTxt() + " sind mindestens " + P.festMinGaeste + " Gäste nötig" + (d.frei < P.festMinGaeste ? ", mit dieser Familiengrösse ist das nicht möglich." : ", damit sich die Woche für alle lohnt (Gesamtpreis mindestens " + chf(P.mindestpreisWoche) + " pro 7 Nächte).") : ""),
+    visible: (d) => d.frei > 0, opts: (d) => (S.festMin && d.frei >= P.festMinGaeste) ? range(P.festMinGaeste, d.frei) : range(0, d.frei) },
+  { id: "zimmer", label: "💤 Schläft ein Gast im selben Zimmer wie ich?", type: "str",
+    hint: (d) => (S.wer === "Nur ich" && d.base + d.GE <= P.sparMaxPers)
+      ? "Ein Gast im selben Zimmer zahlt " + chf(P.gastZimmer) + " statt " + chf(P.gast) + " pro Nacht, du dann nur " + chf(P.famAnteil) + " statt " + chf(P.famPausch) + ". Ihr teilt dann Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Es sind ein Zimmer und ein Doppelbett weniger zu beziehen und zu reinigen."
+      : "Ein Gast im selben Zimmer zahlt " + chf(P.gastZimmer) + " statt " + chf(P.gast) + " pro Nacht. Es sind ein Zimmer und ein Doppelbett weniger zu beziehen und zu reinigen.",
+    visible: (d) => d.GE > 0 && !d.lock && !d.voll, opts: () => ["Ja", "Nein"] },
+  { id: "spar", label: "🔑 Bleibt Zimmer 1 (Schlafzimmer mit rotem Bad) unberührt?", type: "str",
+    hint: (d) => d.sparGrund === "so" ? "Ihr teilt Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Der Sonderpreis von " + chf(P.famAnteil) + " pro Nacht gilt dafür." : d.sparGrund === "pers" ? "Nicht möglich: Bei mehr als " + P.sparMaxPers + " Personen insgesamt (auch Kleinkinder) wird Zimmer 1 gebraucht." : "Ja: nur Zimmer 2, Zimmer 3 und das blaue Bad werden benutzt. Die Familie zahlt " + chf(P.sparEin) + " weniger pro Nacht (" + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + "). Nein: das ganze Chalet steht zur Verfügung.",
+    visible: (d) => d.sparGrund === "", opts: () => ["Ja", "Nein"] },
+  { id: "selbst", label: "🧹 Bringt ihr frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst?", type: "str",
+    hint: () => "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender. Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ").",
+    visible: (d) => d.SM, opts: () => ["Ja", "Nein"] },
+  { id: "reinig", label: "🍰 Wie wird die Reinigung (" + chf(P.reinigung) + ") aufgeteilt?", type: "str",
+    hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht.",
+    visible: (d) => d.GE > 0, opts: () => REINIG }
+];
+
+function normalize() {
+  notice = "";
+  if (S.wer !== MFG) S.fam = null;
+  if (typeof S.wer === "string" && S.wer && (S.luecke ? LWERL : WERL).indexOf(S.wer) < 0) { S.wer = ""; notice = S.luecke ? "Bei der ganzen Lücke sind höchstens 2 Erwachsene und 1 Kleinkind möglich. Bitte neu wählen." : "Die Auswahl «Wer von der Familie kommt» passt nicht mehr zum gewählten Datum. Bitte neu wählen."; }
+  let d = derive(S);
+  if (typeof S.gaeste === "number" && S.gaeste > d.frei) {
+    if (d.LG) { S.gaeste = 0; notice = "Bei der ganzen Lücke sind keine Gäste möglich. Die Gäste wurden automatisch auf 0 gesetzt."; }
+    else if (d.frei === 0) { S.gaeste = 0; notice = "Kein Platz mehr für Gäste. Die Gäste wurden automatisch auf 0 gesetzt."; }
+    else { S.gaeste = null; notice = "Es ist nur noch Platz für " + d.frei + " " + gastWort(d.frei) + ". Bitte die Gäste neu wählen."; }
+    d = derive(S);
+  }
+  if (S.festMin && typeof S.gaeste === "number" && S.gaeste < P.festMinGaeste && d.frei >= P.festMinGaeste) { S.gaeste = null; notice = "Im " + festTxt() + " sind mindestens " + P.festMinGaeste + " Gäste nötig. Bitte die Gäste neu wählen."; d = derive(S); }
+  if (d.frei === 0 && d.FP <= P.maxPersonen && typeof S.wer === "string" && S.wer && (S.wer !== MFG || typeof S.fam === "number")) { S.gaeste = 0; d = derive(S); }
+  if (d.GE === 0) { S.zimmer = ""; S.reinig = ""; }
+  if (d.voll) S.zimmer = "";
+  if (!d.SM) S.selbst = "";
+  if (d.kkMax === 0) S.kk = null;
+  else if (d.kkFix) S.kk = d.kkMin;
+  else if (typeof S.kk === "number" && S.kk < d.kkMin) S.kk = null;
+  else if (typeof S.kk === "number" && S.kk > d.kkMax) { S.kk = null; notice = "Die Auswahl hat weniger Kinder, bitte die Kleinkinder im Kinderbettchen oder bei den eigenen Eltern neu wählen."; }
+  if (d.sparLock) {
+    const ziel = (d.sparGrund === "so" || d.sparGrund === "luecke") ? "Ja" : "Nein";
+    if (S.spar === "Ja" && ziel === "Nein" && !S.sparAuto) notice = "Mit dieser Auswahl wird Zimmer 1 gebraucht. Die Frage wurde auf Nein gesetzt.";
+    S.spar = ziel; S.sparAuto = true;
+  } else if (S.sparAuto) { S.spar = ""; S.sparAuto = false; }
+}
+
+function build() {
+  const form = document.getElementById("form");
+  FIELDS.forEach((f) => {
+    const wrap = document.createElement("div");
+    wrap.className = "field"; wrap.id = "f-" + f.id;
+    const lab = document.createElement("label"); lab.htmlFor = "s-" + f.id; lab.textContent = f.label;
+    const sel = document.createElement("select"); sel.id = "s-" + f.id;
+    const hint = document.createElement("p"); hint.className = "hint"; hint.id = "h-" + f.id;
+    sel.addEventListener("change", () => {
+      const v = sel.value;
+      if (f.id === "spar") S.sparAuto = false;
+      S[f.id] = v === "" ? (f.type === "num" ? null : "") : (f.type === "num" ? Number(v) : v);
+      normalize(); render();
+    });
+    wrap.append(lab, sel, hint);
+    form.appendChild(wrap);
+  });
+}
+
+/* ============ Kalender ============ */
+const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+const WT_KURZ = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const WT_LANG = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+const KAL_MONATE_VORAUS = 24;
+let BELEGT = new Set();
+let BELEGT_OK = false;
+let ARR = "", DEP = "";
+let calY = 0, calM = 0;
+const pad2 = (n) => String(n).padStart(2, "0");
+const dkey = (y, m, d) => y + "-" + pad2(m + 1) + "-" + pad2(d);
+const dparse = (k) => { const a = k.split("-").map(Number); return new Date(Date.UTC(a[0], a[1] - 1, a[2])); };
+const addDays = (k, n) => { const t = dparse(k); t.setUTCDate(t.getUTCDate() + n); return t.getUTCFullYear() + "-" + pad2(t.getUTCMonth() + 1) + "-" + pad2(t.getUTCDate()); };
+const diffDays = (a, b) => Math.round((dparse(b) - dparse(a)) / 86400000);
+// Testmodus: ?heute=JJJJ-MM-TT rechnet so, als wäre dieser Tag heute (nur Anzeige, speichert nichts)
+let TESTHEUTE = null;
+try { const p = new URLSearchParams(location.search).get("heute"); if (/^\d{4}-\d{2}-\d{2}$/.test(p || "")) TESTHEUTE = p; } catch (e) {}
+let TESTMERKEN = false;   // Testmodus per Dreifach-Tipp im Kopf eingeschaltet: bleibt auf diesem Gerät, bis «Echt» getippt wird
+try { const m = localStorage.getItem("tm_testheute"); if (!TESTHEUTE && /^\d{4}-\d{2}-\d{2}$/.test(m || "")) { TESTHEUTE = m; TESTMERKEN = true; } } catch (e) {}
+const heuteDate = () => { if (TESTHEUTE) { const q = TESTHEUTE.split("-").map(Number); return new Date(q[0], q[1] - 1, q[2]); } return new Date(); };
+const heuteKey = () => { const n = heuteDate(); return dkey(n.getFullYear(), n.getMonth(), n.getDate()); };
+const WT_VOLL = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const fmtTagV = (k) => { const t = dparse(k); return WT_VOLL[t.getUTCDay()] + " " + t.getUTCDate() + "." + pad2(t.getUTCMonth() + 1) + "." + t.getUTCFullYear(); };
+const fmtTag = (k) => { const t = dparse(k); return WT_LANG[t.getUTCDay()] + " " + t.getUTCDate() + "." + pad2(t.getUTCMonth() + 1) + "." + t.getUTCFullYear(); };
+function naechteFrei(von, bis) { for (let k = von; k < bis; k = addDays(k, 1)) if (BELEGT.has(k) || GAPSPERR.has(k)) return false; return true; }
+function kannAnreise(k) { return k >= heuteKey() && !BELEGT.has(k) && !GAPSPERR.has(k) && (!GAP.has(k) || GAPSTART.has(k)); }
+function kannAbreise(k) {
+  if (!ARR || k <= ARR) return false;
+  const n = diffDays(ARR, k);
+  if (GAPSTART.has(ARR)) return k === GAPSTART.get(ARR);
+  if (n > P.maxNaechte || !naechteFrei(ARR, k)) return false;
+  return n >= minFuer(ARR, k);
+}
+const spitzVon = (k) => { for (const a of SPITZ) if (k >= a[0] && k <= a[1]) return a; return null; };
+function spitzTermin() { if (!(ARR && DEP)) return null; for (let k = ARR; k < DEP; k = addDays(k, 1)) { const a = spitzVon(k); if (a) return a; } return null; }
+const istRuhe = (k) => RUHE.some((a) => k.slice(5) >= a[0] && k.slice(5) <= a[1]);
+// Unter Vorbehalt: Aufenthalte, die nicht ganz in der Staffel-Zeit (Eigene Wäsche) liegen, sperren die Eltern nicht in Airbnb. Ein Airbnb-Gast hat Vorrang.
+const festTxt = () => FEST_MONATE.map((m) => MONATE[m - 1]).join(" und ");
+const monatVon = (k) => parseInt(k.slice(5, 7), 10);
+function festStay(arr, dep) { if (!arr || !dep || !FEST_MONATE.length) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (FEST_MONATE.indexOf(monatVon(k)) >= 0) return true; return false; }
+function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; } return m; }
+function provStay(arr, dep) { if (!PROV_AN || !arr || !dep || festStay(arr, dep)) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (!istRuhe(k)) return true; return false; }
+const provVon = (x) => (typeof x.prov === "boolean" ? x.prov : provStay(x.arr, x.dep));
+function provKonflikt(b) { if (!b.prov || !BELEGT_AIR) return false; for (let k = b.arr; k < b.dep; k = addDays(k, 1)) if (BELEGT_AIR.has(k)) return true; return false; }
+// praktisch sicher: ein neuer Airbnb-Gast braucht VORLAUF Tage, also kann sich bis zur Abreise niemand mehr dazwischen buchen
+const provSicherDep = (dep) => dep <= addDays(heuteKey(), VORLAUF);
+// Nächte vor diesem Tag können nicht mehr neu gebucht werden (neuer Gast checkt frühestens heute + VORLAUF ein)
+const provSicherBis = () => addDays(heuteKey(), VORLAUF);
+function provSicherZeile(arr, dep) {
+  const S = provSicherBis(), ab = addDays(dep, -VORLAUF);
+  if (dep <= S) return "Praktisch sicher: Ein neuer Airbnb-Gast kann frühestens in " + VORLAUF + " Tagen einchecken, bis zu eurer Abreise kann sich niemand mehr dazwischen buchen.";
+  if (S > arr) return "Schon sicher sind die Nächte bis " + fmtTag(S) + ". Der ganze Aufenthalt wird am " + fmtTag(ab) + " praktisch sicher (" + VORLAUF + " Tage vor der Abreise).";
+  return "Praktisch sicher wird der Aufenthalt erst am " + fmtTag(ab) + " (" + VORLAUF + " Tage vor der Abreise). Bis dahin kann ein Airbnb-Gast Vorrang bekommen.";
+}
+const provSicher = (b) => b.prov === true && !provKonflikt(b) && provSicherDep(b.dep);
+function belegtMischen() {
+  if (!BELEGT_AIR) return;
+  const s = new Set(BELEGT_AIR);
+  BUCH.forEach((b) => { if (b.prov) for (let k = b.arr; k < b.dep; k = addDays(k, 1)) s.add(k); });
+  BELEGT = s;
+}
+// Normale Zeit: kein Tag des Aufenthalts in Hochsaison, Spitzenzeit oder Eigene-Wäsche-Zeit
+function normalStay() {
+  if (!(ARR && DEP) || S.luecke) return false;
+  for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istRuhe(k) || istHoch(k) || spitzVon(k)) return false;
+  return true;
+}
+function ruheStay() {
+  if (!(ARR && DEP) || RUHE.length === 0) return false;
+  for (let k = ARR; k < DEP; k = addDays(k, 1)) if (!istRuhe(k) || istHoch(k) || spitzVon(k)) return false;
+  return true;
+}
+const fmtMD = (md) => parseInt(md.slice(3), 10) + ". " + MONATE[parseInt(md.slice(0, 2), 10) - 1];
+const istHoch = (k) => HOCH_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || HOCH.some((a) => k >= a[0] && k <= a[1]);
+let GAP = new Set();           // alle Naechte, die in einer Luecke liegen
+let FAM_OFFEN = false;          // Liste «Bestätigte Aufenthalte» ausgeklappt?
+let GAPSPERR = new Set();       // gesperrte Luecken-Naechte (Familie)
+let GAPSTART = new Map();      // erste Nacht der Luecke -> Abreisetag (Tag der naechsten Belegung)
+function berechneLuecken() {
+  GAP = new Set(); GAPSTART = new Map(); GAPSPERR = new Set();
+  const heute = heuteKey();
+  const b = Array.from(BELEGT_AIR || BELEGT).sort();
+  for (let i = 0; i + 1 < b.length; i++) {
+    let n = diffDays(b[i], b[i + 1]) - 1;
+    let start = addDays(b[i], 1);
+    let sonntag = "";
+    if (KEIN_CHECKIN_SO && dparse(start).getUTCDay() === 0) { sonntag = start; start = addDays(start, 1); n--; }   // sonntags ist bei Airbnb kein Check-in möglich
+    if (n >= P.minNaechte && n <= LUECKE_MAX && start >= heute) {
+      if (sonntag) GAPSPERR.add(sonntag);
+      GAPSTART.set(start, b[i + 1]);
+      const letzte = addDays(b[i + 1], -1);
+      const staffelZeit = istRuhe(start) && istRuhe(letzte);   // nur dort ist die Familienstaffel möglich
+      const sperr = LUECKE_SPERR.indexOf(Number(start.slice(5, 7))) >= 0 || (!staffelZeit && diffDays(heute, start) > LUECKE_VORLAUF);
+      for (let k = start; k < b[i + 1]; k = addDays(k, 1)) { GAP.add(k); if (sperr) GAPSPERR.add(k); }
+    }
+  }
+}
+function lueckeVon(k) { for (const [st, en] of GAPSTART) if (k >= st && k < en) return [st, en]; return null; }
+function initKalenderMonat() { const n = heuteDate(); calY = n.getFullYear(); calM = n.getMonth(); }
+
+function kalenderKlick(k) {
+  if (!ARR || (ARR && DEP)) { if (kannAnreise(k)) { ARR = k; DEP = ""; } }
+  else if (k === ARR) { ARR = ""; }
+  else if (kannAbreise(k)) { DEP = k; }
+  else if (kannAnreise(k)) { ARR = k; DEP = ""; }
+  ELTERN = false;
+  S.nights = (ARR && DEP) ? diffDays(ARR, DEP) : null;
+  S.festMin = !!(ARR && DEP && P.festMinGaeste > 0 && festStay(ARR, DEP));
+  S.festBoden = !!(ARR && DEP && P.festBodenWoche > 0 && festStay(ARR, DEP));
+  S.luecke = !!(ARR && DEP && P.lueckeRabatt > 0 && GAPSTART.get(ARR) === DEP);
+  S.selbstOK = ruheStay() && !S.luecke;
+  normalize(); render(); renderKalender();
+}
+
+const GELD_TEXT = "<p>Damit decken wir die laufenden Kosten des Chalets: Kurtaxen, Gästekarten, Strom, Wasser, Öl, WLAN und Betriebsmittel, dazu Unterhalt und Ersatz (zum Beispiel Scharniere ersetzen, ein neuer Boiler, defekte Ventilatoren), Anschaffungen (zum Beispiel Cheminée, Duschkabine, Sofa), Abschreibung, Hypozinsen und Steuern.</p><p>In den <b>Erneuerungsfonds</b> legen wir Geld für grosse Arbeiten zurück, zum Beispiel für den Maler, eine neue Heizung oder ein neues Geländer.</p>";
+const HW = "<b>ℹ️ Hinweis:</b> ", WA = "<b>⚠️ Warnung:</b> ";
+function symBtn(id, emoji) { return '<button type="button" class="sym" data-info="' + id + '" aria-label="Zur Erklärung springen">' + emoji + '</button>'; }
+function lueckenRegeln() {
+  return "<ul><li>Höchstens " + P.lueckeMaxPersonen + " Erwachsene in den Betten (Partner, Bruder oder Schwester), zusätzlich höchstens " + P.lueckeMaxKleinkinder + " Kleinkind im Kinderbettchen.</li><li>Keine externen Gäste. Es kommt nur die Familie: Partner, Bruder oder Schwester.</li><li>Nur Zimmer 2 mit dem blauen Bad. Das Kleinkind schläft bei den Erwachsenen in Zimmer 2 oder im Kinderbettchen in Zimmer 3. Zimmer 1 und das rote Bad bleiben unberührt.</li><li>Frische Bettwäsche, Handtücher und Küchentücher mitbringen und selbst beziehen. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Alles nehmt ihr wieder mit. Nur die Moltons bleiben nach dem Benutzen auf der Matratze. Das Kleinkind-Bettchen braucht nichts, dort ist die Wäsche immer vorhanden.</li><li>Wie bei der Selbstreinigung steht in der Anfrage der Hinweis zur eigenen Wäsche. Nach der Bestätigung durch die Eltern erscheint oben der Knopf «Anreise-Wäsche» mit der Liste, gerechnet für die Erwachsenen in den Betten.</li><li>Die Eltern reinigen für " + chf(P.reinigung) + ".</li></ul>";
+}
+function bildAuswahl() {
+  let h = '<div class="exlist" role="img" aria-label="Beispiel einer geöffneten Auswahlliste">';
+  h += '<div><span>– wählen –</span><i class="exr on"></i></div>';
+  REINIG.forEach((t) => { h += '<div><span>' + esc(t) + '</span><i class="exr"></i></div>'; });
+  return h + '</div><p class="exbild-cap">So sieht die Auswahl «Wie wird die Reinigung aufgeteilt?» aus. Tippt die passende Zeile an.</p>';
+}
+function bildLuecke() {
+  const n = LUECKE_MAX, wd = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"], vor = 3, total = vor + n + 1, start = 5, tag0 = 10;
+  let h = '<div class="exbild"><div class="exgap" style="grid-template-columns:repeat(' + total + ',minmax(0,1fr))" role="img" aria-label="Beispiel einer Lücke zwischen zwei Airbnb-Buchungen">';
+  for (let i = 0; i < total; i++) h += '<div class="cal-wd">' + wd[(start + i) % 7] + '</div>';
+  for (let i = 0; i < total; i++) { const gap = i >= vor && i < vor + n; h += '<div class="cal-d ' + (gap ? "gap" : "occ") + '">' + (tag0 + i) + '</div>'; }
+  h += '<div class="ex-lab" style="grid-column:span ' + vor + '">Airbnb-Gast</div><div class="ex-lab gap" style="grid-column:span ' + n + '">Lücke 🧩</div><div class="ex-lab">Gast</div></div>';
+  const an = tag0 + vor, ab = tag0 + vor + n;
+  return h + '<p class="exbild-cap">Beispiel: Der erste Airbnb-Gast reist am ' + wd[(start + vor) % 7] + ' ' + an + '. ab, der nächste kommt am ' + wd[(start + vor + n) % 7] + ' ' + ab + '. Dazwischen liegen ' + n + ' freie Nächte, das ist die Lücke. Ihr bucht sie ganz: Anreise ' + wd[(start + vor) % 7] + ' ' + an + '., Abreise ' + wd[(start + vor + n) % 7] + ' ' + ab + '. (' + n + ' Nächte, ' + P.lueckeRabatt + ' Prozent günstiger).</p></div>';
+}
+function bildStaffel() {
+  const bar = (k, t, f) => '<div class="exb ' + k + '" style="flex:' + f + '">' + t + '</div>';
+  let h = '<div class="exbild" role="img" aria-label="Beispiel einer Familienstaffel">';
+  h += '<p class="extl">So läuft die Staffel</p><div class="exrow">' + bar("selbst", "Jerome", 3) + bar("selbst", "Deborah", 3) + bar("selbst", "Manuel", 3) + bar("occ", "Airbnb", 3) + '</div>';
+  h += '<p class="exbild-cap">Alle reinigen selbst. Erst wenn der Airbnb-Gast kommt, fällt die Endreinigung an. Manuel zahlt sie zuerst und holt die Anteile von Jerome und Deborah zurück.</p>';
+  h += '<p class="extl" style="margin-top:12px">So endet sie früher</p><div class="exrow">' + bar("selbst", "Jerome", 3) + bar("eltern", "Deborah", 4) + bar("selbst", "Manuel", 3) + '</div>';
+  h += '<p class="exbild-cap">Deborah will nicht selber reinigen, die Eltern reinigen (gelb). Damit endet die Staffel für Jerome, seine Endreinigung ist jetzt fällig. Manuel beginnt danach eine neue Staffel und trägt seine Endreinigung allein.</p></div>';
+  return h;
+}
+function bildVorbehalt() {
+  const v = VORLAUF, n = v + 6, tot = n + 1;
+  let h = '<div class="exbild" role="img" aria-label="Beispiel eines Termins unter Vorbehalt"><div class="exgrid" style="grid-template-columns:repeat(' + tot + ',minmax(0,1fr))">';
+  h += '<div class="extl exmark" style="grid-column:1;grid-row:1">heute</div>';
+  h += '<div class="extl exmark" style="grid-column:' + (v + 1) + ';grid-row:1;grid-column-end:span 4;white-space:nowrap">heute +' + v + ' Tage</div>';
+  h += '<div class="exb prov" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;background-image:none">✓</div>';
+  h += '<div class="exb prov" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2">Termin unter Vorbehalt</div>';
+  h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">voll</div>';
+  h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gestreift</div></div>';
+  return h + '<p class="exbild-cap">Der volle Teil ist sicher: Dort kann kein neuer Airbnb-Gast mehr buchen. Der gestreifte Teil ist noch unsicher. Jeden Tag wächst der volle Teil ein Stück weiter, bis der ganze Balken voll ist.</p></div>';
+}
+function bildKalender() {
+  const wd = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+  let h = '<div class="exbild" role="img" aria-label="Beispiel der Balken im Kalender"><div class="exgrid" style="grid-template-columns:repeat(7,minmax(0,1fr))">';
+  wd.forEach((w) => { h += '<div class="cal-wd">' + w + '</div>'; });
+  for (let i = 1; i <= 7; i++) h += '<div class="cal-d ' + (i >= 6 ? "occ" : "") + '" style="cursor:default;display:flex;align-items:center;justify-content:center">' + i + '</div>';
+  h += '<div class="exb selbst" style="grid-column:1/span 2">Jerome</div><div class="exb stf" style="grid-column:3/span 2">Staffel offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
+  h += '</div><p class="exbild-cap">Blau: reinigt selbst. Gelb: Reinigung durch die Eltern. Gestrichelt: Die Familienstaffel ist noch offen. Gestreift: Airbnb-Gast. Die Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben.</p></div>';
+  return h;
+}
+function bildSparen(bsp) {
+  const zeilen = [];
+  for (let g = 2; g <= Math.max(2, P.maxPersonen - 1); g++) { const r = bsp(g); if (r.ok) zeilen.push([g, r]); }
+  if (!zeilen.length) return "";
+  const max = Math.max.apply(null, zeilen.map((z) => z[1].TOT)), z0 = (x) => Math.round(x).toLocaleString("de-CH");
+  let h = '<div class="exbild" role="img" aria-label="Wer zahlt wie viel bei 7 Nächten"><p class="extl">7 Nächte, Beträge in CHF</p>';
+  zeilen.forEach((z) => {
+    const g = z[0], r = z[1], du = r.FZ, ga = r.TOT - r.FZ, w = (r.TOT / max) * 100;
+    h += '<div class="exrow" style="margin-top:8px"><span class="extl" style="flex:0 0 52px">' + g + ' Gäste</span><div style="flex:1;display:flex;gap:2px;min-width:0;width:' + w + '%;max-width:' + w + '%">';
+    if (du > 0) h += '<div class="exb fam" style="flex:' + Math.max(du, 1) + ';min-width:44px;justify-content:center">' + z0(du) + '</div>';
+    h += '<div class="exb gast" style="flex:' + Math.max(ga, 1) + ';justify-content:center">' + z0(ga) + '</div></div><span class="extl" style="flex:0 0 52px;text-align:right">' + z0(r.TOT) + '</span></div>';
+  });
+  return h + '<p class="exbild-cap"><span class="exb fam" style="display:inline-flex;height:16px;padding:0 6px">du</span> <span class="exb gast" style="display:inline-flex;height:16px;padding:0 6px">Gäste</span> Rechts steht der Gesamtpreis. Je mehr Gäste, desto weniger zahlst du. Der Gesamtpreis sinkt nie unter ' + chf(P.mindestpreisWoche) + ' pro Woche.</p></div>';
+}
+function bildRuhe() {
+  const mt = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], mn = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+  const tag = (md) => { const p = md.split("-").map(Number); let t = 0; for (let i = 0; i < p[0] - 1; i++) t += mt[i]; return t + p[1]; };
+  let h = '<div class="exbild" role="img" aria-label="Zeiten, in denen ihr selbst reinigen könnt"><div class="exyear">';
+  RUHE.forEach((a) => { const von = tag(a[0]) - 1, bis = tag(a[1]); h += '<i style="left:' + (von / 365 * 100) + '%;width:' + ((bis - von) / 365 * 100) + '%"></i>'; });
+  h += '</div><div class="exmon">' + mn.map((m) => '<span>' + m + '</span>').join("") + '</div>';
+  return h + '<p class="exbild-cap">Blau: Zeiten, in denen ihr selbst reinigen könnt (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ').</p></div>';
+}
+function begriffeFuellen() {
+  const ruhe = RUHE.length ? RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") : "";
+  const set = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
+  set("bc-trinkgeld", "<p>Es war ein Anliegen von Mami, dass die Kinder günstiger nach Adelboden gehen können. Dafür macht sie viel Arbeit: Fahrt, Reinigung und Wäsche, siehe «Endreinigung» " + symBtn("b-endrein", "🪣") + ".</p><p>Auch Papi packt selbstverständlich mit an: Er reinigt, repariert und hält das Chalet in Schuss.</p><p>Wer möchte, gibt Mami deshalb ein Trinkgeld. Das ist freiwillig, aber ein schönes Zeichen der Wertschätzung. Gebt, was euch passt: Es freut sie, und ihr dürft grosszügig sein 😉</p><p>Wenn ihr unter «Trinkgeld für Mami» einen Betrag eintragt, wird er zum Preis dazugerechnet und extra ausgewiesen.</p>");
+  set("bc-zahlung", "<p>Die Familie überweist den ganzen Betrag, auch wenn Gäste dabei sind. Spätestens " + ZAHL_TAGE + " Tage nach dem letzten Ferientag, ohne Aufforderung.</p><p>" + esc(BANK) + "</p><p>Bitte mit Name und Datum der Ferien überweisen.</p><p>Wie die Reinigung unter euch und den Gästen aufgeteilt wird, entscheidet ihr selbst. Das Total bleibt gleich, nur wer wie viel zahlt ändert sich.</p><div class=\"exbild\">" + bildAuswahl() + "</div>");
+  (function () {
+    const bsp = (g) => calc({ wer: "Nur ich", gaeste: g, zimmer: "Nein", spar: "Nein", selbst: "Nein", reinig: REINIG[0], nights: 7 });
+    let h = "<p>Je mehr Gäste mitkommen, desto günstiger wird es für dich. Dazu ein paar Möglichkeiten:</p><ul>";
+    if (P.mindestpreisWoche > 0) {
+      h += "<li><b>Mindestpreis pro Woche:</b> Mit Gästen ab " + P.mindestpreisAbNaechte + " Nächten entfällt dein eigener Anteil, soweit der Gesamtpreis dabei nicht unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte sinkt (bei anderen Längen anteilig). Reicht der Preis, zahlst du nichts. Mehr Gäste oder mehr Nächte werden nie günstiger." + (P.festBodenWoche > 0 && FEST_MONATE.length ? " Im " + esc(festTxt()) + " gilt stattdessen der Mindestpreis dort " + symBtn("b-februar", "⛷️") + "." : "") + " Beispiel für 7 Nächte, wenn du mit Gästen kommst (Gäste zahlen je " + chf(P.gast) + " pro Nacht, Reinigung nach Personen geteilt):<ul>";
+      for (let g = 2; g <= Math.max(2, P.maxPersonen - 1); g++) { const r = bsp(g); if (!r.ok) continue; h += "<li>" + g + " Gäste: Gesamtpreis " + chf(r.TOT) + (r.GRATIS ? (r.FZ === 0 ? ", du zahlst nichts" : ", du zahlst " + chf(r.FZ)) : ", du zahlst " + chf(r.FZ) + " wie normal") + "</li>"; }
+      h += "</ul>" + bildSparen(bsp) + "</li>";
+    }
+    h += "<li><b>Zimmer 1 unberührt:</b> " + chf(P.sparEin) + " weniger pro Nacht, wenn Zimmer 1 und das rote Bad unberührt bleiben (bis " + P.sparMaxPers + " Personen insgesamt).</li>";
+    if (P.lueckeRabatt > 0) h += "<li><b>Lücken füllen:</b> " + P.lueckeRabatt + " Prozent auf die Übernachtungen, wenn du eine ganze Lücke zwischen zwei Gästen buchst. " + symBtn("b-luecke", "🧩") + "</li>";
+    h += "<li><b>Selber reinigen</b> in den Staffel-Zeiten: keine Reinigung jetzt, die Endreinigung wird unter allen Reisegruppen der Familienstaffel geteilt. " + symBtn("b-ruhe", "🧹") + "</li>";
+    h += "<li><b>Reinigung teilen:</b> Mit Gästen kannst du wählen, wie die Reinigung aufgeteilt wird.</li>";
+    if (FEST_MONATE.length) h += "<li><b>" + esc(festTxt()) + ":</b> mindestens " + (MIN_MONATE[FEST_MONATE[0]] || P.minNaechte) + " Nächte" + (P.festMinGaeste > 0 ? " und mindestens " + P.festMinGaeste + " Gäste" : "") + ", der Termin ist fest und wird in Airbnb gesperrt. " + (P.festBodenWoche > 0 ? " Mindestpreis " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung, mit Kollegen sinkt dein Anteil." : " Mit Kollegen zahlt sich eine volle Skiwoche aus.") + " " + symBtn("b-februar", "⛷️") + "</li>";
+    h += "</ul>";
+    set("bc-sparen", h);
+  })();
+  (function () {
+    const det = document.getElementById("b-februar");
+    if (!det) return;
+    if (!FEST_MONATE.length) { det.hidden = true; return; }
+    det.hidden = false;
+    const mon = festTxt(), mn = MIN_MONATE[FEST_MONATE[0]] || P.minNaechte, nurFeb = FEST_MONATE.length === 1 && FEST_MONATE[0] === 2;
+    const sum = det.querySelector("summary"); if (sum) sum.textContent = "⛷️ " + mon;
+    const bsp = (g) => calc({ wer: "Nur ich", gaeste: g, zimmer: "Nein", spar: "Nein", selbst: "Nein", reinig: REINIG[0], nights: 7, festBoden: true });
+    let h = "<p>Im " + esc(mon) + " ist Skiferien-Zeit, das Chalet ist gefragt. Darum gelten hier eigene Regeln. Sobald auch nur eine Nacht deines Aufenthalts im " + esc(mon) + " liegt, gelten diese Regeln für den ganzen Aufenthalt.</p><ul>";
+    h += "<li><b>Mindestens " + mn + " Nächte.</b>" + (nurFeb ? " Zum Beispiel geht 28.1. bis 4.2. (7 Nächte). 31.1. bis 2.2. (nur 2 Nächte) geht nicht, obwohl auch er den Februar berührt." : "") + "</li>";
+    h += "<li><b>Fest, mit Sicherheit.</b> Euer Termin wird in Airbnb gesperrt und nie unter Vorbehalt geführt. So könnt ihr eure Skiferien sicher planen.</li>";
+    if (P.festBodenWoche > 0) {
+      h += "<li><b>Mindestpreis " + chf(P.festBodenWoche) + " pro 7 Nächte</b> (bei mehr Nächten anteilig), inklusive Endreinigung. Im " + esc(mon) + " ist das Chalet nicht zum tiefen Familienpreis zu haben. Über Airbnb ist es teurer.</li>";
+      h += "<li><b>Allein oder mit Kollegen:</b> Allein zahlst du den Mindestpreis. Mit Kollegen zahlt jeder Gast seinen Satz (" + chf(P.gast) + " pro Nacht, " + chf(P.gastZimmer) + " im Zimmer eines Familienmitglieds, dazu den Anteil an der Reinigung " + symBtn("b-endrein", "🪣") + "). Gratis geht ein Gast nie. Reicht das Total dann noch nicht bis zum Mindestpreis, wird der Rest gleichmässig auf alle Personen verteilt, dich eingeschlossen. Mit jedem Gast wird es für dich günstiger.";
+      const ex = [];
+      for (let g = 0; g <= Math.max(0, P.maxPersonen - 1); g++) { const r = bsp(g); if (r.ok) ex.push("<li>" + (g === 0 ? "Allein" : g + (g === 1 ? " Gast" : " Gäste")) + ": Total " + chf(r.TOT) + ", du zahlst " + (Math.round(r.FZ) === 0 ? "nichts" : chf(r.FZ)) + "</li>"); }
+      if (ex.length) h += " Beispiel für 7 Nächte, wenn du allein von der Familie kommst (Reinigung nach Personen geteilt):<ul>" + ex.join("") + "</ul>";
+      const ex2 = [];
+      for (let g = 0; g <= 2; g++) { const r = calc({ wer: "Ich, Partner und 2 Kinder", kk: 0, gaeste: g, zimmer: "Nein", spar: "Nein", selbst: "Nein", reinig: REINIG[0], nights: 7, festBoden: true }); if (r.ok) ex2.push("<li>" + (g === 0 ? "Ohne Gäste" : g + (g === 1 ? " Gast" : " Gäste")) + ": Total " + chf(r.TOT) + ", Familie zahlt " + chf(r.FZ) + (g > 0 ? ", jeder Gast " + chf((r.HZ + r.WZ) / g) : "") + "</li>"); }
+      if (ex2.length) h += " Beispiel für 7 Nächte mit Partner und 2 Kindern (4 Personen, es bleiben 2 Betten für Gäste):<ul>" + ex2.join("") + "</ul>";
+      h += "</li>";
+    }
+    h += "</ul>";
+    set("bc-februar", h);
+  })();
+  set("bc-staffel", document.getElementById("bc-staffel").innerHTML.replace(/<div class="exbild"[\s\S]*$/, "") + bildStaffel());
+  set("bildKalender", bildKalender());
+  set("bc-prov", "<p>Ausserhalb der Staffel-Zeiten (" + (RUHE.length ? RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") : "keine festgelegt") + ") sperren die Eltern euren Termin <b>nicht in Airbnb</b>. Er steht <b>unter Vorbehalt</b>: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p><b>Praktisch sicher ✓:</b> Ein neuer Airbnb-Gast braucht " + VORLAUF + " Tage Vorlauf. Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann kein neuer Gast mehr buchen: Der Balken wird dort <b>voll</b> statt schraffiert und wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken voll und der Haken erscheint. Je länger der Aufenthalt und je weiter voraus, desto später wird er sicher.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen unter Vorbehalt sind im unsicheren Teil gestreift, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
+  set("bc-wunschtermin", "<p>Den Wunschtermin wählt ihr im Kalender. Wie das geht, steht unter «Erklärung Kalender». Die Farben stehen als Legende unter dem Kalender. " + symBtn("b-kalender", "🗓️") + "</p>");
+  set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Einzelne Nächte daraus sind nicht buchbar.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
+  set("bc-ruhe", RUHE.length ? bildRuhe() + "<ul><li>Möglich vom " + ruhe.replace(" und ", " und vom ") + ".</li>" +
+    "<li>Für euch Kinder mit Partnern und Kindern. Ohne Gäste reinigt ihr, wenn erwünscht, selbst. Mit Gästen reinigen die Eltern.</li>" +
+    "<li>Frische Bettwäsche, Handtücher und Küchentücher mitbringen und selbst beziehen. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Alles nehmt ihr wieder mit. Nur die Moltons bleiben nach dem Benutzen auf der Matratze. Die Liste mit den Mengen für eure Personenzahl findet ihr nach der Anfrage im Knopf «🧳 Anreise-Wäsche» auf der Startseite, zum Abhaken.</li>" +
+    "<li>Wer geht, reinigt: WC putzen, staubsaugen, Küche sauber, Abfall entsorgen, alles picobello.</li>" +
+    "<li>Ihr zahlt den Eltern noch keine Reinigung (" + chf(P.reinigungSelbst) + "). Die Endreinigung durch die Eltern ist trotzdem Pflicht, weil sie ihren Standard wahren wollen.</li></ul>" : "<p>Zurzeit gibt es keine Zeiten, in denen ihr selbst reinigen könnt.</p>");
+  set("bc-endrein", "<p><b>Aufwand</b></p><ul>" +
+    "<li>Die Endreinigung kostet " + chf(P.reinigung) + ". Dafür leisten die Eltern:<ul>" +
+    "<li>320 km Fahrweg, 3,5 Stunden Fahrzeit</li>" +
+    "<li>2 × 3,5 bis 5 Stunden Reinigung (7 bis 10 Stunden insgesamt)</li>" +
+    "<li>Wäschepflege: waschen, trocknen, zusammenlegen</li></ul></li>" +
+    "<li>Alles zusammen (Anfahrt, Reinigung und Wäsche) sind es bis zu 15 Stunden.</li>" +
+    "<li>Zum Vergleich: Unsere externe Putzfrau springt ein, wenn die Eltern krank sind. Sie fährt von Frutigen nach Adelboden und macht auch die Wäsche. Das kostet pro Einsatz CHF 440.–.</li></ul>" +
+    "<p><b>Weiteres zur Endreinigung</b></p><ul>" +
+    "<li>Sie fällt an, sobald die Familienstaffel endet, also sobald nach einer Reisegruppe die Eltern oder ein Airbnb-Gast kommen. Der Aufenthalt wird wie üblich bezahlt.</li>" +
+    "<li>Die Eltern stellen nur eine Rechnung: für die Endreinigung, getrennt vom Aufenthalt, an die letzte Reisegruppe der Familienstaffel. War sie allein in der Staffel, sind es die vollen " + chf(P.reinigung) + ". Waren mehrere Reisegruppen in der Staffel, bezahlt die letzte zuerst alles und holt sich die Anteile der anderen zurück, anteilig nach Reisegruppe. Das Eintreiben des Geldes regeln die Reisegruppen untereinander.</li>" +
+    "<li>Nutzt die Familienstaffel, um die Reinigungskosten möglichst zu drücken: Je mehr Reisegruppen nacheinander kommen, desto weniger zahlt jede Reisegruppe.</li>" +
+    "<li>Sind Geschwister gleichzeitig dort, regeln sie die Kosten untereinander.</li></ul>");
+  set("bc-rechnen", "<p>Ein Tipp auf «Preisberechnung» klappt die Rechnung auf: Preis pro Nacht mal Nächte ergibt die Übernachtung, dazu kommt die Reinigung (" + chf(P.reinigung) + "). Mit Gästen steht unter dem Preis auch, wer wie viel zahlt.</p><ul>" +
+    "<li>Zimmer 1 unberührt: " + chf(P.sparEin) + " weniger pro Nacht, die Familie zahlt " + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + ".</li>" +
+    "<li>Lücke: " + P.lueckeRabatt + " Prozent günstiger, auf ganze Franken gerundet.</li>" +
+    (P.mindestpreisWoche > 0 ? "<li>Mit Gästen ab " + P.mindestpreisAbNaechte + " Nächten: Der Anteil der Familie entfällt, soweit der Gesamtpreis dabei nicht unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte sinkt (bei anderen Längen anteilig). Reicht der Preis, zahlt die Familie nichts. Darunter bezahlt sie nur den Rest bis zu diesem Mindestpreis." + (P.festBodenWoche > 0 && FEST_MONATE.length ? " Im " + esc(festTxt()) + " gilt stattdessen der dortige Mindestpreis von " + chf(P.festBodenWoche) + " pro 7 Nächte." : "") + "</li>" : "") +
+    "<li>Selber reinigen: jetzt keine Reinigung, die Endreinigung kommt später.</li></ul>");
+  set("bc-geld", GELD_TEXT);
+}
+// Sprung zu Erklärungen unter «Begriffe», mit Zurück-Knopf
+let ZURUECK = null;
+function setHilfe(an) {
+  const h = document.getElementById("hilfe"), b = document.getElementById("btnHilfe");
+  h.hidden = !an; b.setAttribute("aria-expanded", an ? "true" : "false"); b.classList.toggle("on", an);
+}
+// Es ist immer nur eines offen: Hilfe oder Rechner (die Eingaben bleiben beim Umschalten erhalten)
+function setRechner(an) {
+  document.getElementById("rechner").hidden = !an;
+  document.body.classList.toggle("rechner-an", an);
+  document.getElementById("btnReserv").classList.toggle("on", an);
+}
+function setChem(an) {
+  document.getElementById("cheminee").hidden = !an;
+  const b = document.getElementById("btnChem");
+  b.setAttribute("aria-expanded", an ? "true" : "false"); b.classList.toggle("on", an);
+}
+function hilfeZuklappen() { document.querySelectorAll("#hilfe details").forEach((d) => { d.open = false; }); }
+function springeZu(id) {
+  const t = document.getElementById(id), bg = document.getElementById("b-begriffe"), hp = document.getElementById("hilfe");
+  if (!t || !bg || !hp) return;
+  if (!ZURUECK) ZURUECK = { y: window.scrollY, hilfeAn: !hp.hidden, rechnerAn: !document.getElementById("rechner").hidden, offen: [] };
+  const bz = document.getElementById("b-benutzung");
+  ZURUECK.offen.push([bg, bg.open], [t, t.open], [bz, bz.open]); bz.open = false;
+  document.querySelectorAll("#b-begriffe details.sub").forEach((o) => { if (o !== t && o.open) { ZURUECK.offen.push([o, true]); o.open = false; } });
+  setRechner(false); setHilfe(true); bg.open = true; t.open = true;
+  t.scrollIntoView({ behavior: "smooth", block: "start" });
+  document.getElementById("zurueck").hidden = false;
+}
+function zurueckGehen() {
+  document.getElementById("zurueck").hidden = true;
+  if (!ZURUECK) return;
+  const z = ZURUECK; ZURUECK = null;
+  for (let i = z.offen.length - 1; i >= 0; i--) z.offen[i][0].open = z.offen[i][1];
+  setHilfe(z.hilfeAn); setRechner(z.rechnerAn);
+  window.scrollTo({ top: z.y, behavior: "auto" });
+}
+// Bestätigte Aufenthalte als Balken im Kalender: von der Mitte des Anreisetags bis zur Mitte des Abreisetags (wie bei Airbnb)
+// Schweif: nach einem Aufenthalt mit Selbstreinigung bleibt die Familienstaffel in den erlaubten Zeiten offen,
+// bis ein Aufenthalt ohne Selbstreinigung, ein externer Gast (Airbnb) oder das Ende der erlaubten Zeit kommt.
+function schweifStop(b) {
+  let k = b.dep, art = "kante", stopper = null;
+  for (let i = 0; i < 400; i++) {
+    if (!istRuhe(k)) { art = "kante"; break; }
+    const s = BUCH.find((x) => x !== b && x.arr <= k && k < x.dep);
+    if (s) { art = "mitte"; stopper = s; break; }
+    if (BELEGT.has(k) && !BUCH.some((x) => x.arr <= k && k < x.dep)) { art = "mitte"; break; }
+    k = addDays(k, 1);
+  }
+  return { k, art, stopper };
+}
+function schweifListe() {
+  const out = [], heute = heuteKey();
+  BUCH.filter((b) => b.sb).forEach((b) => {
+    const st = schweifStop(b), k = st.k;
+    if (k === b.dep) return;
+    const letzteNacht = addDays(k, -1);
+    if (letzteNacht < heute) return;
+    out.push({ von: b.dep, vonMitte: true, bis: st.art === "mitte" ? k : letzteNacht, bisMitte: st.art === "mitte" });
+  });
+  return out;
+}
+// Namen der Reisegruppen einer offenen Familienstaffel, die eine Anreise am Tag arr unterbrechen würde
+function staffelUnterbruch(arr) {
+  if (!arr || !BUCH.length) return [];
+  const treffer = BUCH.filter((b) => b.sb && b.dep <= arr && arr < schweifStop(b).k);
+  if (!treffer.length) return [];
+  const kette = [];
+  let cur = treffer.sort((p, q) => (p.dep < q.dep ? 1 : -1))[0];
+  while (cur && kette.indexOf(cur) < 0) {
+    kette.unshift(cur);
+    cur = BUCH.find((x) => x.sb && x !== cur && schweifStop(x).stopper === cur);
+  }
+  const namen = [];
+  kette.forEach((b) => { if (namen.indexOf(b.name) < 0) namen.push(b.name); });
+  return namen;
+}
+// Gruppen nach der Anreise arr, die bisher zur selben Familienstaffel gehörten und ihre Endreinigung dann allein tragen
+function staffelFolger(arr) {
+  if (!arr || !BUCH.length) return [];
+  const treffer = BUCH.filter((b) => b.sb && b.dep <= arr && arr < schweifStop(b).k);
+  if (!treffer.length) return [];
+  const namen = [], gesehen = [];
+  let st = schweifStop(treffer.sort((p, q) => (p.dep < q.dep ? 1 : -1))[0]).stopper;
+  while (st && st.sb && gesehen.indexOf(st) < 0) {
+    gesehen.push(st);
+    if (namen.indexOf(st.name) < 0) namen.push(st.name);
+    st = schweifStop(st).stopper;
+  }
+  return namen;
+}
+function staffelWarnung(d) {
+  if (!ARR) return "";
+  const ohneSelbst = d.SM ? S.selbst === "Nein" : true;
+  if (!ohneSelbst) return "";
+  const alle = staffelUnterbruch(ARR);
+  if (!alle.length) return "";
+  const andere = alle.filter((n) => n !== ABSENDER), eigene = alle.indexOf(ABSENDER) >= 0;
+  const liste = (l) => (l.length === 1 ? l[0] : l.slice(0, -1).join(", ") + " und " + l[l.length - 1]);
+  const kosten = " und wird nicht mehr mit späteren Gästen geteilt.";
+  const grund = d.SM ? "Mit «Nein» unterbrichst du" : (d.LG ? "Mit der ganzen Lücke (keine Selbstreinigung) unterbrichst du" : "Mit Gästen ist keine Selbstreinigung möglich, du unterbrichst damit");
+  const folger = staffelFolger(ARR);
+  const danach = folger.length ? " Danach trägt " + liste(folger) + " die Endreinigung allein, ohne Teilung mit den früheren Gruppen." : "";
+  if (!andere.length) return grund + " deine eigene laufende Familienstaffel. Für deinen früheren Aufenthalt fällt dadurch die Endreinigung jetzt an" + kosten + " Deine neue Reinigung kostet zusätzlich wie üblich " + chf(P.reinigung) + "." + danach;
+  if (!eigene) return grund + " die laufende Familienstaffel von " + liste(andere) + ". Für " + liste(andere) + " fällt dadurch die Endreinigung jetzt an" + (andere.length === 1 ? "" : " (aufgeteilt unter ihnen)") + kosten + " Deine eigene Reinigung kostet wie üblich " + chf(P.reinigung) + "." + danach + " Sprich dich vorher mit " + (andere.length === 1 ? andere[0] : "ihnen") + " ab.";
+  return grund + " deine eigene laufende Familienstaffel zusammen mit " + liste(andere) + ". Für dich und " + liste(andere) + " fällt dadurch die Endreinigung jetzt an (aufgeteilt unter euch)" + kosten + " Deine neue Reinigung kostet zusätzlich wie üblich " + chf(P.reinigung) + "." + danach + " Sprich dich vorher mit " + (andere.length === 1 ? andere[0] : "ihnen") + " ab.";
+}
+function zeichneBalken() {
+  const g = document.getElementById("calGrid");
+  g.querySelectorAll(".bk").forEach((e) => e.remove());
+  if (!BUCH.length || g.offsetWidth === 0) return;
+  const zell = new Map();
+  g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
+  const ks = Array.from(zell.keys()).sort();
+  if (!ks.length) return;
+  const zeichne = (von, bis, vonMitte, bisMitte, klasse, text, sf) => {
+    const tage = ks.filter((k) => k >= von && k <= bis);
+    if (!tage.length) return;
+    const zeilen = new Map();
+    tage.forEach((k) => { const c = zell.get(k); const y = c.offsetTop; if (!zeilen.has(y)) zeilen.set(y, []); zeilen.get(y).push(k); });
+    zeilen.forEach((arr) => {
+      const c0 = zell.get(arr[0]), c1 = zell.get(arr[arr.length - 1]);
+      const links = c0.offsetLeft + (arr[0] === von && vonMitte ? c0.offsetWidth / 2 : 0);
+      const rechts = c1.offsetLeft + (arr[arr.length - 1] === bis && bisMitte ? c1.offsetWidth / 2 : c1.offsetWidth);
+      if (rechts - links < 8) return;
+      const d = document.createElement("div");
+      d.className = "bk " + klasse;
+      d.textContent = klasse === "sw" ? "" : text;
+      if (/\bsicher\b/.test(klasse) && rechts - links >= 50) { const ck = document.createElement("span"); ck.className = "ck"; ck.textContent = "✓"; d.appendChild(ck); }
+      if (sf) {   // voller (nicht gestreifter) Teil: Nächte vor sf sind schon sicher
+        let x = links;
+        if (sf > arr[arr.length - 1]) x = rechts;
+        else if (sf >= arr[0]) { const cs = zell.get(sf); x = cs.offsetLeft + cs.offsetWidth / 2; }
+        d.style.setProperty("--sf", Math.max(0, Math.min(x, rechts) - links) + "px");
+      }
+      const top = (c0.offsetTop + c0.offsetHeight - (klasse === "sw" ? 14 : 17)) + "px";
+      const sfPx = sf ? parseFloat(d.style.getPropertyValue("--sf")) : 0;
+      if (sf && sfPx > 6 && rechts - links - sfPx > 6) {   // Abriss: voller Teil und gestreifter Teil als zwei getrennte Stücke
+        const LUECKE = 4, d2 = document.createElement("div");
+        d2.className = "bk " + klasse.replace(/\bsicher\b/, "").trim() + " rest";
+        d.className = "bk " + klasse.replace(/\bsicher\b/, "").trim() + " voll";
+        d.textContent = text; d.style.removeProperty("--sf");
+        d.style.left = links + "px"; d.style.width = (sfPx - LUECKE / 2) + "px"; d.style.top = top;
+        d2.style.left = (links + sfPx + LUECKE / 2) + "px"; d2.style.width = (rechts - links - sfPx - LUECKE / 2) + "px"; d2.style.top = top;
+        if (sfPx < 50) { d.textContent = ""; d2.textContent = text; }
+        g.appendChild(d); g.appendChild(d2);
+        return;
+      }
+      d.style.left = links + "px"; d.style.width = (rechts - links) + "px";
+      d.style.top = top;
+      g.appendChild(d);
+    });
+  };
+  schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "Staffel offen"));
+  BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.sb ? "selbst" : "eltern") + (b.prov ? " prov" : "") + (provSicher(b) ? " sicher" : "") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null));
+}
+function renderKalender() {
+  const heute = heuteKey();
+  const n0 = heuteDate();
+  const abstand = (calY - n0.getFullYear()) * 12 + (calM - n0.getMonth());
+  document.getElementById("calPrev").disabled = abstand <= 0;
+  document.getElementById("calNext").disabled = abstand >= KAL_MONATE_VORAUS;
+  document.getElementById("calHeute").disabled = abstand === 0;
+  document.getElementById("calTitle").textContent = MONATE[calM] + " " + calY;
+  const g = document.getElementById("calGrid");
+  g.innerHTML = "";
+  WT_KURZ.forEach((w) => { const h = document.createElement("div"); h.className = "cal-wd"; h.textContent = w; g.appendChild(h); });
+  const erster = new Date(Date.UTC(calY, calM, 1));
+  const lead = (erster.getUTCDay() + 6) % 7;
+  const tage = new Date(Date.UTC(calY, calM + 1, 0)).getUTCDate();
+  for (let i = 0; i < lead; i++) g.appendChild(document.createElement("div"));
+  for (let d = 1; d <= tage; d++) {
+    const k = dkey(calY, calM, d);
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "cal-d";
+    let ok = false, label = "";
+    const istArr = k === ARR, istDep = k === DEP;
+    if (k < heute) { b.classList.add("past"); }
+    else if (ARR && !DEP) {
+      if (istArr) { ok = true; }
+      else if (kannAbreise(k)) ok = true;
+      else if (kannAnreise(k) && k < ARR) ok = true;
+      else if (BELEGT.has(k)) b.classList.add("occ");
+      else b.classList.add("off");
+    } else {
+      if (BELEGT.has(k)) b.classList.add("occ");
+      else if (kannAnreise(k)) ok = true;
+    }
+    if (ARR && DEP && k > ARR && k < DEP) b.classList.add("in");
+    if (!BELEGT.has(k) && k >= heute && GAPSPERR.has(k)) b.classList.add("occ");
+    else if (!BELEGT.has(k) && k >= heute && GAP.has(k)) b.classList.add("gap");
+    if (b.classList.contains("occ") && BELEGT_AIR && !BELEGT_AIR.has(k) && BUCH.some((x) => x.prov && x.arr <= k && k < x.dep)) { b.classList.remove("occ"); b.classList.add("provtag"); }   // Nacht eines Aufenthalts unter Vorbehalt: nicht wählbar, aber ohne Streichung
+    if (spitzVon(k)) b.classList.add("spitz");
+    else if (istHoch(k)) b.classList.add("hoch");
+    else if (istRuhe(k) && !BELEGT.has(k)) b.classList.add("ruhe");
+    if (istArr || istDep) b.classList.add("sel");
+    if (k === heute) b.classList.add("today");
+    b.disabled = !ok;
+    let sm = istArr ? "An" : (istDep ? "Ab" : "");
+    const rb = P.lueckeRabatt > 0 ? "−" + P.lueckeRabatt + "%" : "";
+    if (!sm && rb && !ARR && GAPSTART.has(k) && !GAPSPERR.has(k)) sm = rb;                       // Beginn einer Luecke
+    if (!sm && rb && ARR && !DEP && GAPSTART.get(ARR) === k) sm = rb;        // Abreisetag fuer die ganze Luecke
+    b.dataset.k = k;
+    b.innerHTML = '<span>' + d + '</span>' + (sm ? '<small>' + sm + '</small>' : '');
+    b.setAttribute("aria-label", fmtTag(k) + (istArr ? ", Anreise" : istDep ? ", Abreise" : (BELEGT.has(k) || GAPSPERR.has(k)) ? ", nicht verfügbar" : "") + (spitzVon(k) ? ", Spitzenzeit" : "") + "");
+    if (ok) b.addEventListener("click", () => kalenderKlick(k));
+    g.appendChild(b);
+  }
+  zeichneBalken();
+  const sel = document.getElementById("calSel");
+  if (ARR && DEP) sel.textContent = fmtTag(ARR) + " bis " + fmtTag(DEP) + " = " + S.nights + " " + (S.nights === 1 ? "Nacht" : "Nächte") + (S.luecke ? " · Lückenpreis" : "");
+  else if (ARR) {
+    sel.textContent = "Anreise: " + fmtTag(ARR) + ". Jetzt den Abreisetag antippen.";
+    if (GAPSTART.has(ARR) && P.lueckeRabatt > 0) sel.textContent += " Für den Lückenpreis (−" + P.lueckeRabatt + " %) Abreise am " + fmtTag(GAPSTART.get(ARR)) + " wählen.";
+  }
+  else sel.textContent = "Tippe den Anreisetag an.";
+  {
+    const el = document.getElementById("calHoch");
+    const hochOn = HOCH.length > 0 || HOCH_MONATE.length > 0;
+    let h = "";
+    if (hochOn) h += '<p><i class="sw sw-hoch"></i><b>Hochsaison</b>' + (HOCH_MONATE.length ? " (" + HOCH_MONATE.map((m) => MONATE[m - 1]).join(", ") + ")" : "") + "</p>";
+    if (P.lueckeRabatt > 0) h += '<p><i class="sw sw-gap"></i><b>Lücke</b> (' + P.lueckeRabatt + ' % Rabatt) ' + symBtn('b-luecke', '🧩') + '</p>';
+    if (RUHE.length) h += '<p><i class="sw sw-ruhe"></i><b>Eigene Wäsche möglich</b> (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ") " + symBtn("b-ruhe", "🧹") + "</p>";
+    if (SPITZ.length) h += '<p><i class="sw sw-spitz"></i><b>Spitzenzeit</b> (Preis auf Anfrage)</p>';
+    h += '<p><i class="sw sw-normal"></i><b>Übrige Zeiten:</b> nur mit Endreinigung ' + symBtn("b-endrein", "🪣") + '</p>';
+    h += '<p><i class="sw sw-occ"></i>nicht verfügbar</p>';
+    el.innerHTML = h;
+    el.hidden = h === "";
+  }
+  document.getElementById("legProv").hidden = !PROV_AN;
+  document.getElementById("legSicher").hidden = !PROV_AN;
+  document.getElementById("legSicherTxt").textContent = "ganz sicher: Abreise in höchstens " + VORLAUF + " Tagen (neue Gäste brauchen " + VORLAUF + " Tage Vorlauf)";
+  begriffeFuellen();
+  const sp = spitzTermin();
+  const spEl = document.getElementById("calSpitz");
+  spEl.hidden = !sp;
+  spEl.innerHTML = sp ? WA + "Spitzenzeit" + (sp[2] ? " (" + sp[2] + ")" : "") + ": In dieser Zeit vermieten wir nur zu hohen Preisen. Es gibt dafür keinen Familienpreis, der Preis wird von den Eltern festgelegt. Eine Anfrage ist trotzdem möglich." : "";
+  const lrEl = document.getElementById("calLRegeln");
+  lrEl.hidden = !S.luecke;
+  lrEl.innerHTML = S.luecke ? HW + symBtn("b-luecke", "🧩") + " Alles über Lücken erfahren" : "";
+  const ruheEl = document.getElementById("calRuhe");
+  let monatRuhe = false;
+  for (let d = 1, nt = new Date(Date.UTC(calY, calM + 1, 0)).getUTCDate(); d <= nt; d++) if (istRuhe(dkey(calY, calM, d))) { monatRuhe = true; break; }
+  const ruheZeigen = false;   // Erklaerung steht jetzt in der Kalender-Hilfe (Knopf ?)
+  ruheEl.hidden = !ruheZeigen;
+  ruheEl.innerHTML = ruheZeigen ? HW + 'In dieser Zeit (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ') ist die Familienstaffel möglich ' + symBtn("b-staffel", "🔗") + '. Ohne Gäste reinigt ihr, wenn erwünscht, selbst ' + symBtn("b-ruhe", "🧹") + '. Mit Gästen reinigen die Eltern.' : "";
+  const nEl = document.getElementById("calNormal");
+  const nZeigen = false;   // Erklaerung «Normale Zeit» steht jetzt in der Kalender-Hilfe (Knopf ?)
+  nEl.hidden = true;
+  let gemischt = false;
+  if (ARR && DEP && !S.luecke && !nZeigen && RUHE.length > 0 && !ruheStay()) {
+    for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istRuhe(k)) { gemischt = true; break; }
+  }
+  nEl.hidden = !(nZeigen || gemischt);
+  nEl.innerHTML = nZeigen ? HW + "Normale Zeit: normale Familienpreise, Endreinigung nach den Regeln. " + symBtn("b-endrein", "🪣")
+    : (gemischt ? WA + "Dieser Aufenthalt liegt teils in der Zeit «Eigene Wäsche». Selbst reinigen ist nur möglich, wenn der ganze Aufenthalt darin liegt. " + symBtn("b-ruhe", "🧹") : "");
+  const warn = document.getElementById("calWarn");
+  const msgs = [];
+  if (ARR && DEP) {
+    if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison. Bitte wenn möglich einen anderen wählen. Eine Anfrage ist trotzdem möglich. 🙏"); break; }
+    if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
+    if (provStay(ARR, DEP)) msgs.push(WA + "<b>Unter Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "⏳") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
+    const lg = lueckeVon(ARR);
+    if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
+  }
+  warn.hidden = msgs.length === 0;
+  warn.innerHTML = msgs.join("<br>");
+  document.getElementById("calHint").textContent = BELEGT_OK
+    ? "👉 Erst den Anreisetag, dann den Abreisetag antippen (" + P.minNaechte + " bis " + P.maxNaechte + " Nächte). Mit ‹ und › blättert ihr durch die Monate. Die Belegung wird alle paar Stunden aktualisiert. Tippe unten rechts auf «?» für Hilfe."
+    : "Die Belegung konnte nicht geladen werden, alle Tage erscheinen frei. Der Termin ist nur eine Anfrage, die Eltern prüfen ihn.";
+}
+document.addEventListener("input", (e) => {
+  if (!e.target || e.target.id !== "trink") return;
+  TRINK = e.target.value.replace(/\D/g, "").slice(0, 4);
+  render();
+  const n = document.getElementById("trink");
+  if (n) { n.focus(); const l = n.value.length; try { n.setSelectionRange(l, l); } catch (err) {} }
+});
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".sym[data-info]");
+  if (b) { e.preventDefault(); springeZu(b.dataset.info); return; }
+  if (e.target.closest("#zurueck")) zurueckGehen();
+  if (e.target.closest("#trinkOk")) {
+    TRINK_OFFEN = false;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    render();
+    return;
+  }
+  const tg = e.target.closest(".acc-t[data-body]");
+  if (tg) {
+    const body = document.getElementById(tg.dataset.body);
+    const auf = body.hidden;
+    if (tg.dataset.body === "rechBody") RECH_OFFEN = auf; else TRINK_OFFEN = auf;
+    tg.setAttribute("aria-expanded", auf ? "true" : "false");
+    body.hidden = !auf;
+  }
+});
+// «Benutzung» und «Begriffe»: immer nur eines offen
+document.querySelectorAll("#b-benutzung > summary, #b-begriffe > summary").forEach((sm) => sm.addEventListener("click", () => {
+  const d = sm.parentElement;
+  if (!d.open) ["b-benutzung", "b-begriffe"].forEach((id) => { const o = document.getElementById(id); if (o !== d) o.open = false; });
+}));
+// Unter «Begriffe» ist immer nur ein Eintrag offen
+document.querySelectorAll("#b-begriffe details.sub > summary").forEach((sm) => sm.addEventListener("click", () => {
+  const d = sm.parentElement;
+  if (!d.open) document.querySelectorAll("#b-begriffe details.sub").forEach((o) => { if (o !== d) o.open = false; });
+}));
+document.getElementById("nachOben").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+window.addEventListener("scroll", () => { document.getElementById("nachOben").hidden = window.scrollY < 500; }, { passive: true });
+document.getElementById("btnHilfe").addEventListener("click", () => {
+  const an = document.getElementById("hilfe").hidden;
+  ZURUECK = null; document.getElementById("zurueck").hidden = true;
+  if (an) { setRechner(false); setChem(false); } else hilfeZuklappen();
+  setHilfe(an);
+});
+document.getElementById("btnReserv").addEventListener("click", () => {
+  ZURUECK = null; document.getElementById("zurueck").hidden = true;
+  setHilfe(false); hilfeZuklappen(); setChem(false); setRechner(true);
+  document.getElementById("cal").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+// Versteckt: 5 Tipps auf die Versionszeile zeigen den Buchhaltungs-Link (nur bis zum Neuladen)
+(function () {
+  let n = 0, letzter = 0;
+  document.getElementById("ver").addEventListener("click", () => {
+    const t = Date.now();
+    n = (t - letzter < 1500) ? n + 1 : 1;
+    letzter = t;
+    if (n >= 5) { document.getElementById("btnBuch").hidden = false; tokZeigen(true); n = 0; }
+  });
+})();
+document.getElementById("btnChem").addEventListener("click", () => {
+  const an = document.getElementById("cheminee").hidden;
+  ZURUECK = null; document.getElementById("zurueck").hidden = true;
+  if (an) { setHilfe(false); hilfeZuklappen(); setRechner(false); }
+  setChem(an);
+  if (an) document.getElementById("cheminee").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+document.getElementById("calPrev").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; calY--; } renderKalender(); });
+document.getElementById("calHeute").addEventListener("click", () => { initKalenderMonat(); renderKalender(); });
+document.getElementById("calNext").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderKalender(); });
+
+async function ladeBelegt() {
+  const nimm = (j) => {
+    if (!j || !Array.isArray(j.belegt)) return false;
+    BELEGT = new Set(j.belegt.filter((x) => typeof x === "string" && /^\d{4}-\d{2}-\d{2}$/.test(x)));
+    BELEGT_AIR = new Set(BELEGT); belegtMischen();
+    BELEGT_OK = true; return true;
+  };
+  try {
+    const ctl = new AbortController();
+    const to = setTimeout(() => ctl.abort(), 4000);
+    const r = await fetch("belegt.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    clearTimeout(to);
+    if (!r.ok) throw new Error("http " + r.status);
+    const j = await r.json();
+    if (nimm(j)) { try { localStorage.setItem("tm_belegt", JSON.stringify(j)); } catch (e) {} }
+  } catch (e) {
+    try { const c = localStorage.getItem("tm_belegt"); if (c) nimm(JSON.parse(c)); } catch (e2) {}
+  }
+}
+
+function ketteText() {
+  return "Die " + chf(P.reinigung) + " Endreinigung fallen an, sobald die Familienstaffel endet, also sobald nach einer Reisegruppe die Eltern oder ein Airbnb-Gast kommen. Der Aufenthalt wird wie üblich bezahlt. Die Eltern stellen nur eine Rechnung für die Endreinigung, getrennt vom Aufenthalt, an die letzte Reisegruppe der Familienstaffel. War sie allein in der Staffel, sind es die vollen " + chf(P.reinigung) + ". Waren mehrere Reisegruppen in der Staffel, bezahlt die letzte zuerst alles und holt sich die Anteile der anderen zurück, anteilig nach Reisegruppe. Das Eintreiben des Geldes regeln die Reisegruppen untereinander. Nutzt die Familienstaffel, um die Reinigungskosten möglichst zu drücken: Je mehr Reisegruppen nacheinander kommen, desto weniger zahlt jede Reisegruppe. Sind Geschwister gleichzeitig dort, regeln sie die Kosten untereinander.";
+}
+function putzText() {
+  return "Danach gehen die Eltern die Wohnung reinigen. Die Wäsche darf nur von den Kindern selbst kommen und muss frisch sein. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Nach dem Benutzen bleiben die Moltons auf der Matratze. Wer geht, reinigt selbst: WC putzen, staubsaugen, Küche sauber, Abfall entsorgen, alles picobello. Die Endreinigung durch die Eltern ist trotzdem Pflicht, weil sie ihren Standard wahren wollen.";
+}
+
+const ABS = ["Jerome", "Deborah", "Miriam", "Manuel"];
+let ABSENDER = "";
+try { const a = localStorage.getItem("tm_absender"); if (a && ABS.indexOf(a) >= 0) ABSENDER = a; } catch (e) {}
+
+function anfrageText(r) {
+  const x = r.d;
+  const z = [];
+  z.push("Hallo Eltern");
+  z.push("");
+  z.push("Anfrage für das Chalet Tschenten (noch keine Reservation):");
+  z.push("");
+  z.push("Anreise: " + fmtTagV(ARR));
+  z.push("Abreise: " + fmtTagV(DEP) + " (" + x.nights + " Nächte)");
+  z.push("");
+  z.push("Familie: " + S.wer + (S.wer === MFG ? " (" + S.fam + " Personen)" : "") + (x.KK > 0 ? ", davon " + x.KK + " im Kinderbettchen oder bei den eigenen Eltern" : ""));
+  z.push("Gäste: " + x.GE);
+  if (x.GE > 0 && !x.lock) z.push("Gast im selben Zimmer: " + x.ZE);
+  z.push("Zimmer 1 unberührt: " + (S.spar === "Ja" ? "Ja" : "Nein"));
+  if (x.LG) { z.push("Ganze Lücke: nur Zimmer 2 mit blauem Bad" + (x.KK > 0 ? ", das Kleinkind im Kinderbettchen in Zimmer 3 oder bei den Erwachsenen in Zimmer 2" : "") + ", ohne Gäste, eigene Bettwäsche, Handtücher und Küchentücher, Reinigung durch die Eltern " + chf(P.reinigung)); }
+  if (x.GE > 0) z.push("Reinigung: " + S.reinig);
+  if (x.SB) z.push("Selbstreinigung: Ja");
+  z.push("");
+  if (x.LR > 0 && !spitzTermin()) z.push("Lückenpreis (" + x.LR + " % auf die Übernachtungen)");
+  const spA = spitzTermin();
+  if (spA) z.push("Spitzenzeit" + (spA[2] ? " (" + spA[2] + ")" : "") + ": Preis auf Anfrage");
+  else z.push("Total laut Rechner: " + chf(r.TOT));
+  if (x.SB) z.push("Reinigungskosten sind erst nach Ablauf der Familienstaffel bekannt und werden nachbelastet.");
+  if (x.SM && S.selbst === "Nein") { const u = staffelUnterbruch(ARR); if (u.length) z.push("Achtung: Unterbricht die Familienstaffel von " + u.join(", ") + ".") ; }
+  if (festStay(ARR, DEP)) z.push("Fester Termin (" + festTxt() + "): bitte in Airbnb sperren.");
+  if (provStay(ARR, DEP)) z.push("Unter Vorbehalt: Der Termin wird nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. Das Risiko wurde vom Absender bestätigt." + " " + provSicherZeile(ARR, DEP));
+  z.push("");
+  z.push("Gruss");
+  z.push(ABSENDER);
+  z.push("");
+  if (x.LG) { z.push(""); z.push("Wir bitten euch, eigene Bettwäsche, Frottee- und Küchentücher mitzubringen, so wie im Tschent-O-Mat beschrieben. Die Reinigung übernehmen die Eltern."); }
+  z.push("Zum Bestätigen durch Papi: " + bestLink(ABSENDER, ARR, DEP, x.SB === true, x.FP, x.LG === true));
+  return z.join("\n");
+}
+
+function naechsterTermin() {
+  if (!BELEGT_OK || !DEP) return "";
+  let k = DEP;
+  for (let i = 0; i < 400; i++, k = addDays(k, 1)) {
+    if (BELEGT.has(k)) {
+      const n = diffDays(DEP, k);
+      if (n === 0) return "Direkt nach mir (ab " + fmtTagV(DEP) + ") ist das Chalet schon wieder belegt.";
+      return "Nach mir ist das Chalet noch frei bis zum nächsten bekannten Termin am " + fmtTagV(k) + " (" + n + " " + (n === 1 ? "Nacht" : "Nächte") + ").";
+    }
+  }
+  return "Nach mir ist bisher kein weiterer Termin bekannt.";
+}
+
+function familienText() {
+  const nt = naechsterTermin();
+  const z = [
+    "Hallo zusammen",
+    "",
+    "Ich plane vom",
+    "",
+    fmtTagV(ARR),
+    "bis",
+    fmtTagV(DEP),
+    "",
+    "im Chalet Tschenten zu sein und selbst zu reinigen.",
+    "",
+    "Kommt jemand von euch nach mir, noch bevor die Eltern kommen? So können wir uns die Endreinigungskosten teilen 😉",
+    ""
+  ];
+  if (nt) { z.push(nt); z.push(""); }
+  z.push("Alles Weitere steht im Tschent-O-Mat:");
+  z.push("https://waenu.github.io/Tschentomat/");
+  z.push("");
+  z.push("Gruss");
+  z.push(ABSENDER);
+  return z.join("\n");
+}
+
+function endreinigungInfo(r) {
+  const nb = (t) => '<span style="white-space:nowrap">' + t + '</span>';
+  const au = r.TOT;
+  const R = P.reinigung;
+  return '<div class="note"><b><button type="button" class="sym" data-info="b-endrein" aria-label="Regeln zur Endreinigung anzeigen">🪣</button> Endreinigung später: was kommt noch dazu?</b>' +
+    '<p>Jetzt überweist ihr nur den Aufenthalt: ' + nb('<b>' + chf(au) + '</b>') + '. Die Endreinigung kommt später dazu, höchstens ' + nb(chf(R)) + '. Wer sie zahlt und wann, steht unter «Endreinigung» in «Begriffe».</p>' +
+    '<p><b>Nur als Info, Total für euch:</b></p><ul style="margin:2px 0">' +
+    '<li>Ihr seid allein: ' + nb(chf(au)) + ' + ' + nb(chf(R)) + ' = <b>' + nb(chf(au + R)) + '</b></li>' +
+    '<li>1 weitere Reisegruppe: ' + nb(chf(au)) + ' + ' + nb(chf(R / 2)) + ' = <b>' + nb(chf(au + R / 2)) + '</b></li>' +
+    '<li>2 weitere Reisegruppen: ' + nb(chf(au)) + ' + ' + nb(chf(R / 3)) + ' = <b>' + nb(chf(au + R / 3)) + '</b></li></ul>' +
+    '<p class="hint">Gleichmässig auf die Reisegruppen verteilt gerechnet. Die letzte Reisegruppe der Staffel legt die ganze Endreinigung zuerst aus und holt sich die Anteile der anderen zurück. Das regeln die Reisegruppen untereinander.</p>' +
+    '</div>';
+}
+
+function einladenBox(r) {
+  const ich = S.wer === "Nur ich";
+  const nb = (t) => '<span style="white-space:nowrap">' + t + '</span>';
+  const sum = r.FZ + r.HZ;
+  return '<details><summary>🤝 Gast einladen und selbst bezahlen?</summary><div class="rows"><p>' +
+    (ich ? "Du lädst" : "Ihr ladet") + ' Gast 1 (den Hauptgast) ein und ' + (ich ? "übernimmst" : "übernehmt") + ' seinen Anteil? Dann ' + (ich ? "zahlst du" : "zahlt die Familie") + ' ' +
+    nb(chf(r.FZ)) + ' + ' + nb(chf(r.HZ)) + ' = <b>' + nb(chf(sum)) + '</b>.</p></div></details>';
+}
+
+let ELTERN = false;
+let RECH_OFFEN = false;
+let TRINK_OFFEN = false;
+let TRINK = "";
+let EMPF = "";
+const KINDER = ["Jerome", "Deborah", "Miriam", "Manuel"];
+function einladungText() {
+  const x = derive(S);
+  const allein = S.wer === "Nur ich";
+  const WIE = {
+    "Nur ich": "du alleine",
+    "Ich und Partner": "ihr als Paar",
+    "Ich und 1 Familienmitglied": "ihr zu zweit",
+    "Ich und Kleinkind": "du mit 1 Kleinkind",
+    "Ich, Familienmitglied, Kleinkind": "ihr zu zweit mit 1 Kleinkind",
+    "Ich und 1 Kind": "du mit 1 Kind",
+    "Ich und 2 Kinder": "du mit 2 Kindern",
+    "Ich, Partner und 1 Kind": "ihr als Familie mit 1 Kind",
+    "Ich, Partner und 2 Kinder": "ihr als Familie mit 2 Kindern"
+  };
+  const wer = S.wer === MFG ? S.fam + " Personen aus der Familie" : (WIE[S.wer] || S.wer);
+  const z = ["Hallo " + EMPF, "", allein ? "Wir laden dich ein:" : "Wir laden euch ein:", "", "Anreise: " + fmtTagV(ARR), "Abreise: " + fmtTagV(DEP) + " (" + S.nights + " Nächte)", ""];
+  z.push("Eingeladen: " + wer + (x.KK > 0 ? ", davon " + x.KK + " im Kinderbettchen oder bei den eigenen Eltern" : ""));
+  if (x.GE > 0) {
+    z.push("Gäste: " + x.GE);
+    if (!x.lock) z.push("Gast im selben Zimmer: " + x.ZE);
+  } else z.push("Keine weiteren Gäste");
+  z.push("Zimmer 1 unberührt: " + (S.spar === "Ja" ? "Ja" : "Nein"));
+  z.push("");
+  if (x.SM) {
+    z.push(S.selbst === "Ja"
+      ? "Wir bitten euch, eigene Bettwäsche, Frottee- und Küchentücher mitzubringen, so wie im Tschent-O-Mat beschrieben. Das Chalet reinigt ihr am Schluss selbst."
+      : "Ihr braucht keine eigene Bettwäsche und keine Frotteewäsche mitzubringen. Beides ist im Chalet vorhanden.");
+    z.push("");
+  }
+  if (x.GE > 0) z.push((allein ? "Du und " + (x.GE === 1 ? "dein Gast" : "deine Gäste") : "Ihr und " + (x.GE === 1 ? "euer Gast" : "eure Gäste")) + " seid eingeladen. Wir tragen alle Kosten: Übernachtungen und Endreinigung.");
+  else z.push((allein ? "Du bist unser Gast." : "Ihr seid unsere Gäste.") + " Wir tragen alle Kosten: Übernachtungen und Endreinigung.");
+  z.push("");
+  z.push("Gruss");
+  z.push("Eltern");
+  return z.join("\n");
+}
+function elternKasten() {
+  if (!(ARR && DEP)) return "";
+  const ok = EMPF !== "";
+  const t = ok ? einladungText() : "";
+  LETZTE_EINLADUNG = t;
+  return '<div class="pay" id="elternBox"><strong>💌 Einladung senden</strong>' +
+    '<span class="hint">Nur für die Eltern. Ihr ladet ein Kind mit Familie ein und tragt alle Kosten. WhatsApp öffnet sich mit dem fertigen Text, dort wählst du die Person.</span>' +
+    '<div class="field"><label for="empf">Wen ladet ihr ein?</label><select id="empf" class="' + (ok ? "done" : "missing") + '"><option value="">– wählen –</option>' +
+    KINDER.map((n) => '<option value="' + n + '"' + (n === EMPF ? " selected" : "") + '>' + n + '</option>').join("") + '</select></div><div class="btns">' +
+    (ok ? '<a class="btn" href="https://wa.me/?text=' + encodeURIComponent(t) + '" target="_blank" rel="noopener">Per WhatsApp senden</a>' : '<span class="btn off" aria-disabled="true">Per WhatsApp senden</span>') +
+    '<button type="button" class="btn" id="copyEinl"' + (ok ? "" : " disabled") + '>Einladung kopieren</button></div></div>';
+}
+const WA_SVG = '<svg class="wa" viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="#25D366" d="M16 2.5A13.4 13.4 0 0 0 4.4 22.6L2.5 29.5l7.1-1.9A13.4 13.4 0 1 0 16 2.5z"/><path fill="#fff" d="M22.6 19.4c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2l-1 1.2c-.2.2-.4.3-.7.1a9 9 0 0 1-4.5-3.9c-.3-.6.3-.6.9-1.8.1-.2.1-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.8-.5h-.6a1.2 1.2 0 0 0-.9.4 3.800 3.800 0 0 0-1.2 2.800c0 1.600 1.200 3.200 1.400 3.400.2.200 2.300 3.500 5.600 4.900 2.100.9 2.900 1 4 .8.600-.1 2-.8 2.300-1.600.3-.8.3-1.400.2-1.600l-.6-.3z"/></svg>';
+let LETZTE_EINLADUNG = "";
+let RISIKO_OK = "";   // Aufenthalt (arr_dep), für den das Risiko bestätigt wurde
+const risikoKey = () => ARR + "_" + DEP;
+function anfrageKasten(r) {
+  if (!(ARR && DEP)) return "";
+  const t = anfrageText(r);
+  LETZTE_ANFRAGE = t;
+  const prov = provStay(ARR, DEP), rok = !prov || RISIKO_OK === risikoKey();
+  const ok = ABSENDER !== "" && rok;
+  let h = '<div class="pay"><strong>💬 Anfrage an die Eltern senden</strong>' +
+    '<span class="hint">Das ist nur eine Anfrage und noch keine Buchung. Die Eltern bestätigen den Termin. WhatsApp öffnet sich mit dem fertigen Text. Wähle dort den <b>«Adelboden Airbnb Chat»</b>, nicht den Familien-Chat.</span>' + (provStay(ARR, DEP) ? '<span class="hint"><b>Unter Vorbehalt:</b> Der Termin wird nicht in Airbnb gesperrt. Ein Airbnb-Gast hat Vorrang. ' + symBtn('b-prov', '⏳') + '</span>' : '') +
+    '<div class="field"><label for="absender">Wer schickt die Anfrage?</label><select id="absender" class="' + (ok ? "done" : "missing") + '"><option value="">– wählen –</option>' +
+    ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + '>' + n + '</option>').join("") +
+    '</select>' + (ABSENDER !== "" ? "" : '<p class="hint">Erst den Namen wählen, dann sind die Knöpfe aktiv.</p>') + '</div>' +
+    (prov ? '<label class="risiko"><input type="checkbox" id="risikoOk"' + (rok ? " checked" : "") + '> <span><b>Ich habe das Risiko verstanden:</b> Dieser Termin steht unter Vorbehalt. Kommt eine Airbnb-Buchung, muss ich weichen oder gar nicht erst reisen. Das Risiko trage ich selbst.</span></label>' + (rok ? "" : '<p class="hint">Erst das Risiko bestätigen, dann sind die Knöpfe aktiv.</p>') : "") + '<div class="btns">';
+  h += ok ? '<a class="btn" id="waReq" href="https://wa.me/?text=' + encodeURIComponent(t) + '" target="_blank" rel="noopener">' + WA_SVG + 'Per WhatsApp an den «Adelboden Airbnb Chat» senden</a>' : '<span class="btn off" aria-disabled="true">' + WA_SVG + 'Per WhatsApp an den «Adelboden Airbnb Chat» senden</span>';
+  h += '<button type="button" class="btn" id="copyReq"' + (ok ? "" : " disabled") + '>📋 Anfrage kopieren</button></div><div class="note h" id="aufHinweis" hidden></div>';
+  if (r.d.SB) {
+    const f = familienText();
+    LETZTE_FAMILIE = f;
+    h += '<span class="hint" style="margin-top:12px"><b>Kommt jemand von den Kindern nach dir?</b> Frag im «Adelboden Airbnb Chat». Hier im Rechner steht ' + chf(0) + ' für die Reinigung. Dann teilt ihr die Reinigungskosten. Regeln siehe «Endreinigung» ' + symBtn('b-endrein', '🪣') + '.</span><div class="btns">' +
+      (ok ? '<a class="btn" href="https://wa.me/?text=' + encodeURIComponent(f) + '" target="_blank" rel="noopener">' + WA_SVG + 'Umfrage starten</a>' : '<span class="btn off" aria-disabled="true">' + WA_SVG + 'Umfrage starten</span>') +
+      '<button type="button" class="btn" id="copyFam"' + (ok ? "" : " disabled") + '>📋 Text kopieren</button></div>';
+  }
+  h += '</div>';
+  return h;
+}
+function render() {
+  const d = derive(S);
+  FIELDS.forEach((f) => {
+    const wrap = document.getElementById("f-" + f.id);
+    const sel = document.getElementById("s-" + f.id);
+    const vis = f.visible ? f.visible(d) : true;
+    wrap.hidden = !vis;
+    const cur = S[f.id] === null || S[f.id] === undefined ? "" : String(S[f.id]);
+    const list = f.opts(d).map(String);
+    const sig = list.join("|");
+    if (sel.dataset.sig !== sig) {
+      sel.innerHTML = "";
+      const ph = document.createElement("option"); ph.value = ""; ph.textContent = "– wählen –"; sel.appendChild(ph);
+      list.forEach((o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); });
+      sel.dataset.sig = sig;
+    }
+    if (sel.value !== cur) sel.value = cur;
+    const chosen = cur !== "";
+    const locked = f.id === "spar" && d.sparLock;
+    sel.disabled = locked;
+    wrap.classList.toggle("done", chosen && !locked);
+    wrap.classList.toggle("missing", !chosen && !locked);
+    wrap.classList.toggle("locked", locked);
+    sel.classList.toggle("done", chosen && !locked);
+    sel.classList.toggle("missing", !chosen && !locked);
+    sel.classList.toggle("locked", locked);
+    const hEl = document.getElementById("h-" + f.id);
+    if (f.id === "selbst") { hEl.textContent = ""; const r = document.createElement("span"); r.className = "rot"; r.textContent = "Selbst reinigen geht nur ohne Gäste (für euch Kinder mit Partnern und Kindern). Mit Gästen reinigen immer die Eltern."; hEl.appendChild(r); hEl.appendChild(document.createTextNode(" " + f.hint(d))); }
+    else hEl.textContent = f.hint(d);
+    if (f.id === (d.SM ? "selbst" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h rot-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
+  });
+  const nb = document.getElementById("notice");
+  nb.hidden = !notice; nb.textContent = notice;
+
+  const r = calc(S);
+  const tip = Math.max(0, parseInt(TRINK, 10) || 0);
+  const res = document.getElementById("result");
+  const bar = document.getElementById("bar");
+  const lab = document.getElementById("barLab"), val = document.getElementById("barVal");
+  if (!r.ok) {
+    res.innerHTML = '<h2>Preis</h2><p class="empty">' + r.msg.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</p>';
+    bar.classList.add("err"); lab.textContent = r.msg; val.textContent = "";
+    return;
+  }
+  bar.classList.remove("err");
+  const nTxt = r.d.nights + " " + (r.d.nights === 1 ? "Nacht" : "Nächte");
+  const totTxt = tip > 0 ? "Total inkl. Trinkgeld für " : "Total für ";
+  lab.textContent = totTxt + nTxt; val.textContent = chf(r.TOT + tip);
+  if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
+  const x = r.d;
+  const spR = spitzTermin();
+  if (spR) {
+    lab.textContent = "Spitzenzeit: Preis auf Anfrage"; val.textContent = "";
+    res.innerHTML = '<h2>Preis auf Anfrage</h2>' +
+      '<p class="note h">' + WA + 'Spitzenzeit' + (spR[2] ? ' (' + esc(spR[2]) + ')' : '') + ': In dieser Zeit vermieten wir nur zu hohen Preisen. Es gibt dafür keinen Familienpreis. Der Preis wird von den Eltern festgelegt. Eine Anfrage ist trotzdem möglich.</p>' +
+      (ARR && DEP ? '<p class="hint">' + esc(fmtTag(ARR)) + ' bis ' + esc(fmtTag(DEP)) + '</p>' : '') +
+      anfrageKasten(r);
+    return;
+  }
+  let who = "";
+  who += '<tr><td>' + (S.wer === "Nur ich" ? "Du zahlst" : "Familie zahlt") + '</td><td>' + chf(r.FZ) + '</td></tr>';
+  if (x.GE >= 1) who += '<tr><td>Gast 1 (Hauptgast) zahlt</td><td>' + chf(r.HZ) + '</td></tr>';
+  for (let g = 2; g <= x.GE; g++) who += '<tr><td>Gast ' + g + ' zahlt</td><td>' + chf(r.WZ / (x.GE - 1)) + '</td></tr>';
+  let det = "";
+  const row = (a, b) => '<tr><td>' + a + '</td><td>' + b + '</td></tr>';
+  det += row(S.wer === "Nur ich" ? "Du pro Nacht" : "Familie pro Nacht", chf(x.FN));
+  if (x.GE >= 1) det += row("Gast 1 (Hauptgast) pro Nacht", chf(x.HN));
+  for (let g = 2; g <= x.GE; g++) det += row('Gast ' + g + ' pro Nacht', chf(x.GN));
+  det += row("Übernachtung (" + x.nights + " Nächte)", chf(x.UE));
+  det += row("Reinigung", chf(x.RE));
+  if (x.GE >= 1) det += row(S.wer === "Nur ich" ? "Reinigung: dein Anteil" : "Reinigung: Anteil Familie", chf(x.FA));
+  if (x.GE >= 1) det += row("Reinigung: Anteil pro Gast", chf(x.GS));
+  if (r.AUF) det += row("Aufschlag bis zum Mindestpreis im " + esc(festTxt()), "+" + chf(r.AUF));
+  if (r.GRATIS) det += row("Gesamtpreis vorher: " + chf(r.TOT0) + ". Entlastung Familie", "−" + chf(r.D));
+  if (tip > 0) det += row("Trinkgeld für Mami (freiwillig)", chf(tip));
+  let notes = "";
+  if (x.sp) notes += '<p class="note">Zimmer 1 und rotes Bad bleiben unberührt: ' + chf(P.sparEin) + ' weniger pro Nacht, ' + (S.wer === "Nur ich" ? "du zahlst" : "die Familie zahlt") + ' ' + chf(x.FN0) + ' statt ' + chf(P.famPausch) + '.</p>';
+  if (x.LR > 0) notes += '<p class="note">Lückenpreis: Alle Nachtpreise sind ' + x.LR + ' Prozent günstiger, auf ganze Franken gerundet.</p>';
+  if (r.GRATIS) notes += '<p class="note"><b>Mindestpreis:</b> ' + (r.FZ === 0 ? (S.wer === "Nur ich" ? "Du zahlst deinen" : "Die Familie zahlt ihren") + ' eigenen Anteil (' + chf(r.FZ0) + ') nicht. ' : (S.wer === "Nur ich" ? "Du zahlst" : "Die Familie zahlt") + ' noch ' + chf(r.FZ) + ' statt ' + chf(r.FZ0) + '. ') + 'Der Gesamtpreis sinkt nie unter ' + chf(r.BODEN) + ' (' + chf(r.FEST ? P.festBodenWoche : P.mindestpreisWoche) + ' pro 7 Nächte). Die Gäste zahlen ihre Anteile wie berechnet.</p>';
+  if (r.AUF) notes += '<p class="note"><b>Mindestpreis im ' + esc(festTxt()) + ':</b> Das Total beträgt mindestens ' + chf(r.BODEN) + ' (' + chf(P.festBodenWoche) + ' pro 7 Nächte, inklusive Endreinigung). ' + (x.GE >= 1 ? 'Der fehlende Betrag von ' + chf(r.AUF) + ' wird gleichmässig auf alle Personen verteilt, dich und die Gäste. Mit mehr Gästen sinkt dein Anteil.' : 'Du zahlst den Mindestpreis. Mit Gästen sinkt dein Anteil.') + '</p>';
+  if (x.GE >= 1) notes += '<p class="note">Reinigung aufgeteilt: ' + S.reinig + '.</p>';
+  const zahlung = '<div class="pay"><strong>Die Familie überweist den ganzen Betrag: ' + chf(r.TOT + tip) + '</strong>' +
+      (tip > 0 ? '<span>davon Trinkgeld für Mami: ' + chf(tip) + ' (freiwillig)</span>' : '') +
+      '<span class="rot-txt">Spätestens ' + ZAHL_TAGE + ' Tage nach dem letzten Ferientag, ohne Aufforderung.</span>' +
+      '<span class="iban">IBAN: ' + esc(IBAN) + '</span>' +
+      '<button type="button" id="copyIban">📋 IBAN kopieren</button></div>';
+  const aufteilung = x.GE >= 1 ? '<h3 class="split-h">💸 Aufteilung unter euch</h3>' +
+    '<p class="hint">Das Geld bei den Gästen einsammeln ist eure Sache. Die Tabelle zeigt, wie viel jeder schuldet.</p>' +
+    '<table><tbody>' + who + '</tbody></table>' : '';
+  res.innerHTML =
+    '<div class="acc">' + symBtn('b-rechnen', '🧮') + '<button type="button" class="acc-t" id="rechTgl" data-body="rechBody" aria-expanded="' + (RECH_OFFEN ? 'true' : 'false') + '" aria-controls="rechBody">Preisberechnung</button></div>' +
+    '<div class="total"><span class="small">für ' + x.nights + ' ' + (x.nights === 1 ? "Nacht" : "Nächte") + ', ' + x.PT + ' ' + (x.PT === 1 ? "Person" : "Personen") + ' mit Bett' + (x.KK > 0 ? ', ' + x.KK + (x.KK === 1 ? ' Kind' : ' Kinder') + ' im Kinderbettchen oder bei den eigenen Eltern' : '') + '</span>' +
+    (ARR && DEP ? '<span class="small">vom ' + esc(fmtTag(ARR)) + ' bis ' + esc(fmtTag(DEP)) + '</span>' : '') +
+    '<span class="big">' + chf(r.TOT) + '</span></div>' +
+    (x.LR > 0 ? '<p class="note"><b>Lückenpreis:</b> ' + x.LR + ' % günstiger auf die Übernachtungen, die Reinigung bleibt gleich.</p>' : '') +
+    '<div id="rechBody" class="rows"' + (RECH_OFFEN ? '' : ' hidden') + '><table><tbody>' + det + '</tbody></table>' + notes + (x.SB ? endreinigungInfo(r) : '') + '</div>' +
+    aufteilung +
+    anfrageKasten(r) +
+    '<h3 class="split-h">' + symBtn('b-zahlung', '💰') + ' Zahlung</h3>' +
+    '<div class="acc">' + symBtn('b-trinkgeld', '🐖') + '<button type="button" class="acc-t" id="trinkTgl" data-body="trinkBody" aria-expanded="' + (TRINK_OFFEN ? 'true' : 'false') + '" aria-controls="trinkBody">Trinkgeld' + (tip > 0 ? ' ' + chf(tip) + ' 🙏' : '') + '</button></div>' +
+    '<div class="field" id="trinkBody"' + (TRINK_OFFEN ? '' : ' hidden') + '><label for="trink">Trinkgeld für Mami</label><input id="trink" class="betrag" type="text" inputmode="numeric" autocomplete="off" placeholder="freiwillig, z. B. 20" value="' + esc(TRINK) + '">' +
+      '<button type="button" class="wbtn" id="trinkOk">✓ Übernehmen</button></div>' +
+    zahlung +
+    '<details><summary>' + symBtn('b-geld', '💰') + ' Geldverwendung</summary><div class="rows">' + GELD_TEXT +
+    '</div></details>' +
+    '<div class="marke" id="marke"><span data-z="0">ankommen</span><span class="pt">·</span><span data-z="1">durchatmen</span><span class="pt">·</span><span data-z="2">geniessen</span></div>' + (ELTERN ? elternKasten() : '');
+}
+
+document.getElementById("reset").addEventListener("click", () => { ELTERN = false; EMPF = ""; TRINK = ""; RECH_OFFEN = false; TRINK_OFFEN = false; S = Object.assign({}, EMPTY); ARR = ""; DEP = ""; initKalenderMonat(); notice = ""; render(); renderKalender(); ZURUECK = null; document.getElementById("zurueck").hidden = true; setHilfe(false); hilfeZuklappen(); setRechner(false); window.scrollTo({ top: 0 }); });
+function wendeEinstellungenAn(j) {
+  if (!j || typeof j !== "object") return;
+  Object.keys(P).forEach((k) => {
+    if (typeof j[k] === "number" && isFinite(j[k]) && j[k] >= 0) P[k] = j[k];
+  });
+  if (typeof j.version === "string" && j.version) VERSION = j.version;
+  if (typeof j.gueltigAb === "string" && j.gueltigAb) GUELTIG_AB = j.gueltigAb;
+  if (typeof j.iban === "string" && j.iban.trim()) IBAN = j.iban.trim();
+  if (typeof j.bank === "string" && j.bank.trim()) BANK = j.bank.trim();
+  if (typeof j.zahlTage === "number" && isFinite(j.zahlTage) && j.zahlTage >= 0) ZAHL_TAGE = Math.round(j.zahlTage);
+  if (typeof j.lueckeMax === "number" && isFinite(j.lueckeMax) && j.lueckeMax >= 0) LUECKE_MAX = Math.round(j.lueckeMax);
+  if (typeof j.keinCheckinSonntag === "boolean") KEIN_CHECKIN_SO = j.keinCheckinSonntag;
+  if (Number.isInteger(j.lueckeVorlaufTage) && j.lueckeVorlaufTage >= 0) LUECKE_VORLAUF = j.lueckeVorlaufTage;
+  if (typeof j.provisorisch === "boolean") PROV_AN = j.provisorisch;
+  if (Number.isInteger(j.airbnbVorlaufTage) && j.airbnbVorlaufTage >= 0 && j.airbnbVorlaufTage <= 30) VORLAUF = j.airbnbVorlaufTage;
+  const cl = (a) => Array.isArray(a) ? a.filter((s) => typeof s === "string" && s.trim()).map((s) => s.trim()) : null;
+  if (cl(j.checklisteSelbst)) CHECK_SELBST = cl(j.checklisteSelbst);
+  if (cl(j.checklisteAlle)) CHECK_ALLE = cl(j.checklisteAlle);
+  if (Array.isArray(j.waescheProPerson)) { const w = j.waescheProPerson.filter((a) => Array.isArray(a) && typeof a[0] === "string" && Number.isInteger(a[1]) && a[1] > 0); if (w.length) WAESCHE = w; }
+  if (Array.isArray(j.lueckeSperrMonate)) LUECKE_SPERR = j.lueckeSperrMonate.filter((m) => Number.isInteger(m) && m >= 1 && m <= 12);
+  if (Array.isArray(j.spitzenzeiten)) SPITZ = j.spitzenzeiten.filter((a) => Array.isArray(a) && a.length >= 2 && /^\d{4}-\d{2}-\d{2}$/.test(a[0]) && /^\d{4}-\d{2}-\d{2}$/.test(a[1])).map((a) => [a[0], a[1], typeof a[2] === "string" ? a[2] : ""]);
+  if (Array.isArray(j.selbstReinigung)) RUHE = j.selbstReinigung.filter((a) => Array.isArray(a) && a.length === 2 && /^\d{2}-\d{2}$/.test(a[0]) && /^\d{2}-\d{2}$/.test(a[1]));
+  if (Array.isArray(j.festMonate)) FEST_MONATE = j.festMonate.filter((m) => Number.isInteger(m) && m >= 1 && m <= 12);
+  if (j.minNaechteMonat && typeof j.minNaechteMonat === "object") { MIN_MONATE = {}; Object.keys(j.minNaechteMonat).forEach((m) => { const v = j.minNaechteMonat[m], mi = parseInt(m, 10); if (Number.isInteger(v) && v >= 1 && v <= 30 && mi >= 1 && mi <= 12) MIN_MONATE[mi] = v; }); }
+  if (Array.isArray(j.hochsaisonMonate)) HOCH_MONATE = j.hochsaisonMonate.filter((m) => Number.isInteger(m) && m >= 1 && m <= 12);
+  if (Array.isArray(j.hochsaison)) HOCH = j.hochsaison.filter((a) => Array.isArray(a) && a.length === 2 && /^\d{4}-\d{2}-\d{2}$/.test(a[0]) && /^\d{4}-\d{2}-\d{2}$/.test(a[1]));
+}
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function kopiere(text, btn, fertig, vorher) {
+  const orig = btn.innerHTML;
+  const done = () => { btn.textContent = "✓ " + fertig; setTimeout(() => { btn.innerHTML = orig; }, 2000); };
+  try {
+    navigator.clipboard.writeText(text).then(done, () => {});
+  } catch (err) {
+    const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); done(); } catch (e2) {}
+    document.body.removeChild(t);
+  }
+}
+let LETZTE_ANFRAGE = "";
+let LETZTE_FAMILIE = "";
+document.getElementById("result").addEventListener("change", (e) => {
+  if (e.target && e.target.id === "risikoOk") { RISIKO_OK = e.target.checked ? risikoKey() : ""; render(); return; }
+  if (e.target && e.target.id === "absender") {
+    ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
+    try { localStorage.setItem("tm_absender", ABSENDER); } catch (e2) {}
+    aufentZeigen();
+    render();
+  }
+});
+let ZONE_STAND = 0, ZONE_ZEIT = 0;
+function elternUmschalten() {
+  ELTERN = !ELTERN;
+  render();
+  if (ELTERN) { const b = document.getElementById("elternBox"); if (b) b.scrollIntoView({ block: "center" }); }
+}
+// Versteckte Wörter in der Markenzeile: erst das mittlere, dann das linke, dann das rechte antippen. Öffnet und schliesst die Einladung.
+const ZONE_FOLGE = [1, 0, 2];
+document.getElementById("result").addEventListener("pointerup", (e) => {
+  const z = e.target.closest("[data-z]");
+  if (!z) return;
+  const i = Number(z.dataset.z);
+  const t = Date.now();
+  if (ZONE_STAND > 0 && t - ZONE_ZEIT > 3000) ZONE_STAND = 0;
+  ZONE_ZEIT = t;
+  if (i === ZONE_FOLGE[ZONE_STAND]) ZONE_STAND++;
+  else ZONE_STAND = (i === ZONE_FOLGE[0]) ? 1 : 0;
+  if (ZONE_STAND === ZONE_FOLGE.length) { ZONE_STAND = 0; elternUmschalten(); }
+});
+document.getElementById("result").addEventListener("change", (e) => {
+  if (e.target && e.target.id === "empf") { EMPF = KINDER.indexOf(e.target.value) >= 0 ? e.target.value : ""; render(); }
+});
+document.getElementById("result").addEventListener("click", (e) => {
+  const b = e.target.closest("#copyIban");
+  if (b) { kopiere(IBAN.replace(/\s+/g, ""), b, "IBAN kopiert", "IBAN kopieren"); return; }
+  const ce = e.target.closest("#copyEinl");
+  if (ce) { kopiere(LETZTE_EINLADUNG, ce, "Einladung kopiert", "Einladung kopieren"); return; }
+  const q = e.target.closest("#copyReq");
+  if (q) kopiere(LETZTE_ANFRAGE, q, "Anfrage kopiert", "Anfrage kopieren");
+  if (q || e.target.closest("#waReq")) { aufentSpeichern(); aufHinweisZeigen(); }
+  if (e.target.closest("#zuKnoepfe")) {
+    setRechner(false);
+    const z = document.getElementById("btnAnreise").hidden ? document.getElementById("btnCheck") : document.getElementById("btnAnreise");
+    z.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  const fb = e.target.closest("#copyFam");
+  if (fb) kopiere(LETZTE_FAMILIE, fb, "Text kopiert", "Text kopieren");
+});
+async function ladeEinstellungen() {
+  try {
+    const ctl = new AbortController();
+    const to = setTimeout(() => ctl.abort(), 4000);
+    const r = await fetch("einstellungen.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    clearTimeout(to);
+    if (!r.ok) throw new Error("http " + r.status);
+    const j = await r.json();
+    wendeEinstellungenAn(j);
+    try { localStorage.setItem("tm_einstellungen", JSON.stringify(j)); } catch (e) {}
+  } catch (e) {
+    try { const c = localStorage.getItem("tm_einstellungen"); if (c) wendeEinstellungenAn(JSON.parse(c)); } catch (e2) {}
+  }
+}
+// ===== Mein Aufenthalt: Anreise (Wäsche) und Reinigungs-Checkliste =====
+// Bestätigt: Eintrag in buchungen.json mit dem Namen des Absenders (wird von den Eltern gepflegt).
+// Noch nicht bestätigt: die Anfrage, die dieses Handy gerade gesendet oder kopiert hat (nur lokal gemerkt).
+let CHECK_SELBST = ["🛏️ Betten abziehen (draussen wegen Staub), die Moltons bleiben", "🪶 Mit dem Staubwedel alles abstauben", "🧹 Alle benutzten Räume staubsaugen, auch den grossen Teppich im Wohnzimmer", "🚽 Toilette reinigen", "🚿 Duschkabine reinigen", "🧽 Badezimmer nass aufnehmen (keine Haare dürfen bleiben)", "🍳 Küche sauber machen, auch den leeren Kühlschrank", "🪑 Draussen: Tisch hochklappen, Stühle stapeln", "🧺 Draussen: Teppiche vor den Eingängen zum Haus ausklopfen", "🌳 Die Umgebung ums Haus muss sauber sein", "🧴 Glanzspüler, Putzessig oder Staubsaugersäcke aufgebraucht oder fast leer? Bitte melden"];   // nur bei Selbstreinigung
+let CHECK_ALLE = ["🧊 Kühlschrank ganz leer machen. Keine angefangenen Packungen (Müesli etc.) in der Küche lassen. Alles muss weg.", "🍽️ Geschirrspüler ausräumen, ausschalten, Tür offen lassen", "🗑️ Kehricht entsorgen (Sack mit grüner Marke)", "♻️ Glas, Papier, Weissblech und Aluminium zur Sammelstelle bringen", "🪟 Alle Fenster schliessen", "💡 Alle Lichter ausschalten", "🌡️ Alle Heizungsregler auf Stufe 5 stellen", "🔐 Schlüssel und Fernbedienung in die Schlüsselbox legen"];   // bei jedem Aufenthalt
+let WAESCHE = [["Duvetbezug", 1], ["Kissenbezug", 1], ["Spannleintuch", 1], ["Frottiertuch gross", 2], ["Frottiertuch klein", 2], ["Küchentuch", 1], ["Waschlappen", 1]];
+const checkListe = (a) => (a && a.sb ? CHECK_SELBST : []).concat(CHECK_ALLE);
+let AUFENT = null;      // lokal gemerkte Anfrage {arr, dep, sb, pers}
+let HAKEN = {};         // Haken je Aufenthalt: { "arr|dep": { Text: true } }
+let BUCH_ABGEL = [];    // von den Eltern abgelehnte Anfragen (nur für die Rückmeldung an das Kind)
+let BUCH = [];          // bestätigte Aufenthalte der Familie
+const BUCH_TAG = new Map();   // Nacht -> Name
+const DKEY = /^\d{4}-\d{2}-\d{2}$/;
+function aufentLaden() {
+  try {
+    const j = JSON.parse(localStorage.getItem("tm_aufenthalt"));
+    if (j && DKEY.test(j.arr) && DKEY.test(j.dep)) AUFENT = { arr: j.arr, dep: j.dep, sb: j.sb === true, lg: j.lg === true, pers: Math.max(1, Number(j.pers) || 1) };
+  } catch (e) {}
+  try { const h = JSON.parse(localStorage.getItem("tm_haken")); if (h && typeof h === "object") HAKEN = h; } catch (e) {}
+}
+function aufentSichern() {
+  try {
+    if (AUFENT) localStorage.setItem("tm_aufenthalt", JSON.stringify(AUFENT)); else localStorage.removeItem("tm_aufenthalt");
+    localStorage.setItem("tm_haken", JSON.stringify(HAKEN));
+  } catch (e) {}
+}
+function buchungenAn(j) {
+  if (!j || !Array.isArray(j.buchungen)) return false;
+  const gut = j.buchungen.filter((b) => b && typeof b.name === "string" && DKEY.test(b.arr) && DKEY.test(b.dep) && b.arr < b.dep);
+  const bes = (b) => (typeof b.bescheid === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(b.bescheid) ? b.bescheid : "");
+  BUCH_ABGEL = gut.filter((b) => b.status === "abgelehnt").map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, bescheid: bes(b) }));
+  BUCH = gut.filter((b) => b.status !== "abgelehnt")
+    .map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, sb: b.selbst === true, lg: b.luecke === true, prov: PROV_AN && b.prov === true, pers: Math.max(1, Number(b.pers) || 1), bescheid: bes(b) }))
+    .sort((p, q) => (p.arr < q.arr ? -1 : 1));
+  BUCH_TAG.clear();
+  BUCH.forEach((b) => { for (let k = b.arr; k < b.dep; k = addDays(k, 1)) BUCH_TAG.set(k, b.name); });
+  belegtMischen();
+  return true;
+}
+async function ladeBuchungen() {
+  try {
+    const ctl = new AbortController();
+    const to = setTimeout(() => ctl.abort(), 4000);
+    const r = await fetch("buchungen.json?v=" + Date.now(), { cache: "no-store", signal: ctl.signal });
+    clearTimeout(to);
+    if (!r.ok) throw new Error("http " + r.status);
+    const j = await r.json();
+    if (buchungenAn(j)) { try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e) {} }
+  } catch (e) {
+    try { const c = localStorage.getItem("tm_buchungen"); if (c) buchungenAn(JSON.parse(c)); } catch (e2) {}
+  }
+}
+// Der Aufenthalt, der gerade gilt: der nächste (nach Anreise) aus den bestätigten und der lokal gemerkten Anfrage
+function aufAbgelehnt() { return !!(AUFENT && ABSENDER && BUCH_ABGEL.some((x) => x.name === ABSENDER && x.arr === AUFENT.arr && x.dep === AUFENT.dep)); }
+function aufent() {
+  const h = heuteKey();
+  if (AUFENT && AUFENT.dep < h) { AUFENT = null; aufentSichern(); }   // am Tag nach der Abreise weg
+  const l = ABSENDER ? BUCH.filter((x) => x.name === ABSENDER && x.dep >= h).map((b) => ({ arr: b.arr, dep: b.dep, sb: b.sb, lg: b.lg, pers: b.pers, ok: true })) : [];
+  if (AUFENT && aufAbgelehnt()) { /* abgelehnt: keine Knöpfe */ }
+  else if (AUFENT && !l.some((x) => x.arr === AUFENT.arr && x.dep === AUFENT.dep)) l.push({ arr: AUFENT.arr, dep: AUFENT.dep, sb: AUFENT.sb, lg: AUFENT.lg, pers: AUFENT.pers, ok: false });
+  else if (AUFENT) { AUFENT = null; aufentSichern(); }   // inzwischen bestätigt
+  l.sort((p, q) => (p.arr < q.arr ? -1 : 1));
+  return l[0] || null;
+}
+const hk = (a) => HAKEN[a.arr + "|" + a.dep] || (HAKEN[a.arr + "|" + a.dep] = {});
+function aufentSpeichern() {
+  if (!(ARR && DEP)) return;
+  const x = derive(S);
+  const b = ABSENDER ? BUCH.find((y) => y.name === ABSENDER && y.arr === ARR && y.dep === DEP) : null;
+  if (b) { aufentZeigen(); return; }   // schon bestätigt
+  AUFENT = { arr: ARR, dep: DEP, sb: x.SB === true, lg: x.LG === true, pers: x.FP };
+  aufentSichern(); aufentZeigen();
+}
+function aufHinweisZeigen() {
+  const el = document.getElementById("aufHinweis"), a = aufent();
+  if (!el || !a) return;
+  el.hidden = false;
+  el.innerHTML = '<b>✅ Gemerkt.</b> Deine Knöpfe ' + ((a.sb || a.lg) ? '«Anreise-Wäsche» und ' : '') + '«Reinigungs-Checkliste» findest du jetzt oben auf der Startseite. <button type="button" class="ov-back" id="zuKnoepfe">👆 Zu den Knöpfen</button>';
+}
+function aufentZeigen() {
+  const a = aufent();
+  document.getElementById("btnAnreise").hidden = !(a && (a.sb || a.lg));
+  document.getElementById("btnCheck").hidden = !a;
+  document.getElementById("aufStatus").hidden = !AUFENT;
+  if (a) {
+    const von = fmtTag(a.arr) + " bis " + fmtTag(a.dep);
+    document.getElementById("btnAnreiseSub").textContent = (a.ok ? "Bestätigt: " : "Noch nicht bestätigt: ") + von;
+    document.getElementById("btnCheckSub").textContent = (a.ok ? "Bestätigt. " : "Noch nicht bestätigt. ") + "Abreise: " + fmtTag(a.dep);
+  }
+  document.getElementById("aufStatus").innerHTML = AUFENT && aufAbgelehnt() ? '<div class="note h"><b>❌ Abgelehnt:</b> Deine Anfrage vom ' + esc(fmtTag(AUFENT.arr)) + ' bis ' + esc(fmtTag(AUFENT.dep)) + ' haben die Eltern abgelehnt. Melde dich bei ihnen. <button type="button" class="ov-back" data-ok="1">OK, gelesen</button></div>' : AUFENT ? '<button type="button" class="ov-weg" data-weg="1">Anfrage ' + fmtTag(AUFENT.arr) + ' bis ' + fmtTag(AUFENT.dep) + ' nicht bestätigt? Entfernen</button>' : "";
+  {
+    const st = document.getElementById("aufStatus"), kk = BUCH.filter((b) => ABSENDER && b.name === ABSENDER && b.dep >= heuteKey() && provKonflikt(b));
+    if (kk.length) { st.hidden = false; st.innerHTML += '<div class="note h rot-warn"><b>⚠️ Konflikt:</b> Für ' + kk.map((b) => esc(fmtTag(b.arr)) + " bis " + esc(fmtTag(b.dep))).join(" und ") + ' hat sich ein Airbnb-Gast eingetragen. Dein Termin stand unter Vorbehalt. Melde dich bei den Eltern.</div>'; }
+  }
+  const f = document.getElementById("calFam");
+  if (f && !f.dataset.tg) { f.dataset.tg = "1"; f.addEventListener("toggle", (e) => { if (e.target.id === "famDet") FAM_OFFEN = e.target.open; }, true); }
+  if (f) {
+    const h = heuteKey();
+    const l = BUCH.filter((b) => b.dep >= h);
+    f.hidden = l.length === 0;
+    const lz = l.slice().sort((a, b) => (a.arr < b.arr ? -1 : 1)), kurz = (k) => Number(k.slice(8)) + "." + Number(k.slice(5, 7)) + ".";
+    f.innerHTML = l.length ? '<details id="famDet"' + (FAM_OFFEN ? " open" : "") + '><summary>' + HW + "Bestätigte Aufenthalte (" + lz.length + ")</summary><ul>" + lz.map((b) => "<li><b>" + esc(b.name) + "</b>: " + fmtTag(b.arr) + " bis " + fmtTag(b.dep) + (b.sb ? " (reinigt selbst)" : "") + (b.lg ? " (ganze Lücke)" : "") + (b.prov ? (provKonflikt(b) ? " ⚠️ Konflikt mit Airbnb-Gast" : " (unter Vorbehalt)") : "") + "</li>").join("") + "</ul></details>" : "";
+  }
+}
+function ovOeffnen(id, an) {
+  document.getElementById(id).hidden = !an;
+  document.body.style.overflow = an ? "hidden" : "";
+  if (an) document.getElementById(id).scrollTop = 0;
+}
+function ovWeg(a) {
+  return (a.ok
+    ? '<p class="hint">Bestätigt von den Eltern. Bei Änderungen oder Storno melde dich bei ihnen.</p>'
+    : '<button type="button" class="ov-weg" data-weg="1">Aufenthalt entfernen</button>') +
+    '<p class="hint">Die Knöpfe verschwinden am Tag nach der Abreise von selbst (am ' + fmtTagV(addDays(a.dep, 1)) + ').</p>';
+}
+function anreiseZeichnen() {
+  const a = aufent(); if (!a) return;
+  const n = a.pers, h = hk(a);
+  const key = (w) => "w:" + w[0];
+  const done = WAESCHE.filter((w) => h[key(w)]).length;
+  const alle = WAESCHE.length > 0 && done === WAESCHE.length;
+  document.getElementById("ovAnreiseIn").innerHTML =
+    '<button type="button" class="ov-back" data-ov="ovAnreise">← Zurück</button>' +
+    '<h2>🧳 Nimm am Anreisetag, ' + fmtTagV(a.arr) + ', folgende Wäsche mit:</h2>' +
+    '<p class="chk-stand">' + (a.ok ? "Bestätigt: " : "Noch nicht bestätigt: ") + 'Aufenthalt von ' + fmtTag(a.arr) + ' bis ' + fmtTag(a.dep) + ', für ' + n + (n === 1 ? ' Person' : ' Personen') + '.</p>' +
+    (alle ? '<div class="chk-danke">🎉 Danke, du hast alles eingepackt.</div>' : '<p class="chk-stand">' + done + ' von ' + WAESCHE.length + ' eingepackt. Tippe jeden Punkt an, wenn er eingepackt ist.</p>') +
+    '<div class="chk-liste' + (alle ? ' chk-alle' : '') + '">' + WAESCHE.map((w, k) =>
+      '<button type="button" class="chk-item' + (h[key(w)] ? ' erledigt' : '') + '" data-wa="' + k + '" aria-pressed="' + (h[key(w)] ? 'true' : 'false') + '"><span class="box">' + (h[key(w)] ? '✓' : '') + '</span><span><b>' + (w[1] * n) + '×</b> ' + esc(w[0]) + '</span></button>').join("") + '</div>' +
+    '<p class="hint">Bettdecken und Kissen nie ohne frischen Bezug benutzen. Alles nehmt ihr wieder mit. Nur die Moltons bleiben nach dem Benutzen auf der Matratze.</p>' + ovWeg(a);
+}
+function checkZeichnen() {
+  const a = aufent(); if (!a) return;
+  const h = hk(a);
+  const liste = checkListe(a);
+  const done = liste.filter((i) => h[i]).length;
+  const alle = liste.length > 0 && done === liste.length;
+  const btn = (i) => '<button type="button" class="chk-item' + (h[i] ? ' erledigt' : '') + '" data-chk="' + liste.indexOf(i) + '" aria-pressed="' + (h[i] ? 'true' : 'false') + '"><span class="box">' + (h[i] ? '✓' : '') + '</span><span>' + esc(i) + '</span></button>';
+  const teil = (titel, arr) => arr.length ? '<h3 class="chk-teil">' + titel + '</h3>' + arr.map(btn).join("") : "";
+  document.getElementById("ovCheckIn").innerHTML =
+    '<button type="button" class="ov-back" data-ov="ovCheck">← Zurück</button>' +
+    '<h2>✅ Reinigungs-Checkliste</h2>' +
+    '<p class="chk-stand">' + (a.ok ? "Bestätigt. " : "Noch nicht bestätigt. ") + 'Erledigt am Abreisetag, ' + fmtTagV(a.dep) + '.</p>' +
+    (alle ? '<div class="chk-danke">🎉 Danke, du hast all diese Sachen erledigt.</div>' : '<p class="chk-stand">' + done + ' von ' + liste.length + ' erledigt. Tippe jeden Punkt an, wenn er erledigt ist.</p>') +
+    '<div class="chk-liste' + (alle ? ' chk-alle' : '') + '">' + (a.sb ? teil("🧹 Wohnung reinigen", CHECK_SELBST) : "") + teil("🚪 Vor dem Gehen", CHECK_ALLE) + '</div>' + ovWeg(a);
+}
+document.getElementById("btnAnreise").addEventListener("click", () => { anreiseZeichnen(); ovOeffnen("ovAnreise", true); });
+document.getElementById("btnCheck").addEventListener("click", () => { checkZeichnen(); ovOeffnen("ovCheck", true); });
+function aufentWeg(e) {
+  if (e.target.closest("[data-ok]")) { AUFENT = null; aufentSichern(); aufentZeigen(); return true; }
+  if (e.target.closest("[data-weg]") && confirm("Willst du den Aufenthalt wirklich entfernen?")) {
+    AUFENT = null; aufentSichern(); aufentZeigen(); ovOeffnen("ovAnreise", false); ovOeffnen("ovCheck", false);
+    return true;
+  }
+  return false;
+}
+document.getElementById("aufStatus").addEventListener("click", aufentWeg);
+["ovAnreise", "ovCheck"].forEach((id) => document.getElementById(id).addEventListener("click", (e) => {
+  const c = e.target.closest("[data-ov]");
+  if (c) { ovOeffnen(c.dataset.ov, false); return; }
+  const a = aufent();
+  const k = e.target.closest("[data-chk]");
+  if (k && a) { const i = checkListe(a)[Number(k.dataset.chk)]; if (i !== undefined) { const h = hk(a); h[i] = !h[i]; aufentSichern(); checkZeichnen(); } return; }
+  const wk = e.target.closest("[data-wa]");
+  if (wk && a) { const w = WAESCHE[Number(wk.dataset.wa)]; if (w) { const h = hk(a); h["w:" + w[0]] = !h["w:" + w[0]]; aufentSichern(); anreiseZeichnen(); } return; }
+  aufentWeg(e);
+}));
+// ===== Bestätigen durch die Eltern: Link aus der Anfrage, Eintrag in buchungen.json über die GitHub-Schnittstelle =====
+const GH_REPO = "Waenu/Tschentomat", GH_DATEI = "buchungen.json";
+let TOKEN = "";
+try { TOKEN = localStorage.getItem("tm_token") || ""; } catch (e) {}
+function bestLink(name, arr, dep, selbst, pers, luecke) {
+  return location.origin + location.pathname + "?b=" + [name, arr, dep, selbst ? 1 : 0, pers].concat(luecke ? ["L"] : []).join("_");
+}
+function bestLesen() {
+  let p = "";
+  try { p = new URLSearchParams(location.search).get("b") || ""; } catch (e) {}
+  const a = p.split("_");
+  if (a.length !== 5 && !(a.length === 6 && a[5] === "L")) return null;
+  const pers = Number(a[4]);
+  if (ABS.indexOf(a[0]) < 0 || !DKEY.test(a[1]) || !DKEY.test(a[2]) || a[1] >= a[2] || !(a[3] === "0" || a[3] === "1") || !Number.isInteger(pers) || pers < 1 || pers > 8) return null;
+  return { name: a[0], arr: a[1], dep: a[2], selbst: a[3] === "1", pers: pers, luecke: a.length === 6 };
+}
+const b64 = (s) => btoa(unescape(encodeURIComponent(s)));
+const unb64 = (s) => decodeURIComponent(escape(atob(s.replace(/\s+/g, ""))));
+async function ghAendern(fn) {
+  const url = "https://api.github.com/repos/" + GH_REPO + "/contents/" + GH_DATEI;
+  const kopf = { Authorization: "Bearer " + TOKEN, Accept: "application/vnd.github+json" };
+  for (let versuch = 0; versuch < 2; versuch++) {
+    const g = await fetch(url + "?ref=main&t=" + Date.now(), { headers: kopf, cache: "no-store" });
+    if (g.status === 401 || g.status === 403) throw new Error("Das Token wird nicht akzeptiert. Es ist ungültig oder abgelaufen.");
+    if (!g.ok) throw new Error("GitHub antwortet mit Fehler " + g.status + ".");
+    const d = await g.json();
+    const j = JSON.parse(unb64(d.content));
+    if (!Array.isArray(j.buchungen)) j.buchungen = [];
+    j.buchungen = fn(j.buchungen).filter((x) => !(x.status === "abgelehnt" && x.dep < heuteKey()));
+    const neu = JSON.stringify(j, null, 2) + "\n";
+    const r = await fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, kopf),
+      body: JSON.stringify({ message: "Buchungen aktualisiert (App)", content: b64(neu), sha: d.sha, branch: "main" }) });
+    if (r.ok) return j;
+    if (r.status === 409 && versuch === 0) continue;
+    if (r.status === 401 || r.status === 403) throw new Error("Das Token darf die Datei nicht ändern (Berechtigung «Contents: Read and write» fehlt oder abgelaufen).");
+    throw new Error("Speichern fehlgeschlagen (Fehler " + r.status + ").");
+  }
+  throw new Error("Speichern fehlgeschlagen.");
+}
+// Anfragen-Übersicht in der Hauptansicht (nur mit Token): offen / bestätigt / abgelehnt
+function listeLaden(k) { try { const l = JSON.parse(localStorage.getItem(k) || "[]"); return Array.isArray(l) ? l.filter((x) => x && ABS.indexOf(x.name) >= 0 && DKEY.test(x.arr) && DKEY.test(x.dep)) : []; } catch (e) { return []; } }
+function listeSichern(k, l) { try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
+const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
+let OFFEN = listeLaden("tm_offen"), ABGEL = listeLaden("tm_abgelehnt");
+let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, bestBusy = false, zeigAns = false;
+function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", unter Vorbehalt" : ""); }
+function bestZeigen() {
+  const k = document.getElementById("bestKasten"), kn = document.getElementById("btnAnsichten"), h = heuteKey(), link = bestLesen();
+  if (link) {
+    zeigAns = true; // neue Anfrage über Link: Ansichten automatisch aufklappen
+    const key = bKey(link);
+    if (!TOKEN) bestMsg = "<b>📨 Anfrage von " + esc(link.name) + ":</b> " + esc(bestBeschr(link)) + ".<br>Bestätigen kann nur Papi. Auf diesem Handy ist der Zugriff nicht eingerichtet.";
+    else if (BUCH.some((x) => bKey(x) === key)) bestMsg = "✅ Die Anfrage von " + esc(link.name) + " (" + esc(fmtTag(link.arr)) + " bis " + esc(fmtTag(link.dep)) + ") ist schon bestätigt.";
+    else {
+      ABGEL = ABGEL.filter((x) => bKey(x) !== key);
+      if (!OFFEN.some((x) => bKey(x) === key)) OFFEN.push(link);
+      listeSichern("tm_offen", OFFEN); listeSichern("tm_abgelehnt", ABGEL);
+      bestMsg = "📨 Neue Anfrage von " + esc(link.name) + " ist unten bei «Offene Anfragen».";
+    }
+    try { history.replaceState(null, "", location.pathname); } catch (e) {}
+  }
+  OFFEN = OFFEN.filter((x) => x.dep >= h && !BUCH.some((y) => bKey(y) === bKey(x)));
+  listeSichern("tm_offen", OFFEN);
+  if (!TOKEN && !bestMsg) { k.hidden = true; k.innerHTML = ""; kn.hidden = true; return; }
+  kn.hidden = false; kn.classList.toggle("on", zeigAns); kn.setAttribute("aria-expanded", zeigAns ? "true" : "false");
+  k.hidden = !zeigAns;
+  let s = "";
+  if (bestMsg) s += '<p>' + bestMsg + ' <button type="button" class="ov-back" data-zu="1">Schliessen</button></p>';
+  if (TOKEN) {
+    const bl = BUCH.filter((x) => x.dep >= h);
+    s += '<div class="field"><label for="ansichtAls">👁️ Ansicht als</label><select id="ansichtAls"><option value="">Eltern</option>' + ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + ">" + n + "</option>").join("") + '</select></div><p class="hint">Zeigt dir die Knöpfe und Listen so, wie dieses Kind sie sieht. Nur auf diesem Handy.</p>';
+    const kf = bl.filter(provKonflikt);
+    if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin unter Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe unter «Bestätigte» auf «Fest machen».</div>';
+    s += "<b>📨 Offene Anfragen</b>";
+    s += OFFEN.length ? "<ul>" + OFFEN.map((x) => "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) +
+      '<div class="btns"><button type="button" class="btn" data-ja="' + esc(bKey(x)) + '">✅ Bestätigen</button><button type="button" class="btn" data-nein="' + esc(bKey(x)) + '">✖ Ablehnen</button></div></li>').join("") + "</ul>"
+      : '<p class="hint">Keine offenen Anfragen. Tippe in einer Anfrage auf den Bestätigungs-Link, dann erscheint sie hier.</p>';
+    s += '<div class="btns"><button type="button" class="btn" data-zeig="B">' + (zeigB ? "Bestätigte ausblenden" : "Bestätigte anzeigen (" + bl.length + ")") + '</button>' +
+      '<button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + "</button></div>";
+    if (zeigB) s += "<b>✅ Bestätigt</b>" + (bl.length ? "<ul>" + bl.map((x) => "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) + ' <button type="button" class="sym" data-bdel="' + esc(bKey(x)) + '" aria-label="Aufenthalt entfernen">✖</button>' + provZeile(x) + bestBescheidZeile(x, false) + "</li>").join("") + "</ul>" : '<p class="hint">Keine bestätigten Aufenthalte.</p>');
+    if (zeigA) s += "<b>✖ Abgelehnt</b>" + (ABGEL.length ? "<ul>" + ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return "<li><b>" + esc(x.name) + "</b>: " + esc(bestBeschr(x)) + ' <button type="button" class="ov-back" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>' + bestBescheidZeile(xx, true) + "</li>"; }).join("") + "</ul>" : '<p class="hint">Keine abgelehnten Anfragen.</p>');
+    if (bestFehler) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
+  }
+  k.innerHTML = s;
+}
+function provZeile(x) {
+  if (!x.prov) return "";
+  const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "⏳ unter Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
+  return '<br><span class="hint">' + txt + '</span> <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 Fest machen</button>';
+}
+function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
+function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + WA_SVG + (label || "Dem Kind Bescheid geben") + "</a>"; }
+function bestText(x, abgelehnt) {
+  return abgelehnt
+    ? "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung."
+    : "Hoi " + x.name + ", dein Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " ist bestätigt. 🎉 Im TSCHENT-O-MAT findest du jetzt " + (x.sb || x.selbst || x.luecke ? "die Wäsche-Liste für die Anreise und " : "") + "die Checkliste für die Abreise." + (provVon(x) ? " Achtung: Der Termin steht unter Vorbehalt und ist nicht in Airbnb gesperrt. Kommt ein Airbnb-Gast, hat er Vorrang, dann müsst ihr ausweichen." : "");
+}
+function bestBescheidZeile(x, abgelehnt) {
+  const b = x.bescheid || "", key = bKey(x);
+  const wann = b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "✉️ Noch kein Bescheid gegeben";
+  return "<br><span class=\"hint\">" + wann + "</span>" + bestWaLink(bestText(x, abgelehnt), key, b ? (abgelehnt ? "Nochmals Absage schicken" : "Nochmals Bescheid geben") : (abgelehnt ? "Absage schicken" : "Bescheid geben"));
+}
+async function bescheidVermerken(key) {
+  const d = new Date(), p2 = (n) => String(n).padStart(2, "0");
+  const jetzt = d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()) + "T" + p2(d.getHours()) + ":" + p2(d.getMinutes());
+  try {
+    const j = await ghAendern((l) => l.map((y) => (bKey(y) === key ? Object.assign({}, y, { bescheid: jetzt }) : y)));
+    buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+    bestFehler = "";
+  } catch (err) { bestFehler = "Der Vermerk «Bescheid gegeben» konnte nicht gespeichert werden: " + (err && err.message ? err.message : "Fehler"); }
+  bestZeigen();
+}
+document.getElementById("btnAnsichten").addEventListener("click", () => { zeigAns = !zeigAns; bestZeigen(); });
+document.getElementById("bestKasten").addEventListener("change", (e) => {
+  if (e.target && e.target.id === "ansichtAls") {
+    ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
+    try { localStorage.setItem("tm_absender", ABSENDER); } catch (e2) {}
+    aufentZeigen(); render(); bestZeigen();
+  }
+});
+document.getElementById("bestKasten").addEventListener("click", async (e) => {
+  const wa = e.target.closest("[data-bescheid]");
+  if (wa) { bescheidVermerken(wa.getAttribute("data-bescheid")); return; }
+  if (bestBusy) return;
+  const f = (a) => { const el = e.target.closest("[" + a + "]"); return el ? el.getAttribute(a) : null; };
+  const find = (l, key) => l.find((x) => bKey(x) === key);
+  if (e.target.closest("[data-zu]")) { bestMsg = ""; bestFehler = ""; bestZeigen(); return; }
+  const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else zeigA = !zeigA; bestZeigen(); return; }
+  const w = f("data-wieder");
+  if (w) {
+    const x = find(ABGEL, w); if (!x) return;
+    bestBusy = true; bestFehler = "";
+    try {
+      const j = await ghAendern((l) => l.filter((y) => bKey(y) !== w));
+      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      ABGEL = ABGEL.filter((y) => y !== x); OFFEN.push(x); listeSichern("tm_abgelehnt", ABGEL); listeSichern("tm_offen", OFFEN);
+    } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
+    bestBusy = false; bestZeigen(); return;
+  }
+  const nein = f("data-nein");
+  if (nein) {
+    const x = find(OFFEN, nein); if (!x) return;
+    bestBusy = true; bestFehler = "";
+    const btn = e.target.closest("button"); btn.disabled = true; btn.textContent = "Speichere …";
+    try {
+      const j = await ghAendern((l) => l.filter((y) => bKey(y) !== nein).concat([{ name: x.name, arr: x.arr, dep: x.dep, status: "abgelehnt" }]));
+      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      OFFEN = OFFEN.filter((y) => y !== x); ABGEL.push(x); listeSichern("tm_offen", OFFEN); listeSichern("tm_abgelehnt", ABGEL);
+      const text = "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung.";
+      bestMsg = "Abgelehnt und gespeichert: " + esc(x.name) + ", " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ". Im Handy des Kindes erscheint die Absage beim nächsten Öffnen." + bestWaLink(text, bKey(x), "Absage schicken");
+      bestBusy = false; bestNeuZeichnen();
+    } catch (err) { bestBusy = false; bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; bestZeigen(); }
+    return;
+  }
+  const fest = f("data-fest");
+  if (fest) {
+    bestBusy = true; bestFehler = "";
+    try {
+      const j = await ghAendern((l) => l.map((y) => { if (bKey(y) !== fest) return y; const n = Object.assign({}, y); delete n.prov; return n; }));
+      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      bestMsg = "🔒 Jetzt fest. Sperre den Termin in Airbnb, falls noch nicht geschehen.";
+    } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
+    bestBusy = false; bestNeuZeichnen(); return;
+  }
+  const ja = f("data-ja"), del = f("data-bdel");
+  if (!ja && !del) return;
+  bestBusy = true; bestFehler = "";
+  const btn = e.target.closest("button"); btn.disabled = true; btn.textContent = "Speichere …";
+  try {
+    if (ja) {
+      const x = find(OFFEN, ja); if (!x) { bestBusy = false; bestZeigen(); return; }
+      const pv = provStay(x.arr, x.dep), eintrag = { name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, pers: x.pers };
+      if (pv) eintrag.prov = true;
+      if (x.luecke) eintrag.luecke = true;
+      const j = await ghAendern((l) => l.filter((y) => bKey(y) !== ja).concat([eintrag]));
+      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm_offen", OFFEN);
+      const text = bestText({ name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, luecke: x.luecke, prov: pv });
+      bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle." + (pv ? " <b>Unter Vorbehalt: nicht in Airbnb sperren.</b>" : "") + bestWaLink(text, bKey(x));
+    } else {
+      const [name, arr, dep] = del.split("|");
+      if (!confirm("Aufenthalt von " + name + " (" + fmtTag(arr) + " bis " + fmtTag(dep) + ") wirklich entfernen?")) { bestBusy = false; bestZeigen(); return; }
+      const j = await ghAendern((l) => l.filter((y) => bKey(y) !== del));
+      buchungenAn(j); try { localStorage.setItem("tm_buchungen", JSON.stringify(j)); } catch (e2) {}
+      bestMsg = "Entfernt: " + esc(name) + ", " + esc(fmtTag(arr)) + " bis " + esc(fmtTag(dep)) + ".";
+    }
+    bestBusy = false; bestNeuZeichnen();
+  } catch (err) { bestBusy = false; bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; bestZeigen(); }
+});
+// Zugriff einrichten (versteckt: 5 Tipps auf die Versionszeile)
+function tokZeigen(an) {
+  const p = document.getElementById("tokPanel");
+  p.hidden = !an;
+  if (!an) return;
+  p.innerHTML = "<b>🔑 Zugriff für die Eltern</b><br>" + (TOKEN ? "Eingerichtet auf diesem Handy. " : "Noch nicht eingerichtet. ") + "Das Token bleibt nur auf diesem Handy gespeichert." +
+    '<div class="field"><label for="tokIn">GitHub-Token einfügen</label><input id="tokIn" type="password" autocomplete="off" placeholder="github_pat_…"></div>' +
+    '<div class="btns"><button type="button" class="btn" id="tokSave">Speichern</button>' + (TOKEN ? '<button type="button" class="btn" id="tokDel">Entfernen</button>' : "") + '</div><p class="hint" id="tokMeld"></p>';
+}
+document.getElementById("tokPanel").addEventListener("click", (e) => {
+  const m = document.getElementById("tokMeld");
+  if (e.target.closest("#tokSave")) {
+    const v = document.getElementById("tokIn").value.trim();
+    if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(v)) { m.textContent = "Das sieht nicht wie ein GitHub-Token aus. Es beginnt mit github_pat_."; return; }
+    TOKEN = v; try { localStorage.setItem("tm_token", TOKEN); } catch (e2) {}
+    tokZeigen(true); bestZeigen(); aufentZeigen();
+  } else if (e.target.closest("#tokDel")) {
+    TOKEN = ""; try { localStorage.removeItem("tm_token"); } catch (e2) {}
+    tokZeigen(true); bestZeigen(); aufentZeigen();
+  }
+});
+// Startseite: jedes Wort antippen = kleine Animation (ankommen: Auto fährt zum Haus, durchatmen: Atemzug, geniessen: Prost).
+// ankommen, durchatmen, geniessen nacheinander = Gruss mit Schneeflocken (Nov bis Mär) oder Blüten.
+(function () {
+  const z = document.getElementById("markeStart"), txt = document.getElementById("markeText"), bahn = document.getElementById("markeBahn");
+  if (!z) return;
+  let stand = 0, zeit = 0, atmet = false, faehrt = false, proste = false;
+  const neu = (cls, zeichen, ms) => {
+    const s = document.createElement("span");
+    s.className = cls; s.textContent = zeichen; s.setAttribute("aria-hidden", "true");
+    bahn.appendChild(s);
+    setTimeout(() => s.remove(), ms);
+    return s;
+  };
+  function ankommen() {
+    if (faehrt) return;
+    faehrt = true;
+    neu("bahn-haus", "🏠", 3600); neu("bahn-auto", "🚗", 3600);
+    setTimeout(() => { faehrt = false; }, 3600);
+  }
+  function atmen(el) {
+    if (atmet) return;
+    atmet = true;
+    el.classList.add("atmet");
+    setTimeout(() => { el.classList.remove("atmet"); atmet = false; }, 8000);
+  }
+  function prost() {
+    if (proste) return;
+    proste = true;
+    neu("prost", "🥂", 2600);
+    setTimeout(() => { proste = false; }, 2600);
+  }
+  function gruss() {
+    const m = new Date().getMonth() + 1, flocke = (m >= 11 || m <= 3) ? "❄️" : "🌸";
+    txt.textContent = "schön, dass ihr da seid.";
+    setTimeout(() => { if (txt.textContent === "schön, dass ihr da seid.") txt.textContent = ""; }, 6000);
+    for (let i = 0; i < 16; i++) {
+      const f = document.createElement("span");
+      f.className = "flocke"; f.textContent = flocke; f.setAttribute("aria-hidden", "true");
+      f.style.left = (Math.random() * 94) + "%";
+      f.style.animationDuration = (3 + Math.random() * 2.5) + "s";
+      f.style.animationDelay = (Math.random() * 1.4) + "s";
+      document.body.appendChild(f);
+      setTimeout(() => f.remove(), 7500);
+    }
+  }
+  z.addEventListener("pointerup", (e) => {
+    const w = e.target.closest("[data-e]");
+    if (!w) return;
+    const i = Number(w.dataset.e), t = Date.now();
+    if (stand > 0 && t - zeit > 4000) stand = 0;
+    zeit = t;
+    if (i === 0) ankommen(); else if (i === 1) atmen(w); else prost();
+    if (i === stand) stand++;
+    else stand = (i === 0) ? 1 : 0;
+    if (stand === 3) { stand = 0; gruss(); }
+  });
+})();
+// Kalender-Hilfe: Schwebeknopf «?» schaltet Tipp-Hilfen ein oder aus. Bei Hilfe an erklärt sich jeder angetippte Tag.
+(function () {
+  const knopf = document.getElementById("hilfeKnopf"), blase = document.getElementById("calBlase"), grid = document.getElementById("calGrid"), cal = document.getElementById("cal");
+  if (!knopf || !blase || !grid || !cal) return;
+  let an = true, erst = false;
+  try { const v = localStorage.getItem("tm_hilfe"); if (v === "0") an = false; if (v === null) erst = true; } catch (e) {}
+  const speichern = () => { try { localStorage.setItem("tm_hilfe", an ? "1" : "0"); } catch (e) {} };
+  const START = "<b>💡 Hilfe ist an.</b> Tippe einen Tag an, dann erklärt er sich. Mit gestrichelten Symbolen wie " + symBtn("b-luecke", "🧩") + " springst du zur ausführlichen Erklärung. Mehr dazu unter «Benutzung» " + symBtn("b-benutzung", "📖") + ". Mit dem «?»-Knopf unten rechts schaltest du die Hilfe aus.";
+  const zeigen = (html, zelle) => {
+    blase.innerHTML = '<div class="txt">' + html + '</div><button type="button" id="calBlaseZu" aria-label="Hilfe schliessen">✕</button>';
+    blase.hidden = false;
+    // Box ins Bild holen, falls sie unter dem Bildschirmrand liegt (der angetippte Tag bleibt sichtbar)
+    const r = blase.getBoundingClientRect(), unten = window.innerHeight - 90;
+    const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (r.bottom > unten) {
+      let d = r.bottom - unten + 10;
+      if (zelle) d = Math.min(d, Math.max(0, zelle.getBoundingClientRect().top - 70));
+      if (d > 0) window.scrollBy({ top: d, behavior: ruhig ? "auto" : "smooth" });
+    } else if (r.top < 60) window.scrollBy({ top: r.top - 70, behavior: ruhig ? "auto" : "smooth" });
+  };
+  const RISIKO = '<span class="risk">⚠️ Das Risiko tragt ihr selbst: Kommt eine Airbnb-Buchung, müsst ihr weichen oder gar nicht erst reisen. Plant eine Alternative ein. Mit der Anfrage erklärt ihr euch damit einverstanden.</span>';
+  function text(k) {
+    const heute = heuteKey(), kopf = "<b>" + esc(fmtTag(k)) + "</b>";
+    if (k < heute) return kopf + "<p>Dieser Tag liegt in der Vergangenheit.</p>";
+    const z = [];
+    const stay = BUCH.filter((b) => b.arr <= k && k < b.dep), abr = BUCH.filter((b) => b.dep === k);
+    stay.forEach((b) => z.push("Reserviert für <b>" + esc(b.name) + "</b> (" + (b.sb ? "reinigt selbst, blauer Balken" : "Reinigung durch Eltern, gelber Balken") + (b.prov ? ", unter Vorbehalt" : "") + ")."));
+    stay.filter((b) => b.prov).forEach((b) => {
+      if (provKonflikt(b)) { z.push("⚠️ <b>Konflikt:</b> Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen. " + symBtn("b-prov", "⏳")); return; }
+      const S = provSicherBis();
+      if (k < S) z.push("✓ <b>Diese Nacht ist sicher.</b> Du bist sicher bis " + esc(fmtTag(S)) + ", denn ein neuer Airbnb-Gast kann frühestens dann einchecken. " + (b.dep > S ? "Die späteren Nächte (schraffiert) sind noch nicht sicher; jeden Tag wird eine Nacht mehr sicher, der ganze Aufenthalt am " + esc(fmtTag(addDays(b.dep, -VORLAUF))) + ". " : "Der ganze Aufenthalt ist sicher. ") + symBtn("b-prov", "⏳"));
+      else z.push("⏳ <b>Diese Nacht ist noch nicht sicher.</b> Ein Airbnb-Gast kann sie noch buchen und hat dann Vorrang. Sicher wird sie am " + esc(fmtTag(addDays(k, 1 - VORLAUF))) + ". " + symBtn("b-prov", "⏳"));
+      if (!provSicherDep(b.dep)) z.push(RISIKO);
+    });
+    if (!stay.length && BELEGT.has(k)) z.push(!BELEGT.has(addDays(k, -1)) && !BUCH.some((b) => b.arr <= addDays(k, -1) && addDays(k, -1) < b.dep) ? "Von Airbnb belegt: als Anreise nicht buchbar. Als Abreisetag möglich, denn der Airbnb-Gast kommt erst nachmittags." : "Von Airbnb belegt, nicht buchbar.");
+    abr.forEach((b) => z.push("Abreisetag von <b>" + esc(b.name) + "</b>."));
+    if (!BELEGT.has(k)) {
+      if (GAPSPERR.has(k)) z.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
+      else if (GAP.has(k) && P.lueckeRabatt > 0) z.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
+      if (spitzVon(k)) z.push("Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
+      else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) z.push("Hochsaison: Airbnb-Zeit, bitte wenn möglich meiden. Eine Anfrage ist trotzdem möglich."); }
+      else if (istRuhe(k) && !GAP.has(k)) z.push("Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
+      else if (!stay.length) z.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche».") + "");
+      if (festStay(k, addDays(k, 1))) z.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Sicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
+      else if (provStay(k, addDays(k, 1))) { z.push("Ein Aufenthalt wäre hier ein <b>Termin unter Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "⏳")); z.push(RISIKO); }
+      if (schweifListe().some((s) => k >= s.von && k <= s.bis)) z.push("Familienstaffel noch offen (gestrichelter Balken): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
+      const c = grid.querySelector('[data-k="' + k + '"]');
+      if (c && c.classList.contains("off") && ARR && !DEP) z.push("Als Abreise nicht möglich: zu kurz, zu lang oder ein belegter Tag liegt dazwischen.");
+    }
+    return kopf + z.map((s) => "<p>" + s + "</p>").join("");
+  }
+  function zelle(e) {
+    let c = e.target.closest ? e.target.closest(".cal-d") : null;
+    if (c) return c;
+    const cs = grid.querySelectorAll(".cal-d");
+    for (const x of cs) { const r = x.getBoundingClientRect(); if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) return x; }
+    return null;
+  }
+  function setze(neu) {
+    an = neu;
+    knopf.setAttribute("aria-pressed", an ? "true" : "false");
+    grid.classList.toggle("hilfe", an);
+    if (an) zeigen(START); else blase.hidden = true;
+    speichern();
+  }
+  grid.addEventListener("click", (e) => { if (!an) return; const c = zelle(e); if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
+  blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) blase.hidden = true; });
+  document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an) zeigen(START); });
+  knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
+  grid.classList.toggle("hilfe", an);
+  knopf.setAttribute("aria-pressed", an ? "true" : "false");
+  if (an) zeigen(START);
+  let gesehen = false;
+  // Knopf zeigen, solange der Kalender im Bild ist (Geometrie statt IntersectionObserver: der Kalender kann sehr hoch werden, z. B. bei grosser Schrift)
+  const pruefen = () => {
+    const r = cal.getBoundingClientRect(), sicht = cal.offsetParent !== null && r.bottom > 80 && r.top < window.innerHeight - 80;
+    knopf.hidden = !sicht;
+    if (sicht && erst && !gesehen) { gesehen = true; knopf.classList.add("neu"); speichern(); }
+  };
+  window.addEventListener("scroll", pruefen, { passive: true });
+  window.addEventListener("resize", pruefen);
+  document.addEventListener("click", () => setTimeout(pruefen, 50));
+  try { new ResizeObserver(pruefen).observe(cal); } catch (e) {}
+  pruefen();
+})();
+aufentLaden();
+try { new ResizeObserver(() => zeichneBalken()).observe(document.getElementById("calGrid")); } catch (e) {}
+Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen()]).then(() => {
+  {
+    const STUFEN = [["klein", 0.92], ["mittel", 1], ["gross", 1.18]];
+    const fb = document.getElementById("fsBtn");
+    let stufe = 1;
+    try { const g = localStorage.getItem("tm_schrift"); const i = STUFEN.findIndex((x) => x[0] === g); if (i >= 0) stufe = i; } catch (e) {}
+    const wende = () => {
+      document.documentElement.style.setProperty("--fs", String(STUFEN[stufe][1]));
+      document.documentElement.setAttribute("data-fs", STUFEN[stufe][0]);
+      fb.querySelectorAll("span").forEach((sp, i) => sp.classList.toggle("on", i === stufe));
+      fb.title = "Schrift: " + STUFEN[stufe][0];
+    };
+    wende();
+    fb.addEventListener("click", () => {
+      stufe = (stufe + 1) % STUFEN.length;
+      try { localStorage.setItem("tm_schrift", STUFEN[stufe][0]); } catch (e) {}
+      wende();
+    });
+  }
+  {
+    const btn = document.getElementById("themeBtn");
+    const dunkel = () => (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+    const zeige = () => { btn.textContent = dunkel() ? "☀️" : "🌙"; btn.dataset.mode = dunkel() ? "dark" : "light"; btn.title = dunkel() ? "Hellmodus" : "Dunkelmodus"; };
+    try { const t = localStorage.getItem("tm_theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+    zeige();
+    btn.addEventListener("click", () => {
+      const neu = dunkel() ? "light" : "dark";
+      document.documentElement.dataset.theme = neu;
+      try { localStorage.setItem("tm_theme", neu); } catch (e) {}
+      zeige();
+    });
+  }
+  (function () {   // versteckter Schalter: dreimal links oben im Kopf tippen schaltet den Testmodus ein oder aus
+    const tip = document.getElementById("testTip"); let zeiten = [];
+    if (tip) tip.addEventListener("click", () => {
+      const t = Date.now(); zeiten = zeiten.filter((x) => t - x < 1500); zeiten.push(t);
+      if (zeiten.length < 3) return;
+      zeiten = [];
+      try {
+        if (TESTMERKEN || localStorage.getItem("tm_testheute")) localStorage.removeItem("tm_testheute");
+        else { const n = new Date(); localStorage.setItem("tm_testheute", n.getFullYear() + "-" + String(n.getMonth() + 1).padStart(2, "0") + "-" + String(n.getDate()).padStart(2, "0")); }
+      } catch (e) {}
+      location.href = location.pathname;
+    });
+  })();
+  document.getElementById("ver").textContent = "Version " + VERSION + " · gültig ab " + GUELTIG_AB;
+  initKalenderMonat();
+  berechneLuecken();
+  build(); render(); renderKalender(); aufentZeigen(); bestZeigen();
+  if (TESTHEUTE) {   // Testleiste (nur im Testmodus)
+    const tb = document.createElement("div");
+    tb.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;justify-content:center;padding:6px;background:#C0392B;color:#fff;font:600 14px system-ui";
+    const mk = (txt, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = txt; b.style.cssText = "font:inherit;padding:4px 12px;border-radius:8px;border:0"; b.onclick = fn; return b; };
+    const lab = document.createElement("span"); lab.textContent = "TEST";
+    const inp = document.createElement("input"); inp.type = "date"; inp.setAttribute("aria-label", "Testdatum wählen");
+    inp.style.cssText = "font:inherit;padding:3px 6px;border-radius:8px;border:0;color:#222;background:#fff;min-width:0";
+    const merke = () => { if (TESTMERKEN) { try { localStorage.setItem("tm_testheute", TESTHEUTE); } catch (e) {} } };
+    const neu = (monatSpringen) => { inp.value = heuteKey(); if (monatSpringen) initKalenderMonat(); berechneLuecken(); render(); renderKalender(); aufentZeigen(); bestZeigen(); };   // Auswahl und Formular bleiben, wie sie sind
+    inp.onchange = () => { if (/^\d{4}-\d{2}-\d{2}$/.test(inp.value)) { TESTHEUTE = inp.value; merke(); neu(true); } };
+    const setze = mk("📍 Tag setzen", () => {
+      if (!ARR) { lab.textContent = "Erst Tag antippen"; setTimeout(() => { lab.textContent = "TEST"; }, 2500); return; }
+      TESTHEUTE = ARR; ARR = ""; DEP = ""; S.nights = null; merke(); neu(false);
+    });
+    tb.append(lab, mk("◀", () => { TESTHEUTE = addDays(heuteKey(), -1); merke(); neu(false); }), inp, mk("▶", () => { TESTHEUTE = addDays(heuteKey(), 1); merke(); neu(false); }), setze, mk("Echt", () => { try { localStorage.removeItem("tm_testheute"); } catch (e) {} location.href = location.pathname; }));
+    document.body.prepend(tb); document.body.style.paddingTop = (tb.offsetHeight + 4) + "px"; inp.value = heuteKey();
+  }
+});
+if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+}
+</script>
+</body>
+</html>
