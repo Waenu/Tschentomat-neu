@@ -19,6 +19,7 @@
       "arr": "2027-05-10",
       "dep": "2027-05-17",
       "pers": 2,
+      "betrag": 1000,
       "prov": true,
       "bemerkung": "Testtermin mit Vorbehalt (von Claude angelegt, darf gelöscht werden)"
     }
