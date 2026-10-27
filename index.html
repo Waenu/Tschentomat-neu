@@ -259,7 +259,8 @@
   .cal-nav button:disabled { opacity: 0.3; cursor: default; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .cal-wd { font-size: var(--t-small); color: var(--muted); text-align: center; padding: 2px 0; font-weight: 700; }
-  .cal-d { font: inherit; color: var(--fg); min-height: 46px; padding: 2px 0; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+  .cal-d { font: inherit; color: var(--fg); min-height: 56px; padding: 3px 0 0; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; font-variant-numeric: tabular-nums; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; line-height: 1.1; }
+  .cal-d > span { font-size: 0.82rem; }
   .cal-d small { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.03em; }
   .cal-d:disabled { cursor: default; }
   .cal-d.occ { color: var(--muted); background: repeating-linear-gradient(45deg, transparent 0 4px, var(--line) 4px 6px); text-decoration: line-through; }
@@ -528,10 +529,10 @@
   label.risiko input { width: 24px; height: 24px; flex: none; margin-top: 2px; }
   .bk.gruen { background: var(--gruen); color: var(--gruen-fg); box-shadow: inset 0 0 0 1.5px var(--gruen-ol); }
   .bk.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: inset 0 0 0 1.5px var(--gelb-ol); }
-  .bk.gruen.mit { -webkit-mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); mask: radial-gradient(circle 11px at 100% 50%, transparent 10.5px, #000 11px); }
-  .bk.gelb.ein { padding-left: 13px; }
+  .bk.gruen.mit { -webkit-mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); }
+  .bk.gelb.ein { padding-left: 19px; }
   .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
-  .bk.sw { padding: 0 4px; line-height: 13px; text-align: center; background: transparent; border: 2px solid transparent; border-radius: 9px; opacity: 1; color: var(--fg); font-size: .7rem; }
+  .bk.sw { padding: 0 4px; line-height: 24px; justify-content: center; text-align: center; background: transparent; border: 2px solid transparent; border-radius: 14px; opacity: 1; color: var(--fg); font-size: .7rem; }
   .bk.sw, .bk-leg .k-sw { background-color: transparent; background-origin: border-box; background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
     background-image: linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%);
     background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px; background-position: 0 0, 0 100%, 0 0, 100% 0; animation: ameise 0.9s linear infinite; }
@@ -541,12 +542,21 @@
   .bk-leg .k-air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-size: .6rem; }
   #bestKasten .vk-gast { display: grid; gap: 8px; }
   #bestKasten .vk-gast input, #bestKasten .vk-gast select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
-  .zk { display: inline-block; background: var(--chip); color: var(--chip-fg); border-radius: 5px; padding: 0 2px; margin-right: 3px; line-height: 13px; font-size: .62rem; font-weight: 400; vertical-align: top; margin-top: 2px; }
+  .zk { display: inline-flex; align-items: center; justify-content: center; background: var(--chip); color: var(--chip-fg); border-radius: 6px; padding: 0 3px; margin-right: 3px; height: 22px; min-width: 24px; line-height: 1; font-size: .92rem; font-weight: 400; vertical-align: top; }
+  .bk .zk { margin-right: 0; flex: none; }
+  .bkn { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .exb .zk { height: 18px; min-width: 20px; font-size: .75rem; }
+  .bk-leg .zk { height: 18px; min-width: 22px; font-size: .75rem; margin: 0; }
+  .lk { width: 14px; height: 17px; display: block; }
+  .exb .lk, .bk-leg .lk { width: 11px; height: 14px; }
+  .lk-dach { fill: none; stroke: #B8C4C1; stroke-width: 3.4; stroke-linecap: round; }
+  .lk-body { fill: #F0C84A; stroke: rgba(0,0,0,.35); stroke-width: 1; }
+  .lk-loch { fill: rgba(0,0,0,.55); }
   .bk-leg-h { margin: 12px 0 0; }
   .leg-det { margin: 10px 0 0; }
   .bk-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .bk-leg span { display: inline-flex; align-items: center; gap: 6px; }
-  .bk-leg i { flex: none; width: 44px; height: 17px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
+  .bk-leg i { flex: none; width: 50px; height: 22px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; font-style: normal; font-size: .7rem; }
   .bk-leg .k-gruen { background: var(--gruen); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
   .bk-leg .k-gelb { background: var(--gelb); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
   .bk-leg .k-konf { box-shadow: 0 0 0 2.5px #C0392B; }
@@ -554,7 +564,7 @@
   .bk-leg .zk { margin: 0; }
   .leg-h { flex-basis: 100%; margin: 6px 0 0 !important; font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
   .sw-rosa { border-color: var(--rosa-line); background: var(--rosa-bg); }
-  .bk { position: absolute; height: 17px; line-height: 17px; border-radius: 9px; background: var(--accent); color: var(--accent-fg); font-size: 0.68rem; font-weight: 700; padding: 0 6px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; z-index: 2; opacity: 0.92; }
+  .bk { position: absolute; display: flex; align-items: center; gap: 3px; height: 28px; line-height: 28px; border-radius: 14px; background: var(--accent); color: var(--accent-fg); font-size: 0.8rem; font-weight: 700; padding: 0 4px; box-sizing: border-box; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; pointer-events: none; z-index: 2; opacity: 0.92; }
   #aufStatus { text-align: center; }
   .chk-teil { margin: 10px 0 0; font-size: 1.1rem; color: var(--accent); }
   .chk-danke { background: var(--done-bg); border: 2px solid var(--done-line); border-radius: 10px; padding: 14px; font-size: 1.2rem; font-weight: 700; text-align: center; }
@@ -567,6 +577,7 @@
 
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><symbol id="lkZu" viewBox="0 0 24 30"><path class="lk-dach" d="M7 14 V9 a5 5 0 0 1 10 0 V14"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></symbol><symbol id="lkOffen" viewBox="0 0 24 30"><path class="lk-dach" d="M17 14 V9 a5 5 0 0 0 -10 0 V11" transform="rotate(24 17 14)"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></symbol></defs></svg>
 <div id="vorschau" style="background:#C98A00;color:#1a1200;text-align:center;font:700 14px system-ui,sans-serif;padding:6px 10px;padding-top:calc(6px + env(safe-area-inset-top,0px))">VORSCHAU 2.0.0.0 · nicht die gültige Version</div>
 <div class="wrap">
   <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
@@ -691,7 +702,7 @@
     <details class="leg-det" id="calLegDet"><summary>🎨 Legende</summary>
     <div class="cal-leg" id="calHoch"></div>
     <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
-    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk">🔒</b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk">🔓</b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk">👨‍👦</b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk">✈️</b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk">📜</b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk">🚫</b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk"><svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg></b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk"><svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg></b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk">👨‍👦</b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk">✈️</b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk">📜</b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk">🚫</b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw">🏃🏃</i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk">🧹</b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk">🪣</b></i>die Eltern reinigen</span></div>
     </details>
     <p class="cal-sel" id="calSel" role="status"></p>
     <p class="note h" id="calSpitz" hidden></p>
@@ -727,7 +738,8 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.15.0.0";
+let VERSION = "2.16.0.0";
+const LK_ZU = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg>', LK_OFFEN = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg>';
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1207,12 +1219,12 @@ function bildVorbehalt() {
   let h = '<div class="exbild" role="img" aria-label="Beispiel eines Termins mit Vorbehalt"><div class="exgrid" style="grid-template-columns:repeat(' + tot + ',minmax(0,1fr))">';
   h += '<div class="extl exmark" style="grid-column:1;grid-row:1">heute</div>';
   h += '<div class="extl exmark" style="grid-column:' + (v + 1) + ';grid-row:1;grid-column-end:span 4;white-space:nowrap">heute +' + v + ' Tage</div>';
-  h += '<div class="exb gruen mit" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;padding:0 4px"><b class="zk">🔒</b></div>';
-  h += '<div class="exb gelb ein" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">🔓</b>Termin mit Vorbehalt</div>';
+  h += '<div class="exb gruen mit" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;padding:0 4px"><b class="zk">' + LK_ZU + '</b></div>';
+  h += '<div class="exb gelb ein" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">' + LK_OFFEN + '</b>Termin mit Vorbehalt</div>';
   h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">grün</div>';
   h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gelb</div></div>';
   return h + '<p class="exbild-cap">Der grüne Teil ist gesichert 🔒: Dort kann kein neuer Airbnb-Gast mehr einchecken. Der gelbe Teil ist noch nicht gesichert 🔓. Jeden Tag wächst der grüne Teil ein Stück weiter, bis der ganze Balken grün ist.</p>' +
-    '<p class="extl" style="margin-top:12px">Bei einem Konflikt</p><div class="exrow"><div class="exb gelb konf" style="flex:1"><b class="zk">🔓</b>Termin mit Vorbehalt</div></div><p class="exbild-cap">Ein roter Rand zeigt: Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen.</p></div>';
+    '<p class="extl" style="margin-top:12px">Bei einem Konflikt</p><div class="exrow"><div class="exb gelb konf" style="flex:1"><b class="zk">' + LK_OFFEN + '</b>Termin mit Vorbehalt</div></div><p class="exbild-cap">Ein roter Rand zeigt: Ein Airbnb-Gast hat sich auf diese Tage eingetragen. Der Aufenthalt muss weichen.</p></div>';
 }
 function bildKalender() {
   const wd = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -1551,7 +1563,7 @@ function zeichneBalken() {
   g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
   const ks = Array.from(zell.keys()).sort();
   if (!ks.length) return;
-  const zk = (z) => '<b class="zk">' + z + "</b>";
+  const zk = (z) => '<b class="zk">' + (z === "🔒" ? LK_ZU : z === "🔓" ? LK_OFFEN : z) + "</b>";
   // klasse: "gruen" (gesichert), "gelb" (mit Vorbehalt, noch nicht gesichert) oder "sw" (Staffel offen), dazu "konf"
   // sf: bei Terminen mit Vorbehalt der erste noch nicht gesicherte Tag; rz: Zeichen fuer die Reinigung
   const zeichne = (von, bis, vonMitte, bisMitte, klasse, text, sf, rz) => {
@@ -1565,9 +1577,17 @@ function zeichneBalken() {
       const rechts = c1.offsetLeft + (arr[arr.length - 1] === bis && bisMitte ? c1.offsetWidth / 2 : c1.offsetWidth);
       const breite = rechts - links;
       if (breite < 8) return;
-      const top = (c0.offsetTop + c0.offsetHeight - 20) + "px";
+      const top = (c0.offsetTop + c0.offsetHeight - 31) + "px";
       const mk = (cls, l, w, html) => { const d = document.createElement("div"); d.className = "bk " + cls; d.style.left = l + "px"; d.style.width = w + "px"; d.style.top = top; d.innerHTML = html; g.appendChild(d); return d; };
-      const inh = (w, schloss) => (w < 26 ? "" : (w >= 46 ? zk(FAM_SYM) : "") + zk(schloss) + (rz && w >= 62 ? zk(rz) : "") + (w >= 96 ? esc(text) : ""));
+      const nameBr = (text ? Math.ceil(7.6 * String(text).length) + 6 : 0);
+      const inh = (w, schloss) => {   // Platz verteilen: Schloss immer, dann Name, dann Reinigungs- und Familien-Symbol
+        if (w < 30) return "";
+        let a = w - 8 - 27, n = false, r = false, f = false;
+        if (nameBr && a >= nameBr + 3) { n = true; a -= nameBr + 3; }
+        if (rz && a >= 30) { r = true; a -= 30; }
+        if (a >= 30) f = true;
+        return (f ? zk(FAM_SYM) : "") + zk(schloss) + (r ? zk(rz) : "") + (n ? '<span class="bkn">' + esc(text) + "</span>" : "");
+      };
       if (klasse === "air") { mk("air", links, breite, breite >= 26 ? zk(rz) + (breite >= 60 ? esc(text) : "") : ""); return; }
       if (klasse === "sw") { mk("sw", links, breite, breite >= 34 ? "🏃🏃" : ""); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
@@ -1583,7 +1603,7 @@ function zeichneBalken() {
       if (sf && sfPx >= 18) {                                                                        // ein Termin: gruen mit nach innen gerundetem Ende, gelb muendet darin
         const R = 9;
         mk("gruen mit", links, sfPx, inh(sfPx, "🔒"));
-        mk("gelb ein", links + sfPx - R, breite - sfPx + R, (breite - sfPx) >= 20 ? zk("🔓") + (rz && breite - sfPx >= 46 ? zk(rz) : "") + (sfPx < 64 && breite - sfPx >= 100 ? esc(text) : "") : "");
+        mk("gelb ein", links + sfPx - R, breite - sfPx + R, (breite - sfPx) >= 20 ? zk("🔓") + (rz && breite - sfPx >= 62 ? zk(rz) : "") + (sfPx < 64 && breite - sfPx >= 120 ? '<span class="bkn">' + esc(text) + "</span>" : "") : "");
         return;
       }
       mk("gelb" + konf, links, breite, inh(breite, "🔓"));
