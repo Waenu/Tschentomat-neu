@@ -3,17 +3,14 @@
   "buchungen": [
     {
       "name": "Jerome",
-      "arr": "2026-11-23",
-      "dep": "2026-11-28",
-      "status": "abgelehnt"
-    },
-    {
-      "name": "Jerome",
       "arr": "2027-05-10",
       "dep": "2027-05-17",
       "pers": 2,
       "betrag": 1000,
-      "bemerkung": "Testtermin mit Vorbehalt (von Claude angelegt, darf gelöscht werden)"
+      "bemerkung": "Testtermin mit Vorbehalt (von Claude angelegt, darf gelöscht werden)",
+      "erinnert": [
+        "2026-10-27T11:10"
+      ]
     }
   ],
   "logbuch": [
@@ -24,6 +21,10 @@
     {
       "t": "2026-10-27T11:05",
       "text": "Entfernt: Jerome, Do 19.11.2026 bis So 22.11.2026"
+    },
+    {
+      "t": "2026-10-27T11:10",
+      "text": "Zahlung erinnert: Jerome, Mo 10.05.2027 bis Mo 17.05.2027"
     }
   ]
 }
