@@ -684,7 +684,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.11.1.1";
+let VERSION = "2.12.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1429,7 +1429,7 @@ function gastTagWahl(k) {
   f.mode = ""; f.justSet = true; setTimeout(() => { if (GFORM) GFORM.justSet = false; }, 0);
   const g = document.getElementById("calGrid"); if (g) g.classList.remove("gmode");
   f.keep = true; if (window._gastBlase) window._gastBlase(f.k);
-  const frei = []; for (let n = f.arr; n < f.dep; n = addDays(n, 1)) if (!BELEGT_AIR.has(n)) frei.push(fmtTag(n));
+  const frei = []; for (let n = f.arr; n < f.dep; n = addDays(n, 1)) if (!BELEGT_AIR.has(n) && !(KEIN_CHECKIN_SO && dparse(n).getUTCDay() === 0)) frei.push(fmtTag(n));   // sonntags kann niemand einchecken: die Nacht ist nach einer belegten Nacht von selbst geschützt
   if (frei.length) say("⚠️ In Airbnb nicht gesperrt: " + frei.join(", ") + ". Ein Airbnb-Gast könnte diese Nacht noch buchen.");
 }
 document.addEventListener("click", (ev) => {
