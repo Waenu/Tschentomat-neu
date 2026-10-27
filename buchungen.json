@@ -13,6 +13,14 @@
       "dep": "2026-11-22",
       "selbst": true,
       "pers": 2
+    },
+    {
+      "name": "Jerome",
+      "arr": "2027-05-10",
+      "dep": "2027-05-17",
+      "pers": 2,
+      "prov": true,
+      "bemerkung": "Testtermin mit Vorbehalt (von Claude angelegt, darf gelöscht werden)"
     }
   ]
 }
