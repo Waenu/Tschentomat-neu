@@ -6,6 +6,12 @@
       "typ": "airbnb"
     },
     {
+      "arr": "2026-12-21",
+      "dep": "2026-12-25",
+      "name": "Blockiert Weihnachten",
+      "typ": "airbnb"
+    },
+    {
       "arr": "2026-12-25",
       "dep": "2026-12-30",
       "name": "Stefanie",
