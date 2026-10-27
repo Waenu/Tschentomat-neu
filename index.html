@@ -626,7 +626,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.4.0.0";
+let VERSION = "2.5.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -665,11 +665,15 @@ const P = {
   festMinGaeste: 0,     // In den festMonaten (Februar): mindestens so viele Gäste nötig (0 = keine Vorgabe)
   mindestpreisAbNaechte: 0, // Die Entlastung der Familie (Mindestpreis) gilt erst ab dieser Zahl Nächte (0 = immer)
   festBodenWoche: 0,    // In den festMonaten (Februar): Mindest-Gesamtpreis pro 7 Nächte inkl. Reinigung (CHF, 0 = aus). Ersetzt dort mindestpreisWoche. Fehlt etwas bis zum Boden, wird der Rest gleichmässig auf alle Personen verteilt; liegt der Preis darüber, entfällt der Anteil der Familie soweit möglich
+  hochMinNaechte: 0,   // Hochsaison: Mindestnächte für einen Termin mit Vorbehalt (0 = keine Vorgabe)
+  verbMin: 7,          // Verbindliche Buchung in der Hochsaison: mindestens so viele Nächte, davon alle in der Hochsaison
+  verbMax: 14,         // Verbindliche Buchung: höchstens so viele Nächte
   hochNachtMin: 0,     // Hochsaison (ausserhalb der festMonate): Mindestpreis pro Nacht ohne Reinigung (CHF, 0 = aus). Boden = Nächte x dieser Betrag + Reinigung; sonst gleiche Rechnung wie im Februar. Gilt nur, wenn alle Nächte in der Hochsaison liegen
   mindestpreisWoche: 0, // Boden pro 7 Nächte (CHF, 0 = aus), nur mit Gästen: Übersteigt der Gesamtpreis den Boden (anteilig nach Nächten), entfällt der Anteil der Familie, aber der Gesamtpreis sinkt nie unter den Boden
   lueckeRabatt: 50      // Prozent Ermässigung auf die Übernachtungen, wenn der Aufenthalt in einer Lücke zwischen zwei Airbnb-Buchungen liegt (Reinigung bleibt gleich)
 };
 const MFG = "Meine Familie und Geschwister";
+const ART_V = "Verbindlich buchen (fest, in Airbnb gesperrt)", ART_P = "Mit Vorbehalt (nicht in Airbnb gesperrt)";
 const WERL = ["Nur ich", "Ich und Partner", "Ich und 1 Kind", "Ich und 2 Kinder",
               "Ich, Partner und 1 Kind", "Ich, Partner und 2 Kinder", MFG];
 // Ganze Lücke: nur 2 Erwachsene in den Betten (Partner, Bruder oder Schwester), dazu höchstens 1 Kleinkind im Kinderbettchen
@@ -710,13 +714,14 @@ function derive(s) {
   const KK = (typeof s.kk === "number" || kkFix) ? Math.max(kkMin, Math.min(nz(s.kk), kkMax)) : 0;
   const FP = Math.max(1, base - KK);
   const LG = s.luecke === true;
-  const frei = LG ? 0 : Math.max(0, P.maxPersonen - FP);
+  const VERB = s.art === ART_V && s.verbOK === true;
+  const frei = (LG || VERB) ? 0 : Math.max(0, P.maxPersonen - FP);
   const GE = Math.min(nz(s.gaeste), frei);
   const PT = FP + GE;
   const voll = base + GE > P.sparMaxPers;
   const ZE = (lock || voll) ? "Nein" : (s.zimmer === "Ja" ? "Ja" : "Nein");
   const SO = wer === "Nur ich" && GE >= 1 && ZE === "Ja";
-  const sparGrund = SO ? "so" : (voll ? "pers" : (LG ? "luecke" : ""));
+  const sparGrund = SO ? "so" : (voll ? "pers" : (LG ? "luecke" : (VERB ? "verb" : "")));
   const sparLock = sparGrund !== "";
   const sp = (s.spar === "Ja" && !sparLock) || sparGrund === "luecke";
   const LR = (s.luecke === true) ? P.lueckeRabatt : 0;
@@ -746,7 +751,7 @@ function derive(s) {
     else FA = RE * FP / (FP + GE);
   }
   const GS = GE > 0 ? (RE - FA) / GE : 0;
-  return { LG, lock, voll, base, kkMax, kkMin, kkFix, KK, sp, sparLock, sparGrund, FP, frei, GE, PT, ZE, SO, SM, SB, LR, FN0, FN, GN, HN, WN, PN, nights, UE, AF, AG, RE, FA, GS };
+  return { VERB, LG, lock, voll, base, kkMax, kkMin, kkFix, KK, sp, sparLock, sparGrund, FP, frei, GE, PT, ZE, SO, SM, SB, LR, FN0, FN, GN, HN, WN, PN, nights, UE, AF, AG, RE, FA, GS };
 }
 
 function check(s, d) {
@@ -764,6 +769,7 @@ function check(s, d) {
   if (!d.sparLock && !isYN(s.spar)) return "Bitte wählen: Bleibt Zimmer 1 unberührt";
   if (d.SM && !isYN(s.selbst)) return "Bitte wählen: Selbstreinigung";
   if (d.GE > 0 && REINIG.indexOf(s.reinig) < 0) return "Bitte wählen: Aufteilung der Reinigung";
+  if (s.verbOK === true && s.art !== ART_V && s.art !== ART_P) return "Bitte wählen: Wie möchtest du buchen?";
   if (d.nights < minFuer(ARR, DEP)) return "Mindestens " + minFuer(ARR, DEP) + " Nächte" + (minFuer(ARR, DEP) > P.minNaechte ? " (in diesem Zeitraum)" : "");
   if (d.nights > P.maxNaechte) return "Höchstens " + P.maxNaechte + " Nächte";
   if (d.FP + d.GE > P.maxPersonen) return "Maximal " + P.maxPersonen + " Personen";
@@ -780,6 +786,15 @@ function calc(s) {
     out.FZ = d.FN * d.nights + d.AF + d.FA;
     out.HZ = d.GE === 0 ? 0 : d.HN * d.nights + d.GS;
     out.WZ = d.WN * d.nights + Math.max(0, d.GE - 1) * d.GS;
+    if (d.VERB) {
+      // Verbindliche Buchung in der Hochsaison: Hochsaison-Nächte 200, übrige Nächte der normale Familienpreis, plus Reinigung; keine Gäste
+      const hn = Math.min(d.nights, nz(s.hochN));
+      out.VERB = true; out.HN_ = hn;
+      out.TOT = P.hochNachtMin * hn + d.FN * (d.nights - hn) + d.RE;
+      out.FZ = out.TOT; out.HZ = 0; out.WZ = 0;
+      out.KON = true;
+      return out;
+    }
     const festB = s.festBoden === true && P.festBodenWoche > 0, hochB = !festB && s.hochBoden === true && P.hochNachtMin > 0;
     if (festB || hochB) {
       // Fest-Monate (Februar): Boden fürs Total (inkl. Reinigung), ersetzt dort den normalen Mindestpreis
@@ -807,7 +822,7 @@ function calc(s) {
 // CALC-END
 
 /* ============ Oberfläche ============ */
-const EMPTY = { luecke: false, selbstOK: false, selbst: "", nights: null, wer: "", fam: null, gaeste: null, zimmer: "", kk: null, spar: "", sparAuto: false, reinig: "" };
+const EMPTY = { art: "", luecke: false, selbstOK: false, selbst: "", nights: null, wer: "", fam: null, gaeste: null, zimmer: "", kk: null, spar: "", sparAuto: false, reinig: "" };
 let S = Object.assign({}, EMPTY);
 let notice = "";
 
@@ -816,6 +831,9 @@ const chf = (n) => "CHF " + Math.round(n).toLocaleString("de-CH").replace(/[’'
 const gastWort = (n) => n === 1 ? "Gast" : "Gäste";
 
 const FIELDS = [
+  { id: "art", label: "📝 Wie möchtest du buchen?", type: "str",
+    hint: () => "Dieser Termin liegt in der Hochsaison. Verbindlich: Der Termin ist fest, die Eltern sperren ihn in Airbnb, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung. Mit Vorbehalt: wie bisher, nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang, mit Gästen möglich.",
+    visible: () => S.verbOK === true, opts: () => [ART_V, ART_P] },
   { id: "wer", label: "👨‍👩‍👧‍👦 Wer von der Familie kommt?", type: "str",
     hint: () => S.luecke
       ? "«Ich» ist Sohn oder Tochter. Familienmitglied ist Partner, Bruder oder Schwester, keine Freunde und keine Gäste. Das Kleinkind ist ein Enkelkind bis etwa 2½ Jahren. Es schläft im Kinderbettchen in Zimmer 3 oder bei den Erwachsenen in Zimmer 2. In den Betten schlafen höchstens 2 Erwachsene. Zimmer 1 und das rote Bad bleiben unberührt."
@@ -848,6 +866,7 @@ const FIELDS = [
 
 function normalize() {
   notice = "";
+  if (S.art === ART_V && S.verbOK === true) S.gaeste = 0;
   if (S.wer !== MFG) S.fam = null;
   if (typeof S.wer === "string" && S.wer && (S.luecke ? LWERL : WERL).indexOf(S.wer) < 0) { S.wer = ""; notice = S.luecke ? "Bei der ganzen Lücke sind höchstens 2 Erwachsene und 1 Kleinkind möglich. Bitte neu wählen." : "Die Auswahl «Wer von der Familie kommt» passt nicht mehr zum gewählten Datum. Bitte neu wählen."; }
   let d = derive(S);
@@ -936,9 +955,18 @@ const NEBEN_MONATE = [5, 9], NEBEN_TAGE = [["12-19", "12-31"]];   // Nebensaison
 const istNeben = (k) => NEBEN_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || NEBEN_TAGE.some((a) => k.slice(5) >= a[0] && k.slice(5) <= a[1]);
 const monatVon = (k) => parseInt(k.slice(5, 7), 10);
 function festStay(arr, dep) { if (!arr || !dep || !FEST_MONATE.length) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (FEST_MONATE.indexOf(monatVon(k)) >= 0) return true; return false; }
-function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; } return m; }
+function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; if (P.hochMinNaechte > m && istHoch(k) && FEST_MONATE.indexOf(monatVon(k)) < 0) m = P.hochMinNaechte; } return m; }
 function provStay(arr, dep) { if (!PROV_AN || !arr || !dep || festStay(arr, dep)) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (!istRuhe(k)) return true; return false; }
-const provVon = (x) => (typeof x.prov === "boolean" ? x.prov : provStay(x.arr, x.dep));
+const provVon = (x) => (typeof x.prov === "boolean" ? x.prov : (x.verb === true ? false : provStay(x.arr, x.dep)));
+const hochNaechte = (arr, dep) => { let n = 0; for (let k = arr; k < dep; k = addDays(k, 1)) if (istHoch(k) && FEST_MONATE.indexOf(monatVon(k)) < 0) n++; return n; };
+// Verbindliche Buchung möglich: Hochsaison-Preis aktiv, mindestens verbMin Hochsaison-Nächte, höchstens verbMax Nächte, keine Lücke, keine Spitzenzeit
+function verbMoeglich(arr, dep) {
+  if (!(arr && dep) || !(P.hochNachtMin > 0) || festStay(arr, dep) || spitzTermin()) return false;
+  const n = diffDays(arr, dep);
+  return n >= P.verbMin && n <= P.verbMax && hochNaechte(arr, dep) >= P.verbMin;
+}
+// Termin mit Vorbehalt im aktuellen Formular (verbindlich gewählt = nicht mit Vorbehalt)
+const provSel = () => provStay(ARR, DEP) && !(S.verbOK === true && S.art === ART_V);
 function provKonflikt(b) { if (!b.prov || !BELEGT_AIR) return false; for (let k = b.arr; k < b.dep; k = addDays(k, 1)) if (BELEGT_AIR.has(k)) return true; return false; }
 // praktisch sicher: ein neuer Airbnb-Gast braucht VORLAUF Tage, also kann sich bis zur Abreise niemand mehr dazwischen buchen
 const provSicherDep = (dep) => dep <= addDays(heuteKey(), VORLAUF);
@@ -1007,6 +1035,9 @@ function kalenderKlick(k) {
   S.festBoden = !!(ARR && DEP && P.festBodenWoche > 0 && festStay(ARR, DEP));
   S.hochBoden = !!(ARR && DEP && P.hochNachtMin > 0 && !festStay(ARR, DEP) && (() => { for (let k = ARR; k < DEP; k = addDays(k, 1)) if (!istHoch(k)) return false; return true; })());
   S.luecke = !!(ARR && DEP && P.lueckeRabatt > 0 && GAPSTART.get(ARR) === DEP);
+  S.verbOK = !S.luecke && verbMoeglich(ARR, DEP);
+  S.hochN = (ARR && DEP) ? hochNaechte(ARR, DEP) : 0;
+  if (!S.verbOK) S.art = "";
   S.selbstOK = ruheStay() && !S.luecke;
   normalize(); render(); renderKalender();
 }
@@ -1417,7 +1448,8 @@ function renderKalender() {
   if (ARR && DEP) {
     if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison. Bitte wenn möglich einen anderen wählen. Eine Anfrage ist trotzdem möglich. 🙏"); break; }
     if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
-    if (provStay(ARR, DEP)) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
+    if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit. " + symBtn("b-prov", "🔒"));
+    if (provSel()) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
     if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
   }
@@ -1541,7 +1573,7 @@ function anfrageText(r) {
   z.push("Familie: " + S.wer + (S.wer === MFG ? " (" + S.fam + " Personen)" : "") + (x.KK > 0 ? ", davon " + x.KK + " im Kinderbettchen oder bei den eigenen Eltern" : ""));
   z.push("Gäste: " + x.GE);
   if (x.GE > 0 && !x.lock) z.push("Gast im selben Zimmer: " + x.ZE);
-  z.push("Zimmer 1 unberührt: " + (S.spar === "Ja" ? "Ja" : "Nein"));
+  if (!x.VERB) z.push("Zimmer 1 unberührt: " + (S.spar === "Ja" ? "Ja" : "Nein"));
   if (x.LG) { z.push("Ganze Lücke: nur Zimmer 2 mit blauem Bad" + (x.KK > 0 ? ", das Kleinkind im Kinderbettchen in Zimmer 3 oder bei den Erwachsenen in Zimmer 2" : "") + ", ohne Gäste, eigene Bettwäsche, Handtücher und Küchentücher, Reinigung durch die Eltern " + chf(P.reinigung)); }
   if (x.GE > 0) z.push("Reinigung: " + S.reinig);
   if (x.SB) z.push("Selbstreinigung: Ja");
@@ -1553,13 +1585,14 @@ function anfrageText(r) {
   if (x.SB) z.push("Reinigungskosten sind erst nach Ablauf der Familienstaffel bekannt und werden nachbelastet.");
   if (x.SM && S.selbst === "Nein") { const u = staffelUnterbruch(ARR); if (u.length) z.push("Achtung: Unterbricht die Familienstaffel von " + u.join(", ") + ".") ; }
   if (festStay(ARR, DEP)) z.push("Fester Termin (" + festTxt() + "): bitte in Airbnb sperren.");
-  if (provStay(ARR, DEP)) z.push("Mit Vorbehalt: Der Termin wird nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. Das Risiko wurde vom Absender bestätigt." + " " + provSicherZeile(ARR, DEP));
+  if (x.VERB) z.push("Verbindliche Buchung: Wir buchen verbindlich vom " + fmtTagV(ARR) + " bis " + fmtTagV(DEP) + " (" + x.nights + " Nächte) die Ferienwohnung. Bitte blockiert die Zeit in Airbnb. Mit Endreinigung durch die Eltern.");
+  if (provSel()) z.push("Mit Vorbehalt: Der Termin wird nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. Das Risiko wurde vom Absender bestätigt." + " " + provSicherZeile(ARR, DEP));
   z.push("");
   z.push("Gruss");
   z.push(ABSENDER);
   z.push("");
   if (x.LG) { z.push(""); z.push("Wir bitten euch, eigene Bettwäsche, Frottee- und Küchentücher mitzubringen, so wie im Tschent-O-Mat beschrieben. Die Reinigung übernehmen die Eltern."); }
-  z.push("Zum Bestätigen durch Papi: " + bestLink(ABSENDER, ARR, DEP, x.SB === true, x.FP, x.LG === true, spA ? 0 : r.TOT));
+  z.push("Zum Bestätigen durch Papi: " + bestLink(ABSENDER, ARR, DEP, x.SB === true, x.FP, x.LG === true, spA ? 0 : r.TOT, x.VERB === true));
   return z.join("\n");
 }
 
@@ -1686,7 +1719,7 @@ function anfrageKasten(r) {
   if (!(ARR && DEP)) return "";
   const t = anfrageText(r);
   LETZTE_ANFRAGE = t;
-  const prov = provStay(ARR, DEP), rok = !prov || RISIKO_OK === risikoKey();
+  const prov = provSel(), rok = !prov || RISIKO_OK === risikoKey();
   const ok = ABSENDER !== "" && rok;
   let h = '<div class="pay"><strong>💬 Anfrage an die Eltern senden</strong>' +
     '<span class="hint">Das ist nur eine Anfrage und noch keine Buchung. Die Eltern bestätigen den Termin. WhatsApp öffnet sich mit dem fertigen Text. Wähle dort den <b>«Adelboden Airbnb Chat»</b>, nicht den Familien-Chat.</span>' + (provStay(ARR, DEP) ? '<span class="hint"><b>Mit Vorbehalt:</b> Der Termin wird nicht in Airbnb gesperrt. Ein Airbnb-Gast hat Vorrang. ' + symBtn('b-prov', '⏳') + '</span>' : '') +
@@ -1771,19 +1804,20 @@ function render() {
   for (let g = 2; g <= x.GE; g++) who += '<tr><td>Gast ' + g + ' zahlt</td><td>' + chf(r.WZ / (x.GE - 1)) + '</td></tr>';
   let det = "";
   const row = (a, b) => '<tr><td>' + a + '</td><td>' + b + '</td></tr>';
-  det += row(S.wer === "Nur ich" ? "Du pro Nacht" : "Familie pro Nacht", chf(x.FN));
+  if (!r.VERB) det += row(S.wer === "Nur ich" ? "Du pro Nacht" : "Familie pro Nacht", chf(x.FN));
   if (x.GE >= 1) det += row("Gast 1 (Hauptgast) pro Nacht", chf(x.HN));
   for (let g = 2; g <= x.GE; g++) det += row('Gast ' + g + ' pro Nacht', chf(x.GN));
-  det += row("Übernachtung (" + x.nights + " Nächte)", chf(x.UE));
+  det += row("Übernachtung (" + x.nights + " Nächte)", chf(r.VERB ? r.TOT - x.RE : x.UE));
   det += row("Reinigung", chf(x.RE));
   if (x.GE >= 1) det += row(S.wer === "Nur ich" ? "Reinigung: dein Anteil" : "Reinigung: Anteil Familie", chf(x.FA));
   if (x.GE >= 1) det += row("Reinigung: Anteil pro Gast", chf(x.GS));
-  if (r.AUF) det += row("Aufschlag bis zum Mindestpreis im " + esc(festTxt()), "+" + chf(r.AUF));
+  if (r.AUF) det += row("Aufschlag bis zum Mindestpreis " + (r.HOCH ? "in der Hochsaison" : "im " + esc(festTxt())), "+" + chf(r.AUF));
   if (r.GRATIS) det += row("Gesamtpreis vorher: " + chf(r.TOT0) + ". Entlastung Familie", "−" + chf(r.D));
   if (tip > 0) det += row("Trinkgeld für Mami (freiwillig)", chf(tip));
   let notes = "";
   if (x.sp) notes += '<p class="note">Zimmer 1 und rotes Bad bleiben unberührt: ' + chf(P.sparEin) + ' weniger pro Nacht, ' + (S.wer === "Nur ich" ? "du zahlst" : "die Familie zahlt") + ' ' + chf(x.FN0) + ' statt ' + chf(P.famPausch) + '.</p>';
   if (x.LR > 0) notes += '<p class="note">Lückenpreis: Alle Nachtpreise sind ' + x.LR + ' Prozent günstiger, auf ganze Franken gerundet.</p>';
+  if (r.VERB) notes += '<p class="note"><b>Verbindliche Buchung:</b> ' + r.HN_ + (r.HN_ === 1 ? ' Nacht' : ' Nächte') + ' in der Hochsaison zu ' + chf(P.hochNachtMin) + (x.nights - r.HN_ > 0 ? ', ' + (x.nights - r.HN_) + (x.nights - r.HN_ === 1 ? ' Nacht' : ' Nächte') + ' zum normalen Familienpreis von ' + chf(x.FN) : '') + ', dazu die Endreinigung ' + chf(x.RE) + '. Der Termin ist fest und wird in Airbnb gesperrt.</p>';
   if (r.GRATIS) notes += '<p class="note"><b>Mindestpreis:</b> ' + (r.FZ === 0 ? (S.wer === "Nur ich" ? "Du zahlst deinen" : "Die Familie zahlt ihren") + ' eigenen Anteil (' + chf(r.FZ0) + ') nicht. ' : (S.wer === "Nur ich" ? "Du zahlst" : "Die Familie zahlt") + ' noch ' + chf(r.FZ) + ' statt ' + chf(r.FZ0) + '. ') + 'Der Gesamtpreis sinkt nie unter ' + chf(r.BODEN) + ' (' + (r.HOCH ? chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung' : chf(r.FEST ? P.festBodenWoche : P.mindestpreisWoche) + ' pro 7 Nächte') + '). Die Gäste zahlen ihre Anteile wie berechnet.</p>';
   if (r.AUF) notes += '<p class="note"><b>Mindestpreis ' + (r.HOCH ? "in der Hochsaison" : "im " + esc(festTxt())) + ':</b> Das Total beträgt mindestens ' + chf(r.BODEN) + ' (' + (r.HOCH ? chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung' : chf(P.festBodenWoche) + ' pro 7 Nächte, inklusive Endreinigung') + '). ' + (x.GE >= 1 ? 'Der fehlende Betrag von ' + chf(r.AUF) + ' wird gleichmässig auf alle Personen verteilt, dich und die Gäste. Mit mehr Gästen sinkt dein Anteil.' : 'Du zahlst den Mindestpreis. Mit Gästen sinkt dein Anteil.') + '</p>';
   if (x.GE >= 1) notes += '<p class="note">Reinigung aufgeteilt: ' + S.reinig + '.</p>';
@@ -1950,7 +1984,7 @@ function buchungenAn(j) {
   const bes = (b) => (typeof b.bescheid === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(b.bescheid) ? b.bescheid : "");
   BUCH_ABGEL = gut.filter((b) => b.status === "abgelehnt").map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, bescheid: bes(b) }));
   BUCH = gut.filter((b) => b.status !== "abgelehnt")
-    .map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, sb: b.selbst === true, lg: b.luecke === true, prov: PROV_AN && b.prov === true, pers: Math.max(1, Number(b.pers) || 1), bescheid: bes(b), betrag: Number(b.betrag) > 0 ? Math.round(Number(b.betrag)) : 0, bezahlt: typeof b.bezahlt === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.bezahlt) ? b.bezahlt : "", erinnert: Array.isArray(b.erinnert) ? b.erinnert.filter((t) => typeof t === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) : [] }))
+    .map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, sb: b.selbst === true, lg: b.luecke === true, prov: PROV_AN && b.prov === true, verb: b.verb === true, pers: Math.max(1, Number(b.pers) || 1), bescheid: bes(b), betrag: Number(b.betrag) > 0 ? Math.round(Number(b.betrag)) : 0, bezahlt: typeof b.bezahlt === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.bezahlt) ? b.bezahlt : "", erinnert: Array.isArray(b.erinnert) ? b.erinnert.filter((t) => typeof t === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) : [] }))
     .sort((p, q) => (p.arr < q.arr ? -1 : 1));
   LOGBUCH = Array.isArray(j.logbuch) ? j.logbuch.filter((e) => e && typeof e.t === "string" && typeof e.text === "string").slice(-200) : [];
   BUCH_TAG.clear();
@@ -2120,19 +2154,19 @@ document.getElementById("aufStatus").addEventListener("click", aufentWeg);
 const GH_REPO = "Waenu/Tschentomat-neu", GH_DATEI = "buchungen.json";
 let TOKEN = "";
 try { TOKEN = localStorage.getItem("tm2_token") || ""; } catch (e) {}
-function bestLink(name, arr, dep, selbst, pers, luecke, betrag) {
-  return location.origin + location.pathname + "?b=" + [name, arr, dep, selbst ? 1 : 0, pers].concat(luecke ? ["L"] : []).concat(betrag > 0 ? ["C" + Math.round(betrag)] : []).join("_");
+function bestLink(name, arr, dep, selbst, pers, luecke, betrag, verb) {
+  return location.origin + location.pathname + "?b=" + [name, arr, dep, selbst ? 1 : 0, pers].concat(luecke ? ["L"] : []).concat(verb ? ["V"] : []).concat(betrag > 0 ? ["C" + Math.round(betrag)] : []).join("_");
 }
 function bestLesen() {
   let p = "";
   try { p = new URLSearchParams(location.search).get("b") || ""; } catch (e) {}
   const a = p.split("_");
-  if (a.length < 5 || a.length > 7) return null;
+  if (a.length < 5 || a.length > 8) return null;
   const extra = a.slice(5);
-  if (!extra.every((e) => e === "L" || /^C\d{1,6}$/.test(e))) return null;
+  if (!extra.every((e) => e === "L" || e === "V" || /^C\d{1,6}$/.test(e))) return null;
   const pers = Number(a[4]);
   if (ABS.indexOf(a[0]) < 0 || !DKEY.test(a[1]) || !DKEY.test(a[2]) || a[1] >= a[2] || !(a[3] === "0" || a[3] === "1") || !Number.isInteger(pers) || pers < 1 || pers > 8) return null;
-  return { name: a[0], arr: a[1], dep: a[2], selbst: a[3] === "1", pers: pers, luecke: extra.indexOf("L") >= 0, betrag: (extra.find((e) => e[0] === "C") || "C0").slice(1) * 1 };
+  return { name: a[0], arr: a[1], dep: a[2], selbst: a[3] === "1", pers: pers, luecke: extra.indexOf("L") >= 0, verb: extra.indexOf("V") >= 0, betrag: (extra.find((e) => e[0] === "C") || "C0").slice(1) * 1 };
 }
 const b64 = (s) => btoa(unescape(encodeURIComponent(s)));
 const unb64 = (s) => decodeURIComponent(escape(atob(s.replace(/\s+/g, ""))));
@@ -2173,7 +2207,7 @@ function listeSichern(k, l) { try { localStorage.setItem(k, JSON.stringify(l)); 
 const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
 let OFFEN = listeLaden("tm2_offen"), ABGEL = listeLaden("tm2_abgelehnt");
 let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, zeigL = false, bestBusy = false, zeigAns = false;
-function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", mit Vorbehalt" : ""); }
+function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", mit Vorbehalt" : "") + (b.verb ? ", verbindlich" : ""); }
 function bestZeigen() {
   const k = document.getElementById("bestKasten"), kn = document.getElementById("btnAnsichten"), h = heuteKey(), link = bestLesen();
   if (link) {
@@ -2336,15 +2370,16 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   try {
     if (ja) {
       const x = find(OFFEN, ja); if (!x) { bestBusy = false; bestZeigen(); return; }
-      const pv = provStay(x.arr, x.dep), eintrag = { name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, pers: x.pers };
+      const pv = x.verb ? false : provStay(x.arr, x.dep), eintrag = { name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, pers: x.pers };
+      if (x.verb) eintrag.verb = true;
       if (pv) eintrag.prov = true;
       if (x.luecke) eintrag.luecke = true;
       if (x.betrag > 0) eintrag.betrag = x.betrag;
-      const j = await ghAendern((l, jj) => { logEintrag(jj, "Bestätigt: " + keyText(ja) + (eintrag.betrag ? ", CHF " + eintrag.betrag : "") + (pv ? ", mit Vorbehalt" : "")); return l.filter((y) => bKey(y) !== ja).concat([eintrag]); });
+      const j = await ghAendern((l, jj) => { logEintrag(jj, "Bestätigt: " + keyText(ja) + (eintrag.betrag ? ", CHF " + eintrag.betrag : "") + (pv ? ", mit Vorbehalt" : "") + (x.verb ? ", verbindlich" : "")); return l.filter((y) => bKey(y) !== ja).concat([eintrag]); });
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm2_offen", OFFEN);
       const text = bestText({ name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, luecke: x.luecke, prov: pv });
-      bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle, dann erscheinen beim Kind die Listen." + (pv ? " <b>Mit Vorbehalt: nicht in Airbnb sperren.</b>" : "") + bestWaLink(text, bKey(x));
+      bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle, dann erscheinen beim Kind die Listen." + (pv ? " <b>Mit Vorbehalt: nicht in Airbnb sperren.</b>" : (x.verb ? " <b>Verbindlich: bitte in Airbnb sperren.</b>" : "")) + bestWaLink(text, bKey(x));
     } else {
       const [name, arr, dep] = del.split("|");
       if (!confirm("Aufenthalt von " + name + " (" + fmtTag(arr) + " bis " + fmtTag(dep) + ") wirklich entfernen?")) { bestBusy = false; bestZeigen(); return; }
