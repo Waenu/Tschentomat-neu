@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.11.0.0", "datum": "2026-10-27", "titel": "Familie von Hand eintragen", "punkte": ["Neue Art «Familie» 👨‍👦 bei den Namen, für Familientermine, die schon in Airbnb gesperrt sind", "Gibt es für dieselben Tage einen bestätigten Familienaufenthalt, zeigt der Kalender nur dessen Balken", "Vier Arten nebeneinander: Airbnb, Extern, Familie, Blockiert"] },
     { "v": "2.10.0.0", "datum": "2026-10-27", "titel": "Neu: Blockiert 🚫", "punkte": ["Neben Airbnb ✈️ und Extern 📜 gibt es die Art «Blockiert» 🚫, z. B. wenn niemand reinigen kann", "Die drei Arten stehen nebeneinander zur Auswahl; bei «Blockiert» ist der Name freiwillig", "Auch «Blockiert» steht in der Legende"] },
     { "v": "2.9.0.0", "datum": "2026-10-27", "titel": "Gästenamen mit Anreise und Abreise", "punkte": ["Beim Namen wählt Papi Anreise und Abreise im Kalender, der Balken läuft nur über diese Tage", "Geblockte Tage davor oder danach bleiben ohne Namen", "Ändern und Entfernen weiterhin nur von Hand, Entfernen mit Nachfrage"] },
     { "v": "2.8.1.1", "datum": "2026-10-27", "titel": "Hilfe: Browser am Computer", "punkte": ["Unter «Benutzung» steht, dass am PC Chrome oder Edge empfohlen ist und Firefox abweichen kann"] },
