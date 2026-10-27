@@ -366,6 +366,9 @@
   .exgap .ex-lab.gap { background: var(--sperr-bg); border-color: var(--sperr-line); }
   .exb { height: 24px; border-radius: 12px; display: flex; align-items: center; padding: 0 9px; font-size: 0.75rem; font-weight: 700; box-sizing: border-box; white-space: nowrap; overflow: hidden; min-width: 0; }
   .exb.selbst, .exb.eltern { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
+  .exb.gruen { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); }
+  .exb.gruen.mit { box-shadow: none; -webkit-mask: radial-gradient(circle 14px at 100% 50%, transparent 13.5px, #000 14px); mask: radial-gradient(circle 14px at 100% 50%, transparent 13.5px, #000 14px); }
+  .exb.gelb.ein { margin-left: -12px; padding-left: 16px; }
   .exb.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: 0 0 0 1.5px var(--gelb-ol); }
   .exb .zk { margin-right: 4px; }
   .exb.stf { background: transparent; border: 2px dashed var(--gruen-ol); color: var(--fg); }
@@ -621,7 +624,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.1.1.0";
+let VERSION = "2.1.1.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1032,8 +1035,8 @@ function bildVorbehalt() {
   let h = '<div class="exbild" role="img" aria-label="Beispiel eines Termins mit Vorbehalt"><div class="exgrid" style="grid-template-columns:repeat(' + tot + ',minmax(0,1fr))">';
   h += '<div class="extl exmark" style="grid-column:1;grid-row:1">heute</div>';
   h += '<div class="extl exmark" style="grid-column:' + (v + 1) + ';grid-row:1;grid-column-end:span 4;white-space:nowrap">heute +' + v + ' Tage</div>';
-  h += '<div class="exb gruen" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;background:var(--gruen);color:var(--gruen-fg);padding:0 4px"><b class="zk">🔒</b></div>';
-  h += '<div class="exb gelb" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">🔓</b>Termin mit Vorbehalt</div>';
+  h += '<div class="exb gruen mit" style="grid-column:2/span ' + (v - 1) + ';grid-row:2;padding:0 4px"><b class="zk">🔒</b></div>';
+  h += '<div class="exb gelb ein" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:2"><b class="zk">🔓</b>Termin mit Vorbehalt</div>';
   h += '<div class="extl" style="grid-column:2/span ' + (v - 1) + ';grid-row:3;font-size:0.65rem">grün</div>';
   h += '<div class="extl" style="grid-column:' + (v + 1) + '/span ' + (n - v + 1) + ';grid-row:3;font-size:0.65rem">gelb</div></div>';
   return h + '<p class="exbild-cap">Der grüne Teil ist gesichert 🔒: Dort kann kein neuer Airbnb-Gast mehr buchen. Der gelbe Teil ist noch nicht gesichert 🔓. Jeden Tag wächst der grüne Teil ein Stück weiter, bis der ganze Balken grün ist.</p></div>';
@@ -2128,7 +2131,7 @@ async function ghAendern(fn) {
       body: JSON.stringify({ message: "Buchungen aktualisiert (App)", content: b64(neu), sha: d.sha, branch: "main" }) });
     if (r.ok) return j;
     if (r.status === 409 && versuch === 0) continue;
-    if (r.status === 401 || r.status === 403) throw new Error("Das Token darf die Datei nicht ändern (Berechtigung «Contents: Read and write» fehlt oder abgelaufen).");
+    if (r.status === 401 || r.status === 403) throw new Error("Das Token darf in " + GH_REPO + " nicht schreiben. Es fehlt der Zugriff auf dieses Repository oder die Berechtigung «Contents: Read and write», oder es ist abgelaufen.");
     throw new Error("Speichern fehlgeschlagen (Fehler " + r.status + ").");
   }
   throw new Error("Speichern fehlgeschlagen.");
