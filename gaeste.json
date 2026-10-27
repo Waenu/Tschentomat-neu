@@ -16,6 +16,12 @@
       "dep": "2026-12-30",
       "name": "Stefanie",
       "typ": "airbnb"
+    },
+    {
+      "arr": "2026-12-30",
+      "dep": "2027-01-07",
+      "name": "Marianne und ich",
+      "typ": "airbnb"
     }
   ]
 }
