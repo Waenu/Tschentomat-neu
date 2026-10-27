@@ -626,7 +626,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.6.0.0";
+let VERSION = "2.6.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -998,6 +998,13 @@ function normalStay() {
   for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istRuhe(k) || istHoch(k) || spitzVon(k)) return false;
   return true;
 }
+// Staffel ist nur sinnvoll, wenn danach noch eine weitere Familie anschliessen kann (mindestens minNaechte freie Nächte in der Staffel-Zeit bis zur nächsten Belegung)
+// oder wenn der Termin eine laufende Staffel fortsetzt (dann teilen sich die Gruppen die Endreinigung)
+function staffelSinn(arr, dep) {
+  if (!(arr && dep)) return true;
+  if (staffelUnterbruch(arr).length > 0) return true;
+  return diffDays(dep, schweifStop({ arr: arr, dep: dep }).k) >= P.minNaechte;
+}
 function ruheStay() {
   if (!(ARR && DEP) || RUHE.length === 0) return false;
   for (let k = ARR; k < DEP; k = addDays(k, 1)) if (!istRuhe(k) || istHoch(k) || spitzVon(k)) return false;
@@ -1045,7 +1052,7 @@ function kalenderKlick(k) {
   S.verbOK = !S.luecke && verbMoeglich(ARR, DEP);
   S.hochN = (ARR && DEP) ? hochNaechte(ARR, DEP) : 0;
   if (!S.verbOK) S.art = "";
-  S.selbstOK = ruheStay() && !S.luecke;
+  S.selbstOK = ruheStay() && !S.luecke && staffelSinn(ARR, DEP);
   normalize(); render(); renderKalender();
 }
 
@@ -1455,6 +1462,7 @@ function renderKalender() {
   if (ARR && DEP) {
     if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison. Bitte wenn möglich einen anderen wählen. Eine Anfrage ist trotzdem möglich. 🙏"); break; }
     if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
+    if (ruheStay() && !S.luecke && S.selbstOK !== true) msgs.push(HW + "<b>Keine Staffel möglich:</b> Nach eurer Abreise bleiben bis zum nächsten Airbnb-Gast weniger als " + P.minNaechte + " freie Nächte, es kann keine weitere Familie anschliessen. Ihr würdet die ganze Endreinigung allein tragen und zusätzlich selbst putzen. Darum gilt hier der normale Termin: die Eltern reinigen, Gäste sind möglich.");
     if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit. " + symBtn("b-prov", "🔒"));
     if (provSel()) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
