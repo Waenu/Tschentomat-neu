@@ -4,6 +4,11 @@
       "arr": "2026-12-04",
       "name": "Andrea",
       "typ": "airbnb"
+    },
+    {
+      "arr": "2026-12-21",
+      "name": "Stefanie",
+      "typ": "airbnb"
     }
   ]
 }
