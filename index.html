@@ -756,7 +756,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.17.0.0";
+let VERSION = "2.18.0.0";
 const LK_ZU = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkZu"></use></svg>', LK_OFFEN = '<svg class="lk" aria-hidden="true" focusable="false"><use href="#lkOffen"></use></svg>';
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
@@ -1382,6 +1382,8 @@ function setChem(an) {
   const b = document.getElementById("btnChem");
   b.setAttribute("aria-expanded", an ? "true" : "false"); b.classList.toggle("on", an);
 }
+// Ansichten (Verwaltung) gehören zum selben Schema: es ist immer nur ein grosser Bereich offen
+function ansichtZu() { if (zeigAns) { zeigAns = false; bestZeigen(); } }
 function hilfeZuklappen() { document.querySelectorAll("#hilfe details").forEach((d) => { d.open = false; }); }
 function springeZu(id) {
   const t = document.getElementById(id), bg = document.getElementById("b-begriffe"), hp = document.getElementById("hilfe");
@@ -1390,7 +1392,7 @@ function springeZu(id) {
   const bz = document.getElementById("b-benutzung");
   ZURUECK.offen.push([bg, bg.open], [t, t.open], [bz, bz.open]); bz.open = false;
   document.querySelectorAll("#b-begriffe details.sub").forEach((o) => { if (o !== t && o.open) { ZURUECK.offen.push([o, true]); o.open = false; } });
-  setRechner(false); setHilfe(true); bg.open = true; t.open = true;
+  setRechner(false); ansichtZu(); setHilfe(true); bg.open = true; t.open = true;
   t.scrollIntoView({ behavior: "smooth", block: "start" });
   document.getElementById("zurueck").hidden = false;
 }
@@ -1792,12 +1794,12 @@ window.addEventListener("scroll", () => { document.getElementById("nachOben").hi
 document.getElementById("btnHilfe").addEventListener("click", () => {
   const an = document.getElementById("hilfe").hidden;
   ZURUECK = null; document.getElementById("zurueck").hidden = true;
-  if (an) { setRechner(false); setChem(false); } else hilfeZuklappen();
+  if (an) { setRechner(false); setChem(false); ansichtZu(); } else hilfeZuklappen();
   setHilfe(an);
 });
 document.getElementById("btnReserv").addEventListener("click", () => {
   ZURUECK = null; document.getElementById("zurueck").hidden = true;
-  setHilfe(false); hilfeZuklappen(); setChem(false); setRechner(true);
+  setHilfe(false); hilfeZuklappen(); setChem(false); ansichtZu(); setRechner(true);
   document.getElementById("cal").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 // Versteckt: 5 Tipps auf die Versionszeile zeigen den Buchhaltungs-Link (nur bis zum Neuladen)
@@ -1813,7 +1815,7 @@ document.getElementById("btnReserv").addEventListener("click", () => {
 document.getElementById("btnChem").addEventListener("click", () => {
   const an = document.getElementById("cheminee").hidden;
   ZURUECK = null; document.getElementById("zurueck").hidden = true;
-  if (an) { setHilfe(false); hilfeZuklappen(); setRechner(false); }
+  if (an) { setHilfe(false); hilfeZuklappen(); setRechner(false); ansichtZu(); }
   setChem(an);
   if (an) document.getElementById("cheminee").scrollIntoView({ behavior: "smooth", block: "start" });
 });
@@ -2624,7 +2626,8 @@ function gaesteFormular() {
 function bestZeigen() {
   const k = document.getElementById("bestKasten"), kn = document.getElementById("btnAnsichten"), h = heuteKey(), link = bestLesen();
   if (link) {
-    zeigAns = true; // neue Anfrage über Link: Ansichten automatisch aufklappen
+    zeigAns = true; // neue Anfrage über Link: Ansichten automatisch aufklappen, alles andere zu
+    setHilfe(false); setRechner(false); setChem(false);
     const key = bKey(link);
     if (!TOKEN) bestMsg = "<b>📨 Anfrage von " + esc(link.name) + ":</b> " + esc(bestBeschr(link)) + ".<br>Bestätigen kann nur Papi. Auf diesem Handy ist der Zugriff nicht eingerichtet.";
     else if (BUCH.some((x) => bKey(x) === key)) bestMsg = "✅ Die Anfrage von " + esc(link.name) + " (" + esc(fmtTag(link.arr)) + " bis " + esc(fmtTag(link.dep)) + ") ist schon bestätigt.";
@@ -2732,7 +2735,11 @@ document.getElementById("btnZurEltern").addEventListener("click", () => {
   ABSENDER = ""; try { localStorage.setItem("tm2_absender", ""); } catch (e2) {}
   aufentZeigen(); render(); bestZeigen();
 });
-document.getElementById("btnAnsichten").addEventListener("click", () => { zeigAns = !zeigAns; bestZeigen(); });
+document.getElementById("btnAnsichten").addEventListener("click", () => {
+  zeigAns = !zeigAns;
+  if (zeigAns) { ZURUECK = null; document.getElementById("zurueck").hidden = true; setHilfe(false); hilfeZuklappen(); setRechner(false); setChem(false); }
+  bestZeigen();
+});
 document.getElementById("bestKasten").addEventListener("change", (e) => {
   if (e.target && e.target.id === "ansichtAls") {
     ABSENDER = ABS.indexOf(e.target.value) >= 0 ? e.target.value : "";
