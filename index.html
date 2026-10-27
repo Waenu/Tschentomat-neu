@@ -212,6 +212,12 @@
   tr.strong td { font-weight: 700; }
   .empty { color: var(--muted); margin: 0; }
   details summary { cursor: pointer; font-weight: 700; font-size: var(--t-title); min-height: 44px; display: flex; align-items: center; border: 2px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
+  details.papi-hinweis { margin-top: 16px; }
+  details.papi-hinweis > summary { white-space: normal; font-size: 1rem; padding: 6px 12px; }
+  details.papi-hinweis > summary::after, details.papi-hinweis[open] > summary::after { content: "▾"; }
+  details.papi-hinweis[open] > summary::after { content: "▴"; }
+  details.papi-hinweis ul { margin: 0; padding-left: 20px; }
+  details.papi-hinweis li { margin-bottom: 8px; }
   details > summary::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
   details[open] > summary::after { content: "▴\00a0\00a0💡"; }
   details[open] > summary, .acc:has(.acc-t[aria-expanded="true"]) { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
@@ -800,7 +806,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.20.0.0";
+let VERSION = "2.20.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2733,7 +2739,7 @@ function bestZeigen() {
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, xx.bescheid ? "" : "offen", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
-    s += '<details class="note h"><summary><b>🔧 Nur für Papi: versteckte Menüs</b></summary><ul>' +
+    s += '<details class="papi-hinweis"><summary>🔧 Nur für Papi: Versteckte Menüs</summary><ul>' +
       '<li><b>Zugriff (Token) und Buchhaltung:</b> fünfmal schnell auf die Versionszeile ganz unten tippen («Vorschau …»). Es erscheinen das Feld für das Token und der Buchhaltungs-Link, bis zum Neuladen.</li>' +
       '<li><b>Testmodus:</b> dreimal schnell links oben in den Kopf tippen (unsichtbare Stelle über dem Titel). Rote Leiste mit frei wählbarem «heute». Gleich wieder ausschalten: nochmals dreimal tippen oder «Echt».</li>' +
       '<li><b>Ansichten:</b> der blaue Knopf «Ansichten» erscheint nur mit eingerichtetem Token. Abgelehnte, Logbuch und Gäste klappst du unter «Nachschlagen» auf.</li>' +
