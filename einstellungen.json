@@ -1,6 +1,6 @@
 {
   "_hinweis": "Nur die Zahlen und die Version ändern, sonst nichts. Beträge in CHF. Nach dem Speichern dauert es etwa eine Minute, bis alle die neuen Werte sehen.",
-  "version": "2.2.0.0",
+  "version": "2.3.0.0",
   "gueltigAb": "01.01.2027",
   "famPausch": 70,
   "gast": 70,
@@ -16,6 +16,7 @@
   "iban": "CH25 0878 4046 4374 6612 8",
   "bank": "Spar- und Leihkasse Frutigen (SLF)",
   "zahlTage": 7,
+  "erinnerungAb": 10,
   "lueckeMax": 3,
   "festMinGaeste": 0,
   "festBodenWoche": 1920,
