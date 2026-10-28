@@ -140,7 +140,11 @@
   #animBtn[aria-pressed="false"] { opacity: .75; }
   #animBtn[aria-pressed="false"]::after { content: ""; position: absolute; left: 20%; right: 20%; top: 50%; border-top: 3px solid var(--fg); transform: rotate(-45deg); }
   /* Bewegung aus (Schalter oben oder «Bewegung reduzieren» im Handy): alle kleinen Animationen stehen still */
-  .ruhig *, .ruhig *::before, .ruhig *::after { animation: none !important; }
+  /* Wichtig, daher immer in Bewegung (auch bei «Bewegung aus»): Redner (.rd) und Ameisenpfade (.sym, .bk.sw, .k-sw) */
+  .ruhig *:not(.rd):not(.rd *):not(.sym):not(.bk.sw):not(.bk-leg .k-sw), .ruhig *:not(.rd *):not(.sym)::before, .ruhig *:not(.rd *):not(.sym)::after { animation: none !important; }
+  #animBtn .glb { width: 28px; height: 28px; display: block; margin: auto; overflow: visible; }
+  .glb-land { animation: glbDreh 8s linear infinite; }
+  @keyframes glbDreh { to { transform: translateX(-32px); } }
   .ruhig .an-unter { opacity: 0; }
   .ruhig .zi-tropf { display: none; }
   #testTip { position: absolute; left: 10px; bottom: 4px; width: 150px; height: 84px; padding: 0; border: 0; background: transparent; opacity: 0; z-index: 2; cursor: default; -webkit-tap-highlight-color: transparent; }
@@ -423,7 +427,6 @@
   @property --ameise { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
   @keyframes ziAmeise { to { --ameise: 360deg; } }
   .sym::after { content: ""; position: absolute; inset: -1.5px; border-radius: 8px; padding: 1.5px; background: repeating-conic-gradient(from var(--ameise), var(--ac, var(--accent)) 0 9deg, transparent 9deg 18deg); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); mask-composite: exclude; pointer-events: none; animation: ziAmeise 8s linear infinite; }
-  @media (prefers-reduced-motion: reduce) { .sym::after { animation: none; } }
   .bigbtn .bi { font-size: 1.7rem; line-height: 1; flex: 0 0 2.4rem; width: 2.4rem; text-align: center; }
   a.bigbtn { text-decoration: none; box-sizing: border-box; }
   #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
@@ -522,7 +525,6 @@
   @keyframes rd-hr { 0%, 12% { transform: translate(0, 0) scale(1); } 38%, 70% { transform: translate(-3.6px, -17px) scale(1.18); } 92%, 100% { transform: translate(0, 0) scale(1); } }
   @keyframes rd-nick { 0%, 12%, 92%, 100% { transform: rotate(0deg); } 38%, 70% { transform: rotate(3deg); } }
   @keyframes rd-sprech { 0% { transform: scaleY(0.12); } 10% { transform: scaleY(1); } 20% { transform: scaleY(0.3); } 32% { transform: scaleY(0.85); } 44% { transform: scaleY(0.1); } 56% { transform: scaleY(1); } 68% { transform: scaleY(0.45); } 80% { transform: scaleY(0.9); } 90% { transform: scaleY(0.2); } 100% { transform: scaleY(0.12); } }
-  @media (prefers-reduced-motion: reduce) { .rd * { animation: none !important; } .rd-mund { transform: scaleY(0.45); } }
   details[id^="b-"] > summary { scroll-margin-top: 8px; }
   .verlink { font: inherit; font-size: .85rem; color: inherit; background: none; border: 0; text-decoration: underline; opacity: .85; padding: 8px 12px; min-height: 36px; cursor: pointer; }
   .vh { border: 1px solid var(--line, #8886); border-radius: 10px; padding: 10px 14px; background: var(--surface); }
@@ -603,7 +605,6 @@
     background-image: linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(90deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%), linear-gradient(0deg, var(--gruen-ol) 50%, transparent 50%);
     background-size: 8px 2px, 8px 2px, 2px 8px, 2px 8px; background-position: 0 0, 0 100%, 0 0, 100% 0; animation: ameise 0.9s linear infinite; }
   @keyframes ameise { to { background-position: 8px 0, -8px 100%, 0 -8px, 100% 8px; } }
-  @media (prefers-reduced-motion: reduce) { .bk.sw, .bk-leg .k-sw { animation: none; } }
   .bk.air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-weight: 600; }
   .bk-leg .k-air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-size: .6rem; }
   #bestKasten .vk-gast { display: grid; gap: 8px; }
@@ -645,7 +646,7 @@
 <body>
 <div id="vorschau" style="background:#C98A00;color:#1a1200;text-align:center;font:700 14px system-ui,sans-serif;padding:6px 10px;padding-top:calc(6px + env(safe-area-inset-top,0px))">VORSCHAU 2.0.0.0 · nicht die gültige Version</div>
 <div class="wrap">
-  <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="animBtn" aria-label="Bewegte Symbole ausschalten" aria-pressed="true" title="Bewegung ausschalten">✨</button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
+  <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="animBtn" aria-label="Bewegte Symbole ausschalten" aria-pressed="true" title="Bewegung ausschalten"><svg class="glb" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><clipPath id="glbK"><circle cx="16" cy="16" r="13"/></clipPath></defs><circle cx="16" cy="16" r="13" fill="#2F7FD0"/><g clip-path="url(#glbK)"><g class="glb-land" fill="#4CAF6A"><path id="glbL" d="M3 11 q4-5 9-2 q3 3 -1 6 q-3 3 -6 1 z M17 18 q5-3 8 1 q1 5 -4 6 q-4 -1 -4 -7 z M22 8 q3-2 6 1 q0 3 -4 3 z"/><use href="#glbL" x="32"/></g></g><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 8 q3-3 7-3" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
   <header class="sign">
     <button type="button" id="testTip" tabindex="-1" aria-hidden="true"></button>
     <h1>TSCHENT-O-MAT</h1>
@@ -807,7 +808,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.21.1.0";
+let VERSION = "2.22.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3123,7 +3124,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen(), ladeGaeste()]).
     zeige();
     {   // Bewegung ein oder aus: gemerkt auf diesem Handy, sonst gilt die Einstellung «Bewegung reduzieren» des Handys
       const ab = document.getElementById("animBtn");
-      let ruhig = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let ruhig = true;   // Standard: kleine Bewegungen aus
       try { const g = localStorage.getItem("tm2_ruhig"); if (g === "1") ruhig = true; else if (g === "0") ruhig = false; } catch (e) {}
       const anw = () => {
         document.documentElement.classList.toggle("ruhig", ruhig);

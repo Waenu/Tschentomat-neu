@@ -8,6 +8,11 @@
     },
     {
       "status": "geplant",
+      "titel": "Kleine Symbole im Text bewegen",
+      "text": "Alle Symbole, auch im Hilfetext, mit kurzer Bewegung, ohne dass sich die Zeilenhöhe ändert. Vorschau zuerst."
+    },
+    {
+      "status": "geplant",
       "titel": "Eigene Symbole für weitere Knöpfe",
       "text": "Zum Beispiel Kalenderblatt und Cheminée-Flamme, bewegt wie Koffer und Häkchen."
     },
