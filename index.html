@@ -836,7 +836,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.27.0.0";
+let VERSION = "2.27.0.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1128,6 +1128,7 @@ function build() {
       if (f.id === "spar") S.sparAuto = false;
       S[f.id] = v === "" ? (f.type === "num" ? null : "") : (f.type === "num" ? Number(v) : v);
       normalize(); render();
+      if (f.id === "art") renderKalender();   // Hinweise unter dem Kalender (verbindlich oder mit Vorbehalt) folgen der Wahl
     });
     wrap.append(lab, sel, hint);
     form.appendChild(wrap);
@@ -1861,7 +1862,7 @@ function renderKalender() {
     if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
     if (ruheStay() && !S.luecke && S.selbstOK !== true) msgs.push(HW + "<b>Keine Staffel möglich:</b> Nach eurer Abreise bleiben bis zum nächsten Airbnb-Gast weniger als " + P.minNaechte + " freie Nächte, es kann keine weitere Familie anschliessen. Ihr würdet die ganze Endreinigung allein tragen und zusätzlich selbst putzen. Darum gilt hier der normale Termin: die Eltern reinigen, Gäste sind möglich.");
     if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit. " + symBtn("b-prov", "🔒"));
-    if (provSel()) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
+    if (provSel() && !(S.verbOK === true && S.art === "")) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
     if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
   }
@@ -3094,11 +3095,11 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       if (GAPSPERR.has(k)) z.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
       else if (GAP.has(k) && P.lueckeRabatt > 0) z.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) z.push("Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
-      else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) z.push("Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 ? " Du kannst trotzdem buchen: <b>verbindlich</b> (" + P.verbMin + " bis " + P.verbMax + " Nächte, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest) oder <b>mit Vorbehalt</b> (ein Airbnb-Gast hat Vorrang)." : " Eine Anfrage ist trotzdem möglich.")); }
+      else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) z.push("Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> (" + P.verbMin + " bis " + P.verbMax + " Nächte, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest) oder <b>mit Vorbehalt</b> (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
       else if (istRuhe(k) && !GAP.has(k)) z.push("Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
       else if (!stay.length) z.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche».") + "");
       if (festStay(k, addDays(k, 1))) z.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Sicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
-      else if (ARR && DEP && k >= ARR && k <= DEP && verbMoeglich(ARR, DEP) && istHoch(k)) z.push("Für deine gewählten Tage kannst du <b>verbindlich</b> buchen: fest und in Airbnb gesperrt, ohne Gäste. " + symBtn("b-hochsaison", "🏔️"));
+      else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
       else if (provStay(k, addDays(k, 1))) { z.push("Ein Aufenthalt wäre hier ein <b>Termin mit Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "🔓")); z.push(RISIKO); }
       if (schweifListe().some((s) => k >= s.von && k <= s.bis)) z.push("Familienstaffel noch offen (gestrichelter Balken 🏃🏃): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
       const c = grid.querySelector('[data-k="' + k + '"]');
