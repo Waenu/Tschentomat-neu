@@ -610,6 +610,15 @@
   #calGrid.gmode .cal-d:disabled { pointer-events: none; }
   #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   #meldenKasten .idneu { display: grid; gap: 6px; border: 2px dashed var(--accent); border-radius: 12px; padding: 12px; margin: 8px 0 12px; }
+  #meldenKasten .idg { border: 2px solid var(--accent); border-radius: 12px; margin: 8px 0; padding: 0 12px; }
+  #meldenKasten .idg > summary { font-weight: 700; min-height: 48px; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  #meldenKasten .idsort { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 4px 0 6px; }
+  #meldenKasten .idsort button, #meldenKasten .ied button { font: inherit; font-weight: 700; min-height: 44px; border-radius: 10px; border: 2px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; padding: 4px; }
+  #meldenKasten .idsort button[aria-pressed="true"], #meldenKasten .ied button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+  #meldenKasten .ied { margin-top: 6px; } #meldenKasten .ied > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--muted); }
+  #meldenKasten .ied .typ { margin: 4px 0 8px; } #meldenKasten .ied .typ.vier { grid-template-columns: repeat(2, 1fr); } #meldenKasten .ied .idlab { font-weight: 700; display: block; }
+  #meldenKasten .ied button.idrot { border-color: #C0392B; color: #C0392B; } #meldenKasten .ied button.idrot:hover { background: #C0392B; color: #fff; }
+  #meldenKasten .idfert { display: flex; align-items: center; gap: 8px; min-height: 44px; margin: 4px 0; }
   #meldenKasten .idneu .typ.vier { grid-template-columns: repeat(2, 1fr); } #meldenKasten .idneu .idlab { font-weight: 700; margin-top: 2px; }
   #meldenKasten .idneu input, #meldenKasten .idneu select, #meldenKasten .idneu textarea { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   #calBlase .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; min-height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; justify-self: start; align-self: flex-start; margin-top: 6px; }
@@ -849,7 +858,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.41.0.0";
+let VERSION = "2.42.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2541,6 +2550,7 @@ document.addEventListener("toggle", (e) => {
   const STATUS = { arbeit: "in Arbeit", geplant: "geplant", neu: "Neu", idee: "Idee", fertig: "erledigt" }, REIHE = ["arbeit", "geplant", "neu", "idee", "fertig"];   // «idee» als Stand nur noch für ältere Einträge
   const ART = { fehler: "🐞 Fehler", wunsch: "🙏 Wunsch", idee: "💡 Idee" }, STAND_NEU = ["neu", "geplant", "arbeit", "fertig"];
   let typ = "Fehler", text = VORL.Fehler, ideen = null, ideenFehler = false;
+  let offen = {}, sortG = {}, zeigFertig = false, edOpen = -1, delAsk = -1, lMsg = "", lBusy = false;   // Liste: Gruppen, Sortierung, Bearbeiten (Papi)
   let iArt = "fehler", iStatus = "neu", iTitel = "", iText = "", iMsg = "", iBusy = false;   // Papi: neuer Eintrag in «Geplant und Ideen»
   const kasten = document.getElementById("meldenKasten"), karte = document.getElementById("b-melden");
   function geraet() {
@@ -2563,11 +2573,35 @@ document.addEventListener("toggle", (e) => {
     a.href = ok ? "https://wa.me/?text=" + encodeURIComponent(nachricht()) : "#";
     document.getElementById("meldHinweis").textContent = ok ? "WhatsApp öffnet sich mit dem fertigen Text. Wähle Papi und tippe auf Senden. Ein Bild fügst du in WhatsApp selbst an." : "Beantworte die Fragen oben, dann wird der Knopf aktiv.";
   }
+  const GRT = { fehler: "🐞 Fehler", wunsch: "🙏 Wünsche", idee: "💡 Ideen" }, RANG = { arbeit: 0, geplant: 1, neu: 2, idee: 2, fertig: 3 };
+  const artVon = (x) => (ART[x.art] ? x.art : "idee");
+  function eintrag(o, admin) {
+    const x = o.x, i = o.i, st = REIHE.indexOf(x.status) >= 0 ? x.status : "neu";
+    let h = '<li><span class="st ' + st + '">' + esc(STATUS[x.status] || "Neu") + "</span><div><b>" + esc(x.titel) + "</b>" + (x.text ? '<span class="hint">' + esc(x.text) + "</span>" : "");
+    if (admin) {
+      h += '<details class="ied" data-i="' + i + '"' + (edOpen === i ? " open" : "") + '><summary>⚙️ Ändern</summary>' +
+        '<span class="idlab">Art</span><div class="typ" role="group">' + Object.keys(ART).map((k) => '<button type="button" data-eart="' + i + ":" + k + '" aria-pressed="' + (k === artVon(x)) + '">' + ART[k] + "</button>").join("") + "</div>" +
+        '<span class="idlab">Stand</span><div class="typ vier" role="group">' + STAND_NEU.map((k) => '<button type="button" data-estand="' + i + ":" + k + '" aria-pressed="' + (k === st || (k === "neu" && st === "idee")) + '">' + STATUS[k] + "</button>").join("") + "</div>" +
+        (delAsk === i ? '<p class="hint"><b>Wirklich löschen?</b> Das lässt sich nicht rückgängig machen.</p><div class="typ"><button type="button" class="idrot" data-edel="' + i + '">Ja, löschen</button><button type="button" data-enein="1">Abbrechen</button></div>'
+          : '<button type="button" class="idrot" data-eask="' + i + '">🗑️ Löschen</button>') +
+        "</details>";
+    }
+    return h + "</div></li>";
+  }
   function liste() {
     if (ideenFehler) return '<p class="hint">Die Liste konnte nicht geladen werden.</p>';
     if (!ideen) return '<p class="hint">Laden …</p>';
-    const l = ideen.slice().sort((p, q) => REIHE.indexOf(p.status) - REIHE.indexOf(q.status));
-    return '<ul class="idl">' + l.map((x) => '<li><span class="st ' + esc(REIHE.indexOf(x.status) >= 0 ? x.status : "neu") + '">' + esc(STATUS[x.status] || "Neu") + "</span><div><b>" + (ART[x.art] ? esc(ART[x.art].split(" ")[0]) + " " : "") + esc(x.titel) + "</b>" + (x.text ? '<span class="hint">' + esc(x.text) + "</span>" : "") + "</div></li>").join("") + "</ul>";
+    const admin = !!(TOKEN && !ABSENDER), alle = ideen.map((x, i) => ({ x: x, i: i }));
+    let h = '<label class="idfert"><input type="checkbox" id="iFert"' + (zeigFertig ? " checked" : "") + "> Erledigte zeigen</label>" + (lMsg ? '<p class="hint" role="status">' + esc(lMsg) + "</p>" : "");
+    ["fehler", "wunsch", "idee"].forEach((g) => {
+      const gr = alle.filter((o) => artVon(o.x) === g), fert = gr.filter((o) => o.x.status === "fertig").length, modus = sortG[g] || "stand";
+      const l = (zeigFertig ? gr : gr.filter((o) => o.x.status !== "fertig")).sort((p, q) => (modus === "stand" ? (RANG[p.x.status] === undefined ? 2 : RANG[p.x.status]) - (RANG[q.x.status] === undefined ? 2 : RANG[q.x.status]) || p.i - q.i : q.i - p.i));
+      h += '<details class="idg" data-g="' + g + '"' + (offen[g] ? " open" : "") + "><summary>" + GRT[g] + " (" + l.length + ")" + (!zeigFertig && fert ? ' <span class="hint">· ' + fert + " erledigt</span>" : "") + "</summary>";
+      if (l.length) h += '<div class="idsort" role="group" aria-label="Sortierung"><button type="button" data-isort="' + g + ':stand" aria-pressed="' + (modus === "stand") + '">nach Stand</button><button type="button" data-isort="' + g + ':neu" aria-pressed="' + (modus === "neu") + '">neueste zuerst</button></div>';
+      h += l.length ? '<ul class="idl">' + l.map((o) => eintrag(o, admin)).join("") + "</ul>" : '<p class="hint">Nichts offen.</p>';
+      h += "</details>";
+    });
+    return h;
   }
   function zeichnen() {
     let h = "";
@@ -2603,8 +2637,26 @@ document.addEventListener("toggle", (e) => {
     const ba = e.target.closest("[data-iart]"), bs = e.target.closest("[data-istand]");
     if (ba) { iArt = ba.dataset.iart; zeichnen(); return; }
     if (bs) { iStatus = bs.dataset.istand; zeichnen(); return; }
+    const sg = e.target.closest("[data-isort]"), ea = e.target.closest("[data-eart]"), es = e.target.closest("[data-estand]"), ed = e.target.closest("[data-edel]"), ek = e.target.closest("[data-eask]");
+    if (sg) { const q = sg.dataset.isort.split(":"); sortG[q[0]] = q[1]; zeichnen(); return; }
+    if (ea) { const q = ea.dataset.eart.split(":"); ideeAendern(+q[0], (l) => { l[+q[0]] = Object.assign({}, l[+q[0]], { art: q[1] }); return l; }, "✅ Art geändert."); return; }
+    if (es) { const q = es.dataset.estand.split(":"); ideeAendern(+q[0], (l) => { l[+q[0]] = Object.assign({}, l[+q[0]], { status: q[1] }); return l; }, "✅ Stand geändert."); return; }
+    if (ek) { delAsk = +ek.dataset.eask; edOpen = delAsk; zeichnen(); return; }
+    if (e.target.closest("[data-enein]")) { delAsk = -1; zeichnen(); return; }
+    if (ed) { const i = +ed.dataset.edel; ideeAendern(i, (l) => l.filter((_, k) => k !== i), "🗑️ Gelöscht."); return; }
     if (e.target.closest("#iSave")) ideeSpeichern();
   });
+  async function ideeAendern(i, fn, ok) {   // Eintrag ändern oder löschen (nur Papi); prüft, dass noch derselbe Eintrag an der Stelle steht
+    if (lBusy || !TOKEN || ABSENDER) return;
+    const titel = ideen && ideen[i] ? ideen[i].titel : null;
+    lBusy = true; lMsg = "Speichere …"; zeichnen();
+    try {
+      const j = await ghIdeen((l) => { if (!l[i] || l[i].titel !== titel) throw new Error("Die Liste hat sich inzwischen geändert. Bitte die Karte neu öffnen."); return fn(l); });
+      ideen = j.eintraege; lMsg = ok + " Alle sehen es in 1 bis 2 Minuten.";
+      if (ok.indexOf("Gelöscht") >= 0) edOpen = -1;
+    } catch (err) { lMsg = "⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt."); }
+    delAsk = -1; lBusy = false; zeichnen();
+  }
   async function ideeSpeichern() {
     if (iBusy || !TOKEN || ABSENDER) return;
     const titel = iTitel.trim(), txt = iText.trim();
@@ -2613,10 +2665,16 @@ document.addEventListener("toggle", (e) => {
     try {
       const j = await ghIdeen((l) => l.concat([Object.assign({ art: iArt, status: iStatus, titel: titel }, txt ? { text: txt } : {})]));
       ideen = j.eintraege; ideenFehler = false;
-      iTitel = ""; iText = ""; iMsg = "✅ Gespeichert. Alle sehen die Liste in 1 bis 2 Minuten.";
+      offen[iArt] = true; iTitel = ""; iText = ""; iMsg = "✅ Gespeichert. Alle sehen die Liste in 1 bis 2 Minuten.";
     } catch (err) { iMsg = "⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt."); }
     iBusy = false; zeichnen();
   }
+  kasten.addEventListener("toggle", (e) => {
+    const d = e.target;
+    if (d.classList && d.classList.contains("idg")) offen[d.dataset.g] = d.open;
+    else if (d.classList && d.classList.contains("ied")) { const i = +d.dataset.i; if (d.open) edOpen = i; else if (edOpen === i) { edOpen = -1; delAsk = -1; } }
+  }, true);
+  kasten.addEventListener("change", (e) => { if (e.target.id === "iFert") { zeigFertig = e.target.checked; zeichnen(); } });
   kasten.addEventListener("input", (e) => { if (e.target.id === "meldTxt") { text = e.target.value; aktualisieren(); } else if (e.target.id === "iTitel") iTitel = e.target.value; else if (e.target.id === "iText") iText = e.target.value; });
   karte.addEventListener("toggle", async () => {
     if (!karte.open) return;
