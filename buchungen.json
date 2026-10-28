@@ -7,7 +7,6 @@
       "dep": "2027-06-26",
       "selbst": false,
       "pers": 2,
-      "prov": true,
       "betrag": 1115
     }
   ],
@@ -83,6 +82,10 @@
     {
       "t": "2026-10-28T13:27",
       "text": "Bestätigt: Miriam, Sa 19.06.2027 bis Sa 26.06.2027, CHF 1115, mit Vorbehalt"
+    },
+    {
+      "t": "2026-10-28T13:28",
+      "text": "In Airbnb gesperrt (vorher mit Vorbehalt): Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
     }
   ]
 }
