@@ -839,7 +839,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.28.0.0";
+let VERSION = "2.28.0.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2735,7 +2735,7 @@ function festKarte(x) {
   let st = "";
   if (prov) st += "<span>" + (konf ? "⚠️ Konflikt mit Airbnb-Gast" : "Nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "")) + "</span>";
   st += bescheidStatus(x);
-  const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 Fest machen</button>' : "") + bescheidKnopf(x, false) +
+  const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
   return vkKarte(x, konf ? "rot" : (!x.bescheid ? "offen" : (prov ? "warn" : "")), vkChips(x), st, acts);
 }
@@ -2823,7 +2823,7 @@ function zahlZeile(x) {
 function provZeile(x) {
   if (!x.prov) return "";
   const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "🔓 mit Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
-  return '<br><span class="hint">' + txt + '</span> <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 Fest machen</button>';
+  return '<br><span class="hint">' + txt + '</span> <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 In Airbnb gesperrt</button>';
 }
 function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
 function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + WA_SVG + (label || "Dem Kind Bescheid geben") + "</a>"; }
@@ -2942,9 +2942,9 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   if (fest) {
     bestBusy = true; bestFehler = "";
     try {
-      const j = await ghAendern((l, jj) => { logEintrag(jj, "Fest gemacht: " + keyText(fest)); return l.map((y) => { if (bKey(y) !== fest) return y; const n = Object.assign({}, y); delete n.prov; return n; }); });
+      const j = await ghAendern((l, jj) => { logEintrag(jj, "In Airbnb gesperrt (vorher mit Vorbehalt): " + keyText(fest)); return l.map((y) => { if (bKey(y) !== fest) return y; const n = Object.assign({}, y); delete n.prov; return n; }); });
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
-      bestMsg = "🔒 Jetzt fest. Sperre den Termin in Airbnb, falls noch nicht geschehen.";
+      bestMsg = "🔒 Als in Airbnb gesperrt eingetragen. Der Preis bleibt wie berechnet. Sperre den Termin in Airbnb, falls noch nicht geschehen.";
     } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
     bestBusy = false; bestNeuZeichnen(); return;
   }
