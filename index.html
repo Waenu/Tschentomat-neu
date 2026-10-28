@@ -395,7 +395,7 @@
   #meldenKasten .idl li { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; padding: 8px 0; border-top: 1px solid var(--line); }
   #meldenKasten .idl li:first-child { border-top: 0; }
   #meldenKasten .st { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; border: 2px solid currentColor; border-radius: 99px; padding: 1px 8px; white-space: nowrap; margin-top: 2px; }
-  #meldenKasten .st.idee { color: var(--muted); } #meldenKasten .st.geplant { color: var(--marke); } #meldenKasten .st.arbeit { color: #C98A1B; } #meldenKasten .st.fertig { color: var(--accent); }
+  #meldenKasten .st.idee, #meldenKasten .st.neu { color: var(--muted); } #meldenKasten .st.geplant { color: var(--marke); } #meldenKasten .st.arbeit { color: #C98A1B; } #meldenKasten .st.fertig { color: var(--accent); }
   #meldenKasten .idl b { display: block; }
   .zk { position: relative; }
   .zi { display: inline-block; transform-origin: 50% 50%; }
@@ -610,6 +610,7 @@
   #calGrid.gmode .cal-d:disabled { pointer-events: none; }
   #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   #meldenKasten .idneu { display: grid; gap: 6px; border: 2px dashed var(--accent); border-radius: 12px; padding: 12px; margin: 8px 0 12px; }
+  #meldenKasten .idneu .typ.vier { grid-template-columns: repeat(2, 1fr); } #meldenKasten .idneu .idlab { font-weight: 700; margin-top: 2px; }
   #meldenKasten .idneu input, #meldenKasten .idneu select, #meldenKasten .idneu textarea { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   #calBlase .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; min-height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; justify-self: start; align-self: flex-start; margin-top: 6px; }
   #calBlase .gd .btn { min-height: 44px; padding: 4px 12px; }
@@ -848,7 +849,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.40.0.0";
+let VERSION = "2.41.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2537,9 +2538,10 @@ document.addEventListener("toggle", (e) => {
 (function () {
   const VORL = { Fehler: "Was wolltest du tun?\n\nWas ist passiert?\n\nWas hätte passieren sollen?\n", Wunsch: "Ich wünsche mir:\n\nDas würde helfen, weil:\n", Frage: "Meine Frage:\n" };
   const WA_PFAD = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.8-.1 1.3z"/></svg>';
-  const STATUS = { arbeit: "in Arbeit", geplant: "geplant", idee: "Idee", fertig: "erledigt" }, REIHE = ["arbeit", "geplant", "idee", "fertig"];
+  const STATUS = { arbeit: "in Arbeit", geplant: "geplant", neu: "Neu", idee: "Idee", fertig: "erledigt" }, REIHE = ["arbeit", "geplant", "neu", "idee", "fertig"];   // «idee» als Stand nur noch für ältere Einträge
+  const ART = { fehler: "🐞 Fehler", wunsch: "🙏 Wunsch", idee: "💡 Idee" }, STAND_NEU = ["neu", "geplant", "arbeit", "fertig"];
   let typ = "Fehler", text = VORL.Fehler, ideen = null, ideenFehler = false;
-  let iStatus = "idee", iTitel = "", iText = "", iMsg = "", iBusy = false;   // Papi: neuer Eintrag in «Geplant und Ideen»
+  let iArt = "fehler", iStatus = "neu", iTitel = "", iText = "", iMsg = "", iBusy = false;   // Papi: neuer Eintrag in «Geplant und Ideen»
   const kasten = document.getElementById("meldenKasten"), karte = document.getElementById("b-melden");
   function geraet() {
     const u = navigator.userAgent || "";
@@ -2565,7 +2567,7 @@ document.addEventListener("toggle", (e) => {
     if (ideenFehler) return '<p class="hint">Die Liste konnte nicht geladen werden.</p>';
     if (!ideen) return '<p class="hint">Laden …</p>';
     const l = ideen.slice().sort((p, q) => REIHE.indexOf(p.status) - REIHE.indexOf(q.status));
-    return '<ul class="idl">' + l.map((x) => '<li><span class="st ' + esc(REIHE.indexOf(x.status) >= 0 ? x.status : "idee") + '">' + esc(STATUS[x.status] || "Idee") + "</span><div><b>" + esc(x.titel) + "</b>" + (x.text ? '<span class="hint">' + esc(x.text) + "</span>" : "") + "</div></li>").join("") + "</ul>";
+    return '<ul class="idl">' + l.map((x) => '<li><span class="st ' + esc(REIHE.indexOf(x.status) >= 0 ? x.status : "neu") + '">' + esc(STATUS[x.status] || "Neu") + "</span><div><b>" + (ART[x.art] ? esc(ART[x.art].split(" ")[0]) + " " : "") + esc(x.titel) + "</b>" + (x.text ? '<span class="hint">' + esc(x.text) + "</span>" : "") + "</div></li>").join("") + "</ul>";
   }
   function zeichnen() {
     let h = "";
@@ -2578,7 +2580,8 @@ document.addEventListener("toggle", (e) => {
     }
     h += '<h3>🗒️ Geplant und Ideen</h3><p class="hint">Was schon läuft und was angedacht ist.</p>';
     if (TOKEN && !ABSENDER) {   // nur Papi: Wunsch, Idee oder Fehler direkt in die Liste schreiben
-      h += '<div class="idneu"><b>➕ Neuer Eintrag</b><label for="iStatus">Art</label><select id="iStatus">' + REIHE.map((k) => '<option value="' + k + '"' + (k === iStatus ? " selected" : "") + ">" + STATUS[k] + "</option>").join("") + '</select>' +
+      h += '<div class="idneu"><b>➕ Neuer Eintrag</b><span class="idlab">Art</span><div class="typ" role="group" aria-label="Art des Eintrags">' + Object.keys(ART).map((k) => '<button type="button" data-iart="' + k + '" aria-pressed="' + (k === iArt) + '">' + ART[k] + "</button>").join("") + '</div>' +
+        '<span class="idlab">Stand</span><div class="typ vier" role="group" aria-label="Stand des Eintrags">' + STAND_NEU.map((k) => '<button type="button" data-istand="' + k + '" aria-pressed="' + (k === iStatus) + '">' + STATUS[k] + "</button>").join("") + '</div>' +
         '<label for="iTitel">Titel</label><input id="iTitel" type="text" maxlength="80" autocomplete="off" placeholder="z. B. Wunsch: Sortierung nach Name">' +
         '<label for="iText">Beschreibung (freiwillig)</label><textarea id="iText" rows="3"></textarea>' +
         '<button type="button" class="btn main" id="iSave"' + (iBusy ? " disabled" : "") + '>💾 In die Liste speichern</button><p class="hint" id="iMsg" role="status">' + esc(iMsg) + "</p></div>";
@@ -2597,6 +2600,9 @@ document.addEventListener("toggle", (e) => {
       return;
     }
     if (e.target.closest("#meldSend") && document.getElementById("meldSend").getAttribute("aria-disabled") === "true") e.preventDefault();
+    const ba = e.target.closest("[data-iart]"), bs = e.target.closest("[data-istand]");
+    if (ba) { iArt = ba.dataset.iart; zeichnen(); return; }
+    if (bs) { iStatus = bs.dataset.istand; zeichnen(); return; }
     if (e.target.closest("#iSave")) ideeSpeichern();
   });
   async function ideeSpeichern() {
@@ -2605,14 +2611,13 @@ document.addEventListener("toggle", (e) => {
     if (!titel) { iMsg = "Bitte einen Titel eingeben."; zeichnen(); return; }
     iBusy = true; iMsg = "Speichere …"; zeichnen();
     try {
-      const j = await ghIdeen((l) => l.concat([Object.assign({ status: iStatus, titel: titel }, txt ? { text: txt } : {})]));
+      const j = await ghIdeen((l) => l.concat([Object.assign({ art: iArt, status: iStatus, titel: titel }, txt ? { text: txt } : {})]));
       ideen = j.eintraege; ideenFehler = false;
       iTitel = ""; iText = ""; iMsg = "✅ Gespeichert. Alle sehen die Liste in 1 bis 2 Minuten.";
     } catch (err) { iMsg = "⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt."); }
     iBusy = false; zeichnen();
   }
   kasten.addEventListener("input", (e) => { if (e.target.id === "meldTxt") { text = e.target.value; aktualisieren(); } else if (e.target.id === "iTitel") iTitel = e.target.value; else if (e.target.id === "iText") iText = e.target.value; });
-  kasten.addEventListener("change", (e) => { if (e.target.id === "iStatus") iStatus = e.target.value; });
   karte.addEventListener("toggle", async () => {
     if (!karte.open) return;
     zeichnen();

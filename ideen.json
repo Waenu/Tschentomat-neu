@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Liste «Geplant und Ideen» in der App. Status: arbeit, geplant, idee, fertig. Keine geheimen Zugänge hier eintragen.",
+  "_hinweis": "Liste «Geplant und Ideen» in der App. Art (optional): fehler, wunsch, idee. Stand: neu, geplant, arbeit, fertig (alt: idee). Keine geheimen Zugänge hier eintragen.",
   "eintraege": [
     {
       "status": "arbeit",
