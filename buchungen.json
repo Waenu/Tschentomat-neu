@@ -30,15 +30,6 @@
       "pers": 2,
       "betrag": 110,
       "bescheid": "2026-10-28T10:39"
-    },
-    {
-      "name": "Miriam",
-      "arr": "2027-06-19",
-      "dep": "2027-06-26",
-      "selbst": false,
-      "pers": 2,
-      "betrag": 625,
-      "bescheid": "2026-10-28T13:00"
     }
   ],
   "logbuch": [
@@ -89,6 +80,10 @@
     {
       "t": "2026-10-28T13:04",
       "text": "Fest gemacht: Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
+    },
+    {
+      "t": "2026-10-28T13:10",
+      "text": "Entfernt: Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
     }
   ]
 }
