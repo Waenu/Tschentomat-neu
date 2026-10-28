@@ -7,7 +7,8 @@
       "dep": "2027-06-26",
       "selbst": false,
       "pers": 2,
-      "betrag": 1115
+      "betrag": 1115,
+      "bescheid": "2026-10-28T13:28"
     }
   ],
   "logbuch": [
@@ -86,6 +87,10 @@
     {
       "t": "2026-10-28T13:28",
       "text": "In Airbnb gesperrt (vorher mit Vorbehalt): Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
+    },
+    {
+      "t": "2026-10-28T13:28",
+      "text": "Bescheid gegeben: Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
     }
   ]
 }
