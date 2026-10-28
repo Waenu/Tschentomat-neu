@@ -1,0 +1,35 @@
+name: Gästenamen aus Kalender
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gaeste-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Kalender lesen und gaeste.json abgleichen
+        env:
+          GAESTE_ICAL: ${{ secrets.GAESTE_ICAL }}
+        run: python3 scripts/gaeste_sync.py
+      - name: Änderung speichern
+        run: |
+          if [ -n "$(git status --porcelain gaeste.json)" ]; then
+            git config user.name "tschentomat-sync"
+            git config user.email "actions@users.noreply.github.com"
+            git add gaeste.json
+            git commit -m "Gästenamen aus Kalender (automatisch)"
+            git pull --rebase
+            git push
+          else
+            echo "Nichts zu speichern."
+          fi
