@@ -16,6 +16,14 @@
       "selbst": false,
       "pers": 2,
       "betrag": 405
+    },
+    {
+      "name": "Manuel",
+      "arr": "2026-11-25",
+      "dep": "2026-11-27",
+      "selbst": true,
+      "pers": 2,
+      "betrag": 110
     }
   ],
   "logbuch": [
@@ -142,6 +150,10 @@
     {
       "t": "2026-10-28T14:13",
       "text": "Bestätigt: Miriam, Mo 10.05.2027 bis Do 13.05.2027, CHF 405"
+    },
+    {
+      "t": "2026-10-28T15:02",
+      "text": "Bestätigt: Manuel, Mi 25.11.2026 bis Fr 27.11.2026, CHF 110"
     }
   ]
 }
