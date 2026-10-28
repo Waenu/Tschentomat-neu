@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.38.0.0", "datum": "2026-10-28", "titel": "Verwaltung nach Datum sortiert", "arten": ["Funktion"], "punkte": ["Die Aufenthalte unter «Mit Vorbehalt» und «Bestätigt, fest» sind nach Anreise sortiert, der früheste steht zuoberst"] },
     { "v": "2.37.0.0", "datum": "2026-10-28", "titel": "Grosser Zurück-Knopf zur Verwaltung entfällt", "arten": ["Funktion"], "punkte": ["Der Knopf «Zurück zur Verwaltung» im Kalender ist weg. Dafür gibt es das kleine Auge im Hinweis zu einem Aufenthalt"] },
     { "v": "2.36.0.0", "datum": "2026-10-28", "titel": "Auge im Kalender führt in die Verwaltung", "arten": ["Funktion","Text"], "punkte": ["Im Kalender-Hinweis zu einem Aufenthalt gibt es für Papi ein kleines Auge 👁️. Es springt in der Verwaltung zum gleichen Eintrag. Der Knopf «Aufenthalt entfernen» im Kalender ist wieder weg, entfernt wird in der Verwaltung", "Der blaue Knopf «Ansichten» heisst jetzt «Verwaltung»"] },
     { "v": "2.35.0.0", "datum": "2026-10-28", "titel": "Hin und her zwischen Ansichten und Kalender", "arten": ["Funktion"], "punkte": ["Springt Papi aus den Ansichten in den Kalender, erscheint der Knopf «Zurück zu Ansichten». Er führt an die gleiche Stelle zurück"] },
