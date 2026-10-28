@@ -58,6 +58,12 @@
       "status": "arbeit",
       "titel": "Automatischer Abgleich Name",
       "text": "Blockiert in Airbnb vom 5. bis 8. November. Wenn sichtbar in App bei Piml eintragen. Müsste danach Name eintragen."
+    },
+    {
+      "art": "wunsch",
+      "status": "neu",
+      "titel": "Bereich Chemine",
+      "text": "Darstellung"
     }
   ]
 }
