@@ -401,14 +401,14 @@
   .zi-rolle { animation: ziRolle 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
   .zi-stopp { animation: ziPuls 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
   .zuw .lk-dach { animation: ziKlick 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
-  .offw .lk-dach { transform-box: view-box; transform-origin: 17px 14px; transform: rotate(24deg); animation: ziAuf 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
+  .offw .lk-dach { transform-box: view-box; transform-origin: 7px 14px; transform: rotate(-60deg); animation: ziAuf 6s ease-in-out infinite; animation-delay: var(--d, 0s); }
   @keyframes ziKehr { 0%, 22%, 100% { transform: rotate(0); } 3% { transform: rotate(-26deg); } 7% { transform: rotate(24deg); } 11% { transform: rotate(-26deg); } 15% { transform: rotate(24deg); } 19% { transform: rotate(-8deg); } }
   @keyframes ziKippt { 0%, 40%, 100% { transform: rotate(0); } 8% { transform: rotate(-78deg); } 24% { transform: rotate(-78deg); } 30% { transform: rotate(6deg); } 35% { transform: rotate(-3deg); } }
   @keyframes ziTropf { 0%, 8% { opacity: 0; transform: translateY(0); } 10% { opacity: 1; } 22% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
   @keyframes ziTropf2 { 0%, 12% { opacity: 0; transform: translateY(0); } 14% { opacity: 1; } 26% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
   @keyframes ziHupf { 0%, 14%, 100% { transform: translateY(0); } 3% { transform: translateY(-3px); } 6% { transform: translateY(0); } 9% { transform: translateY(-3px); } 12% { transform: translateY(0); } }
   @keyframes ziKlick { 0%, 12%, 100% { transform: translateY(0); } 3% { transform: translateY(-2.5px); } 6% { transform: translateY(1px); } 9% { transform: translateY(0); } }
-  @keyframes ziAuf { 0%, 4%, 24%, 100% { transform: rotate(24deg); } 12%, 16% { transform: rotate(46deg); } }
+  @keyframes ziAuf { 0%, 4%, 24%, 100% { transform: rotate(-60deg); } 12%, 16% { transform: rotate(-78deg); } }
   @keyframes ziFlug { 0%, 18%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 3% { transform: translate(-2px, 2px) rotate(-8deg); } 10% { transform: translate(10px, -9px) rotate(6deg); opacity: 0; } 10.1% { transform: translate(-10px, 9px); opacity: 0; } 17% { transform: translate(0, 0); opacity: 1; } }
   @keyframes ziRolle { 0%, 16%, 100% { transform: scale(1, 1); } 4% { transform: scale(1, 0.55); } 9% { transform: scale(1, 1.25); } 13% { transform: scale(1, 0.92); } }
   @keyframes ziPuls { 0%, 18%, 100% { transform: scale(1); } 4% { transform: scale(1.3); } 8% { transform: scale(0.9); } 12% { transform: scale(1.2); } 16% { transform: scale(1); } }
@@ -808,7 +808,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.22.0.0";
+let VERSION = "2.22.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1533,7 +1533,7 @@ const RUN = '<svg class="rn" viewBox="0 0 18 20" aria-hidden="true" focusable="f
 let ZK_N = 0;
 function zkI(z) {
   const d = ' style="--d:' + ((ZK_N++ * 0.9) % 6).toFixed(1) + 's"';
-  const lock = (offen) => '<svg class="lk ' + (offen ? "offw" : "zuw") + '"' + d + ' viewBox="0 0 24 30" aria-hidden="true" focusable="false"><path class="lk-dach" d="' + (offen ? "M17 14 V9 a5 5 0 0 0 -10 0 V11" : "M7 14 V9 a5 5 0 0 1 10 0 V14") + '"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></svg>';
+  const lock = (offen) => '<svg class="lk ' + (offen ? "offw" : "zuw") + '"' + d + ' viewBox="0 0 24 30" aria-hidden="true" focusable="false"><path class="lk-dach" d="' + (offen ? "M7 14 V9 a5 5 0 0 1 10 0 V11" : "M7 14 V9 a5 5 0 0 1 10 0 V14") + '"></path><rect class="lk-body" x="3" y="13" width="18" height="15" rx="3.5"></rect><circle class="lk-loch" cx="12" cy="19.5" r="2.3"></circle><rect class="lk-loch" x="11" y="20" width="2" height="4.5" rx="1"></rect></svg>';
   if (z === "🔒") return lock(false);
   if (z === "🔓") return lock(true);
   if (z === "🧹") return '<span class="zi zi-besen"' + d + ">🧹</span>";
