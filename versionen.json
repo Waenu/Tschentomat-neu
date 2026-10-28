@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.23.3.0", "datum": "2026-10-28", "titel": "Kalender: Dauer direkt beim Hinweis", "punkte": ["Unter dem Kalender stehen jetzt Legende, Hinweisrahmen und direkt darunter die Dauer. Der Satz «Tippe einen belegten Tag an» erscheint nur noch, wenn der Hinweisrahmen zu ist"] },
     { "v": "2.23.2.0", "datum": "2026-10-28", "titel": "Cheminée immer zuunterst", "punkte": ["Die Cheminée-Anleitung steht jetzt immer ganz unten, auch wenn «Ich reserviere jetzt» geöffnet ist (vorher stand sie zwischen dem Knopf und dem Kalender)"] },
     { "v": "2.23.1.0", "datum": "2026-10-28", "titel": "Namen in den Balken passen sich der Schrift an", "punkte": ["Reicht bei mittlerer oder grosser Schrift der Platz im Balken nicht, bricht der Name auf zwei Zeilen um oder wird in der Grösse der kleinen Schrift gezeigt, nötigenfalls beides","Wechselt man die Schriftgrösse, zeichnet sich der Kalender neu"] },
     { "v": "2.23.0.1", "datum": "2026-10-28", "titel": "Nicht in Suchmaschinen", "punkte": ["Die App bittet Suchmaschinen, sie nicht aufzulisten"] },
