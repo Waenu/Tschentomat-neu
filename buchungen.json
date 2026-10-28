@@ -1,16 +1,6 @@
 {
   "_hinweis": "Bestätigte Aufenthalte der Familie (Vorschau 2.0.0.0, getrennt von der gültigen Version). Pro Eintrag: name, arr = Anreise, dep = Abreise (JJJJ-MM-TT), selbst = true wenn die Kinder selbst reinigen, pers = Personen mit Bett. Eintrag löschen = Storno.",
-  "buchungen": [
-    {
-      "name": "Miriam",
-      "arr": "2027-06-19",
-      "dep": "2027-06-26",
-      "selbst": false,
-      "pers": 2,
-      "betrag": 1115,
-      "bescheid": "2026-10-28T13:28"
-    }
-  ],
+  "buchungen": [],
   "logbuch": [
     {
       "t": "2026-10-27T11:05",
@@ -91,6 +81,10 @@
     {
       "t": "2026-10-28T13:28",
       "text": "Bescheid gegeben: Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
+    },
+    {
+      "t": "2026-10-28T13:36",
+      "text": "Entfernt: Miriam, Sa 19.06.2027 bis Sa 26.06.2027"
     }
   ]
 }
