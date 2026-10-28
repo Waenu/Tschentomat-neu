@@ -64,6 +64,12 @@
       "status": "neu",
       "titel": "Bereich Chemine",
       "text": "Darstellung"
+    },
+    {
+      "art": "fehler",
+      "status": "neu",
+      "titel": "Was ist gemeint",
+      "text": "Wenn ich von der Verwaltung zu Kalendereintrag gehe ist der erste Tag des Termins für einige Sekunden orange. Wozu?"
     }
   ]
 }
