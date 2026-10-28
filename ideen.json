@@ -76,6 +76,12 @@
       "status": "neu",
       "titel": "Ich reserviere jetzt",
       "text": "Diese Menu lässt sich nicht einklappen wenn man erneut drückt. Es wird zwar sauber nach oben gefahren damit man möglichst viel sieht vom Kalender. Aber wenn mann erneut drückt wird mich zugeklappt."
+    },
+    {
+      "art": "fehler",
+      "status": "neu",
+      "titel": "Menu bei Terminbalken",
+      "text": "Die neue Ansicht wenn man einen Termin im Kalender klickt muss anders sein. Nicht nur Symbole sondern auch Beschriftung. Die Bedienerführung stringent halten."
     }
   ]
 }
