@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.39.1.0", "datum": "2026-10-28", "titel": "Verwaltung: Offenes orange, Bestätigtes grün", "arten": ["Layout"], "punkte": ["Bestätigte feste Aufenthalte haben einen grünen Rahmen, offene Anfragen bleiben orange", "Fehlt bei einem bestätigten Aufenthalt noch der Bescheid, steht das in Orange im Eintrag"] },
     { "v": "2.39.0.0", "datum": "2026-10-28", "titel": "Offene Anfragen nach Datum sortiert", "arten": ["Funktion"], "punkte": ["Auch die offenen Anfragen in der Verwaltung sind nach Anreise sortiert, die früheste steht zuoberst"] },
     { "v": "2.38.0.0", "datum": "2026-10-28", "titel": "Verwaltung nach Datum sortiert", "arten": ["Funktion"], "punkte": ["Die Aufenthalte unter «Mit Vorbehalt» und «Bestätigt, fest» sind nach Anreise sortiert, der früheste steht zuoberst"] },
     { "v": "2.37.0.0", "datum": "2026-10-28", "titel": "Grosser Zurück-Knopf zur Verwaltung entfällt", "arten": ["Funktion"], "punkte": ["Der Knopf «Zurück zur Verwaltung» im Kalender ist weg. Dafür gibt es das kleine Auge im Hinweis zu einem Aufenthalt"] },

@@ -563,6 +563,8 @@
   #bestKasten .vk-sec .n { background: var(--accent); color: var(--accent-fg, #fff); border-radius: 999px; padding: 0 8px; font-size: 0.8em; }
   #bestKasten .vk { background: var(--surface); border: 2px solid var(--accent); border-radius: 14px; padding: 12px; margin: 6px 0; display: flex; flex-direction: column; gap: 8px; }
   #bestKasten .vk.spring { outline: 4px solid var(--missing-line); outline-offset: 2px; }
+  #bestKasten .vk.ok { border-color: var(--gruen); }
+  #bestKasten .bs-fehlt { color: var(--missing-line); }
   #bestKasten .vk.warn { border-color: #C9A227; }
   #bestKasten .vk.rot { border-color: #C62828; }
   #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -844,7 +846,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.39.0.0";
+let VERSION = "2.39.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2740,7 +2742,7 @@ function vkKarte(x, cls, chips, status, acts) {
   return '<div class="vk' + (cls ? " " + cls : "") + '" data-vk="' + esc(bKey(x)) + '"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><button type="button" class="vk-datum" data-zk="' + esc(x.arr) + '" aria-label="Im Kalender zeigen">📅 ' + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + " ›</button></div>" + chips + (status ? '<div class="vk-st hint">' + status + "</div>" : "") + '<div class="vk-acts">' + acts + "</div></div>";
 }
 function vkSek(titel, n) { return '<div class="vk-sec">' + titel + ' <span class="n">' + n + "</span></div>"; }
-function bescheidStatus(x) { const b = x.bescheid || ""; return "<span>" + (b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "✉️ Noch kein Bescheid gegeben") + "</span>"; }
+function bescheidStatus(x) { const b = x.bescheid || ""; return "<span>" + (b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "<b class=\"bs-fehlt\">✉️ Noch kein Bescheid gegeben</b>") + "</span>"; }
 function bescheidKnopf(x, abgelehnt) { const b = x.bescheid || ""; return bestWaLink(bestText(x, abgelehnt), bKey(x), b ? (abgelehnt ? "Nochmals Absage" : "Nochmals Bescheid") : (abgelehnt ? "Absage schicken" : "Bescheid geben")); }
 function festKarte(x) {
   const key = esc(bKey(x)), prov = !!x.prov, konf = prov && provKonflikt(x);
@@ -2749,7 +2751,7 @@ function festKarte(x) {
   st += bescheidStatus(x);
   const acts = (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
-  return vkKarte(x, konf ? "rot" : (!x.bescheid ? "offen" : (prov ? "warn" : "")), vkChips(x), st, acts);
+  return vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
 }
 function gaesteFormular() {
   const h = heuteKey(), starts = [];
@@ -2791,7 +2793,7 @@ function bestZeigen() {
     const bl = BUCH.filter((x) => x.dep >= h);
     s += '<div class="field"><label for="ansichtAls">👁️ Ansicht als</label><select id="ansichtAls"><option value="">Eltern</option>' + ABS.map((n) => '<option value="' + n + '"' + (n === ABSENDER ? " selected" : "") + ">" + n + "</option>").join("") + '</select></div><p class="hint">Zeigt dir die Startseite so, wie dieses Kind sie sieht. Nur auf diesem Handy. Die Verwaltung bleibt dabei ausgeblendet, denn die Kinder sehen sie nicht.</p>';
     if (ABSENDER) { k.innerHTML = s; return; }
-    s += '<p class="hint">🟧 Orange Rahmen: Hier musst du noch etwas tun (bestätigen, ablehnen oder Bescheid geben).</p>';
+    s += '<p class="hint">🟧 Orange Rahmen: offene Anfrage, hier musst du noch etwas tun (bestätigen oder ablehnen). 🟩 Grün: bestätigter, fester Aufenthalt; ein orangefarbenes «Noch kein Bescheid gegeben» heisst, dass du dem Kind noch Bescheid geben musst.</p>';
     const kf = bl.filter(provKonflikt);
     if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin mit Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe bei «Mit Vorbehalt» auf «In Airbnb gesperrt».</div>';
     const zl = BUCH.filter((x) => zahlOffen(x) && x.dep < h).sort((p, q) => (p.dep < q.dep ? -1 : 1));
