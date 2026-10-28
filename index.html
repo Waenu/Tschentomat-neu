@@ -844,7 +844,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.38.0.0";
+let VERSION = "2.39.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2797,7 +2797,7 @@ function bestZeigen() {
     const zl = BUCH.filter((x) => zahlOffen(x) && x.dep < h).sort((p, q) => (p.dep < q.dep ? -1 : 1));
     if (zl.length) s += vkSek("💳 Zahlungen offen", zl.length) + zl.map((x) => zahlZeile(x)).join("");
     s += vkSek("📨 Offene Anfragen", OFFEN.length);
-    s += OFFEN.length ? OFFEN.map((x) => vkKarte(x, "offen", vkChips(x, true), "",
+    s += OFFEN.length ? OFFEN.slice().sort((a, b) => (a.arr < b.arr ? -1 : a.arr > b.arr ? 1 : (a.dep < b.dep ? -1 : a.dep > b.dep ? 1 : 0))).map((x) => vkKarte(x, "offen", vkChips(x, true), "",
       '<button type="button" class="btn main" data-ja="' + esc(bKey(x)) + '">✅ Bestätigen</button><button type="button" class="btn" data-nein="' + esc(bKey(x)) + '">✖ Ablehnen</button>')).join("")
       : '<p class="hint">Keine offenen Anfragen. Tippe in einer Anfrage auf den Bestätigungs-Link, dann erscheint sie hier.</p>';
     const nachDatum = (a, b) => (a.arr < b.arr ? -1 : a.arr > b.arr ? 1 : (a.dep < b.dep ? -1 : a.dep > b.dep ? 1 : 0));   // früheste Anreise zuoberst
