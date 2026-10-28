@@ -624,8 +624,9 @@
   .rechd { margin: 6px 0; } .rechd > summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; gap: 6px; }
   .rechd .rechin { border-top: 1px solid var(--line); padding-top: 6px; } .rechd .rechin h4 { margin: 10px 0 2px; }
   .rechd table { width: 100%; border-collapse: collapse; } .rechd td { padding: 3px 0; vertical-align: top; } .rechd td:last-child { text-align: right; padding-left: 10px; }
-  #calBlase .ibar { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0 4px; }
-  #calBlase .ibtn, #calBlase .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; height: 36px; padding: 0 10px; margin: 0; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  #calBlase .ibar { display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin: 10px 0 4px; }
+  #calBlase .ibar .vk-auge { margin: 0 auto 0 0; align-self: center; }   /* Auge ganz links, die übrigen Icons rechtsbündig */
+  #calBlase .ibar .ibtn, #calBlase .ibar .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; display: inline-flex; flex: none; align-items: center; justify-content: center; }
   #calBlase .ibtn.on { background: var(--accent); color: var(--accent-fg); } #calBlase .ibtn.warn { border-color: #E0A800; }
   #calBlase .ipan { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
   .rechd > summary::after, .idg > summary::after, .ied > summary::after { content: "▾"; } .rechd[open] > summary::after, .idg[open] > summary::after, .ied[open] > summary::after { content: "▴"; }
@@ -866,7 +867,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.43.1.0";
+let VERSION = "2.43.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
