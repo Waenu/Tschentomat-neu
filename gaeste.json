@@ -1,12 +1,6 @@
 {
   "gaeste": [
     {
-      "arr": "2026-11-11",
-      "dep": "2026-11-15",
-      "name": "Marianne und Yolanda",
-      "typ": "fam"
-    },
-    {
       "arr": "2026-12-04",
       "name": "Andrea",
       "typ": "airbnb"
