@@ -30,6 +30,15 @@
       "pers": 2,
       "betrag": 110,
       "bescheid": "2026-10-28T10:39"
+    },
+    {
+      "name": "Miriam",
+      "arr": "2027-06-19",
+      "dep": "2027-06-26",
+      "selbst": false,
+      "pers": 2,
+      "prov": true,
+      "betrag": 625
     }
   ],
   "logbuch": [
@@ -68,6 +77,10 @@
     {
       "t": "2026-10-28T10:39",
       "text": "Bescheid gegeben: Jerome, Do 29.10.2026 bis Sa 31.10.2026"
+    },
+    {
+      "t": "2026-10-28T13:00",
+      "text": "Bestätigt: Miriam, Sa 19.06.2027 bis Sa 26.06.2027, CHF 625, mit Vorbehalt"
     }
   ]
 }
