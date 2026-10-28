@@ -3,14 +3,6 @@
   "buchungen": [
     {
       "name": "Miriam",
-      "arr": "2027-05-10",
-      "dep": "2027-05-13",
-      "selbst": false,
-      "pers": 2,
-      "betrag": 405
-    },
-    {
-      "name": "Miriam",
       "arr": "2026-11-27",
       "dep": "2026-11-30",
       "selbst": true,
@@ -158,6 +150,10 @@
     {
       "t": "2026-10-28T22:20",
       "text": "Entfernt: Manuel, Do 13.05.2027 bis So 16.05.2027"
+    },
+    {
+      "t": "2026-10-28T22:21",
+      "text": "Entfernt: Miriam, Mo 10.05.2027 bis Do 13.05.2027"
     }
   ]
 }
