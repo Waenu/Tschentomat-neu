@@ -841,7 +841,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.30.0.0";
+let VERSION = "2.31.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2737,7 +2737,7 @@ function festKarte(x) {
   let st = "";
   if (prov) st += "<span>" + (konf ? "⚠️ Konflikt mit Airbnb-Gast" : "Nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "")) + "</span>";
   st += bescheidStatus(x);
-  const acts = (prov ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
+  const acts = (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
   return vkKarte(x, konf ? "rot" : (!x.bescheid ? "offen" : (prov ? "warn" : "")), vkChips(x), st, acts);
 }
@@ -2822,10 +2822,12 @@ function zahlZeile(x) {
   const st2 = "<span>" + stand + "</span><span>" + wann + "</span>";
   return vkKarte(x, zahlFaellig(x) ? "warn" : "", '<div class="vk-chips"><span class="vk-chip">' + esc(chf(x.betrag)) + "</span></div>", st2, '<button type="button" class="btn main" data-bez="' + esc(key) + '">✅ Zahlung eingegangen</button>' + wa);
 }
+// Hochsaison: Sicherheit gibt es nur zum Preis für «verbindlich». Darum kein Knopf, der einen Termin mit Vorbehalt (Familienpreis) nachträglich sperrt
+const hochVorbehalt = (x) => P.hochNachtMin > 0 && hochNaechte(x.arr, x.dep) > 0;
 function provZeile(x) {
   if (!x.prov) return "";
   const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "🔓 mit Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
-  return '<br><span class="hint">' + txt + '</span> <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 In Airbnb gesperrt</button>';
+  return '<br><span class="hint">' + txt + '</span>' + (hochVorbehalt(x) ? "" : ' <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 In Airbnb gesperrt</button>');
 }
 function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
 function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + WA_SVG + (label || "Dem Kind Bescheid geben") + "</a>"; }
