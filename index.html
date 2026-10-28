@@ -140,8 +140,8 @@
   #animBtn[aria-pressed="false"] { opacity: .75; }
   #animBtn[aria-pressed="false"]::after { content: ""; position: absolute; left: 20%; right: 20%; top: 50%; border-top: 3px solid var(--fg); transform: rotate(-45deg); }
   /* Bewegung aus (Schalter oben oder «Bewegung reduzieren» im Handy): alle kleinen Animationen stehen still */
-  /* Wichtig, daher immer in Bewegung (auch bei «Bewegung aus»): Redner (.rd) und Ameisenpfade (.sym, .ant) */
-  .ruhig *:not(.rd):not(.rd *):not(.sym):not(.ant):not(.ant *), .ruhig *:not(.rd *):not(.sym)::before, .ruhig *:not(.rd *):not(.sym)::after { animation: none !important; }
+  /* Wichtig, daher immer in Bewegung (auch bei «Bewegung aus»): Redner (.rd), Ameisenpfade (.sym, .ant) und Staffel-Läufer (.laeufer, .rn) */
+  .ruhig *:not(.rd):not(.rd *):not(.sym):not(.ant):not(.ant *):not(.laeufer):not(.laeufer *):not(.rn):not(.rn *), .ruhig *:not(.rd *):not(.sym)::before, .ruhig *:not(.rd *):not(.sym)::after { animation: none !important; }
   #animBtn .glb { width: 28px; height: 28px; display: block; margin: auto; overflow: visible; }
   .glb-land { animation: glbDreh 8s linear infinite; }
   @keyframes glbDreh { to { transform: translateX(-32px); } }
@@ -437,7 +437,7 @@
   .laeufer { position: absolute; left: 0; top: 50%; margin-top: -9px; display: flex; gap: 3px; animation: ziLauf 3.6s linear infinite; }
   @keyframes ziLauf { from { left: -40px; } to { left: 100%; } }
   .exb .rn { width: 13px; height: 15px; margin-right: 2px; }
-  @media (prefers-reduced-motion: reduce) { .zi, .zi-tropf, .zuw .lk-dach, .offw .lk-dach, .rn path, .laeufer { animation: none !important; } .zi-tropf { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .zi, .zi-tropf, .zuw .lk-dach, .offw .lk-dach { animation: none !important; } .zi-tropf { display: none; } }
   /* Ameisenpfad um verlinkende Symbole */
   @property --ameise { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
   @keyframes ziAmeise { to { --ameise: 360deg; } }
@@ -832,7 +832,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.23.4.0";
+let VERSION = "2.24.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
