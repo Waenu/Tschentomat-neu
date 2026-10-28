@@ -21,6 +21,14 @@
       "pers": 4,
       "betrag": 165,
       "bescheid": "2026-10-27T23:04"
+    },
+    {
+      "name": "Jerome",
+      "arr": "2026-10-29",
+      "dep": "2026-10-31",
+      "selbst": true,
+      "pers": 2,
+      "betrag": 110
     }
   ],
   "logbuch": [
@@ -51,6 +59,10 @@
     {
       "t": "2026-10-27T23:04",
       "text": "Bescheid gegeben: Manuel, Mi 17.03.2027 bis Sa 20.03.2027"
+    },
+    {
+      "t": "2026-10-28T10:39",
+      "text": "Bestätigt: Jerome, Do 29.10.2026 bis Sa 31.10.2026, CHF 110"
     }
   ]
 }
