@@ -46,6 +46,12 @@
       "status": "neu",
       "titel": "Wunsch",
       "text": "Wunsch ist..."
+    },
+    {
+      "art": "idee",
+      "status": "geplant",
+      "titel": "Idee",
+      "text": "Geplante Ifee"
     }
   ]
 }
