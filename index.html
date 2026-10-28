@@ -407,6 +407,19 @@
   @keyframes ziTropf { 0%, 8% { opacity: 0; transform: translateY(0); } 10% { opacity: 1; } 22% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
   @keyframes ziTropf2 { 0%, 12% { opacity: 0; transform: translateY(0); } 14% { opacity: 1; } 26% { opacity: 0; transform: translateY(10px); } 100% { opacity: 0; } }
   @keyframes ziHupf { 0%, 14%, 100% { transform: translateY(0); } 3% { transform: translateY(-3px); } 6% { transform: translateY(0); } 9% { transform: translateY(-3px); } 12% { transform: translateY(0); } }
+  /* Kleine Symbole im Text (nur wenn «Bewegung» an ist): nur transform, darum bleibt die Zeilenhöhe gleich. Bewegung im ersten Zehntel eines 9-Sekunden-Takts, je Symbol versetzt, nur im Bild */
+  .e { display: inline-block; transform-origin: 50% 70%; animation: var(--m, e-hupf) 9s ease-in-out infinite; animation-delay: var(--d, 0s); animation-play-state: paused; }
+  .e.sicht { animation-play-state: running; }
+  @media (prefers-reduced-motion: reduce) { .e { animation: none; } }
+  @keyframes e-hupf { 0%, 12%, 100% { transform: none; } 3% { transform: translateY(-4px); } 6% { transform: translateY(0); } 8% { transform: translateY(-2px); } }
+  @keyframes e-besen { 0%, 12%, 100% { transform: none; } 2% { transform: rotate(-22deg); } 5% { transform: rotate(22deg); } 8% { transform: rotate(-14deg); } 10% { transform: rotate(8deg); } }
+  @keyframes e-wackel { 0%, 12%, 100% { transform: none; } 2% { transform: translateX(-2px); } 4% { transform: translateX(2px); } 6% { transform: translateX(-2px); } 8% { transform: translateX(1px); } }
+  @keyframes e-offen { 0%, 12%, 100% { transform: none; } 3% { transform: rotate(-18deg); } 7% { transform: rotate(12deg); } 10% { transform: rotate(-6deg); } }
+  @keyframes e-eimer { 0%, 12%, 100% { transform: none; } 4% { transform: rotate(-35deg); } 9% { transform: rotate(-35deg); } 11% { transform: rotate(0); } }
+  @keyframes e-puls { 0%, 12%, 100% { transform: none; } 3% { transform: scale(1.3); } 6% { transform: scale(.94); } 9% { transform: scale(1.12); } }
+  @keyframes e-dreh { 0%, 12%, 100% { transform: none; } 9% { transform: rotate(360deg); } }
+  @keyframes e-ski { 0%, 12%, 100% { transform: none; } 4% { transform: translateX(-5px) rotate(-12deg); } 9% { transform: translateX(5px) rotate(6deg); } }
+  @keyframes e-flug { 0%, 12%, 100% { transform: none; } 5% { transform: translate(5px, -4px) rotate(-10deg); } 10% { transform: translate(0, 0); } }
   @keyframes ziKlick { 0%, 12%, 100% { transform: translateY(0); } 3% { transform: translateY(-2.5px); } 6% { transform: translateY(1px); } 9% { transform: translateY(0); } }
   @keyframes ziAuf { 0%, 4%, 24%, 100% { transform: rotate(-60deg); } 12%, 16% { transform: rotate(-78deg); } }
   @keyframes ziFlug { 0%, 18%, 100% { transform: translate(0, 0) rotate(0); opacity: 1; } 3% { transform: translate(-2px, 2px) rotate(-8deg); } 10% { transform: translate(10px, -9px) rotate(6deg); opacity: 0; } 10.1% { transform: translate(-10px, 9px); opacity: 0; } 17% { transform: translate(0, 0); opacity: 1; } }
@@ -809,7 +822,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.22.3.0";
+let VERSION = "2.23.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3128,8 +3141,38 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen(), ladeGaeste()]).
       const ab = document.getElementById("animBtn");
       let ruhig = true;   // Standard: kleine Bewegungen aus
       try { const g = localStorage.getItem("tm2_ruhig"); if (g === "1") ruhig = true; else if (g === "0") ruhig = false; } catch (e) {}
+      // Kleine Symbole im Text: erst bei «Bewegung an» werden sie umhüllt und bewegen sich kurz (bei «aus» bleibt der Text unberührt)
+      const MOT = { "🧹": "e-besen", "🔒": "e-wackel", "🔓": "e-offen", "🪣": "e-eimer", "⚠️": "e-puls", "🧩": "e-dreh", "⛷️": "e-ski", "✉️": "e-flug", "💡": "e-puls", "✅": "e-puls", "📨": "e-flug", "✈️": "e-flug", "💰": "e-hupf", "💸": "e-flug" };
+      const EMO = /(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F)(?:\u200D(?:\p{Emoji_Presentation}|\p{Extended_Pictographic}\uFE0F?))*/gu;
+      const NICHT = "script, style, textarea, input, select, option, button, svg, .e, .zi, .zk, .bk, .cal-d, .rd, .bar, .sym, .an-auge, .an-bulb, .an-fire, .an-blatt, .an-unter, .ik-koffer, .ik-kreis, .ik-haken, .bigbtn, [data-noanim]";
+      let EN = 0, io = null, mo = null, plan = false;
+      const hueller = (wurzel) => {
+        const w = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, { acceptNode: (t) => { EMO.lastIndex = 0; const pe = t.parentElement; return pe && EMO.test(t.nodeValue) && !pe.closest(NICHT) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+        const liste = []; while (w.nextNode()) liste.push(w.currentNode);
+        liste.forEach((t) => {
+          const f = document.createDocumentFragment(); let i = 0, m; EMO.lastIndex = 0;
+          const v = t.nodeValue;
+          while ((m = EMO.exec(v))) {
+            if (m.index > i) f.appendChild(document.createTextNode(v.slice(i, m.index)));
+            const sp = document.createElement("span"); sp.className = "e"; sp.textContent = m[0];
+            sp.style.setProperty("--m", MOT[m[0]] || "e-hupf"); sp.style.setProperty("--d", ((EN++ * 1.7) % 9).toFixed(1) + "s");
+            f.appendChild(sp); if (io) io.observe(sp); else sp.classList.add("sicht"); i = m.index + m[0].length;
+          }
+          if (i < v.length) f.appendChild(document.createTextNode(v.slice(i)));
+          t.parentNode.replaceChild(f, t);
+        });
+      };
+      const spaeter = () => { if (plan) return; plan = true; requestAnimationFrame(() => { plan = false; if (mo) hueller(document.body); }); };
+      const symbole = (an) => {
+        if (an && !mo) {
+          io = "IntersectionObserver" in window ? new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle("sicht", e.isIntersecting))) : null;
+          mo = new MutationObserver((ml) => { if (ml.some((x) => [...x.addedNodes].some((n) => !(n.nodeType === 1 && n.classList.contains("e"))))) spaeter(); });
+          hueller(document.body); mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+        } else if (!an && mo) { mo.disconnect(); mo = null; }
+      };
       const anw = () => {
         document.documentElement.classList.toggle("ruhig", ruhig);
+        symbole(!ruhig);
         ab.setAttribute("aria-pressed", ruhig ? "false" : "true");
         ab.setAttribute("aria-label", ruhig ? "Bewegte Symbole einschalten" : "Bewegte Symbole ausschalten");
         ab.title = ruhig ? "Bewegung einschalten" : "Bewegung ausschalten";

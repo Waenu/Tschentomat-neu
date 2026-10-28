@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.23.0.0", "datum": "2026-10-28", "titel": "Kleine Symbole im Text bewegen sich", "punkte": ["Ist «Bewegung» an (Erde oben), bewegen sich auch die kleinen Symbole im Text kurz und versetzt, nur wenn sie im Bild sind","Besen wischt, Eimer kippt, Schloss wackelt, Warnung pulsiert, Puzzle dreht sich, Skifahrer rutscht, Brief fliegt, alle anderen hüpfen","Bei «Bewegung aus» (Standard) bleibt der Text unverändert"] },
     { "v": "2.22.3.0", "datum": "2026-10-28", "titel": "Ameisenpfad beim Läufer-Balken", "punkte": ["Der Läufer-Balken hat jetzt dieselbe gestrichelte, laufende Linie wie die Symbole, rundum dem runden Rand folgend (Kalender und Legende)"] },
     { "v": "2.22.2.0", "datum": "2026-10-28", "titel": "Eimer in der Legende, grössere Quadrate", "punkte": ["Legende: Der Eimer bei «die Eltern reinigen» ist wieder sichtbar (die Tropfen deckten ihn zu)","Die farbigen Quadrate bei «Monate und Zeiten» und «Lücken-Hinweis» sind grösser"] },
     { "v": "2.22.1.0", "datum": "2026-10-28", "titel": "Offenes Schloss neu", "punkte": ["Beim offenen Schloss ragt der Bügel jetzt weit zur Seite hinaus und ist klar als offen erkennbar"] },
