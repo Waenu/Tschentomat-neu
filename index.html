@@ -609,6 +609,8 @@
   #calBlase .gb { display: grid; gap: 8px; margin-top: 8px; }
   #calGrid.gmode .cal-d:disabled { pointer-events: none; }
   #calBlase .gd { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #meldenKasten .idneu { display: grid; gap: 6px; border: 2px dashed var(--accent); border-radius: 12px; padding: 12px; margin: 8px 0 12px; }
+  #meldenKasten .idneu input, #meldenKasten .idneu select, #meldenKasten .idneu textarea { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   #calBlase .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; min-height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; justify-self: start; align-self: flex-start; margin-top: 6px; }
   #calBlase .gd .btn { min-height: 44px; padding: 4px 12px; }
   .gtyp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
@@ -846,7 +848,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.39.2.0";
+let VERSION = "2.40.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2537,6 +2539,7 @@ document.addEventListener("toggle", (e) => {
   const WA_PFAD = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.2-.7-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.8-.1 1.3z"/></svg>';
   const STATUS = { arbeit: "in Arbeit", geplant: "geplant", idee: "Idee", fertig: "erledigt" }, REIHE = ["arbeit", "geplant", "idee", "fertig"];
   let typ = "Fehler", text = VORL.Fehler, ideen = null, ideenFehler = false;
+  let iStatus = "idee", iTitel = "", iText = "", iMsg = "", iBusy = false;   // Papi: neuer Eintrag in «Geplant und Ideen»
   const kasten = document.getElementById("meldenKasten"), karte = document.getElementById("b-melden");
   function geraet() {
     const u = navigator.userAgent || "";
@@ -2573,9 +2576,17 @@ document.addEventListener("toggle", (e) => {
         '<p class="hint">So sieht die Nachricht aus:</p><div class="mvor" id="meldVor" aria-live="polite"></div>' +
         '<a class="msend" id="meldSend" href="#" target="_blank" rel="noopener" aria-disabled="true">' + WA_PFAD + "<span>Per WhatsApp senden</span></a><p class=\"hint\" id=\"meldHinweis\" role=\"status\"></p>";
     }
-    h += '<h3>🗒️ Geplant und Ideen</h3><p class="hint">Was schon läuft und was angedacht ist.</p>' + liste();
+    h += '<h3>🗒️ Geplant und Ideen</h3><p class="hint">Was schon läuft und was angedacht ist.</p>';
+    if (TOKEN && !ABSENDER) {   // nur Papi: Wunsch, Idee oder Fehler direkt in die Liste schreiben
+      h += '<div class="idneu"><b>➕ Neuer Eintrag</b><label for="iStatus">Art</label><select id="iStatus">' + REIHE.map((k) => '<option value="' + k + '"' + (k === iStatus ? " selected" : "") + ">" + STATUS[k] + "</option>").join("") + '</select>' +
+        '<label for="iTitel">Titel</label><input id="iTitel" type="text" maxlength="80" autocomplete="off" placeholder="z. B. Wunsch: Sortierung nach Name">' +
+        '<label for="iText">Beschreibung (freiwillig)</label><textarea id="iText" rows="3"></textarea>' +
+        '<button type="button" class="btn main" id="iSave"' + (iBusy ? " disabled" : "") + '>💾 In die Liste speichern</button><p class="hint" id="iMsg" role="status">' + esc(iMsg) + "</p></div>";
+    }
+    h += liste();
     kasten.innerHTML = h;
     const t = document.getElementById("meldTxt"); if (t) { t.value = text; aktualisieren(); }
+    const it = document.getElementById("iTitel"); if (it) { it.value = iTitel; document.getElementById("iText").value = iText; }
   }
   kasten.addEventListener("click", (e) => {
     const b = e.target.closest("[data-mtyp]");
@@ -2586,8 +2597,22 @@ document.addEventListener("toggle", (e) => {
       return;
     }
     if (e.target.closest("#meldSend") && document.getElementById("meldSend").getAttribute("aria-disabled") === "true") e.preventDefault();
+    if (e.target.closest("#iSave")) ideeSpeichern();
   });
-  kasten.addEventListener("input", (e) => { if (e.target.id === "meldTxt") { text = e.target.value; aktualisieren(); } });
+  async function ideeSpeichern() {
+    if (iBusy || !TOKEN || ABSENDER) return;
+    const titel = iTitel.trim(), txt = iText.trim();
+    if (!titel) { iMsg = "Bitte einen Titel eingeben."; zeichnen(); return; }
+    iBusy = true; iMsg = "Speichere …"; zeichnen();
+    try {
+      const j = await ghIdeen((l) => l.concat([Object.assign({ status: iStatus, titel: titel }, txt ? { text: txt } : {})]));
+      ideen = j.eintraege; ideenFehler = false;
+      iTitel = ""; iText = ""; iMsg = "✅ Gespeichert. Alle sehen die Liste in 1 bis 2 Minuten.";
+    } catch (err) { iMsg = "⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt."); }
+    iBusy = false; zeichnen();
+  }
+  kasten.addEventListener("input", (e) => { if (e.target.id === "meldTxt") { text = e.target.value; aktualisieren(); } else if (e.target.id === "iTitel") iTitel = e.target.value; else if (e.target.id === "iText") iText = e.target.value; });
+  kasten.addEventListener("change", (e) => { if (e.target.id === "iStatus") iStatus = e.target.value; });
   karte.addEventListener("toggle", async () => {
     if (!karte.open) return;
     zeichnen();
@@ -2689,6 +2714,26 @@ async function ghGaeste(fn) {
     const body = { message: "Gästenamen aktualisiert (App)", content: b64(JSON.stringify({ gaeste: j.gaeste }, null, 2) + "\n"), branch: "main" };
     if (sha) body.sha = sha;
     const r = await fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, kopf), body: JSON.stringify(body) });
+    if (r.ok) return j;
+    if ((r.status === 409 || r.status === 422) && versuch === 0) continue;
+    if (r.status === 401 || r.status === 403) throw new Error("Das Token darf in " + GH_REPO + " nicht schreiben.");
+    throw new Error("Speichern fehlgeschlagen (Fehler " + r.status + ").");
+  }
+  throw new Error("Speichern fehlgeschlagen.");
+}
+async function ghIdeen(fn) {   // Liste «Geplant und Ideen» (ideen.json) ändern, nur Papi mit Token
+  const url = "https://api.github.com/repos/" + GH_REPO + "/contents/ideen.json";
+  const kopf = { Authorization: "Bearer " + TOKEN, Accept: "application/vnd.github+json" };
+  for (let versuch = 0; versuch < 2; versuch++) {
+    const g = await fetch(url + "?ref=main&t=" + Date.now(), { headers: kopf, cache: "no-store" });
+    if (g.status === 401 || g.status === 403) throw new Error("Das Token wird nicht akzeptiert. Es ist ungültig oder abgelaufen.");
+    if (!g.ok) throw new Error("GitHub antwortet mit Fehler " + g.status + ".");
+    const d = await g.json();
+    const j = JSON.parse(unb64(d.content));
+    if (!Array.isArray(j.eintraege)) j.eintraege = [];
+    j.eintraege = fn(j.eintraege);
+    const r = await fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, kopf),
+      body: JSON.stringify({ message: "Ideenliste aktualisiert (App)", content: b64(JSON.stringify(j, null, 2) + "\n"), sha: d.sha, branch: "main" }) });
     if (r.ok) return j;
     if ((r.status === 409 || r.status === 422) && versuch === 0) continue;
     if (r.status === 401 || r.status === 403) throw new Error("Das Token darf in " + GH_REPO + " nicht schreiben.");
