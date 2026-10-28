@@ -28,7 +28,8 @@
       "dep": "2026-10-31",
       "selbst": true,
       "pers": 2,
-      "betrag": 110
+      "betrag": 110,
+      "bescheid": "2026-10-28T10:39"
     }
   ],
   "logbuch": [
@@ -63,6 +64,10 @@
     {
       "t": "2026-10-28T10:39",
       "text": "Bestätigt: Jerome, Do 29.10.2026 bis Sa 31.10.2026, CHF 110"
+    },
+    {
+      "t": "2026-10-28T10:39",
+      "text": "Bescheid gegeben: Jerome, Do 29.10.2026 bis Sa 31.10.2026"
     }
   ]
 }
