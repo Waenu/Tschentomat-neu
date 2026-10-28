@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.23.2.0", "datum": "2026-10-28", "titel": "Cheminée immer zuunterst", "punkte": ["Die Cheminée-Anleitung steht jetzt immer ganz unten, auch wenn «Ich reserviere jetzt» geöffnet ist (vorher stand sie zwischen dem Knopf und dem Kalender)"] },
     { "v": "2.23.1.0", "datum": "2026-10-28", "titel": "Namen in den Balken passen sich der Schrift an", "punkte": ["Reicht bei mittlerer oder grosser Schrift der Platz im Balken nicht, bricht der Name auf zwei Zeilen um oder wird in der Grösse der kleinen Schrift gezeigt, nötigenfalls beides","Wechselt man die Schriftgrösse, zeichnet sich der Kalender neu"] },
     { "v": "2.23.0.1", "datum": "2026-10-28", "titel": "Nicht in Suchmaschinen", "punkte": ["Die App bittet Suchmaschinen, sie nicht aufzulisten"] },
     { "v": "2.23.0.0", "datum": "2026-10-28", "titel": "Kleine Symbole im Text bewegen sich", "punkte": ["Ist «Bewegung» an (Erde oben), bewegen sich auch die kleinen Symbole im Text kurz und versetzt, nur wenn sie im Bild sind","Besen wischt, Eimer kippt, Schloss wackelt, Warnung pulsiert, Puzzle dreht sich, Skifahrer rutscht, Brief fliegt, alle anderen hüpfen","Bei «Bewegung aus» (Standard) bleibt der Text unverändert"] },
