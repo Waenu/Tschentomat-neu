@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
-<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TSCHENT-O-MAT Vorschau 2.0.0.0</title>
 <meta name="theme-color" content="#1F5D4D">
@@ -627,6 +626,10 @@
   .zk { display: inline-flex; align-items: center; justify-content: center; background: var(--chip); color: var(--chip-fg); border-radius: 6px; padding: 0 3px; margin-right: 3px; height: 22px; min-width: 24px; line-height: 1; font-size: .92rem; font-weight: 400; vertical-align: top; }
   .bk .zk { margin-right: 0; flex: none; }
   .bkn { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  /* Reicht der Platz im Balken nicht (grosse Schrift): zuerst Umbruch auf zwei Zeilen, sonst Schrift der kleinen Stufe, sonst beides */
+  .bkn.fk { font-size: calc(0.8rem * 0.92 / var(--fs)); }
+  .bkn.zw { white-space: normal; line-height: 1.05; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-overflow: clip; }
+  .bkn.zw.bg { overflow-wrap: anywhere; }
   .exb .zk { height: 18px; min-width: 20px; font-size: .75rem; }
   .bk-leg .zk { margin: 0; }
   .lk { width: 14px; height: 17px; display: block; }
@@ -823,7 +826,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.23.0.1";
+let VERSION = "2.23.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1662,6 +1665,17 @@ async function ladeGaeste() {
     try { const c = localStorage.getItem("tm2_gaeste"); if (c) gaesteAn(JSON.parse(c)); } catch (e2) {}
   }
 }
+function balkenPassen() {
+  const pass = (s) => s.scrollWidth <= s.clientWidth + 1 && s.scrollHeight <= s.clientHeight + 1 && s.clientHeight <= 28;
+  document.querySelectorAll("#calGrid .bkn").forEach((s) => {
+    s.classList.remove("fk", "zw");
+    if (pass(s)) return;
+    s.classList.add("zw"); if (pass(s)) return;      // gleiche Schrift, zwei Zeilen
+    s.classList.remove("zw"); s.classList.add("fk"); if (pass(s)) return;   // Schrift der kleinen Stufe, eine Zeile
+    s.classList.add("zw"); if (pass(s)) return;      // beides
+    s.classList.add("bg");                          // geht sonst nicht: kleine Schrift, zwei Zeilen, langes Wort darf umbrechen, am Ende Punkte
+  });
+}
 function zeichneBalken() {
   const g = document.getElementById("calGrid");
   g.querySelectorAll(".bk").forEach((e) => e.remove());
@@ -1695,7 +1709,7 @@ function zeichneBalken() {
         if (a >= 30) f = true;
         return (f ? zk(FAM_SYM) : "") + zk(schloss) + (r ? zk(rz) : "") + (n ? '<span class="bkn">' + esc(text) + "</span>" : "");
       };
-      if (klasse === "air") { mk("air", links, breite, breite >= 26 ? zk(rz) + (breite >= 60 ? esc(text) : "") : ""); return; }
+      if (klasse === "air") { mk("air", links, breite, breite >= 26 ? zk(rz) + (breite >= 60 ? '<span class="bkn">' + esc(text) + "</span>" : "") : ""); return; }
       if (klasse === "sw") { mk("sw", links, breite, ANT + (breite >= 34 ? LAEUFER : "")); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
       if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
@@ -1719,6 +1733,7 @@ function zeichneBalken() {
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
   gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.name, null, TYP_SYM[x.typ] || TYP_SYM.airbnb));
   BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, b.sb ? "🧹" : "🪣"));
+  balkenPassen();
 }
 function renderKalender() {
   const heute = heuteKey();
@@ -3124,6 +3139,7 @@ Promise.all([ladeEinstellungen(), ladeBelegt(), ladeBuchungen(), ladeGaeste()]).
       document.documentElement.setAttribute("data-fs", STUFEN[stufe][0]);
       fb.querySelectorAll("span").forEach((sp, i) => sp.classList.toggle("on", i === stufe));
       fb.title = "Schrift: " + STUFEN[stufe][0];
+      try { zeichneBalken(); } catch (e) {}
     };
     wende();
     fb.addEventListener("click", () => {
