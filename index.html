@@ -520,7 +520,7 @@
   .zei.menue { background: var(--accent); color: var(--accent-fg); border-radius: 999px; }
   .sym { line-height: 1.15; }
   .split-h { padding-left: 14px; }
-  #zurueck, #zuAns { position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: #9A7400; color: #FFFFFF; border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+  #zurueck { position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: #9A7400; color: #FFFFFF; border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
   .bar .val { font-family: var(--display); font-weight: 700; font-size: calc(1.9rem / var(--fs)); line-height: 1; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .bar.err { background: var(--error-bg); color: var(--error-fg); }
   .bar.err.wahl { background: var(--missing-bg); color: var(--fg); box-shadow: inset 0 4px 0 var(--missing-line); }   /* «Bitte wählen»: nur eine Erinnerung, daher orange wie die Felder «– wählen –» */
@@ -832,7 +832,6 @@
 
 <button type="button" id="hilfeKnopf" hidden aria-pressed="true" aria-label="Kalender-Hilfe ein- oder ausschalten">?</button>
 <button type="button" id="zurueck" hidden>↩ zurück</button>
-<button type="button" id="zuAns" hidden>👁️ Zurück zur Verwaltung</button>
 <button type="button" id="nachOben" hidden aria-label="Nach oben zum Menü">↑ Menü</button>
 <div class="bar" id="bar" role="status"><div class="in"><span class="lab" id="barLab"></span><span class="val" id="barVal"></span></div></div>
 
@@ -845,7 +844,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.36.0.0";
+let VERSION = "2.37.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1467,7 +1466,6 @@ function begriffeFuellen() {
 }
 // Sprung zu Erklärungen unter «Glossar», mit Zurück-Knopf
 let ZURUECK = null;
-let ZUANS = null;   // Scrollstand in den Ansichten, solange man von dort in den Kalender gesprungen ist
 function setHilfe(an) {
   const h = document.getElementById("hilfe"), b = document.getElementById("btnHilfe");
   h.hidden = !an; b.setAttribute("aria-expanded", an ? "true" : "false"); b.classList.toggle("on", an);
@@ -1475,7 +1473,6 @@ function setHilfe(an) {
 // Es ist immer nur eines offen: Hilfe oder Rechner (die Eingaben bleiben beim Umschalten erhalten)
 function setRechner(an) {
   document.getElementById("rechner").hidden = !an;
-  if (!an) { ZUANS = null; document.getElementById("zuAns").hidden = true; }   // «Zurück zu Ansichten» gilt nur, solange der Kalender offen ist
   document.body.classList.toggle("rechner-an", an);
   document.getElementById("btnReserv").classList.toggle("on", an);
 }
@@ -2902,10 +2899,8 @@ document.getElementById("bestKasten").addEventListener("change", (e) => {
 });
 // Von einem Eintrag in der Verwaltung zum Kalender springen: Monat öffnen, Anreisetag zeigen und kurz markieren
 function zumKalender(k) {
-  const yAns = window.scrollY;
   ZURUECK = null; document.getElementById("zurueck").hidden = true;
   setHilfe(false); hilfeZuklappen(); setChem(false); ansichtZu(); setRechner(true);
-  ZUANS = { y: yAns }; document.getElementById("zuAns").hidden = false;
   calY = +k.slice(0, 4); calM = +k.slice(5, 7) - 1; renderKalender();
   requestAnimationFrame(() => {
     const c = document.querySelector('#calGrid [data-k="' + k + '"]');
@@ -2916,19 +2911,12 @@ function zumKalender(k) {
     if (window._gastBlase) window._gastBlase(k);
   });
 }
-function zurueckZuAnsichten() {
-  const z = ZUANS || { y: 0 };
-  setRechner(false); setHilfe(false); setChem(false); zeigAns = true; bestZeigen();
-  requestAnimationFrame(() => window.scrollTo({ top: z.y, behavior: "auto" }));
-}
-document.getElementById("zuAns").addEventListener("click", zurueckZuAnsichten);
 window._zurVerwaltung = (key) => {   // Auge im Kalender-Hinweis (nur Papi): in die Verwaltung zum gleichen Aufenthalt springen
   if (!TOKEN || ABSENDER) return;
   ZURUECK = null; document.getElementById("zurueck").hidden = true;
   const yKal = window.scrollY;
   setHilfe(false); hilfeZuklappen(); setChem(false); setRechner(false);
   zeigAns = true; bestMsg = ""; bestZeigen();
-  ZUANS = null;
   requestAnimationFrame(() => {
     const k = document.getElementById("bestKasten"), c = [...k.querySelectorAll("[data-vk]")].find((el) => el.getAttribute("data-vk") === key);
     if (!c) { bestMsg = "Dieser Aufenthalt ist vorbei und steht nicht mehr in der Verwaltung."; bestZeigen(); k.scrollIntoView({ behavior: "auto", block: "start" }); return; }
