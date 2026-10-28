@@ -550,6 +550,9 @@
   .vh h3 { margin: 0 0 4px; font-size: 1.05rem; }
   .vh .d { font-weight: 400; opacity: .7; font-size: .85rem; }
   .vh ul { margin: 4px 0 0; padding-left: 20px; }
+  .vh .arten { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 4px; }
+  .vh .art { font-size: .72rem; font-weight: 700; padding: 1px 9px; border-radius: 999px; border: 1.5px solid currentColor; }
+  .art-neu { color: #2E9E5B; } .art-fun { color: #3B7DC4; } .art-feh { color: #E07B1A; } .art-lay { color: #8E63C9; } .art-txt { color: #8A9490; }
   .ov { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); overflow-y: auto; padding: 16px; box-sizing: border-box; }
   .ov[hidden] { display: none; }
   #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
@@ -836,7 +839,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.27.0.1";
+let VERSION = "2.28.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2587,6 +2590,12 @@ document.addEventListener("toggle", (e) => {
 // Versionshistorie (versionen.json, neueste zuoberst)
 (function () {
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const ART = { Neu: "neu", Funktion: "fun", Fehler: "feh", Layout: "lay", Text: "txt" };
+  const arten = (v) => {   // Marken: aus «arten», sonst aus der Versionsnummer (2.x.x.x: 4. Stelle Text, 3. Layout, 2. Funktion)
+    let l = Array.isArray(v.arten) ? v.arten : null;
+    if (!l) { const m = /^2\.(\d+)\.(\d+)\.(\d+)$/.exec(v.v || ""); if (m) l = [+m[3] > 0 ? "Text" : +m[2] > 0 ? "Layout" : "Funktion"]; }
+    return l && l.length ? '<div class="arten">' + l.filter((a) => ART[a]).map((a) => '<span class="art art-' + ART[a] + '">' + esc(a) + "</span>").join("") + "</div>" : "";
+  };
   const dat = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ""); return m ? m[3] + "." + m[2] + "." + m[1] : ""; };
   document.getElementById("btnVerHist").addEventListener("click", async () => {
     const ziel = document.getElementById("ovVerIn");
@@ -2596,8 +2605,8 @@ document.addEventListener("toggle", (e) => {
     try {
       const r = await fetch("versionen.json?v=" + Date.now(), { cache: "no-store" });
       const j = await r.json();
-      html = '<p class="hint"><b>Idee und Konzept: Wänu<br>Umsetzung: Claude KI</b></p><p class="hint">Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler.</p>' +
-        j.versionen.map((v) => '<div class="vh"><h3>' + esc(v.v) + ' <span class="d">' + esc(dat(v.datum)) + '</span> · ' + esc(v.titel) + '</h3><ul>' + v.punkte.map((p) => "<li>" + esc(p) + "</li>").join("") + "</ul></div>").join("");
+      html = '<p class="hint"><b>Idee und Konzept: Wänu<br>Umsetzung: Claude KI</b></p><p class="hint">Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Marken: Neu, Funktion, Fehler (behoben), Layout, Text.</p>' +
+        j.versionen.map((v) => '<div class="vh"><h3>' + esc(v.v) + ' <span class="d">' + esc(dat(v.datum)) + '</span> · ' + esc(v.titel) + '</h3>' + arten(v) + '<ul>' + v.punkte.map((p) => "<li>" + esc(p) + "</li>").join("") + "</ul></div>").join("");
     } catch (e) { html = '<p class="hint">Die Historie konnte nicht geladen werden.</p>'; }
     ziel.innerHTML = '<button type="button" class="ov-back" data-ov="ovVer">← Zurück</button><h2>Versionshistorie</h2>' + html;
   });
