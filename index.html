@@ -565,6 +565,8 @@
   #bestKasten .vk.rot { border-color: #C62828; }
   #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   #bestKasten .vk-name { font-weight: 700; font-size: 1.05em; }
+  #bestKasten .vk-datum { font: inherit; font-size: .9em; color: var(--accent); background: transparent; border: 0; padding: 6px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-align: right; }
+  .cal-d.spring { outline: 4px solid var(--missing-line); outline-offset: 2px; }
   #bestKasten .vk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   #bestKasten .vk-chip { background: rgba(127,127,127,0.18); border-radius: 999px; padding: 2px 10px; font-size: 0.85em; }
   #bestKasten .vk-chip.v { background: #FFF1C9; color: #5A4300; }
@@ -839,7 +841,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.28.0.1";
+let VERSION = "2.29.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2725,7 +2727,7 @@ function vkChips(x, anfrage) {
   return '<div class="vk-chips">' + c.join("") + "</div>";
 }
 function vkKarte(x, cls, chips, status, acts) {
-  return '<div class="vk' + (cls ? " " + cls : "") + '"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><span class="hint">' + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + "</span></div>" + chips + (status ? '<div class="vk-st hint">' + status + "</div>" : "") + '<div class="vk-acts">' + acts + "</div></div>";
+  return '<div class="vk' + (cls ? " " + cls : "") + '"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><button type="button" class="vk-datum" data-zk="' + esc(x.arr) + '" aria-label="Im Kalender zeigen">📅 ' + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + " ›</button></div>" + chips + (status ? '<div class="vk-st hint">' + status + "</div>" : "") + '<div class="vk-acts">' + acts + "</div></div>";
 }
 function vkSek(titel, n) { return '<div class="vk-sec">' + titel + ' <span class="n">' + n + "</span></div>"; }
 function bescheidStatus(x) { const b = x.bescheid || ""; return "<span>" + (b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "✉️ Noch kein Bescheid gegeben") + "</span>"; }
@@ -2881,7 +2883,23 @@ document.getElementById("bestKasten").addEventListener("change", (e) => {
     aufentZeigen(); render(); bestZeigen();
   }
 });
+// Von einem Eintrag in der Verwaltung zum Kalender springen: Monat öffnen, Anreisetag zeigen und kurz markieren
+function zumKalender(k) {
+  ZURUECK = null; document.getElementById("zurueck").hidden = true;
+  setHilfe(false); hilfeZuklappen(); setChem(false); ansichtZu(); setRechner(true);
+  calY = +k.slice(0, 4); calM = +k.slice(5, 7) - 1; renderKalender();
+  requestAnimationFrame(() => {
+    const c = document.querySelector('#calGrid [data-k="' + k + '"]');
+    document.getElementById("cal").scrollIntoView({ behavior: "auto", block: "start" });
+    if (!c) return;
+    c.classList.add("spring");
+    setTimeout(() => c.classList.remove("spring"), 3500);
+    if (window._gastBlase) window._gastBlase(k);
+  });
+}
 document.getElementById("bestKasten").addEventListener("click", async (e) => {
+  const zk = e.target.closest("[data-zk]");
+  if (zk) { zumKalender(zk.getAttribute("data-zk")); return; }
   const wa = e.target.closest("[data-bescheid]");
   if (wa) { bescheidVermerken(wa.getAttribute("data-bescheid")); return; }
   const er = e.target.closest("[data-erinnert]");
