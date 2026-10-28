@@ -297,7 +297,7 @@
   .cal-d.ruhe { background-color: var(--ruhe-bg); border-color: var(--ruhe-line); border-width: 2px; }
   .cal-d.in.ruhe { background-color: var(--note-bg); border-color: var(--accent); }
   .cal-d.sel.ruhe { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); }
-  .sw { display: inline-block; width: 14px; height: 14px; border-radius: 3px; border: 2px solid; vertical-align: -2px; margin-right: 6px; }
+  .sw { display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid; vertical-align: -5px; margin-right: 8px; }
   .sw-hoch { border-color: #C98A1B; background: var(--hoch-bg); }
   .sw-gap { border-color: var(--sperr-line); background: var(--sperr-bg); }
   .sw-occ { border-color: var(--line); background: repeating-linear-gradient(45deg, transparent 0 3px, var(--line) 3px 5px); }
@@ -808,7 +808,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.22.1.0";
+let VERSION = "2.22.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1537,7 +1537,7 @@ function zkI(z) {
   if (z === "🔒") return lock(false);
   if (z === "🔓") return lock(true);
   if (z === "🧹") return '<span class="zi zi-besen"' + d + ">🧹</span>";
-  if (z === "🪣") return '<span class="zi zi-eimer"' + d + '>🪣</span><i class="zi-tropf"' + d + '></i><i class="zi-tropf b"' + d + "></i>";
+  if (z === "🪣") return '<span class="zi zi-eimer"' + d + '>🪣</span><span class="zi-tropf"' + d + '></span><span class="zi-tropf b"' + d + "></span>";
   if (z === FAM_SYM) return '<span class="zi zi-fam"' + d + ">" + z + "</span>";
   if (z === "✈️") return '<span class="zi zi-flug"' + d + ">" + z + "</span>";
   if (z === "📜") return '<span class="zi zi-rolle"' + d + ">" + z + "</span>";

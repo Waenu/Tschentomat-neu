@@ -1,6 +1,7 @@
 {
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Keine geheimen Zugänge hier eintragen.",
   "versionen": [
+    { "v": "2.22.2.0", "datum": "2026-10-28", "titel": "Eimer in der Legende, grössere Quadrate", "punkte": ["Legende: Der Eimer bei «die Eltern reinigen» ist wieder sichtbar (die Tropfen deckten ihn zu)","Die farbigen Quadrate bei «Monate und Zeiten» und «Lücken-Hinweis» sind grösser"] },
     { "v": "2.22.1.0", "datum": "2026-10-28", "titel": "Offenes Schloss neu", "punkte": ["Beim offenen Schloss ragt der Bügel jetzt weit zur Seite hinaus und ist klar als offen erkennbar"] },
     { "v": "2.22.0.0", "datum": "2026-10-28", "titel": "Bewegung: Standard aus, Wichtiges läuft immer", "punkte": ["Die kleinen Bewegungen sind jetzt standardmässig aus; der Knopf oben zeigt eine sich drehende Erde, wenn sie an sind","Der Redner und die Ameisenpfade laufen immer, auch bei «Bewegung aus» und bei «Bewegung reduzieren» im Handy"] },
     { "v": "2.21.1.0", "datum": "2026-10-27", "titel": "Hinweisleiste unten in Orange", "punkte": ["Fehlt noch eine Wahl («Bitte wählen …»), ist die Leiste unten orange wie die Felder «– wählen –» statt rot. Echte Fehler bleiben rot"] },
