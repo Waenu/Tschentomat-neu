@@ -40,6 +40,12 @@
       "status": "fertig",
       "titel": "Im Kalender zurückblättern",
       "text": "Bis 12 Monate, ab Version 2.15.0.0."
+    },
+    {
+      "art": "wunsch",
+      "status": "neu",
+      "titel": "Wunsch",
+      "text": "Wunsch ist..."
     }
   ]
 }
