@@ -18,14 +18,6 @@
       "betrag": 405
     },
     {
-      "name": "Manuel",
-      "arr": "2026-11-25",
-      "dep": "2026-11-27",
-      "selbst": true,
-      "pers": 2,
-      "betrag": 110
-    },
-    {
       "name": "Miriam",
       "arr": "2026-11-27",
       "dep": "2026-11-30",
@@ -166,6 +158,10 @@
     {
       "t": "2026-10-28T15:07",
       "text": "Bestätigt: Miriam, Fr 27.11.2026 bis Mo 30.11.2026, CHF 165"
+    },
+    {
+      "t": "2026-10-28T15:08",
+      "text": "Entfernt: Manuel, Mi 25.11.2026 bis Fr 27.11.2026"
     }
   ]
 }
