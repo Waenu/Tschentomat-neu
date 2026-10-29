@@ -599,10 +599,10 @@
   #bestKasten .vk-acts .hint { grid-column: 1 / -1; }
   #bestKasten .einn-jahr { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 10px 0 6px; font-size: 1.15em; }
   #bestKasten .einn-jahr .btn { min-width: 48px; justify-content: center; }
-  #bestKasten .eintab { width: 100%; border-collapse: collapse; font-size: .9em; font-variant-numeric: tabular-nums; }
-  #bestKasten .eintab th { font-weight: 700; text-align: right; padding: 4px 3px; border-bottom: 2px solid var(--accent); }
-  #bestKasten .eintab td { padding: 5px 3px; text-align: right; border-bottom: 1px solid var(--line, rgba(128,128,128,.35)); }
-  #bestKasten .eintab td:first-child, #bestKasten .eintab th:first-child { text-align: left; padding-left: 0; }
+  #bestKasten .eintab { width: 100%; border-collapse: collapse; font-size: .84em; font-variant-numeric: tabular-nums; }
+  #bestKasten .eintab th { font-weight: 700; text-align: right; padding: 4px 0 4px 14px; border-bottom: 2px solid var(--accent); white-space: nowrap; }
+  #bestKasten .eintab td { padding: 5px 0 5px 14px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line, rgba(128,128,128,.35)); }
+  #bestKasten .eintab td:first-child, #bestKasten .eintab th:first-child { text-align: left; padding-left: 0; white-space: normal; }
   #bestKasten .eintab tr.sum td { border-top: 2px solid var(--accent); }
   #bestKasten .vk-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
   #bestKasten .vk-nav .btn { width: 100%; justify-content: center; border-style: dashed; font-weight: 500; }
@@ -654,7 +654,7 @@
   #calBlase .ar[aria-expanded="true"] { background: var(--note-bg); }
   #calBlase .ar + .ipan { margin: 6px 0 0; padding: 6px 12px; border: 0; border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--surface); font-size: .92rem; }
   #calBlase .ar-nur { margin: 14px 0 0; padding-top: 8px; border-top: 2px dashed var(--accent); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
-  #calBlase .ipan table { width: 100%; border-collapse: collapse; } #calBlase .ipan td { padding: 3px 0; vertical-align: top; } #calBlase .ipan td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; } #calBlase .ipan .rechtab td:last-child { white-space: normal; overflow-wrap: anywhere; } #calBlase .ipan .rechtab td:first-child { padding-right: 6px; }
+  #calBlase .ipan table { width: 100%; border-collapse: collapse; } #calBlase .ipan td { padding: 3px 0; vertical-align: top; } #calBlase .ipan td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; } #calBlase .ipan .rechtab td:last-child { white-space: normal; overflow-wrap: break-word; } #calBlase .ipan .rechtab td:first-child { padding-right: 6px; }
   #calBlase .ar-h { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); } #calBlase .ar-h:first-child { border-top: 0; }
   #calBlase .ar-hi { flex: none; width: 26px; text-align: center; font-size: 1.15rem; line-height: 1.3; } #calBlase .ar-h b { display: block; }
   #calBlase .ipan { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
@@ -905,7 +905,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.55.2.0";
+let VERSION = "2.55.2.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
