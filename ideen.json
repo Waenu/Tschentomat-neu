@@ -7,6 +7,11 @@
       "text": "Teile ein- und ausklappen."
     },
     {
+      "status": "idee",
+      "titel": "Belohnung für vermittelte Gäste",
+      "text": "Familienmitglied bringt einen Gast, der selbständig als «Extern» bucht. Nach Buchung und Zahlung gibt es eine Gutschrift für den Vermittler, die Preise bleiben unverändert. Offen: Höhe (fix oder Prozent), Verrechnung oder Auszahlung, Sichtbarkeit fürs Kind, Deckel, Feld «Vermittelt durch» (privat gespeichert)."
+    },
+    {
       "status": "geplant",
       "titel": "Kleine Symbole im Text bewegen",
       "text": "Alle Symbole, auch im Hilfetext, mit kurzer Bewegung, ohne dass sich die Zeilenhöhe ändert. Vorschau zuerst."
