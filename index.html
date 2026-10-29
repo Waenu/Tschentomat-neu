@@ -890,7 +890,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.49.3.0";
+let VERSION = "2.49.4.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1779,6 +1779,13 @@ function zeichneBalken(gr) {
     if (!tage.length) return;
     const zeilen = new Map();
     tage.forEach((k) => { const c = zell.get(k); const y = c.offsetTop; if (!zeilen.has(y)) zeilen.set(y, []); zeilen.get(y).push(k); });
+    // Beschriftung (BnB/Ext./Fam.) nur einmal pro Wochenumbruch: im längeren Stück; ein Stück am Monatsrand (Schwänzchen) nur, wenn der Name daneben ganz Platz hat
+    const zl = Array.from(zeilen.values()), bre = zl.map((r) => { const q0 = zell.get(r[0]), q1 = zell.get(r[r.length - 1]); return (q1.offsetLeft + (r[r.length - 1] === bis && bisMitte ? q1.offsetWidth / 2 : q1.offsetWidth)) - (q0.offsetLeft + (r[0] === von && vonMitte ? q0.offsetWidth / 2 : 0)); });
+    const labZ = new Set();
+    zl.forEach((r, i) => {
+      if (i > 0) { const j = bre[i] > bre[i - 1] ? i : i - 1; labZ.add(zl[j][0]); }
+    });
+    if (zl.length === 1) labZ.add(zl[0][0]);
     zeilen.forEach((arr) => {
       const c0 = zell.get(arr[0]), c1 = zell.get(arr[arr.length - 1]);
       const links = c0.offsetLeft + (arr[0] === von && vonMitte ? c0.offsetWidth / 2 : 0);
@@ -1813,7 +1820,7 @@ function zeichneBalken(gr) {
       if (klasse === "air") {   // Gastbalken: Ext. (Airbnb, Vertrag) oder Fam. als Beschriftung, Blockiert bleibt Symbol; Name hat Vorrang, bei wenig Platz entfällt die Beschriftung
         const lab = rz === "✈️" ? "BnB" : rz === "📜" ? "Ext." : rz === FAM_SYM ? "Fam." : "";
         const nm = breite >= 60 && !imBlass, nmBr = Math.ceil(7 * String(text).length) + 6;
-        const kopf = lab ? ((nm ? breite >= 72 : breite >= 40) ? '<b class="zk zl">' + lab + "</b>" : "") : (breite >= 26 ? zk(rz) : "");   // Beschriftung steht auf jedem Stück ganz vorne, der Name kürzt oder bricht um
+        const kopf = lab ? ((labZ.has(arr[0]) && (nm ? breite >= (zl.length === 1 && (von < ks[0] || bis > ks[ks.length - 1]) ? nmBr + 3 + 40 : 72) : breite >= 40)) ? '<b class="zk zl">' + lab + "</b>" : "") : (breite >= 26 ? zk(rz) : "");   // Beschriftung einmal pro Umbruch im längeren Stück, ganz vorne; der Name kürzt oder bricht um
         mk("air", links, breite, kopf + (nm ? '<span class="bkn">' + esc(text) + "</span>" : "")); return;
       }
       if (klasse === "sw") { mk("sw", links, breite, ANT + (breite >= 34 ? LAEUFER : "")); return; }
