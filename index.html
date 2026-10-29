@@ -890,7 +890,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.49.4.0";
+let VERSION = "2.49.5.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3102,7 +3102,7 @@ function rechnungHtml(r, bt) {
   zu();
   return h + (bt ? '<p class="hint">Bestätigt am ' + esc(fmtTag(bt.slice(0, 10))) + ", " + esc(bt.slice(11, 16)) + " Uhr.</p>" : "");
 }
-function rechDetails(r, bt) { return '<details class="rechd"><summary>🧾 Preisberechnung ansehen</summary><div class="rechin">' + rechnungHtml(r, bt) + "</div></details>"; }
+function rechDetails(r, bt) { return '<details class="rechd"><summary>🧾 Preisberechnung</summary><div class="rechin">' + rechnungHtml(r, bt) + "</div></details>"; }
 function vkKarte(x, cls, chips, status, acts) {
   return '<div class="vk' + (cls ? " " + cls : "") + '" data-vk="' + esc(bKey(x)) + '"><div class="vk-top"><span class="vk-name">' + esc(x.name) + '</span><button type="button" class="vk-datum" data-zk="' + esc(x.arr) + '" aria-label="Im Kalender zeigen">📅 ' + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + " ›</button></div>" + chips + (status ? '<div class="vk-st hint">' + status + "</div>" : "") + (typeof x.rechnung === "string" ? rechDetails(x.rechnung, x.bestaetigt) : "") + '<div class="vk-acts">' + acts + "</div></div>";
 }
@@ -3178,7 +3178,7 @@ function bestZeigen() {
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, xx.bescheid ? "" : "offen", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
-    s += '<details class="papi-hinweis"><summary>🔧 Nur für Papi: Versteckte Menüs</summary><ul>' +
+    s += '<details class="papi-hinweis"><summary>🔧 Versteckte Menüs</summary><ul>' +
       '<li><b>Zugriff (Token) und Buchhaltung:</b> fünfmal schnell auf die Versionszeile ganz unten tippen («Vorschau …»). Es erscheinen das Feld für das Token und der Buchhaltungs-Link, bis zum Neuladen.</li>' +
       '<li><b>Testmodus:</b> dreimal schnell links oben in den Kopf tippen (unsichtbare Stelle über dem Titel). Rote Leiste mit frei wählbarem «heute». Gleich wieder ausschalten: nochmals dreimal tippen oder «Echt».</li>' +
       '<li><b>Verwaltung:</b> der blaue Knopf «Verwaltung» erscheint nur mit eingerichtetem Token. Abgelehnte, Logbuch und Gäste klappst du unter «Nachschlagen» auf.</li>' +
