@@ -106,6 +106,12 @@
       "status": "geplant",
       "titel": "Freischaltung Version 2 und später Version 3",
       "text": "Version 2 ersetzt die Live-Version 1.10.5 nach der Testphase. Vorher Testdaten aufräumen (nur mit Okay) und den Kalender-Abgleich im Live-Repo einrichten. Später evtl. Version 3 zum Vereinfachen und Optimieren."
+    },
+    {
+      "art": "wunsch",
+      "status": "neu",
+      "titel": "Neues und Änderungen",
+      "text": "Welche Symbole in den Balken bleiben.\nDie Legende muss die blasse Fortsetzung erklären.\nDie Freischaltung von Version 2, das Aufräumen der Testdaten und die Version 3."
     }
   ]
 }
