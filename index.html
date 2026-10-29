@@ -869,7 +869,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.43.3.0";
+let VERSION = "2.44.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1985,6 +1985,46 @@ document.getElementById("btnChem").addEventListener("click", () => {
 document.getElementById("calPrev").addEventListener("click", () => { calM--; if (calM < 0) { calM = 11; calY--; } renderKalender(); });
 document.getElementById("calHeute").addEventListener("click", () => { initKalenderMonat(); renderKalender(); });
 document.getElementById("calNext").addEventListener("click", () => { calM++; if (calM > 11) { calM = 0; calY++; } renderKalender(); });
+// Wischen: nach links = nächster Monat, nach rechts = vorheriger Monat (die Pfeile bleiben)
+(function () {
+  const g = document.getElementById("calGrid"), KEY = "tm2_wischhinweis";
+  const ruhig = () => !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const lesen = () => { try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; } };
+  const merken = () => { try { localStorage.setItem(KEY, "1"); } catch (e) {} };
+  const gleiten = (px, von) => {   // Monat gleitet von der Seite herein (nur wenn Bewegung erlaubt)
+    if (ruhig() || !g.animate) return;
+    const el = g.parentElement; if (el) el.style.overflowX = "clip";
+    const a = g.animate([{ transform: "translateX(" + px + "px)", opacity: von }, { transform: "none", opacity: 1 }], { duration: 220, easing: "ease-out" });
+    a.onfinish = a.oncancel = () => { if (el) el.style.overflowX = ""; };
+  };
+  window._kalWisch = (dir) => {   // dir +1 = nächster Monat, -1 = vorheriger; false, wenn an der Grenze
+    const btn = document.getElementById(dir > 0 ? "calNext" : "calPrev");
+    if (!btn || btn.disabled) return false;
+    btn.click(); gleiten(dir > 0 ? 36 : -36, 0.25); merken(); return true;
+  };
+  let x0 = 0, y0 = 0, t0 = 0, an = false;
+  g.addEventListener("touchstart", (e) => { if (e.touches.length !== 1) { an = false; return; } an = true; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); }, { passive: true });
+  g.addEventListener("touchend", (e) => {
+    if (!an) return; an = false;
+    const t = e.changedTouches[0], dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Date.now() - t0 > 900 || Math.abs(dx) < 60 || Math.abs(dx) < 2 * Math.abs(dy)) return;
+    window._kalWisch(dx < 0 ? 1 : -1);
+  }, { passive: true });
+  g.addEventListener("touchcancel", () => { an = false; }, { passive: true });
+  // Einmaliger Wink: beim ersten Mal, wenn der Kalender im Bild ist, schiebt sich der Monat kurz nach links und federt zurück
+  try {
+    if (!lesen() && !ruhig() && "IntersectionObserver" in window && g.animate) {
+      const io = new IntersectionObserver((es) => {
+        if (!es.some((x) => x.isIntersecting) || g.offsetWidth === 0) return;
+        io.disconnect(); merken();
+        const el = g.parentElement; if (el) el.style.overflowX = "clip";
+        const a = g.animate([{ transform: "none" }, { transform: "translateX(-16px)", offset: 0.4 }, { transform: "none" }], { duration: 800, delay: 600, easing: "ease-in-out" });
+        a.onfinish = a.oncancel = () => { if (el) el.style.overflowX = ""; };
+      }, { threshold: 0.6 });
+      io.observe(g);
+    }
+  } catch (e) {}
+})();
 
 async function ladeBelegt() {
   const nimm = (j) => {
@@ -3283,7 +3323,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   let an = true, erst = false, zu = false;   // Hilfe ist bei jedem Öffnen der Seite an; nach «✕» bleibt die Startbox für den Rest des Besuchs zu
   try { if (localStorage.getItem("tm2_hilfe") === null) erst = true; } catch (e) {}
   const speichern = () => { try { localStorage.setItem("tm2_hilfe", an ? "1" : "0"); } catch (e) {} };
-  const START = "<b>💡 Hilfe ist an.</b> Tippe einen Tag an, dann erklärt er sich. Mit gestrichelten Symbolen wie " + symBtn("b-luecke", "🧩") + " springst du zur ausführlichen Erklärung. Mehr dazu unter «Benutzung» " + symBtn("b-benutzung", "📖") + ". Mit dem Knopf <span class='zei hilfe'>?</span> unten rechts schaltest du die Hilfe aus.";
+  const START = "<b>💡 Hilfe ist an.</b> Tippe einen Tag an, dann erklärt er sich. Zum Wechseln des Monats wischst du im Kalender nach links oder rechts. Mit gestrichelten Symbolen wie " + symBtn("b-luecke", "🧩") + " springst du zur ausführlichen Erklärung. Mehr dazu unter «Benutzung» " + symBtn("b-benutzung", "📖") + ". Mit dem Knopf <span class='zei hilfe'>?</span> unten rechts schaltest du die Hilfe aus.";
   const zeigen = (html, zelle, still) => {
     blase.innerHTML = '<div class="txt">' + html + '</div><button type="button" id="calBlaseZu" aria-label="Hilfe schliessen">✕</button>';
     blase.hidden = false;
