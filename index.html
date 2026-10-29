@@ -898,7 +898,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.52.1.0";
+let VERSION = "2.52.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1273,6 +1273,8 @@ function belegtMischen() {
   if (!BELEGT_AIR) return;
   const s = new Set(BELEGT_AIR);
   BUCH.forEach((b) => { if (b.prov) for (let k = b.arr; k < b.dep; k = addDays(k, 1)) s.add(k); });
+  // Gast mit eigenem Abreisetag: alle Nächte gelten als belegt, auch wenn der Airbnb-Kalender eine Lücke hat (z. B. geteilter Eintrag)
+  GAESTE.forEach((x) => { if (x.dep && BELEGT_AIR.has(x.arr)) for (let k = x.arr; k < x.dep; k = addDays(k, 1)) s.add(k); });
   BELEGT = s;
 }
 // Normale Zeit: kein Tag des Aufenthalts in Hochsaison, Spitzenzeit oder Eigene-Wäsche-Zeit
@@ -1762,6 +1764,7 @@ async function gaesteAufraeumen() {
 function gaesteAn(j) {
   if (!j || !Array.isArray(j.gaeste)) return false;
   GAESTE = j.gaeste.filter((x) => x && typeof x.name === "string" && x.name.trim() && DKEY.test(x.arr)).map((x) => ({ arr: x.arr, dep: DKEY.test(x.dep || "") && x.dep > x.arr ? x.dep : "", name: gastKurz(x.name), typ: typNorm(x.typ) }));
+  belegtMischen();
   return true;
 }
 async function ladeGaeste() {

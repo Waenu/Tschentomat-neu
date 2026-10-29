@@ -2,13 +2,14 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.52.1.0",
+      "v": "2.43.3.0 bis 2.52.2.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
         "Neu",
         "Funktion",
-        "Layout"
+        "Layout",
+        "Fehler"
       ],
       "punkte": [
         "Kalender: Monat wechseln durch Wischen und Schieben mit dem Finger. Termine über den Monatsrand laufen blass weiter, am Wochenumbruch enden die Balken gerade, die Balkenschrift ist überall klein.",
@@ -30,7 +31,8 @@
         "Korrekturen: Rechnung im Kalender-Kasten wird nicht mehr rechts abgeschnitten. Bei Buchungen mit Selbstreinigung steht der Hinweis «Eigene Wäsche möglich» nicht mehr.",
         "Staffel: Der Zeitraum heisst überall «Staffel-Zeit» (statt «Eigene Wäsche»). Der Tageshinweis erklärt: ohne Gäste selbst reinigen mit eigener Wäsche, mit Gästen reinigen die Eltern. An gebuchten Tagen erscheint er nicht mehr. In der Warnung steht «Normal» statt «Nein».",
         "Kalender: Tage, an denen zwischen zwei Belegungen weniger als die Mindestnächte frei bleiben, haben einen knallroten Rahmen («Buchung unmöglich», nicht wählbar, mit Eintrag in der Legende). Dort endet auch der offene Staffel-Balken. Wählst du den Abreisetag, zeigt die Box die Abreise (Nächte, Airbnb-Gast am selben Tag, Staffelende) statt der Tagesinfo.",
-        "Lücken: Die Familie kann auch sonntags anreisen. Beginnt eine Lücke an einem Sonntag, ist der Sonntag jetzt wählbar (wie der Montag, für die ganze Lücke mit Lückenpreis) und nicht mehr gesperrt."
+        "Lücken: Die Familie kann auch sonntags anreisen. Beginnt eine Lücke an einem Sonntag, ist der Sonntag jetzt wählbar (wie der Montag, für die ganze Lücke mit Lückenpreis) und nicht mehr gesperrt.",
+        "Fehler behoben: Hat der Airbnb-Kalender mitten in einem Gast-Aufenthalt eine Lücke (z. B. 17.1.2027 bei Janine Collins), galt diese Nacht als frei und wurde als «Buchung unmöglich» rot umrahmt. Nächte eines Gastes mit eigenem Abreisetag zählen jetzt als belegt."
       ]
     },
     {
