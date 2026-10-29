@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.57.0.1",
+      "v": "2.43.3.0 bis 2.57.1.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -46,7 +46,8 @@
         "Text bei Selbstreinigung: Der Hinweis «Hier steht CHF 0.– für die Reinigung. Dann teilt ihr die Reinigungskosten» klang, als werde 0 aufgeteilt. Jetzt steht: Die Endreinigung der Eltern kommt erst am Ende der Staffel, die letzte Reisegruppe bezahlt und teilt mit den anderen.",
         "Text: «Kommt jemand von den Geschwistern nach dir?» statt «von den Kindern».",
         "Staffel-Hinweis in «Wie möchtest du buchen?»: Vergleich der Reinigung (Normal CHF 240 gegenüber Staffel mit Anteil an der Endreinigung: allein, zu zweit, zu dritt).",
-        "Das Wort «kein» in der Frage zum normalen Bett ist dezenter markiert (kleiner, nur leicht gelb unterlegt)."
+        "Das Wort «kein» in der Frage zum normalen Bett ist dezenter markiert (kleiner, nur leicht gelb unterlegt).",
+        "Staffel-Zeit: Unter dem Total steht klein der Preis der anderen Art (bei Staffel «normal», bei Normal ohne Gäste «Staffel» samt Anteil an der Endreinigung). Der lange Vergleichstext im Hinweis ist weg."
       ]
     },
     {
