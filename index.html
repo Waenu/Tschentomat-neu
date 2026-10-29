@@ -898,7 +898,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.53.0.1";
+let VERSION = "2.54.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1676,7 +1676,7 @@ const typNorm = (t) => (t === "extern" || t === "block" || t === "fam" ? t : "ai
 const typKnoepfe3 = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Belegung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + { airbnb: "BnB", extern: "Ext.", fam: "Fam.", block: "🚫 Blockiert" }[k] + "</button>").join("") + "</div>";
 const typKnoepfe = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Buchung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + TYP_SYM[k] + " " + { airbnb: "Airbnb", extern: "Vertrag", fam: "Familie", block: "Blockiert" }[k] + "</button>").join("") + "</div>";
 const typWahl = (id) => { const b = document.querySelector("#" + id + " .typ.on"); return typNorm(b && b.getAttribute("data-typ")); };
-const gbSumme = () => { const o = document.getElementById("gbSum"); if (!o) return; const v = (id) => frZahl((document.getElementById(id) || {}).value), n = v("gbN"), r = v("gbR"), p = v("gbP"); o.textContent = n || r || p ? "Brutto " + frk(n + r) + (p ? ", Provision " + frk(p) + ", netto " + frk(n + r - p) : "") : ""; };
+const gbSumme = () => { const o = document.getElementById("gbSum"); if (!o) return; const v = (id) => frZahl((document.getElementById(id) || {}).value), n = v("gbN"), r = v("gbR"), p = v("gbP"); o.textContent = n || r || p ? "Nächte " + frk(Math.max(0, n + p - r)) + ", Reinigung " + frk(r) + (p ? ", Provision " + frk(p) : "") + ", brutto " + frk(n + p) + ", du erhältst " + frk(n) : ""; };
 document.addEventListener("input", (ev) => { if (ev.target.closest && ev.target.closest("#gbBetr")) gbSumme(); });
 document.addEventListener("click", (ev) => { const b = ev.target.closest(".gtyp .typ"); if (!b) return; b.parentNode.querySelectorAll(".typ").forEach((x) => x.classList.toggle("on", x === b)); });
 const gastEnde = (x) => (x.dep && x.dep > x.arr ? x.dep : belegtEnde(x.arr));   // Abreisetag des Gastes: eigene Abreise oder Ende der Belegung
@@ -1692,11 +1692,11 @@ let GFORM = null;   // Eingabe zu einem Namen im Kalender: {k, alt, arr, dep, na
 function gastFormularFuer(k) {
   if (!TOKEN || ABSENDER || !BELEGT_AIR || !BELEGT_AIR.has(k)) return "";
   const e = gastEintragFuer(k);
-  if (!(GFORM && GFORM.keep && GFORM.k === k)) { const q = e ? EINN[e.arr] : null; GFORM = { k: k, alt: e ? e.arr : "", arr: e ? e.arr : k, dep: e ? gastEnde(e) : belegtEnde(k), name: e ? e.name : "", typ: e ? e.typ : "airbnb", n: q && q.n ? String(q.n) : "", r: q && q.r ? String(q.r) : "", p: q && q.p ? String(q.p) : "", mode: "" }; const g = document.getElementById("calGrid"); if (g) g.classList.remove("gmode"); }
+  if (!(GFORM && GFORM.keep && GFORM.k === k)) { const q = e ? EINN[e.arr] : null; GFORM = { k: k, alt: e ? e.arr : "", arr: e ? e.arr : k, dep: e ? gastEnde(e) : belegtEnde(k), name: e ? e.name : "", typ: e ? e.typ : "airbnb", n: q && (q.n + q.r - q.p) > 0 ? String(Math.round((q.n + q.r - q.p) * 100) / 100) : "", r: q && q.r ? String(q.r) : "", p: q && q.p ? String(q.p) : "", mode: "" }; const g = document.getElementById("calGrid"); if (g) g.classList.remove("gmode"); }
   GFORM.keep = false;
   const f = GFORM, inp = (id, tx, v) => '<label class="gb-f"><span>' + tx + '</span><input id="' + id + '" type="text" inputmode="decimal" autocomplete="off" placeholder="CHF" value="' + esc(v) + '"' + (EINN_STATUS === "fehlt" ? " disabled" : "") + "></label>";
   return '<div class="gb"><b>👤 Belegung</b>' + typKnoepfe3("gbTyp", f.typ) + '<span class="hint">«Blockiert» nur wählen, wenn niemand im Chalet ist.</span><input id="gbName" type="text" maxlength="30" placeholder="z. B. Maria K." autocomplete="off" value="' + esc(f.name) + '">' +
-    '<div class="gb-b" id="gbBetr"><b>💰 Beträge (nur für dich)</b>' + inp("gbN", "Preis Nächte", f.n) + inp("gbR", "Preis Reinigung", f.r) + inp("gbP", "Provision (nur Airbnb)", f.p) + '<span class="hint" id="gbSum"></span>' +
+    '<div class="gb-b" id="gbBetr"><b>💰 Beträge (nur für dich)</b>' + inp("gbN", "Du erhältst (Total)", f.n) + inp("gbR", "davon Reinigung", f.r) + inp("gbP", "Provision (nur Airbnb)", f.p) + '<span class="hint" id="gbSum"></span>' +
     (EINN_STATUS === "fehlt" ? '<span class="hint">Der private Speicher «' + esc(PRIV_REPO) + '» ist noch nicht eingerichtet. Beträge lassen sich erst speichern, wenn er da ist.</span>' : "") + "</div>" +
     '<button type="button" class="btn main" data-gbs="1">💾 Speichern</button>' +
     (e ? '<button type="button" class="btn quiet" data-gbd="' + e.arr + '">🗑️ Name entfernen</button>' : "") + '<span class="hint" id="gbMsg"></span></div>';
@@ -1743,7 +1743,7 @@ document.addEventListener("click", async (ev) => {
     gaesteAn(j); try { localStorage.setItem("tm2_gaeste", JSON.stringify(j)); } catch (e2) {}
     let betrMsg = "";
     if (bs) {   // Beträge in den privaten Speicher (nur bei Ext. und Fam.; Provision nur bei Ext.)
-      const o = typ === "block" ? { n: 0, r: 0, p: 0 } : { n: frZahl(f.n), r: frZahl(f.r), p: typ === "airbnb" ? frZahl(f.p) : 0 };
+      const o = typ === "block" ? { n: 0, r: 0, p: 0 } : (() => { const t = frZahl(f.n), r0 = frZahl(f.r), p0 = typ === "airbnb" ? frZahl(f.p) : 0; return { n: Math.max(0, Math.round((t + p0 - r0) * 100) / 100), r: r0, p: p0 }; })();
       if (o.n || o.r || o.p || EINN[arr] || (alt && EINN[alt])) { try { await einnSpeichern(arr, alt, o); } catch (e3) { betrMsg = " ⚠️ Beträge nicht gespeichert: " + (e3 && e3.message ? e3.message : "Fehler"); } }
     }
     bestBusy = false; zeichneBalken(); bestZeigen(); if (bs) { GFORM.alt = arr; } else { GFORM = null; } say(bs ? "✅ Gespeichert. Alle sehen es in 1 bis 2 Minuten." + betrMsg : "Name entfernt.");
