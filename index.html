@@ -898,7 +898,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.52.2.0";
+let VERSION = "2.53.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2974,6 +2974,8 @@ document.getElementById("aufStatus").addEventListener("click", aufentWeg);
 const GH_REPO = "Waenu/Tschentomat-neu", GH_DATEI = "buchungen.json";
 let TOKEN = "";
 try { TOKEN = localStorage.getItem("tm2_token") || ""; } catch (e) {}
+// «Ansicht als» Kind (nur mit Zugriff von Papi): beim Start immer zurück zu Eltern
+if (TOKEN && ABSENDER) { ABSENDER = ""; try { localStorage.setItem("tm2_absender", ""); } catch (e) {} }
 function bestLink(name, arr, dep, selbst, pers, luecke, betrag, verb, snap) {
   return location.origin + location.pathname + "?b=" + [name, arr, dep, selbst ? 1 : 0, pers].concat(luecke ? ["L"] : []).concat(verb ? ["V"] : []).concat(betrag > 0 ? ["C" + Math.round(betrag)] : []).join("_") + (snap ? "&s=" + snap : "");
 }
@@ -3292,11 +3294,31 @@ async function bescheidVermerken(key) {
   } catch (err) { bestFehler = "Der Vermerk «Bescheid gegeben» konnte nicht gespeichert werden: " + (err && err.message ? err.message : "Fehler"); }
   bestZeigen();
 }
-document.getElementById("btnZurEltern").addEventListener("click", () => {
+function zurElternAnsicht() {
   ABSENDER = ""; try { localStorage.setItem("tm2_absender", ""); } catch (e2) {}
-  aufentZeigen(); render(); bestZeigen();
-  ladeBuchungen().then(() => { aufentZeigen(); render(); bestZeigen(); });   // frische Daten, ein Neuladen der Seite ist nicht nötig
-});
+  aufentZeigen(); render(); bestZeigen(); renderKalender();
+  ladeBuchungen().then(() => { aufentZeigen(); render(); bestZeigen(); renderKalender(); });   // frische Daten, ein Neuladen der Seite ist nicht nötig
+}
+document.getElementById("btnZurEltern").addEventListener("click", zurElternAnsicht);
+// Kindansicht läuft nach 2 Minuten ohne Bedienung von selbst ab (mit kurzer Meldung)
+const ANSICHT_TIMEOUT = 120000;
+let ansichtLetzte = Date.now();
+function ansichtPruefen() {
+  if (!(TOKEN && ABSENDER)) { ansichtLetzte = Date.now(); return; }
+  if (Date.now() - ansichtLetzte < ANSICHT_TIMEOUT) return;
+  const wer = ABSENDER;
+  zurElternAnsicht(); ansichtLetzte = Date.now();
+  const d = document.createElement("div");
+  d.setAttribute("role", "status");
+  d.style.cssText = "position:fixed;left:50%;top:40%;transform:translateX(-50%);z-index:9999;max-width:86%;background:#1F5FA8;color:#fff;border-radius:14px;padding:18px 22px;font-weight:700;font-size:1.1em;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.5);transition:opacity .6s;opacity:1";
+  d.textContent = "👁️ Du verlässt die Ansicht " + wer + ". Zurück bei Eltern.";
+  document.body.appendChild(d);
+  setTimeout(() => { d.style.opacity = "0"; }, 2600);
+  setTimeout(() => { d.remove(); }, 3300);
+}
+["pointerdown", "keydown", "scroll", "touchstart"].forEach((n) => window.addEventListener(n, () => { ansichtLetzte = Date.now(); }, { passive: true, capture: true }));
+setInterval(ansichtPruefen, 5000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) ansichtPruefen(); });
 document.getElementById("btnAnsichten").addEventListener("click", () => {
   zeigAns = !zeigAns;
   if (zeigAns) { ZURUECK = null; document.getElementById("zurueck").hidden = true; setHilfe(false); hilfeZuklappen(); setRechner(false); setChem(false); }
