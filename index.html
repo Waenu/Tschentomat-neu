@@ -357,9 +357,6 @@
   .bar .in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; }
   .bar .lab { font-size: 0.95rem; min-width: 0; }
   .bar .lab small { font-size: var(--t-small); opacity: 0.9; }
-  .bar .lab small.vgl { opacity: 1; font-weight: 700; }
-  .bar .lab small.teurer { color: #8F1818; }
-  .bar .lab small.guenstig { color: #0A5A2A; }
   #nachOben { position: fixed; left: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
   .start { display: flex; flex-direction: column; gap: 10px; }
   #rechner[hidden] + .start2 { margin-top: -8px; }   /* ohne offenen Rechner bleibt der Abstand wie zwischen den Knöpfen */
@@ -909,7 +906,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.1.1";
+let VERSION = "2.57.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1059,15 +1056,14 @@ function check(s, d) {
   return "OK";
 }
 
-// Staffel-Zeit: Preis der anderen Art für die untere Leiste (nur wenn beide Arten möglich sind)
-function vergleichDaten(r, tip) {
-  if (S.selbstOK !== true || (S.art !== ART_S && S.art !== ART_N)) return null;
-  if (S.art === ART_N && nz(S.gaeste) > 0) return null;
+// Kleine Zeile unter dem Total: Preis der anderen Art in der Staffel-Zeit (nur wenn beide Arten möglich sind)
+function vergleichZeile(r) {
+  if (S.selbstOK !== true || (S.art !== ART_S && S.art !== ART_N)) return "";
+  if (S.art === ART_N && nz(S.gaeste) > 0) return "";
   const alt = S.art === ART_S ? calc(Object.assign({}, S, { art: ART_N, selbst: "Nein" })) : calc(Object.assign({}, S, { art: ART_S, selbst: "Ja", gaeste: 0 }));
-  if (!alt.ok) return null;
-  const teurer = alt.TOT > r.TOT;
-  const txt = S.art === ART_S ? "Normal: " + chf(alt.TOT + tip) : "Staffel: " + chf(alt.TOT + tip) + " plus Anteil Endreinigung";
-  return { txt, teurer, gleich: Math.round(alt.TOT) === Math.round(r.TOT) };
+  if (!alt.ok) return "";
+  if (S.art === ART_S) return '<span class="small">Zum Vergleich: normal (die Eltern reinigen) ' + chf(alt.TOT) + '</span>';
+  return '<span class="small">Zum Vergleich: Staffel ' + chf(alt.TOT) + ', dazu euer Anteil an der Endreinigung (allein ' + chf(P.reinigung) + ', zu zweit je ' + chf(P.reinigung / 2) + ', zu dritt je ' + chf(P.reinigung / 3) + ')</span>';
 }
 function calc(s) {
   const d = derive(s);
@@ -2479,9 +2475,7 @@ function render() {
   const nTxt = r.d.nights + " " + (r.d.nights === 1 ? "Nacht" : "Nächte");
   const totTxt = tip > 0 ? "Total inkl. Trinkgeld für " : "Total für ";
   lab.textContent = totTxt + nTxt; val.textContent = chf(r.TOT + tip);
-  const vg = vergleichDaten(r, tip);
-  if (vg) lab.innerHTML = totTxt + nTxt + '<br><small class="vgl ' + (vg.gleich ? "" : vg.teurer ? "teurer" : "guenstig") + '">' + vg.txt + '</small>';
-  else if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
+  if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
   const x = r.d;
   const spR = spitzTermin();
   if (spR) {
@@ -2529,7 +2523,7 @@ function render() {
     '<div class="acc">' + symBtn('b-rechnen', '🧮') + '<button type="button" class="acc-t" id="rechTgl" data-body="rechBody" aria-expanded="' + (RECH_OFFEN ? 'true' : 'false') + '" aria-controls="rechBody">Preisberechnung</button></div>' +
     '<div class="total"><span class="small">für ' + x.nights + ' ' + (x.nights === 1 ? "Nacht" : "Nächte") + ', ' + x.PT + ' ' + (x.PT === 1 ? "Person" : "Personen") + ' mit Bett' + (x.KK > 0 ? ', ' + x.KK + (x.KK === 1 ? ' Kind' : ' Kinder') + ' im Kinderbettchen oder bei den eigenen Eltern' : '') + '</span>' +
     (ARR && DEP ? '<span class="small">vom ' + esc(fmtTag(ARR)) + ' bis ' + esc(fmtTag(DEP)) + '</span>' : '') +
-    '<span class="big">' + chf(r.TOT) + '</span>' + '</div>' +
+    '<span class="big">' + chf(r.TOT) + '</span>' + vergleichZeile(r) + '</div>' +
     (x.LR > 0 ? '<p class="note"><b>Lückenpreis:</b> ' + x.LR + ' % günstiger auf die Übernachtungen, die Reinigung bleibt gleich.</p>' : '') +
     '<div id="rechBody" class="rows"' + (RECH_OFFEN ? '' : ' hidden') + '><table><tbody>' + det + '</tbody></table>' + notes + (x.SB ? endreinigungInfo(r) : '') + '</div>' +
     aufteilung +
