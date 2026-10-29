@@ -226,8 +226,8 @@
   details.papi-hinweis[open] > summary::after { content: "▴"; }
   details.papi-hinweis ul { margin: 0; padding-left: 20px; }
   details.papi-hinweis li { margin-bottom: 8px; }
-  details > summary::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
-  details[open] > summary::after { content: "▴\00a0\00a0💡"; }
+  details > summary::after { content: "▾"; margin-left: auto; padding-left: 10px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+  details[open] > summary::after { content: "▴"; color: inherit; }
   details[open] > summary, .acc:has(.acc-t[aria-expanded="true"]) { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
   details[open] > summary { margin-bottom: 8px; }
   .acc { display: flex; align-items: center; gap: 6px; min-height: 44px; font-weight: 700; font-size: var(--t-title); }
@@ -236,8 +236,8 @@
   .acc-t { background: none; border: 0; font: inherit; font-size: var(--t-title); font-weight: 700; color: inherit; padding: 0; text-align: left; cursor: pointer; display: flex; flex: 1; align-items: center; min-height: 44px; }
   #trinkTgl { font-weight: 400; }
   details[open] > summary .sym, .acc:has(.acc-t[aria-expanded="true"]) .sym { --ac: var(--accent-fg); }
-  .acc-t::after { content: "▾\00a0\00a0💡"; margin-left: auto; padding-left: 10px; font-weight: 400; white-space: nowrap; }
-  .acc-t[aria-expanded="true"]::after { content: "▴\00a0\00a0💡"; }
+  .acc-t::after { content: "▾"; margin-left: auto; padding-left: 10px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+  .acc-t[aria-expanded="true"]::after { content: "▴"; color: inherit; }
 
   .field input.betrag { width: 100%; min-height: 50px; font: inherit; color: var(--fg); padding: 10px 12px; border: 2px solid var(--line); border-radius: 6px; background-color: var(--surface); }
   details .rows { display: flex; flex-direction: column; gap: 8px; }
@@ -739,7 +739,7 @@
         <p><b>Nur für die Familie:</b> Der Link bleibt in der Familie und wird nicht weitergegeben oder geteilt. Zur Familie gehören meine Kinder, ihre Partner und die Enkelkinder.</p>
         <p><b>Nur über die App:</b> Buchungen nimmt Papi nur noch über den TSCHENT-O-MAT an, nicht mehr mündlich, per Kurier oder Rauchzeichen. Was nicht in der App steht, gilt nicht. Eine Anfrage ist verbindlich: Mit dem Senden bestätigst du, dass du den Aufenthalt zu diesen Bedingungen buchst.</p>
         <p><b>TSCHENT-O-MAT ist interaktiv.</b> Von oben nach unten ausfüllen. Die Felder hängen zusammen: Eure Wahl bestimmt, was bei den nächsten Feldern zur Auswahl steht.</p>
-        <p>Mit 💡 lassen sich Menüs auf- und zuklappen.</p>
+        <p>Mit dem Pfeil ▾ lassen sich Menüs auf- und zuklappen.</p>
         <p>Mit gestrichelten Icons wie <button type="button" class="sym" data-info="b-luecke" aria-label="Beispiel: zur Erklärung springen">🧩</button> springt ihr zur Erklärung. Sie erscheint ausgeklappt. Mit dem gelben Knopf <span class="zei zur">↩ zurück</span> geht es an die Ausgangsstelle zurück.</p>
         <p>Hinweise erkennt ihr am blauen Rahmen. <b>ℹ️ Hinweis</b> erklärt etwas, <b>⚠️ Warnung</b> macht auf etwas aufmerksam, das den Aufenthalt oder den Preis verändert.</p>
         <p><b>❓ Kalender-Hilfe:</b> Im Kalender schwebt unten rechts ein runder Knopf <span class="zei hilfe">?</span>. Ist er grün gefüllt, erklärt sich jeder Tag, den ihr antippt, in einer Box unter dem Kalender. Mit einem Tipp auf den Knopf schaltet ihr die Hilfe aus (der Knopf ist dann durchgestrichen: <span class="zei hilfe aus">?</span>) und wieder ein. Beim nächsten Öffnen der Seite ist die Hilfe wieder an. Warnungen bleiben immer sichtbar.</p>
@@ -882,7 +882,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.47.0.0";
+let VERSION = "2.47.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3444,7 +3444,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     let h = "", einn = "";
     if (eig) {
       const bez = b.bezahlt && b.betrag > 0;
-      const kurz = b.betrag > 0 ? esc(chf(b.betrag).replace(/\.–$/, "")) + " · " + (b.prov ? "fällig mit der Sicherung" : bez ? "bezahlt am " + esc(fmtTag(b.bezahlt.slice(0, 10))) : "noch offen") : "Preisberechnung";
+      const kurz = b.betrag > 0 ? esc(chf(b.betrag).replace(" ", "\u00a0")) + ", " + (b.prov ? "fällig mit der Sicherung" : bez ? "bezahlt am " + esc(fmtTag(b.bezahlt.slice(0, 10))) : "noch offen") : "Preisberechnung";
       h += zeile("rech", "🧾", bez ? "Quittung" : "Rechnung", kurz, false) + '<div class="ipan" data-ipan="rech" hidden>' + rechnungHtml(b.rechnung, b.bestaetigt) + "</div>";
     }
     if (zs.length) {
@@ -3453,14 +3453,14 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     }
     if (zh.length) {
       const it = zh.map(hinItem);
-      h += zeile("hin", "ℹ️", "Hinweise", it.slice(0, 2).map((x) => esc(x.ti)).join(" · "), false) + '<div class="ipan ar-list" data-ipan="hin" hidden>' + it.map((x) => x.html).join("") + "</div>";
+      h += zeile("hin", "ℹ️", "Hinweise", it.slice(0, 2).map((x) => esc(x.ti)).join(", "), false) + '<div class="ipan ar-list" data-ipan="hin" hidden>' + it.map((x) => x.html).join("") + "</div>";
     }
     if (papi && b.betrag > 0) {   // Einnahmen nur Familie: ein Betrag zählt im Monat der Anreise
-      const ym = b.arr.slice(0, 7), jj = b.arr.slice(0, 4), heute = heuteKey(), kurzChf = (n) => chf(n).replace(/\.–$/, "").replace(" ", "\u00a0");
+      const ym = b.arr.slice(0, 7), jj = b.arr.slice(0, 4), heute = heuteKey(), kurzChf = (n) => chf(n).replace(" ", "\u00a0");
       const sum = (f) => BUCH.filter((x) => x.betrag > 0 && f(x)).reduce((t, x) => t + x.betrag, 0);
       const mon = sum((x) => x.arr.slice(0, 7) === ym), jahrBis = sum((x) => x.arr.slice(0, 4) === jj && x.arr <= heute), jahrAll = sum((x) => x.arr.slice(0, 4) === jj);
       const mn = MONATE[Number(ym.slice(5, 7)) - 1];
-      einn = zeile("einn", "💰", "Einnahmen", kurzChf(b.betrag) + " · zählt im " + esc(mn), false) + '<div class="ipan" data-ipan="einn" hidden><p>Diese Buchung: <b>' + esc(kurzChf(b.betrag)) + "</b></p><p>" + esc(mn) + " " + jj + " (Familie): <b>" + esc(kurzChf(mon)) + "</b></p><p>Seit Jahresanfang bis heute: <b>" + esc(kurzChf(jahrBis)) + "</b><br>Gebucht für " + jj + ": <b>" + esc(kurzChf(jahrAll)) + '</b></p><p class="hint">Nur Familie. Die Beträge der Ext.-Gäste fehlen noch (dafür braucht es einen privaten Speicher).</p></div>';
+      einn = zeile("einn", "💰", "Einnahmen", kurzChf(b.betrag) + ", zählt im " + esc(mn), false) + '<div class="ipan" data-ipan="einn" hidden><p>Diese Buchung: <b>' + esc(kurzChf(b.betrag)) + "</b></p><p>" + esc(mn) + " " + jj + " (Familie): <b>" + esc(kurzChf(mon)) + "</b></p><p>Seit Jahresanfang bis heute: <b>" + esc(kurzChf(jahrBis)) + "</b><br>Gebucht für " + jj + ": <b>" + esc(kurzChf(jahrAll)) + '</b></p><p class="hint">Nur Familie. Die Beträge der Ext.-Gäste fehlen noch (dafür braucht es einen privaten Speicher).</p></div>';
     }
     if (papi) h += '<div class="ar-nur">🔐 Nur für dich</div>' + einn + '<button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>';
     return h;

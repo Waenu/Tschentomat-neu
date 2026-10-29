@@ -2,6 +2,18 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
+      "v": "2.47.1.0",
+      "datum": "2026-10-29",
+      "titel": "Aufklapp-Pfeile ohne Glühbirnen, Beträge einheitlich",
+      "arten": [
+        "Layout"
+      ],
+      "punkte": [
+        "Menüs und Glossar zeigen nur noch den Pfeil (fett, in der Akzentfarbe), die Glühbirnen sind weg; die Anleitung ist angepasst.",
+        "In der Box stehen Beträge wie überall («CHF 165.–»), ohne Mittelpunkt vor dem Text."
+      ]
+    },
+    {
       "v": "2.47.0.0",
       "datum": "2026-10-29",
       "titel": "Ext. und Fam. auf den Balken, Einnahmen (Familie)",
