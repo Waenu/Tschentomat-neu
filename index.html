@@ -905,7 +905,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.55.1.0";
+let VERSION = "2.55.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3191,7 +3191,16 @@ function einnahmenHtml() {
   const leer = () => ({ f: 0, a: 0, e: 0, r: 0, p: 0, fb: 0, ab: 0, eb: 0, rb: 0, pb: 0 });   // b = bis heute
   const M = Array.from({ length: 12 }, leer);
   const buch = (arr, spalte, v, rein, pr) => { if (arr.slice(0, 4) !== String(jj)) return; const m = M[Number(arr.slice(5, 7)) - 1], bis = arr <= heute; m[spalte] += v; m.r += rein; m.p += pr; if (bis) { m[spalte + "b"] += v; m.rb += rein; m.pb += pr; } };
-  BUCH.forEach((b) => { if (b.betrag > 0) buch(b.arr, "f", b.betrag, 0, 0); });   // Familie: Betrag inklusive Reinigung (nicht getrennt gespeichert)
+  // Familie: Reinigung aus der gespeicherten Preisberechnung (Zeile «Reinigung»); fehlt sie, bleibt sie im Betrag enthalten
+  let ohneRein = 0;
+  BUCH.forEach((b) => {
+    if (!(b.betrag > 0)) return;
+    const z = (b.rechnung || "").split("\n").find((t) => /^Reinigung\t/.test(t.trim()));
+    let rein = 0;
+    if (z) { const v = Number(z.split("\t").slice(1).join(" ").replace(/CHF|\s|\u00a0|[’']/g, "").replace(/\.?[–-]$/, "")); if (isFinite(v) && v > 0 && v <= b.betrag) rein = v; }
+    if (!z) ohneRein++;
+    buch(b.arr, "f", b.betrag - rein, rein, 0);
+  });
   Object.keys(EINN).forEach((k) => {
     const q = EINN[k], g = GAESTE.find((x) => x.arr === k), typ = g ? g.typ : "airbnb";
     if (typ === "fam" && BUCH.some((b) => b.arr < (g && g.dep ? g.dep : addDays(k, 1)) && b.dep > k)) return;   // gleicher Aufenthalt steht schon bei den Buchungen
@@ -3209,10 +3218,10 @@ function einnahmenHtml() {
     "<p><b>Was bleibt</b> <span class=\"hint\">(nach Provision, ohne Reinigung)</span></p>" +
     '<table class="eintab"><thead><tr><th></th><th>Familie</th><th>Airbnb</th><th>Ext.</th><th>Total</th></tr></thead><tbody>' + (z1 || leerZ(5)) +
     '<tr class="sum"><td>Bis heute</td><td>' + nf(S.fb) + "</td><td>" + nf(S.ab) + "</td><td>" + nf(S.eb) + "</td><td><b>" + nf(tot(S, true)) + '</b></td></tr><tr class="sum"><td>Total ' + jj + "</td><td>" + nf(S.f) + "</td><td>" + nf(S.a) + "</td><td>" + nf(S.e) + "</td><td><b>" + nf(tot(S)) + "</b></td></tr></tbody></table>" +
-    "<p><b>Reinigung und Provision</b> <span class=\"hint\">(Airbnb und Ext.)</span></p>" +
+    "<p><b>Reinigung und Provision</b> <span class=\"hint\">(alle Belegungen)</span></p>" +
     '<table class="eintab"><thead><tr><th></th><th>Reinigung</th><th>Provision</th></tr></thead><tbody>' + (z2 || leerZ(3)) +
     '<tr class="sum"><td>Bis heute</td><td>' + nf(S.rb) + "</td><td>" + nf(S.pb) + '</td></tr><tr class="sum"><td>Total ' + jj + "</td><td><b>" + nf(S.r) + "</b></td><td><b>" + nf(S.p) + "</b></td></tr></tbody></table>" +
-    '<p class="hint">Beträge in CHF. Ein Betrag zählt im Monat der Anreise. «Was bleibt» bei Airbnb und Ext. = Nächte nach Abzug der Provision, ohne Reinigung. Familie: Betrag der Buchung inklusive Reinigung (dort nicht getrennt gespeichert). Reinigung plus «Was bleibt» ergibt das, was bei dir ankommt.' +
+    '<p class="hint">Beträge in CHF. Ein Betrag zählt im Monat der Anreise. «Was bleibt» bei Airbnb und Ext. = Nächte nach Abzug der Provision, ohne Reinigung. Familie: Reinigung aus der gespeicherten Preisberechnung der Buchung.' + (ohneRein ? " Bei " + ohneRein + (ohneRein === 1 ? " Buchung" : " Buchungen") + " ohne Preisberechnung ist die Reinigung nicht getrennt, sie steckt im Betrag." : "") + ' Reinigung plus «Was bleibt» ergibt das, was bei dir ankommt.' +
     (EINN_STATUS === "ok" ? "" : " <b>Die Beträge von Airbnb und Ext. fehlen: privater Speicher nicht geladen.</b>") + "</p></div>";
 }
 function bestZeigen() {
