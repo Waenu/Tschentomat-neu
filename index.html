@@ -357,6 +357,7 @@
   .bar .in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; }
   .bar .lab { font-size: 0.95rem; min-width: 0; }
   .bar .lab small { font-size: var(--t-small); opacity: 0.9; }
+  .bar .lab small.spar { opacity: 1; font-weight: 700; color: #0A5A2A; }
   #nachOben { position: fixed; left: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
   .start { display: flex; flex-direction: column; gap: 10px; }
   #rechner[hidden] + .start2 { margin-top: -8px; }   /* ohne offenen Rechner bleibt der Abstand wie zwischen den Knöpfen */
@@ -906,7 +907,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.1.0";
+let VERSION = "2.57.1.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1110,14 +1111,12 @@ const range = (a, b) => { const r = []; for (let i = a; i <= b; i++) r.push(i); 
 const chf = (n) => "CHF " + Math.round(n).toLocaleString("de-CH").replace(/[’']/g, "’") + ".–";
 const gastWort = (n) => n === 1 ? "Gast" : "Gäste";
 
-// Ersparnis für die Familie, wenn Zimmer 1 unberührt bleibt (echte Rechnung: Unterschied zwischen «Ja» und «Nein»)
-function sparSatz(d) {
-  if (d.sparGrund !== "") return "";
+// Ersparnis für die Familie, wenn Zimmer 1 unberührt bleibt (echte Rechnung: Unterschied zwischen «Ja» und «Nein»); nur wenn Zimmer 1 in Gebrauch ist
+function sparBetrag(d) {
+  if (d.sparGrund !== "" || S.spar !== "Nein") return 0;
   const ja = calc(Object.assign({}, S, { spar: "Ja" })), nein = calc(Object.assign({}, S, { spar: "Nein" }));
-  if (!ja.ok || !nein.ok) return "";
-  const diff = Math.round(nein.FZ - ja.FZ);
-  if (diff <= 0) return "";
-  return S.spar === "Ja" ? "Du sparst " + chf(diff) + ", weil Zimmer 1 zu bleibt. " : "Bleibt Zimmer 1 zu, sparst du " + chf(diff) + ". ";
+  if (!ja.ok || !nein.ok) return 0;
+  return Math.max(0, Math.round(nein.FZ - ja.FZ));
 }
 const FIELDS = [
   { id: "art", label: "📝 Wie möchtest du buchen?", type: "str",
@@ -1151,7 +1150,7 @@ const FIELDS = [
       : "Ein Gast im selben Zimmer zahlt " + chf(P.gastZimmer) + " statt " + chf(P.gast) + " pro Nacht. Es sind ein Zimmer und ein Doppelbett weniger zu beziehen und zu reinigen.",
     visible: (d) => d.GE > 0 && !d.lock && !d.voll, opts: () => ["Ja", "Nein"] },
   { id: "spar", label: "🔑 Bleibt Zimmer 1 (Schlafzimmer mit rotem Bad) unberührt?", type: "str",
-    hint: (d) => sparSatz(d) + (d.sparGrund === "so" ? "Ihr teilt Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Der Sonderpreis von " + chf(P.famAnteil) + " pro Nacht gilt dafür." : d.sparGrund === "pers" ? "Nicht möglich: Bei mehr als " + P.sparMaxPers + " Personen insgesamt (auch Kleinkinder) wird Zimmer 1 gebraucht." : (S.spar === "Nein" ? "Nein: das ganze Chalet steht zur Verfügung. Mit «Ja» zahlt die Familie " + chf(P.sparEin) + " weniger pro Nacht (nur Zimmer 2, Zimmer 3 und das blaue Bad)." : "Ja: nur Zimmer 2, Zimmer 3 und das blaue Bad werden benutzt. Die Familie zahlt " + chf(P.sparEin) + " weniger pro Nacht (" + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + ")." + (S.spar === "Ja" ? "" : " Nein: das ganze Chalet steht zur Verfügung."))),
+    hint: (d) => d.sparGrund === "so" ? "Ihr teilt Zimmer 2 und das blaue Bad, Zimmer 1 und das rote Bad bleiben unberührt. Der Sonderpreis von " + chf(P.famAnteil) + " pro Nacht gilt dafür." : d.sparGrund === "pers" ? "Nicht möglich: Bei mehr als " + P.sparMaxPers + " Personen insgesamt (auch Kleinkinder) wird Zimmer 1 gebraucht." : (S.spar === "Nein" ? "Nein: das ganze Chalet steht zur Verfügung. Mit «Ja» zahlt die Familie " + chf(P.sparEin) + " weniger pro Nacht (nur Zimmer 2, Zimmer 3 und das blaue Bad)." : "Ja: nur Zimmer 2, Zimmer 3 und das blaue Bad werden benutzt. Die Familie zahlt " + chf(P.sparEin) + " weniger pro Nacht (" + chf(P.famPausch - P.sparEin) + " statt " + chf(P.famPausch) + ")." + (S.spar === "Ja" ? "" : " Nein: das ganze Chalet steht zur Verfügung.")),
     visible: (d) => d.sparGrund === "", opts: () => ["Ja", "Nein"] },
   { id: "selbst", label: "🧹 Bringt ihr frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst?", type: "str",
     hint: () => S.selbst === "Nein" ? "Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")." : "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender." + (S.selbst === "Ja" ? "" : " Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")."),
@@ -2476,6 +2475,8 @@ function render() {
   const totTxt = tip > 0 ? "Total inkl. Trinkgeld für " : "Total für ";
   lab.textContent = totTxt + nTxt; val.textContent = chf(r.TOT + tip);
   if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
+  const sb = sparBetrag(r.d);
+  if (sb > 0) lab.innerHTML += '<br><small class="spar">Bleibt Zimmer 1 zu, sparst du ' + chf(sb) + '</small>';
   const x = r.d;
   const spR = spitzTermin();
   if (spR) {
