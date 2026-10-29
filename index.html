@@ -552,6 +552,10 @@
   .verlink { font: inherit; font-size: .85rem; color: inherit; background: none; border: 0; text-decoration: underline; opacity: .85; padding: 8px 12px; min-height: 36px; cursor: pointer; }
   .vh { border: 1px solid var(--line, #8886); border-radius: 10px; padding: 10px 14px; background: var(--surface); }
   .vh h3 { margin: 0 0 4px; font-size: 1.05rem; }
+  .vh > summary { min-height: 0; border: 0; padding: 0; background: none; color: inherit; white-space: normal; font-size: 1.05rem; align-items: flex-start; margin: 0 0 4px; }
+  .vh[open] > summary { background: none; color: inherit; margin-bottom: 4px; }
+  .vh > summary::after { align-self: center; }
+  .vh:not([open]) > summary { margin-bottom: 0; }
   .vh .d { font-weight: 400; opacity: .7; font-size: .85rem; }
   .vh ul { margin: 4px 0 0; padding-left: 20px; }
   .vh .arten { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 4px; }
@@ -883,7 +887,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.47.3.0";
+let VERSION = "2.47.4.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2882,7 +2886,7 @@ document.addEventListener("toggle", (e) => {
       const r = await fetch("versionen.json?v=" + Date.now(), { cache: "no-store" });
       const j = await r.json();
       html = '<p class="hint"><b>Idee und Konzept: Wänu<br>Umsetzung: Claude KI</b></p><p class="hint">Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Marken: Neu, Funktion, Fehler (behoben), Layout, Text.</p>' +
-        j.versionen.map((v) => '<div class="vh"><h3>' + esc(v.v) + ' <span class="d">' + esc(dat(v.datum)) + '</span> · ' + esc(v.titel) + '</h3>' + arten(v) + '<ul>' + v.punkte.map((p) => "<li>" + esc(p) + "</li>").join("") + "</ul></div>").join("");
+        j.versionen.map((v, i) => '<details class="vh"' + (i === 0 ? " open" : "") + '><summary><span class="vt">' + esc(v.v) + ' <span class="d">' + esc(dat(v.datum)) + '</span> · ' + esc(v.titel) + '</span></summary>' + arten(v) + '<ul>' + v.punkte.map((p) => "<li>" + esc(p) + "</li>").join("") + "</ul></details>").join("");
     } catch (e) { html = '<p class="hint">Die Historie konnte nicht geladen werden.</p>'; }
     ziel.innerHTML = '<button type="button" class="ov-back" data-ov="ovVer">← Zurück</button><h2>Versionshistorie</h2>' + html;
   });
