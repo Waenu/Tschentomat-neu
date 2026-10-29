@@ -896,7 +896,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.51.1.0";
+let VERSION = "2.51.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1620,7 +1620,7 @@ function staffelWarnung(d) {
   const andere = alle.filter((n) => n !== ABSENDER), eigene = alle.indexOf(ABSENDER) >= 0;
   const liste = (l) => (l.length === 1 ? l[0] : l.slice(0, -1).join(", ") + " und " + l[l.length - 1]);
   const kosten = " und wird nicht mehr mit späteren Gästen geteilt.";
-  const grund = d.SM ? "Mit «Nein» unterbrichst du" : (d.LG ? "Mit der ganzen Lücke (keine Selbstreinigung) unterbrichst du" : "Mit Gästen ist keine Selbstreinigung möglich, du unterbrichst damit");
+  const grund = d.SM ? "Mit «Normal» unterbrichst du" : (d.LG ? "Mit der ganzen Lücke (keine Selbstreinigung) unterbrichst du" : "Mit Gästen ist keine Selbstreinigung möglich, du unterbrichst damit");
   const folger = staffelFolger(ARR);
   const danach = folger.length ? " Danach trägt " + liste(folger) + " die Endreinigung allein, ohne Teilung mit den früheren Gruppen." : "";
   if (!andere.length) return grund + " deine eigene laufende Familienstaffel. Für deinen früheren Aufenthalt fällt dadurch die Endreinigung jetzt an" + kosten + " Deine neue Reinigung kostet zusätzlich wie üblich " + chf(P.reinigung) + "." + danach;
@@ -1937,7 +1937,7 @@ function renderKalender() {
     const hochOn = HOCH.length > 0 || HOCH_MONATE.length > 0;
     let h = '<p class="leg-h">Monate und Zeiten</p>';
     if (hochOn) h += '<p><i class="sw sw-hoch"></i><b>Hochsaison</b>' + (HOCH_MONATE.length ? " (" + HOCH_MONATE.map((m) => MONATE[m - 1]).join(", ") + ")" : "") + "</p>";
-    if (RUHE.length) h += '<p><i class="sw sw-ruhe"></i><b>Eigene Wäsche und Staffel möglich</b> (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ") " + symBtn("b-ruhe", "🧹") + "</p>";
+    if (RUHE.length) h += '<p><i class="sw sw-ruhe"></i><b>Staffel-Zeit: selbst reinigen möglich</b> (' + RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") + ") " + symBtn("b-ruhe", "🧹") + "</p>";
     h += '<p><i class="sw sw-rosa"></i><b>Nebensaison</b> (Mai, September, 19. bis 31. Dezember)</p>';
     if (SPITZ.length) h += '<p><i class="sw sw-spitz"></i><b>Spitzenzeit</b> (Preis auf Anfrage)</p>';
     h += '<p><i class="sw sw-normal"></i><b>Übrige Zeiten:</b> nur mit Endreinigung ' + symBtn("b-endrein", "🪣") + '</p>';
@@ -1971,7 +1971,7 @@ function renderKalender() {
   }
   nEl.hidden = !(nZeigen || gemischt);
   nEl.innerHTML = nZeigen ? HW + "Normale Zeit: normale Familienpreise, Endreinigung nach den Regeln. " + symBtn("b-endrein", "🪣")
-    : (gemischt ? WA + "Dieser Aufenthalt liegt teils in der Zeit «Eigene Wäsche»" + fld("ruhe") + ". Selbst reinigen ist nur möglich, wenn der ganze Aufenthalt darin liegt. " + symBtn("b-ruhe", "🧹") : "");
+    : (gemischt ? WA + "Dieser Aufenthalt liegt teils in der Staffel-Zeit" + fld("ruhe") + ". Selbst reinigen ist nur möglich, wenn der ganze Aufenthalt darin liegt. " + symBtn("b-ruhe", "🧹") : "");
   const warn = document.getElementById("calWarn");
   const msgs = [];
   if (ARR && DEP) {
@@ -3585,13 +3585,13 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) zb.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
       else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) zb.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> (" + P.verbMin + " bis " + P.verbMax + " Nächte, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest) oder <b>mit Vorbehalt</b> (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
-      else if (istRuhe(k) && !GAP.has(k) && !stay.some((b) => b.sb)) zb.push(fld("ruhe") + "Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
-      else if (!stay.length) zb.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche»" + fld("ruhe") + ".") + "");
+      else if (istRuhe(k) && !GAP.has(k) && !stay.length) zb.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Ohne Gäste kannst du die Staffel wählen: ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + " und bringt eigene Wäsche mit, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern (Normal).");
+      else if (!stay.length) zb.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Staffel-Zeit" + fld("ruhe") + ".") + "");
       if (festStay(k, addDays(k, 1))) zb.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
       else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
       else if (istNeben(k) && !istHoch(k)) zb.push(fld("rosa") + "<b>Nebensaison:</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit. Es gelten die normalen Familienpreise.");
       else if (provStay(k, addDays(k, 1))) { zb.push("Ein Aufenthalt wäre hier ein <b>Termin mit Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "🔓")); zb.push(RISIKO); }
-      if (schweifListe().some((s) => k >= s.von && k <= s.bis)) zb.push("Familienstaffel noch offen (gestrichelter Balken 🏃🏃): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
+      if (schweifListe().some((s) => k >= s.von && k <= s.bis)) zb.push("Familienstaffel noch offen (gestrichelter Balken 🏃🏃): Wer hier selbst reinigt, führt sie weiter. Mit «Normal» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
       const c = grid.querySelector('[data-k="' + k + '"]');
       if (c && c.classList.contains("off") && ARR && !DEP) zb.push("Als Abreise nicht möglich: zu kurz, zu lang oder ein belegter Tag liegt dazwischen.");
     }

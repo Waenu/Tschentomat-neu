@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.51.1.0",
+      "v": "2.43.3.0 bis 2.51.2.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -27,7 +27,8 @@
         "Kalender: Buchungen aus der App sehen aus wie die Gastbalken (gleiche Schrift, Kürzel «Fam.» statt Schloss und Eimer). Die Sicherheit zeigt die Farbe, alles Weitere steht in der Box. Legende angepasst.",
         "Ansicht als Kind (Verwaltung): Das Formular «Belegung» mit den Beträgen erscheint dort nicht mehr, und der Kalender aktualisiert sich beim Wechsel des Kindes.",
         "Verwaltung: Bestätigte Aufenthalte klappen zu, wenn nichts mehr zu tun ist (Kopfzeile mit Name, Datum, Betrag). Offen bleiben Karten mit Konflikt, ohne Bescheid oder mit Vorbehalt, der noch nicht gesperrt oder praktisch sicher ist. Offene Zahlungen stehen nach der Abreise offen unter «Zahlungen offen», bis du den Eingang bestätigst.",
-        "Korrekturen: Rechnung im Kalender-Kasten wird nicht mehr rechts abgeschnitten. Bei Buchungen mit Selbstreinigung steht der Hinweis «Eigene Wäsche möglich» nicht mehr."
+        "Korrekturen: Rechnung im Kalender-Kasten wird nicht mehr rechts abgeschnitten. Bei Buchungen mit Selbstreinigung steht der Hinweis «Eigene Wäsche möglich» nicht mehr.",
+        "Staffel: Der Zeitraum heisst überall «Staffel-Zeit» (statt «Eigene Wäsche»). Der Tageshinweis erklärt: ohne Gäste selbst reinigen mit eigener Wäsche, mit Gästen reinigen die Eltern. An gebuchten Tagen erscheint er nicht mehr. In der Warnung steht «Normal» statt «Nein»."
       ]
     },
     {
