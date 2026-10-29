@@ -626,11 +626,18 @@
   #meldenKasten .idneu input, #meldenKasten .idneu select, #meldenKasten .idneu textarea { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   .rechd { margin: 6px 0; } .rechd > summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; gap: 6px; }
   .rechd .rechin { border-top: 1px solid var(--line); padding-top: 6px; } .rechd .rechin h4 { margin: 10px 0 2px; }
-  .rechd table { width: 100%; border-collapse: collapse; } .rechd td { padding: 3px 0; vertical-align: top; } .rechd td:last-child { text-align: right; padding-left: 10px; }
-  #calBlase .ibar { display: flex; gap: 10px; align-items: center; justify-content: flex-end; margin: 10px 0 4px; }
-  #calBlase .ibar .vk-auge { margin: 0 auto 0 0; align-self: center; }   /* Auge ganz links, die übrigen Icons rechtsbündig */
-  #calBlase .ibar .ibtn, #calBlase .ibar .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; display: inline-flex; flex: none; align-items: center; justify-content: center; }
-  #calBlase .ibtn.on { background: var(--accent); color: var(--accent-fg); } #calBlase .ibtn.warn { border-color: #E0A800; }
+  .rechd table { width: 100%; border-collapse: collapse; } .rechd td { padding: 3px 0; vertical-align: top; } .rechd td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; }
+  #calBlase .ar { display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box; margin: 8px 0 0; padding: 8px 12px; border: 2px solid var(--accent); border-radius: 14px; background: var(--surface); color: var(--fg); font: inherit; text-align: left; cursor: pointer; }
+  #calBlase .ar.warn { border-color: #E0A800; }
+  #calBlase .ar-i { flex: none; width: 30px; text-align: center; font-size: 1.35rem; }
+  #calBlase .ar-t { flex: 1; min-width: 0; font-weight: 700; } #calBlase .ar-t small { display: block; font-weight: 400; color: var(--muted); font-size: .8rem; }
+  #calBlase .ar-c { flex: none; color: var(--accent); font-weight: 700; } #calBlase .ar-c::before { content: "▾"; } #calBlase .ar[aria-expanded="true"] .ar-c::before { content: "▴"; } #calBlase .ar-c.go::before { content: "›"; }
+  #calBlase .ar[aria-expanded="true"] { background: var(--note-bg); }
+  #calBlase .ar + .ipan { margin: 6px 0 0; padding: 6px 12px; border: 0; border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--surface); font-size: .92rem; }
+  #calBlase .ar-nur { margin: 14px 0 0; padding-top: 8px; border-top: 2px dashed var(--accent); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
+  #calBlase .ipan table { width: 100%; border-collapse: collapse; } #calBlase .ipan td { padding: 3px 0; vertical-align: top; } #calBlase .ipan td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; }
+  #calBlase .ar-h { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); } #calBlase .ar-h:first-child { border-top: 0; }
+  #calBlase .ar-hi { flex: none; width: 26px; text-align: center; font-size: 1.15rem; line-height: 1.3; } #calBlase .ar-h b { display: block; }
   #calBlase .ipan { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
   .rechd > summary::after, .idg > summary::after, .ied > summary::after { content: "▾"; } .rechd[open] > summary::after, .idg[open] > summary::after, .ied[open] > summary::after { content: "▴"; }
   #calBlase .vk-auge { font: inherit; font-size: 1.1rem; min-width: 44px; min-height: 36px; padding: 0 10px; border: 2px solid var(--accent); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; justify-self: start; align-self: flex-start; margin-top: 6px; }
@@ -803,7 +810,7 @@
     <div class="note h" id="calBlase" role="status" aria-live="polite" hidden></div>
     <details class="leg-det" id="calLegDet"><summary>🎨 Legende</summary>
     <div class="cal-leg" id="calHoch"></div>
-    <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Sicherheit:</p>
+    <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Buchungssicherheit:</p>
     <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk" data-z="🔒"></b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk" data-z="🔓"></b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk" data-z="👨‍👦"></b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk" data-z="✈️"></b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk" data-z="📜"></b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk" data-z="🚫"></b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw" data-run="1"></i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk" data-z="🧹"></b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk" data-z="🪣"></b></i>die Eltern reinigen</span></div>
     </details>
     <p class="note h" id="calSpitz" hidden></p>
@@ -875,7 +882,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.45.4.0";
+let VERSION = "2.46.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1358,7 +1365,7 @@ function festUndVorbehaltTxt() {   // aus den Einstellungen: welche Zeiten fest 
   fest.push("Aufenthalte in der <b>Nebensaison</b>" + fld("rosa") + " (Mai, September und 19. bis 31. Dezember), solange keine Nacht in der Hochsaison liegt");
   if (FEST_MONATE.length) fest.push("Aufenthalte, die den <b>" + festTxt() + "</b> berühren (auch nur eine Nacht)");
   return "<p><b>Fest oder mit Vorbehalt?</b> Das hängt davon ab, wann ihr im Chalet seid:</p><ul>" +
-    "<li><b>Fest</b> (in Airbnb gesperrt, volle Sicherheit): " + fest.join("; ") + ".</li>" +
+    "<li><b>Fest</b> (in Airbnb gesperrt, volle Buchungssicherheit): " + fest.join("; ") + ".</li>" +
     "<li><b>Mit Vorbehalt</b> (nicht in Airbnb gesperrt): Aufenthalte, die mindestens eine Nacht in der <b>Hochsaison</b>" + fld("hoch") + " haben (" + (mon || "keine Monate") + "). Dort sperren die Eltern den Aufenthalt <b>nicht</b>, ausser ihr bucht verbindlich.</li></ul>";
 }
 function bildVorbehalt() {
@@ -1432,7 +1439,7 @@ function begriffeFuellen() {
     const bsp = (g) => calc({ wer: "Nur ich", gaeste: g, zimmer: "Nein", spar: "Nein", selbst: "Nein", reinig: REINIG[0], nights: 7, festBoden: true });
     let h = "<p>Im " + esc(mon) + " ist Skiferien-Zeit, das Chalet ist gefragt. Darum gelten hier eigene Regeln. Sobald auch nur eine Nacht deines Aufenthalts im " + esc(mon) + " liegt, gelten diese Regeln für den ganzen Aufenthalt.</p><ul>";
     h += "<li><b>Mindestens " + mn + " Nächte.</b>" + (nurFeb ? " Der Grund ist die Stückelung: Kurze Aufenthalte zerstückeln den Kalender, und die Eltern können die Zeit nicht mehr an Airbnb-Gäste vergeben. Beispiel: 28.1. bis 4.2. (7 Nächte) geht. 31.1. bis 2.2. (nur 2 Nächte) geht nicht, auch wenn er den Februar berührt: Sobald eine Nacht im Februar liegt, gelten die 7 Nächte für den ganzen Aufenthalt." : "") + "</li>";
-    h += "<li><b>Fest, mit Sicherheit.</b> Euer Termin wird in Airbnb gesperrt und nie mit Vorbehalt geführt. So könnt ihr eure Skiferien sicher planen.</li>";
+    h += "<li><b>Fest, mit Buchungssicherheit.</b> Euer Termin wird in Airbnb gesperrt und nie mit Vorbehalt geführt. So könnt ihr eure Skiferien sicher planen.</li>";
     h += "<li><b>Auch wir Eltern verzichten.</b> Im " + esc(mon) + " verzichten wir Eltern auf eigene Ferien im Chalet, damit Einnahmen hereinkommen.</li>";
     if (P.festBodenWoche > 0) {
       h += "<li><b>Mindestpreis " + chf(P.festBodenWoche) + " pro 7 Nächte</b> (bei mehr Nächten anteilig), inklusive Endreinigung. Das ist der Preis für Stammgäste. Im " + esc(mon) + " ist das Chalet nicht zum tiefen Familienpreis zu haben, über Airbnb kostet es definitiv mehr.</li>";
@@ -1457,7 +1464,7 @@ function begriffeFuellen() {
     if (!(P.hochNachtMin > 0) || !ms.length) { det.hidden = true; return; }
     det.hidden = false;
     const mon = ms.map((m) => MONATE[m - 1]).join(", ").replace(/, ([^,]*)$/, " und $1"), w7 = P.hochNachtMin * 7 + P.reinigung;
-    set("bc-hochsaison", "<p>" + fld("hoch") + "Hochsaison sind " + mon + ". Dann sind die Nächte bei Airbnb-Gästen besonders gefragt. Darum gibt es zwei Möglichkeiten: Wer Sicherheit will, zahlt mehr (verbindlich). Wer den normalen Familienpreis zahlt, trägt das Risiko (mit Vorbehalt).</p><ul>" +
+    set("bc-hochsaison", "<p>" + fld("hoch") + "Hochsaison sind " + mon + ". Dann sind die Nächte bei Airbnb-Gästen besonders gefragt. Darum gibt es zwei Möglichkeiten: Wer Buchungssicherheit will, zahlt mehr (verbindlich). Wer den normalen Familienpreis zahlt, trägt das Risiko (mit Vorbehalt).</p><ul>" +
       "<li><b>Preis verbindlich:</b> Eine Nacht kostet " + chf(P.hochNachtMin) + ", dazu kommt die Endreinigung (" + chf(P.reinigung) + "). Für 7 Nächte sind das " + chf(w7) + ". Ferien im Hotel sind teurer, und im Chalet habt ihr die ganze Wohnung für euch.</li>" +
       "<li><b>Preis mit Vorbehalt:</b> der normale Familienpreis wie in den anderen Monaten (" + chf(P.famPausch) + " pro Nacht für die Familie, dazu Endreinigung). Dafür trägt ihr das Risiko: Kommt ein Airbnb-Gast, müsst ihr weichen.</li>" +
       "<li><b>Auch wir Eltern verzichten:</b> In der Hochsaison verzichten wir Eltern auf eigene Ferien im Chalet, damit Einnahmen hereinkommen.</li>" +
@@ -1466,7 +1473,7 @@ function begriffeFuellen() {
       "<li><b>Mit Vorbehalt:</b> ab " + P.hochMinNaechte + " Nächten, auch mit Gästen. Der Termin wird nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "🔓") + "</li></ul>" +
       "<p>Wie die Preise entstehen, steht unter «Wie wird gerechnet». " + symBtn("b-rechnen", "🧮") + "</p>");
   })();
-  set("bc-prov", festUndVorbehaltTxt() + "<p><b>Mit Vorbehalt</b> heisst: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p>In der Hochsaison (" + HOCH_MONATE.filter((m) => FEST_MONATE.indexOf(m) < 0).map((m) => MONATE[m - 1]).join(", ").replace(/, ([^,]*)$/, " und $1") + ") braucht ein Termin mit Vorbehalt mindestens " + P.hochMinNaechte + " Nächte (wie bei Airbnb). Wer dort Sicherheit will, bucht <b>verbindlich</b> 🔒: Dann sperren die Eltern die Zeit in Airbnb. " + symBtn("b-hochsaison", "🏔️") + "</p><p><b>Praktisch gesichert 🔒:</b> Ein Airbnb-Gast kann jederzeit buchen, aber erst nach der Vorlaufzeit von " + VORLAUF + " Tagen einchecken (so ist es in Airbnb eingestellt). Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann deshalb kein neuer Gast mehr belegen: Der Balken wird dort <b>grün</b> (gesichert 🔒) statt gelb (🔓) und der grüne Teil wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken grün. Je länger der Aufenthalt und je weiter voraus, desto später wird er gesichert.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten, in der Nebensaison" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen mit Vorbehalt sind im noch nicht gesicherten Teil gelb, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
+  set("bc-prov", festUndVorbehaltTxt() + "<p><b>Mit Vorbehalt</b> heisst: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p>In der Hochsaison (" + HOCH_MONATE.filter((m) => FEST_MONATE.indexOf(m) < 0).map((m) => MONATE[m - 1]).join(", ").replace(/, ([^,]*)$/, " und $1") + ") braucht ein Termin mit Vorbehalt mindestens " + P.hochMinNaechte + " Nächte (wie bei Airbnb). Wer dort Buchungssicherheit will, bucht <b>verbindlich</b> 🔒: Dann sperren die Eltern die Zeit in Airbnb. " + symBtn("b-hochsaison", "🏔️") + "</p><p><b>Praktisch gesichert 🔒:</b> Ein Airbnb-Gast kann jederzeit buchen, aber erst nach der Vorlaufzeit von " + VORLAUF + " Tagen einchecken (so ist es in Airbnb eingestellt). Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann deshalb kein neuer Gast mehr belegen: Der Balken wird dort <b>grün</b> (gesichert 🔒) statt gelb (🔓) und der grüne Teil wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken grün. Je länger der Aufenthalt und je weiter voraus, desto später wird er gesichert.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten, in der Nebensaison" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen mit Vorbehalt sind im noch nicht gesicherten Teil gelb, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
   set("bc-wunschtermin", "<p>Den Wunschtermin wählt ihr im Kalender. Wie das geht, steht unter «Erklärung Kalender». Die Farben stehen als Legende unter dem Kalender. " + symBtn("b-kalender", "🗓️") + "</p>");
   set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Einzelne Nächte daraus sind nicht buchbar.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
   set("bc-ruhe", RUHE.length ? bildRuhe() + "<ul><li>Möglich vom " + ruhe.replace(" und ", " und vom ") + ".</li>" +
@@ -1923,11 +1930,11 @@ function renderKalender() {
   const msgs = [];
   if (ARR && DEP) {
     if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison" + fld("hoch") + ", die Nächte sind bei Airbnb-Gästen gefragt. " + (P.hochNachtMin > 0 ? (verbMoeglich(ARR, DEP) ? "Du kannst verbindlich buchen (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung) oder mit Vorbehalt (ein Airbnb-Gast hat Vorrang)." : "Verbindlich buchen geht mit " + P.verbMin + " bis " + P.verbMax + " Nächten, alle in der Hochsaison (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Sonst ist eine Anfrage mit Vorbehalt möglich: ein Airbnb-Gast hat Vorrang.") : "Eine Anfrage ist trotzdem möglich.")); break; }
-    if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
+    if (festStay(ARR, DEP)) msgs.push(HW + "<b>" + esc(festTxt()) + ":</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Buchungssicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
     if (ruheStay() && !S.luecke && S.selbstOK !== true) msgs.push(HW + "<b>Keine Staffel möglich:</b> Nach eurer Abreise bleiben bis zum nächsten Airbnb-Gast weniger als " + P.minNaechte + " freie Nächte, es kann keine weitere Familie anschliessen. Ihr würdet die ganze Endreinigung allein tragen und zusätzlich selbst putzen. Darum gilt hier der normale Termin: die Eltern reinigen, Gäste sind möglich.");
-    if (nebenFest(ARR, DEP)) msgs.push(HW + fld("rosa") + "<b>Nebensaison:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit. " + symBtn("b-prov", "🔒"));
-    if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Sicherheit. " + symBtn("b-prov", "🔒"));
-    if (provSel() && !(S.verbOK === true && S.art === "")) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Sicherheit:</b> " + provSicherZeile(ARR, DEP));
+    if (nebenFest(ARR, DEP)) msgs.push(HW + fld("rosa") + "<b>Nebensaison:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Buchungssicherheit. " + symBtn("b-prov", "🔒"));
+    if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Buchungssicherheit. " + symBtn("b-prov", "🔒"));
+    if (provSel() && !(S.verbOK === true && S.art === "")) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Buchungssicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
     if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
   }
@@ -3120,7 +3127,7 @@ function zahlZeile(x) {
   const st2 = "<span>" + stand + "</span><span>" + wann + "</span>";
   return vkKarte(x, zahlFaellig(x) ? "warn" : "", '<div class="vk-chips"><span class="vk-chip">' + esc(chf(x.betrag)) + "</span></div>", st2, '<button type="button" class="btn main" data-bez="' + esc(key) + '">✅ Zahlung eingegangen</button>' + wa);
 }
-// Hochsaison: Sicherheit gibt es nur zum Preis für «verbindlich». Darum kein Knopf, der einen Termin mit Vorbehalt (Familienpreis) nachträglich sperrt
+// Hochsaison: Buchungssicherheit gibt es nur zum Preis für «verbindlich». Darum kein Knopf, der einen Termin mit Vorbehalt (Familienpreis) nachträglich sperrt
 const hochVorbehalt = (x) => P.hochNachtMin > 0 && hochNaechte(x.arr, x.dep) > 0;
 function provZeile(x) {
   if (!x.prov) return "";
@@ -3419,26 +3426,32 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     } else if (r.top < 60) window.scrollBy({ top: r.top - 70, behavior: ruhig ? "auto" : "smooth" });
   };
   const RISIKO = '<span class="risk">⚠️ Das Risiko tragt ihr selbst: Kommt eine Airbnb-Buchung, müsst ihr weichen oder gar nicht erst reisen. Plant eine Alternative ein. Mit der Anfrage erklärt ihr euch damit einverstanden.</span>';
-  function iconLeiste(k, stay, zs, zh) {   // gebuchter Tag: Auge, Berechnung, Sicherheit, Hinweise als gleich grosse Icons; der Inhalt klappt darunter auf
+  function hinItem(t) {   // ein Hinweis als Punkt: Symbol, fetter Titel (Text vor dem ersten Doppelpunkt), Satz dahinter
+    const pl = t.replace(/<[^>]+>/g, "").trim(), m = t.match(/^((?:<i class="sw[^>]*><\/i>\s*)?)(?:<b>)?([^<:]{2,32}?)(?:<\/b>)?:\s*(?:<\/b>)?([\s\S]*)$/);
+    const ti = m ? m[2].trim() : "", rest = m ? m[3] : t, sw = m ? m[1] : "";
+    const sym = sw || (/^Februar|^Hochsaison|^Spitzen|Fest/.test(ti) ? "⛷️" : /Wäsche/.test(ti) ? "🧹" : /Endreinigung/.test(ti) ? "🪣" : /Lücke|Gesperrt/.test(ti) ? "🧩" : "ℹ️");
+    return { ti: ti || pl.slice(0, 28) + (pl.length > 28 ? "…" : ""), html: '<div class="ar-h"><span class="ar-hi">' + sym + '</span><div>' + (ti ? "<b>" + esc(ti) + "</b>" : "") + rest + "</div></div>" };
+  }
+  function iconLeiste(k, stay, zs, zh) {   // gebuchter Tag: ausklappbare Zeilen mit Symbol und Text, nur eine offen; Papi zusätzlich «Nur für dich»
     if (!stay.length) return "";
     const papi = !!(TOKEN && !ABSENDER), b = stay[0], eig = papi || (ABSENDER !== "" && b.name === ABSENDER);
-    let ik = "", pan = "";
-    if (papi) ik += '<button type="button" class="ibtn vk-auge" data-vw="' + esc(bKey(b)) + '" aria-label="In der Verwaltung zeigen" title="In der Verwaltung zeigen">👁️</button>';
+    const zeile = (id, sym, titel, kurz, warn) => '<button type="button" class="ar' + (warn ? " warn" : "") + '" data-ip="' + id + '" aria-expanded="false"><span class="ar-i">' + sym + '</span><span class="ar-t">' + titel + "<small>" + kurz + '</small></span><span class="ar-c" aria-hidden="true"></span></button>';
+    let h = "";
     if (eig) {
-      ik += '<button type="button" class="ibtn" data-ip="rech" aria-expanded="false" aria-label="Preisberechnung" title="Preisberechnung">🧾</button>';
-      const st = b.betrag > 0 ? '<p><b>' + esc(chf(b.betrag)) + '</b>' + (papi ? (b.prov ? " (wird erst mit der Sicherung fällig)" : (b.bezahlt ? ", bezahlt am " + esc(fmtTag(b.bezahlt.slice(0, 10))) : ", noch offen")) : "") + "</p>" : "";
-      pan += '<div class="ipan" data-ipan="rech" hidden>' + st + rechnungHtml(b.rechnung, b.bestaetigt) + "</div>";
+      const bez = b.bezahlt && b.betrag > 0;
+      const kurz = b.betrag > 0 ? esc(chf(b.betrag)) + " · " + (b.prov ? "fällig mit der Sicherung" : bez ? "bezahlt am " + esc(fmtTag(b.bezahlt.slice(0, 10))) : "noch offen") : "Preisberechnung";
+      h += zeile("rech", "🧾", bez ? "Quittung" : "Rechnung", kurz, false) + '<div class="ipan" data-ipan="rech" hidden>' + rechnungHtml(b.rechnung, b.bestaetigt) + "</div>";
     }
     if (zs.length) {
       const konf = stay.some((x) => x.prov && provKonflikt(x)), sicher = !konf && stay.every((x) => !x.prov || k < provSicherBis());
-      ik += '<button type="button" class="ibtn' + (sicher ? "" : " warn") + '" data-ip="sich" aria-expanded="false" aria-label="Sicherheit in Airbnb" title="Sicherheit in Airbnb">' + (konf ? "⚠️" : sicher ? "🔒" : "🔓") + "</button>";
-      pan += '<div class="ipan" data-ipan="sich" hidden>' + zs.map((t) => "<p>" + t + "</p>").join("") + "</div>";
+      h += zeile("sich", konf ? "⚠️" : sicher ? "🔒" : "🔓", "Buchungssicherheit", konf ? "Konflikt mit Airbnb-Gast" : sicher ? "gesichert" : "noch nicht gesichert", !sicher) + '<div class="ipan" data-ipan="sich" hidden>' + zs.map((t) => "<p>" + t + "</p>").join("") + "</div>";
     }
     if (zh.length) {
-      ik += '<button type="button" class="ibtn" data-ip="hin" aria-expanded="false" aria-label="Hinweise" title="Hinweise">ℹ️</button>';
-      pan += '<div class="ipan" data-ipan="hin" hidden>' + zh.map((t) => "<p>" + t + "</p>").join("") + "</div>";
+      const it = zh.map(hinItem);
+      h += zeile("hin", "ℹ️", "Hinweise", it.slice(0, 2).map((x) => esc(x.ti)).join(" · "), false) + '<div class="ipan ar-list" data-ipan="hin" hidden>' + it.map((x) => x.html).join("") + "</div>";
     }
-    return '<div class="ibar">' + ik + "</div>" + pan;
+    if (papi) h += '<div class="ar-nur">🔐 Nur für dich</div><button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>';
+    return h;
   }
   function text(k) {
     const heute = heuteKey(), kopf = "<b>" + esc(fmtTag(k)) + "</b>";
@@ -3463,9 +3476,9 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) zb.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> (" + P.verbMin + " bis " + P.verbMax + " Nächte, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest) oder <b>mit Vorbehalt</b> (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
       else if (istRuhe(k) && !GAP.has(k)) zb.push(fld("ruhe") + "Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
       else if (!stay.length) zb.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche»" + fld("ruhe") + ".") + "");
-      if (festStay(k, addDays(k, 1))) zb.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Sicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
+      if (festStay(k, addDays(k, 1))) zb.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
       else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
-      else if (istNeben(k) && !istHoch(k)) zb.push(fld("rosa") + "<b>Nebensaison:</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Sicherheit. Es gelten die normalen Familienpreise.");
+      else if (istNeben(k) && !istHoch(k)) zb.push(fld("rosa") + "<b>Nebensaison:</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit. Es gelten die normalen Familienpreise.");
       else if (provStay(k, addDays(k, 1))) { zb.push("Ein Aufenthalt wäre hier ein <b>Termin mit Vorbehalt</b>: nicht in Airbnb gesperrt, ein Airbnb-Gast hat Vorrang. " + symBtn("b-prov", "🔓")); zb.push(RISIKO); }
       if (schweifListe().some((s) => k >= s.von && k <= s.bis)) zb.push("Familienstaffel noch offen (gestrichelter Balken 🏃🏃): Wer hier selbst reinigt, führt sie weiter. Mit «Nein» wird sie unterbrochen und die Endreinigung der Gäste davor fällig.");
       const c = grid.querySelector('[data-k="' + k + '"]');
