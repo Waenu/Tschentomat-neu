@@ -21,6 +21,16 @@
       "verb": true,
       "betrag": 1640,
       "bestaetigt": "2026-10-29T16:59"
+    },
+    {
+      "name": "Manuel",
+      "arr": "2026-11-19",
+      "dep": "2026-11-22",
+      "selbst": false,
+      "pers": 2,
+      "betrag": 825,
+      "rechnung": "Gesendet am Do 29.10.2026, 17:23 Uhr. App-Version 2.51.1.0.\nAnreise\tDonnerstag 19.11.2026\nAbreise\tSonntag 22.11.2026 (3 Nächte)\nFamilie\tIch und Partner\nGäste\t2\nZimmer 1 unberührt\tJa\nReinigung\tHälfte Familie, Hälfte Gäste\nTotal laut Rechner\tCHF 825.–\n#Preisberechnung\nFamilie pro Nacht\tCHF 55.–\nGast 1 (Hauptgast) pro Nacht\tCHF 70.–\nGast 2 pro Nacht\tCHF 70.–\nÜbernachtung (3 Nächte)\tCHF 585.–\nReinigung\tCHF 240.–\nReinigung: Anteil Familie\tCHF 120.–\nReinigung: Anteil pro Gast\tCHF 60.–\n#Aufteilung unter den Gästen\nFamilie zahlt\tCHF 285.–\nGast 1 (Hauptgast) zahlt\tCHF 270.–\nGast 2 zahlt\tCHF 270.–\nZimmer 1 und rotes Bad bleiben unberührt: CHF 15.– weniger pro Nacht, die Familie zahlt CHF 55.– statt CHF 70.–.\nReinigung aufgeteilt: Hälfte Familie, Hälfte Gäste.",
+      "bestaetigt": "2026-10-29T17:23"
     }
   ],
   "logbuch": [
@@ -183,6 +193,10 @@
     {
       "t": "2026-10-29T16:59",
       "text": "Bescheid gegeben: Miriam, Fr 27.11.2026 bis Mo 30.11.2026"
+    },
+    {
+      "t": "2026-10-29T17:23",
+      "text": "Bestätigt: Manuel, Do 19.11.2026 bis So 22.11.2026, CHF 825"
     }
   ]
 }
