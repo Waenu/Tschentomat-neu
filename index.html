@@ -905,7 +905,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.55.2.1";
+let VERSION = "2.56.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -963,8 +963,7 @@ const WERL = ["Nur ich", "Ich und Partner", "Ich und 1 Kind", "Ich und 2 Kinder"
 const LWERL = ["Nur ich", "Ich und 1 Familienmitglied", "Ich und Kleinkind", "Ich, Familienmitglied, Kleinkind"];
 const REINIG = [
   "Nach Personen: ab 2½ Jahren zählt jede Person gleich",
-  "Familie ¼, Gäste ¾",
-  "Hälfte Familie, Hälfte Gäste",
+  "Nach Parteien: Familie und jeder Gast zahlen gleich viel",
   "Familie ¾, Gäste ¼",
   "Gäste zahlen die ganze Reinigung",
   "Familie zahlt die ganze Reinigung"
@@ -1027,11 +1026,10 @@ function derive(s) {
   let FA = RE;
   if (GE > 0) {
     if (ri === 0) FA = RE * FP / (FP + GE);
-    else if (ri === 1) FA = RE / 4;
-    else if (ri === 2) FA = RE / 2;
-    else if (ri === 3) FA = RE * 3 / 4;
-    else if (ri === 4) FA = 0;
-    else if (ri === 5) FA = RE;
+    else if (ri === 1) FA = RE / (1 + GE);   // Parteien: die Familie zählt als eine, jeder Gast als eine weitere Partei
+    else if (ri === 2) FA = RE * 3 / 4;
+    else if (ri === 3) FA = 0;
+    else if (ri === 4) FA = RE;
     else FA = RE * FP / (FP + GE);
   }
   const GS = GE > 0 ? (RE - FA) / GE : 0;
@@ -1150,7 +1148,7 @@ const FIELDS = [
     hint: () => S.selbst === "Nein" ? "Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")." : "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender." + (S.selbst === "Ja" ? "" : " Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")."),
     visible: () => false, opts: () => ["Ja", "Nein"] },
   { id: "reinig", label: "🍰 Wie werden die Reinigungskosten (" + chf(P.reinigung) + ") aufgeteilt?", type: "str",
-    hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht.",
+    hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht. Bei «Nach Parteien» ist die Familie eine Partei und jeder Gast eine weitere: bei 3 Gästen zahlt die Familie ¼, bei 4 Gästen ⅕.",
     visible: (d) => d.GE > 0, opts: () => REINIG }
 ];
 
