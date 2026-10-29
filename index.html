@@ -669,8 +669,8 @@
   .bk.blass { border-radius: 0; opacity: 1; box-shadow: none; color: var(--fg); padding: 0 8px; }
   .bk.blass.gruen, .bk.blass.air { background: color-mix(in srgb, var(--gruen) 38%, transparent); color: var(--fg); }
   .bk.blass.gelb { background: color-mix(in srgb, var(--gelb) 38%, transparent); color: var(--fg); }
-  .bk.gruen { background: var(--gruen); color: var(--gruen-fg); box-shadow: inset 0 0 0 1.5px var(--gruen-ol); }
-  .bk.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: inset 0 0 0 1.5px var(--gelb-ol); }
+  .bk.gruen { background: var(--gruen); color: var(--gruen-fg); box-shadow: inset 0 0 0 1.5px var(--gruen-ol); font-weight: 600; }
+  .bk.gelb { background: var(--gelb); color: var(--gelb-fg); box-shadow: inset 0 0 0 1.5px var(--gelb-ol); font-weight: 600; }
   .bk.gruen.mit { -webkit-mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); }
   .bk.gelb.ein { padding-left: 19px; }
   .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
@@ -819,7 +819,7 @@
     <details class="leg-det" id="calLegDet"><summary>🎨 Legende</summary>
     <div class="cal-leg" id="calHoch"></div>
     <p class="hint bk-leg-h">Diese Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben. Die Farbe zeigt die Buchungssicherheit:</p>
-    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk" data-z="🔒"></b></i>gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk" data-z="🔓"></b></i>noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk zl">Fam.</b></i>Familie</span><span id="legAir"><i class="k-air"><b class="zk zl">BnB</b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk zl">Ext.</b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk" data-z="🚫"></b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw" data-run="1"></i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk" data-z="🧹"></b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk" data-z="🪣"></b></i>die Eltern reinigen</span></div>
+    <div class="bk-leg"><span id="legGruen"><i class="k-gruen"><b class="zk zl">Fam.</b></i>Familie, gesichert: in Airbnb gesperrt</span><span id="legProv"><i class="k-gelb"><b class="zk zl">Fam.</b></i>Familie, noch nicht gesichert: Termin mit Vorbehalt, ein Airbnb-Gast hat Vorrang</span><span id="legFam"><i class="k-air"><b class="zk zl">Fam.</b></i>Familie (von Papi eingetragen)</span><span id="legAir"><i class="k-air"><b class="zk zl">BnB</b></i>Airbnb-Gast (Name von Papi eingetragen)</span><span id="legExt"><i class="k-air"><b class="zk zl">Ext.</b></i>Gast mit Vertrag (Name von Papi eingetragen)</span><span id="legBlock"><i class="k-air"><b class="zk" data-z="🚫"></b></i>blockiert, z. B. weil niemand reinigen kann</span><span id="legKonf"><i class="k-gelb k-konf"></i>Konflikt: ein Airbnb-Gast hat sich auf diese Tage eingetragen</span><span id="legStaffel"><i class="k-sw" data-run="1"></i>Familienstaffel noch offen, eine weitere Reisegruppe ist möglich</span><span><i class="k-gruen"><b class="zk" data-z="🧹"></b></i>ihr reinigt selbst</span><span><i class="k-gruen"><b class="zk" data-z="🪣"></b></i>die Eltern reinigen</span></div>
     </details>
     <p class="note h" id="calSpitz" hidden></p>
     <p class="note h" id="calRuhe" hidden></p>
@@ -890,7 +890,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.49.5.0";
+let VERSION = "2.50.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1825,7 +1825,15 @@ function zeichneBalken(gr) {
       }
       if (klasse === "sw") { mk("sw", links, breite, ANT + (breite >= 34 ? LAEUFER : "")); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
-      if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, inh(breite, "🔒")); return; }
+      // Buchungen aus der App: gleiche Schrift wie die Gastbalken, Beschriftung "Fam." einmal pro Umbruch im längeren Stück; Sicherheit zeigt die Farbe, alles Weitere steht in der Box
+      const famChip = '<b class="zk zl">Fam.</b>', mitLab = labZ.has(arr[0]);
+      const binh = (w, lab) => {
+        if (w < 30) return "";
+        const f = lab && w >= (nameBr ? 72 : 40);
+        const a = w - 8 - (f ? 43 : 0);
+        return (f ? famChip : "") + (nameBr && a >= 30 ? '<span class="bkn">' + esc(text) + "</span>" : "");
+      };
+      if (klasse.indexOf("gruen") >= 0) { mk("gruen" + konf, links, breite, binh(breite, mitLab)); return; }
       let sfPx = 0;
       if (sf) {
         let x = links;
@@ -1833,14 +1841,15 @@ function zeichneBalken(gr) {
         else if (sf >= arr[0]) { const cs = zell.get(sf); x = cs.offsetLeft + cs.offsetWidth / 2; }
         sfPx = Math.max(0, Math.min(x, rechts) - links);
       }
-      if (sf && sfPx >= breite - 6) { mk("gruen", links, breite, inh(breite, "🔒")); return; }          // ganz gesichert
+      if (sf && sfPx >= breite - 6) { mk("gruen", links, breite, binh(breite, mitLab)); return; }          // ganz gesichert
       if (sf && sfPx >= 18) {                                                                        // ein Termin: gruen mit nach innen gerundetem Ende, gelb muendet darin
         const R = 9;
-        mk("gruen mit", links, sfPx, inh(sfPx, "🔒"));
-        mk("gelb ein", links + sfPx - R, breite - sfPx + R, (breite - sfPx) >= 20 ? zk("🔓") + (rz && breite - sfPx >= 62 ? zk(rz) : "") + (sfPx < 64 && breite - sfPx >= 120 ? '<span class="bkn">' + esc(text) + "</span>" : "") : "");
+        const labErst = mitLab && sfPx >= 72;
+        mk("gruen mit", links, sfPx, binh(sfPx, labErst));
+        mk("gelb ein", links + sfPx - R, breite - sfPx + R, labErst || sfPx >= 72 ? "" : binh(breite - sfPx, mitLab));
         return;
       }
-      mk("gelb" + konf, links, breite, inh(breite, "🔓"));
+      mk("gelb" + konf, links, breite, binh(breite, mitLab));
     });
   };
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
