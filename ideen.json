@@ -117,7 +117,7 @@
       "art": "wunsch",
       "status": "neu",
       "titel": "Beträge externer Gäste eintragen, Monatssummen",
-      "text": "In der Box ein Feld für den Betrag von Ext.-Gästen (von Hand, nur für Papi sichtbar) und eine Monatsübersicht mit Familie (aus den Buchungen), Ext. und Total. Noch zu klären: Speicherort (die Daten im öffentlichen Repo wären nicht privat, Alternativen: nur im Browser des Geräts oder privates Repo), Zuordnung zum Monat bei Aufenthalten über den Monatswechsel, brutto oder netto, mit oder ohne Reinigung. Nur als Übersicht, die Buchhaltung bleibt die Grundlage."
+      "text": "In der Box ein Feld für den Betrag von Ext.-Gästen (von Hand, nur für Papi sichtbar) und eine Monatsübersicht mit Familie (aus den Buchungen), Ext. und Total. Noch zu klären: Speicherort (die Daten im öffentlichen Repo wären nicht privat, Alternativen: nur im Browser des Geräts oder privates Repo), brutto oder netto, mit oder ohne Reinigung. Nur als Übersicht, die Buchhaltung bleibt die Grundlage. Entschieden am 29.10.2026: Ein Betrag zählt im Monat der Anreise (Airbnb zahlt am Anreisetag oder spätestens am zweiten Tag aus). Dieselbe Regel für die Familie. Priorität: nicht so wichtig."
     }
   ]
 }
