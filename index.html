@@ -302,6 +302,8 @@
   .cal-d.rosa { background-color: var(--rosa-bg); border-color: var(--rosa-line); border-width: 2px; }
   .cal-d.occ.rosa { background-color: var(--rosa-bg); }
   .cal-d.ruhe { background-color: var(--ruhe-bg); border-color: var(--ruhe-line); border-width: 2px; }
+  .cal-d.kurz, .cal-d.kurz.occ { border-color: #FF0000 !important; border-width: 3px !important; border-style: solid !important; }
+  .sw-kurz { border-color: #FF0000; border-width: 3px; background: repeating-linear-gradient(45deg, transparent 0 3px, var(--line) 3px 5px); }
   .cal-d.in.ruhe { background-color: var(--note-bg); border-color: var(--accent); }
   .cal-d.sel.ruhe { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); }
   .sw { display: inline-block; width: 22px; height: 22px; border-radius: 5px; border: 2px solid; vertical-align: -5px; margin-right: 8px; }
@@ -896,7 +898,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.51.2.0";
+let VERSION = "2.52.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1315,6 +1317,21 @@ function berechneLuecken() {
     }
   }
 }
+// Freie Nächte zwischen zwei Belegungen, die für keinen Aufenthalt reichen (weniger als die Mindestnächte): Tag -> Anzahl freier Nächte. Lücken ab heute, begrenzt durch Belegungen auf beiden Seiten.
+let KURZ_KEY = "", KURZ_MAP = new Map();
+function kurzMap() {
+  const heute = heuteKey(), key = [heute, P.minNaechte, BELEGT ? Array.from(BELEGT).sort().join(",") : "", BUCH.map((x) => x.arr + x.dep).join(",")].join("|");
+  if (key === KURZ_KEY) return KURZ_MAP;
+  KURZ_KEY = key; KURZ_MAP = new Map();
+  const occ = new Set(BELEGT || []);
+  BUCH.forEach((x) => { for (let k = x.arr; k < x.dep; k = addDays(k, 1)) occ.add(k); });
+  const b = Array.from(occ).sort();
+  for (let i = 0; i + 1 < b.length; i++) {
+    const n = diffDays(b[i], b[i + 1]) - 1, start = addDays(b[i], 1);
+    if (n >= 1 && n < P.minNaechte && start >= heute) for (let k = start; k < b[i + 1]; k = addDays(k, 1)) KURZ_MAP.set(k, n);
+  }
+  return KURZ_MAP;
+}
 function lueckeVon(k) { for (const [st, en] of GAPSTART) if (k >= st && k < en) return [st, en]; return null; }
 function initKalenderMonat() { const n = heuteDate(); calY = n.getFullYear(); calM = n.getMonth(); }
 
@@ -1576,6 +1593,7 @@ function schweifListe() {
   BUCH.filter((b) => b.sb).forEach((b) => {
     const st = schweifStop(b), k = st.k;
     if (k === b.dep) return;
+    if (diffDays(b.dep, k) < P.minNaechte) return;   // zu kurz für einen weiteren Aufenthalt: kein offener Balken
     const letzteNacht = addDays(k, -1);
     if (letzteNacht < heute) return;
     out.push({ von: b.dep, vonMitte: true, bis: st.art === "mitte" ? k : letzteNacht, bisMitte: st.art === "mitte" });
@@ -1887,6 +1905,7 @@ function monatBauen(g, calY, calM) {
       else if (kannAnreise(k)) ok = true;
     }
     if (ARR && DEP && k > ARR && k < DEP) b.classList.add("in");
+    if (!BELEGT.has(k) && k >= heute && !nachtGebucht(k) && kurzMap().has(k)) { b.classList.add("occ", "kurz"); ok = false; }   // Lücke zu kurz: keine Buchung möglich
     if (!BELEGT.has(k) && k >= heute && GAPSPERR.has(k)) b.classList.add("occ");
     else if (!BELEGT.has(k) && k >= heute && GAP.has(k)) b.classList.add("gap");
     if (b.classList.contains("occ") && BELEGT_AIR && !BELEGT_AIR.has(k) && BUCH.some((x) => x.prov && x.arr <= k && k < x.dep)) { b.classList.remove("occ"); b.classList.add("provtag"); }   // Nacht eines Aufenthalts mit Vorbehalt: nicht wählbar, aber ohne Streichung
@@ -1944,6 +1963,7 @@ function renderKalender() {
     h += '<p class="leg-h">Lücken-Hinweis</p>';
     if (P.lueckeRabatt > 0) h += '<p><i class="sw sw-gap"></i><b>Lücke</b> (' + P.lueckeRabatt + ' % Rabatt) ' + symBtn('b-luecke', '🧩') + '</p>';
     h += '<p><i class="sw sw-occ"></i>nicht verfügbar</p>';
+    if (kurzMap().size) h += '<p><i class="sw sw-kurz"></i><b>Buchung unmöglich:</b> zwischen den Belegungen bleiben weniger als ' + P.minNaechte + ' Nächte</p>';
     el.innerHTML = h;
     el.hidden = h === "";
   }
@@ -3567,6 +3587,14 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     const heute = heuteKey(), kopf = "<b>" + esc(fmtTag(k)) + "</b>";
     lastK = k;
     if (k < heute) return kopf + "<p>Dieser Tag liegt in der Vergangenheit.</p>";
+    if (ARR && DEP && k === DEP && !BUCH.some((b) => b.arr <= k && k < b.dep)) {   // gewählter Abreisetag: Box zur Auswahl statt der Tagesinfo
+      const p = [], n = diffDays(ARR, DEP), gast = BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null, folge = BUCH.find((b) => b.arr === k);
+      p.push("Dein Aufenthalt: " + esc(fmtTag(ARR)) + " bis " + esc(fmtTag(DEP)) + " = " + n + (n === 1 ? " Nacht" : " Nächte") + ".");
+      if (folge) p.push("Am Abreisetag beginnt der Aufenthalt von <b>" + esc(folge.name) + "</b>.");
+      else if (BELEGT.has(k)) p.push("Am Abreisetag reist " + (gast && gast.name ? "ein Airbnb-Gast (<b>" + esc(gast.name) + "</b>)" : "ein Airbnb-Gast") + " an. Er kommt erst nachmittags, bis dahin seid ihr abgereist.");
+      if ((BELEGT.has(k) || !istRuhe(k)) && S.selbst !== "Nein") p.push(S.selbst === "Ja" ? "🔗 <b>Staffel endet hier.</b> Die Endreinigung (" + chf(P.reinigung) + ") fällt jetzt an und wird unter den Reisegruppen der Staffel aufgeteilt." : "🔗 Wählst du «Staffel», endet sie hier. Die Endreinigung (" + chf(P.reinigung) + ") fällt dann an und wird unter den Reisegruppen der Staffel aufgeteilt.");
+      return "<b>Abreise: " + esc(fmtTag(k)) + "</b>" + p.map((t) => "<p>" + t + "</p>").join("");
+    }
     const z = [], zs = [], zh = [];
     const stay = BUCH.filter((b) => b.arr <= k && k < b.dep), abr = BUCH.filter((b) => b.dep === k), zb = stay.length ? zh : z;
     stay.forEach((b) => z.push("Reserviert für <b>" + esc(b.name) + "</b> (" + (b.sb ? "reinigt selbst 🧹" : "Reinigung durch Eltern 🪣") + (b.prov ? ", mit Vorbehalt" : "") + ")."));
@@ -3580,7 +3608,10 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     });
     if (!stay.length && BELEGT.has(k)) z.push(!BELEGT.has(addDays(k, -1)) && !BUCH.some((b) => b.arr <= addDays(k, -1) && addDays(k, -1) < b.dep) ? "Von Airbnb belegt: als Anreise nicht buchbar. Als Abreisetag möglich, denn der Airbnb-Gast kommt erst nachmittags." : "Von Airbnb belegt, nicht buchbar.");
     abr.forEach((b) => z.push("Abreisetag von <b>" + esc(b.name) + "</b>."));
-    if (!BELEGT.has(k)) {
+    if (!BELEGT.has(k) && !stay.length && kurzMap().has(k)) {
+      const n = kurzMap().get(k);
+      z.push("<b>Buchung unmöglich:</b> Zwischen den Belegungen " + (n === 1 ? "bleibt nur 1 freie Nacht" : "bleiben nur " + n + " freie Nächte") + ", mindestens " + P.minNaechte + " Nächte sind nötig.");
+    } else if (!BELEGT.has(k)) {
       if (GAPSPERR.has(k)) zb.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) zb.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
