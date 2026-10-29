@@ -288,6 +288,8 @@
   .cal-d.provtag { color: var(--fg); }
   .cal-d.past { color: var(--muted); opacity: 0.45; border-style: dashed; }
   .cal-d.off { color: var(--muted); opacity: 0.5; }
+  .cal-d.nb { border-style: dashed; }
+  .cal-d.nb > span { opacity: 0.55; }
   .cal-d.in { background: var(--note-bg); border-color: var(--accent); }
   .cal-d.sel { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); font-weight: 700; }
   .cal-d.sel { text-decoration: none; }
@@ -867,7 +869,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.43.2.0";
+let VERSION = "2.43.3.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1803,11 +1805,9 @@ function renderKalender() {
   const erster = new Date(Date.UTC(calY, calM, 1));
   const lead = (erster.getUTCDay() + 6) % 7;
   const tage = new Date(Date.UTC(calY, calM + 1, 0)).getUTCDate();
-  for (let i = 0; i < lead; i++) g.appendChild(document.createElement("div"));
-  for (let d = 1; d <= tage; d++) {
-    const k = dkey(calY, calM, d);
+  const zelleBauen = (k, d, fremd) => {   // fremd: Tag des Vor- oder Folgemonats (gestrichelt, sonst gleich)
     const b = document.createElement("button");
-    b.type = "button"; b.className = "cal-d";
+    b.type = "button"; b.className = "cal-d" + (fremd ? " nb" : "");
     let ok = false, label = "";
     const istArr = k === ARR, istDep = k === DEP;
     if (k < heute) { b.classList.add("past"); }
@@ -1841,8 +1841,14 @@ function renderKalender() {
     b.innerHTML = '<span>' + d + '</span>' + (sm ? '<small>' + sm + '</small>' : '');
     b.setAttribute("aria-label", fmtTag(k) + (istArr ? ", Anreise" : istDep ? ", Abreise" : (BELEGT.has(k) || GAPSPERR.has(k)) ? ", nicht verfügbar" : "") + (spitzVon(k) ? ", Spitzenzeit" : "") + "");
     if (ok) b.addEventListener("click", () => kalenderKlick(k));
-    g.appendChild(b);
-  }
+    return b;
+  };
+  const vy = calM === 0 ? calY - 1 : calY, vm = calM === 0 ? 11 : calM - 1, ny = calM === 11 ? calY + 1 : calY, nm = calM === 11 ? 0 : calM + 1;
+  const vorTage = new Date(Date.UTC(calY, calM, 0)).getUTCDate();
+  for (let i = lead - 1; i >= 0; i--) g.appendChild(zelleBauen(dkey(vy, vm, vorTage - i), vorTage - i, true));
+  for (let d = 1; d <= tage; d++) g.appendChild(zelleBauen(dkey(calY, calM, d), d, false));
+  const nach = (7 - (lead + tage) % 7) % 7;
+  for (let d = 1; d <= nach; d++) g.appendChild(zelleBauen(dkey(ny, nm, d), d, true));
   zeichneBalken();
   const sel = document.getElementById("calSel");
   sel.classList.toggle("frag", !(ARR && DEP));
