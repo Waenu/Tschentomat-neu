@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.49.0.0",
+      "v": "2.43.3.0 bis 2.49.1.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -12,7 +12,7 @@
       ],
       "punkte": [
         "Kalender: Monat wechseln durch Wischen und Schieben mit dem Finger. Termine über den Monatsrand laufen blass weiter, am Wochenumbruch enden die Balken gerade, die Balkenschrift ist überall klein.",
-        "Gastbalken zeigen «Ext.» (Airbnb, Vertrag) oder «Fam.» statt eines Symbols; der Name hat Vorrang.",
+        "Gastbalken zeigen die Art als Beschriftung statt als Symbol; der Name hat Vorrang.",
         "Neue Box beim Antippen eines Balkens: ausklappbare Zeilen für Rechnung (nach der Zahlung Quittung), Buchungssicherheit und Hinweise, immer nur eine offen; die Box nutzt die ganze Breite.",
         "Nur für Papi: Bereich «Nur für dich» mit Einnahmen (Familie) und Verwaltung, dazu der Knopf «↩ zurück» aus der Verwaltung zur Box.",
         "«Sicherheit» heisst überall «Buchungssicherheit».",
@@ -20,8 +20,8 @@
         "Versionshistorie: Die Einträge sind aufklappbar, nur der neueste ist offen. Alles von einem Tag steht in einem Eintrag.",
         "Belegung am Airbnb-Tag (nur Papi): Das Formular ist auf Art (Ext., Fam., Blockiert), Name und Beträge verkleinert. Beträge: Preis Nächte, Preis Reinigung, Provision (nur Airbnb), mit Brutto und netto. Sie gehen in einen privaten Speicher (Repository «Tschentomat-privat»), der noch eingerichtet werden muss; bis dahin zeigt die App einen Hinweis.",
         "Einnahmen (Papi): Zeile zeigt zusätzlich Ext. im Monat und seit Jahresanfang, sobald der private Speicher läuft.",
-        "Flugzeug und Schriftrolle sind überall durch «Ext.» ersetzt (Box, Verwaltung, Auswahl der Art).",
-        "Kalender-Import: Die Art der Belegung lässt sich im Kalendertitel festlegen: «Airbnb: Ali belegt», «Extern: Janine Collins belegt Adelboden», «Familie: Marianne und Yolanda», «Block: Blockiert». Ohne Kürzel gilt wie bisher «<Name> belegt» als Airbnb."
+        "Kalender-Import: Die Art der Belegung steht im Kalendertitel: «Airbnb: Ali», «Extern: Janine Collins belegt Adelboden», «Familie: Marianne und Yolanda», «Blockiert:» (genügt allein, es steht kein Name auf dem Balken). Ohne Kürzel gilt wie bisher «<Name> belegt» als Airbnb.",
+        "Beschriftung der Gastbalken nach Art: «Fam.», «BnB» (Airbnb), «Ext.» (Gast mit Vertrag); «Blockiert» zeigt nur das Symbol 🚫 ohne Namen. Das Flugzeug ist überall ersetzt (Box, Verwaltung, Auswahl der Art)."
       ]
     },
     {
