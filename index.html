@@ -574,6 +574,12 @@
   #bestKasten .bs-fehlt { color: var(--missing-line); }
   #bestKasten .vk.warn { border-color: #C9A227; }
   #bestKasten .vk.rot { border-color: #C62828; }
+  #bestKasten .vkd { margin: 6px 0; }
+  #bestKasten .vkd > summary { min-height: 44px; border: 3px solid var(--gruen); border-radius: 14px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
+  #bestKasten .vkd.prov > summary { border-color: #C9A227; }
+  #bestKasten .vkd[open] > summary { margin-bottom: 4px; }
+  #bestKasten .vkd > summary b { font-weight: 700; }
+  #bestKasten .vkd-t { flex: 1; min-width: 0; display: block; }
   #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   #bestKasten .vk-name { font-weight: 700; font-size: 1.05em; }
   #bestKasten .vk-datum { font: inherit; font-size: .9em; color: var(--accent); background: transparent; border: 0; padding: 6px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-align: right; }
@@ -890,7 +896,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.50.1.0";
+let VERSION = "2.51.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3125,8 +3131,15 @@ function festKarte(x) {
   st += bescheidStatus(x);
   const acts = (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
-  return vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
+  const karte = vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
+  // Zugeklappt, wenn nichts mehr zu tun ist; offen, solange etwas fehlt (Konflikt, kein Bescheid, Vorbehalt noch nicht gesperrt oder praktisch sicher). Offene Zahlungen stehen nach der Abreise oben unter «Zahlungen offen».
+  const fehlt = konf || !x.bescheid || (prov && !hochVorbehalt(x) && !provSicher(x));
+  const ov = VK_STAND.get(bKey(x)), offen = fehlt || ov === true;
+  const kd = (k) => k.slice(8, 10) + "." + k.slice(5, 7) + ".";
+  return '<details class="vkd' + (fehlt ? " fehlt" : "") + (prov ? " prov" : "") + '"' + (offen ? " open" : "") + ' data-vkd="' + key + '"><summary><span class="vkd-t">' + (fehlt ? "🟧 " : prov ? "🔓 " : "✅ ") + "<b>" + esc(x.name) + "</b>, " + kd(x.arr) + "–" + kd(x.dep) + esc(x.dep.slice(0, 4)) + (x.betrag > 0 ? ", " + esc(chf(x.betrag).replace(" ", "\u00a0")) : "") + "</span></summary>" + karte + "</details>";
 }
+const VK_STAND = new Map();   // vom Nutzer aufgeklappte/zugeklappte Karten in der Verwaltung (bis zum Neuladen)
+document.addEventListener("click", (e) => { const sm = e.target.closest && e.target.closest(".vkd > summary"); if (!sm) return; const d = sm.parentNode; VK_STAND.set(d.getAttribute("data-vkd"), !d.open); });
 function gaesteFormular() {
   const h = heuteKey(), starts = [];
   if (BELEGT_AIR) Array.from(BELEGT_AIR).sort().forEach((k) => { if (!BELEGT_AIR.has(addDays(k, -1)) && belegtEnde(k) >= h) starts.push(k); });
