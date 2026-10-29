@@ -1,6 +1,14 @@
 {
   "gaeste": [
     {
+      "arr": "2026-11-05",
+      "dep": "2026-11-08",
+      "name": "Test",
+      "typ": "airbnb",
+      "quelle": "kalender",
+      "kal": "Test"
+    },
+    {
       "arr": "2026-11-11",
       "dep": "2026-11-15",
       "name": "Marianne und Yolanda",
