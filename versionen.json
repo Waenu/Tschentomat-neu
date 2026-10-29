@@ -2,6 +2,21 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
+      "v": "2.47.0.0",
+      "datum": "2026-10-29",
+      "titel": "Ext. und Fam. auf den Balken, Einnahmen (Familie)",
+      "arten": [
+        "Neu",
+        "Layout"
+      ],
+      "punkte": [
+        "Gastbalken zeigen «Ext.» (Airbnb und Vertrag) oder «Fam.» statt Symbol; «Blockiert» behält das Symbol. Bei wenig Platz entfällt die Beschriftung, der Name hat Vorrang.",
+        "Legende angepasst.",
+        "Nur für Papi: Zeile «Einnahmen» (Familie) mit Betrag der Buchung, Monatssumme nach Anreisemonat und Summe seit Jahresanfang.",
+        "Betrag in der Rechnungszeile ohne «.–»."
+      ]
+    },
+    {
       "v": "2.46.0.0",
       "datum": "2026-10-29",
       "titel": "Neue Box beim Antippen eines Balkens",
