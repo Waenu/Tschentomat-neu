@@ -6,6 +6,7 @@ Regeln (mit Wänu abgesprochen):
 - Mit Kürzel am Anfang bestimmt der Titel die Art (Gross- und Kleinschreibung egal, «belegt» ist dann freiwillig):
   «Airbnb: Ali belegt», «Extern: Janine Collins belegt Adelboden» (Gast mit Vertrag), «Familie: Marianne und Yolanda»,
   «Blockiert: Reinigung» (Text frei, auch ganz ohne; «Block:», «Fam:», «Ext:» gehen ebenfalls). Alles nach dem Namen und « belegt» wird ignoriert.
+  Das Kürzel darf auch «Extern>> Name» oder «<<Extern>> Name» lauten (Klammerform: Pimlical zeigt sie im Titel nicht an).
 - Anreise = Starttag, Abreise = letzter angezeigter Tag (Google speichert das Ende einen Tag später).
 - Eintrag aus dem Kalender kommt mit der Art aus dem Titel (ohne Kürzel: «airbnb»), markiert mit quelle=kalender und kal=<Name>.
 - Von Hand eingetragene oder in der App geänderte Einträge werden NIE überschrieben (die App entfernt die Markierung beim Speichern).
@@ -21,7 +22,9 @@ from zoneinfo import ZoneInfo
 
 MAX_ENTFERNEN = 3
 MARKER = re.compile(r"^\s*(.+?)\s+bel(?:egt|egen)\b", re.IGNORECASE)
-PRAEFIX = re.compile(r"^\s*(familie|fam|airbnb|extern|ext|blockiert|block)\.?\s*:\s*(.*)$", re.IGNORECASE)
+ART = r"familie|fam|airbnb|extern|ext|blockiert|block"
+# Kürzel: «Extern: Name», «Extern>> Name» oder «<<Extern>> Name» (die Klammerform blendet Pimlical im Titel aus)
+PRAEFIX = re.compile(r"^\s*(?:<<\s*(" + ART + r")\.?\s*>>|(" + ART + r")\.?\s*(?::|>>))\s*(.*)$", re.IGNORECASE)
 ARTEN = {"familie": "fam", "fam": "fam", "airbnb": "airbnb", "extern": "extern", "ext": "extern", "block": "block", "blockiert": "block"}
 
 
@@ -29,8 +32,8 @@ def titel_lesen(t):
     """Titel -> (art, name) oder None, wenn es kein Gast-Eintrag ist."""
     p = PRAEFIX.match(t)
     if p:
-        art = ARTEN[p.group(1).lower()]
-        rest = p.group(2).strip()
+        art = ARTEN[(p.group(1) or p.group(2)).lower()]
+        rest = p.group(3).strip()
         m = MARKER.match(rest)
         name = kurz((m.group(1) if m else rest).rstrip(" .:;,"))
         if not name and art == "block":
