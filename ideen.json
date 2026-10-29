@@ -115,9 +115,9 @@
     },
     {
       "art": "wunsch",
-      "status": "neu",
+      "status": "geplant",
       "titel": "Beträge externer Gäste eintragen, Monatssummen",
-      "text": "In der Box ein Feld für den Betrag von Ext.-Gästen (von Hand, nur für Papi sichtbar) und eine Monatsübersicht mit Familie (aus den Buchungen), Ext. und Total. Noch zu klären: Speicherort (die Daten im öffentlichen Repo wären nicht privat, Alternativen: nur im Browser des Geräts oder privates Repo), brutto oder netto, mit oder ohne Reinigung. Nur als Übersicht, die Buchhaltung bleibt die Grundlage. Entschieden am 29.10.2026: Ein Betrag zählt im Monat der Anreise (Airbnb zahlt am Anreisetag oder spätestens am zweiten Tag aus). Dieselbe Regel für die Familie. Priorität: nicht so wichtig."
+      "text": "In der Box ein Feld für den Betrag von Ext.-Gästen (von Hand, nur für Papi sichtbar) und eine Einnahmen-Ansicht in der Verwaltung (nur Papi): pro Monat Familie (aus den Buchungen), Ext. und Total, dazu eine laufende Summe seit Jahresanfang bis heute. Zurückblättern in frühere Monate und Jahre, die Beträge bleiben gespeichert. Entschieden am 29.10.2026: Ein Betrag zählt im Monat der Anreise (Airbnb zahlt am Anreisetag oder spätestens am zweiten Tag aus), dieselbe Regel für die Familie. Speicherort: privates GitHub-Repo (z. B. «Tschentomat-privat»), damit es privat und dauerhaft ist. Dafür muss Papi das Repo anlegen (Private) und seinen Zugangsschlüssel auf dieses Repo erweitern. Noch offen: brutto oder netto, mit oder ohne Reinigung. Soll «bis heute» nur Anreisen bis heute zählen (Vorschlag: «bis heute» und «gebucht für das ganze Jahr» getrennt zeigen)? Die Familienbeträge stehen heute in buchungen.json im Vorschau-Repo und sind nicht privat, falls nötig ebenfalls ins private Repo. Nur als Übersicht, die Buchhaltung bleibt die Grundlage. Priorität: nicht so wichtig."
     }
   ]
 }
