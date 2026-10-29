@@ -631,7 +631,7 @@
   #calBlase .ar.warn { border-color: #E0A800; }
   #calBlase .ar-i { flex: none; width: 30px; text-align: center; font-size: 1.35rem; }
   #calBlase .ar-t { flex: 1; min-width: 0; font-weight: 700; } #calBlase .ar-t small { display: block; font-weight: 400; color: var(--muted); font-size: .8rem; }
-  #calBlase .ar-c { flex: none; color: var(--accent); font-weight: 700; } #calBlase .ar-c::before { content: "▾"; } #calBlase .ar[aria-expanded="true"] .ar-c::before { content: "▴"; } #calBlase .ar-c.go::before { content: "›"; }
+  #calBlase .ar-c { flex: none; color: var(--accent); font-weight: 700; } #calBlase .ar-c::before { content: "▾"; } #calBlase .ar[aria-expanded="true"] .ar-c::before { content: "▴"; } #calBlase .ar-c.go::before { content: "▸"; }
   #calBlase .ar[aria-expanded="true"] { background: var(--note-bg); }
   #calBlase .ar + .ipan { margin: 6px 0 0; padding: 6px 12px; border: 0; border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--surface); font-size: .92rem; }
   #calBlase .ar-nur { margin: 14px 0 0; padding-top: 8px; border-top: 2px dashed var(--accent); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
@@ -648,11 +648,12 @@
   #calBlase .gb input, #calBlase .gb select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   #calBlase .gb .btn { width: 100%; justify-content: center; min-height: 48px; }
   #calBlase .gb .btn.quiet { border-style: dashed; font-weight: 500; }
-  #calBlase { margin-top: 8px; display: flex; gap: 8px; align-items: flex-start; }
+  #calBlase { margin-top: 8px; position: relative; }
   #calBlase:not([hidden]) ~ #calTipp { display: none; }
   #calBlase .txt { flex: 1; min-width: 0; }
   #calBlase .txt p { margin: 4px 0 0; }
-  #calBlase #calBlaseZu { font: inherit; background: transparent; border: 0; color: var(--muted); padding: 2px 6px; cursor: pointer; }
+  #calBlase #calBlaseZu { position: absolute; top: 0; right: 0; font: inherit; background: transparent; border: 0; color: var(--muted); padding: 2px 6px; cursor: pointer; }
+  #calBlase .txt > :nth-child(-n+2) { padding-right: 32px; }   /* Titel und erste Zeile lassen Platz für ✕, die Zeilen darunter nutzen die ganze Breite */
   .risk { color: var(--error-line); font-weight: 700; }
   label.risiko { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; padding: 10px; border: 2px solid var(--error-line); border-radius: 12px; background: var(--error-bg); color: var(--error-fg); }
   label.risiko input { width: 24px; height: 24px; flex: none; margin-top: 2px; }
@@ -882,7 +883,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.47.2.0";
+let VERSION = "2.47.3.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
