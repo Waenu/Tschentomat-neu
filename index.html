@@ -890,7 +890,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.48.0.0";
+let VERSION = "2.48.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1645,6 +1645,7 @@ const ANT = '<svg class="ant" aria-hidden="true" focusable="false"><rect x="0" y
 const LAEUFER = '<span class="laeufer">' + RUN + RUN + "</span>";
 document.querySelectorAll("[data-z]").forEach((e) => { e.innerHTML = zkI(e.dataset.z); });
 document.querySelectorAll("[data-run]").forEach((e) => { e.innerHTML = ANT + LAEUFER; });
+const typMarke = (t) => (t === "block" ? "🚫" : '<b class="zk zl">' + (t === "fam" ? "Fam." : "Ext.") + "</b>");   // statt Flugzeug und Schriftrolle: Ext. (Airbnb, Vertrag), Fam., Blockiert
 const typNorm = (t) => (t === "extern" || t === "block" || t === "fam" ? t : "airbnb");
 const typKnoepfe3 = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Belegung">' + ["airbnb", "fam", "block"].map((k) => '<button type="button" class="btn typ' + ((typNorm(t) === "extern" ? "airbnb" : typNorm(t)) === k ? " on" : "") + '" data-typ="' + k + '">' + { airbnb: "Ext.", fam: "Fam.", block: "🚫 Blockiert" }[k] + "</button>").join("") + "</div>";
 const typKnoepfe = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Buchung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + TYP_SYM[k] + " " + { airbnb: "Airbnb", extern: "Vertrag", fam: "Familie", block: "Blockiert" }[k] + "</button>").join("") + "</div>";
@@ -3116,9 +3117,9 @@ function gaesteFormular() {
   const opt = starts.slice(0, 40).map((k) => { const g = GAESTE.find((x) => x.arr === k); return '<option value="' + k + '">' + esc(fmtTag(k)) + " bis " + esc(fmtTag(belegtEnde(k))) + (g ? " · " + esc(g.name) : "") + "</option>"; }).join("");
   let t = vkSek("👤 Gäste mit Namen", GAESTE.length);
   t += '<p class="hint">Die Namen stehen öffentlich in gaeste.json und im Kalender. Gib den Namen so ein, wie er im Kalender stehen soll, z. B. «Maria K.». Die App ändert ihn nicht und löscht nichts von selbst. Folgt ein zweiter Gast ohne Lücke, wähle sein Anreisedatum bei «Anderes Datum». Das zweite Datumsfeld ist die Abreise (freiwillig, sonst bis zum Ende der Belegung). Einfacher geht es im Kalender: Tag antippen, dann Anreise und Abreise wählen.</p>';
-  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select>' + typKnoepfe("gTyp", "airbnb") + '<input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gDep" type="date" aria-label="Abreise (freiwillig)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
+  t += '<div class="vk vk-gast"><select id="gSel" aria-label="Airbnb-Belegung"><option value="">Belegung wählen …</option>' + opt + '</select>' + typKnoepfe3("gTyp", "airbnb") + '<input id="gDat" type="date" aria-label="Anderes Datum (Anreise)" min="' + h + '"><input id="gDep" type="date" aria-label="Abreise (freiwillig)" min="' + h + '"><input id="gName" type="text" maxlength="40" placeholder="Name, z. B. Maria K." autocomplete="off"><div class="vk-acts"><button type="button" class="btn main full" data-gsave="1">💾 Speichern</button></div></div>';
   const gl = GAESTE.slice().sort((p, q) => (p.arr < q.arr ? -1 : 1));
-  t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + TYP_SYM[x.typ] + " " + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
+  t += gl.map((x) => '<div class="vk"><div class="vk-top"><span class="vk-name">' + typMarke(x.typ) + " " + esc(x.name) + '</span><span class="hint">ab ' + esc(fmtTag(x.arr)) + '</span></div><div class="vk-acts"><button type="button" class="btn quiet full" data-gdel="' + esc(x.arr) + '">🗑️ Name entfernen</button></div></div>').join("");
   if (bestFehler) t += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
   return t;
 }
@@ -3567,7 +3568,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     }
     const gf = !stay.length ? gastFormularFuer(k) : "";
     const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
-    return kopf + (gn ? "<p>" + TYP_SYM[gn.typ] + " " + TYP_TXT[gn.typ] + ": <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + iconLeiste(k, stay, zs, zh) + gf;
+    return kopf + (gn ? "<p>" + typMarke(gn.typ) + " <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + iconLeiste(k, stay, zs, zh) + gf;
   }
   window._gastBlase = (k, still) => zeigen(text(k), grid.querySelector('[data-k="' + k + '"]'), !!still);
   function zelle(e) {
