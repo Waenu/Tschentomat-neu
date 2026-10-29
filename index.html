@@ -290,6 +290,8 @@
   .cal-d.off { color: var(--muted); opacity: 0.5; }
   .cal-d.nb { border-style: dashed; }
   .kal-nb { position: absolute; pointer-events: none; z-index: 1; }
+  .kal-nbk { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; pointer-events: none; }
+  #cal.zieht .cal-nav button { visibility: hidden; }   /* beim Schieben tragen die Monatsnamen die Titelzeile */
   .cal-d.nb > span { opacity: 0.55; }
   .cal-d.in { background: var(--note-bg); border-color: var(--accent); }
   .cal-d.sel { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); font-weight: 700; }
@@ -870,7 +872,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.45.0.0";
+let VERSION = "2.45.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2013,7 +2015,13 @@ document.getElementById("calNext").addEventListener("click", () => { calM++; if 
   let st = null, stumm = 0;
   g.style.touchAction = "pan-y";
   const btnFuer = (dir) => document.getElementById(dir > 0 ? "calNext" : "calPrev");
-  const weg = () => { if (st && st.nb) { st.nb.remove(); st.nb = null; } const el = g.parentElement; if (el) el.style.overflowX = ""; g.style.transition = ""; g.style.transform = ""; };
+  const weg = () => { if (st && st.nb) { st.nb.remove(); st.nb = null; } if (st && st.gk) { st.gk.remove(); st.gk = null; } const ti = document.getElementById("calTitle"); if (ti) ti.style.visibility = ""; const el = g.parentElement; if (el) { el.style.overflowX = ""; el.classList.remove("zieht"); } g.style.transition = ""; g.style.transform = ""; };
+  const kopfBauen = (text) => {   // Monatsname auf Höhe der Titelzeile, gleitet mit seinem Monat mit
+    const ti = document.getElementById("calTitle"), tr = ti.getBoundingClientRect(), gr = g.getBoundingClientRect(), cs = getComputedStyle(ti);
+    const d = document.createElement("div"); d.className = "kal-nbk"; d.textContent = text;
+    d.style.top = (tr.top - gr.top) + "px"; d.style.height = tr.height + "px"; d.style.lineHeight = tr.height + "px"; d.style.font = cs.font; d.style.color = cs.color;
+    return d;
+  };
   const nachbar = (dir) => {   // Nachbarmonat daneben aufbauen (dir +1 = rechts daneben, -1 = links daneben); null an der Grenze
     if (st.nb && st.nbDir === dir) return;
     if (st.nb) { st.nb.remove(); st.nb = null; }
@@ -2024,11 +2032,13 @@ document.getElementById("calNext").addEventListener("click", () => { calM++; if 
     nb.className = "cal-grid kal-nb"; nb.setAttribute("aria-hidden", "true");
     nb.style.left = g.offsetLeft + "px"; nb.style.top = g.offsetTop + "px"; nb.style.width = g.offsetWidth + "px";
     g.insertAdjacentElement("afterend", nb);
-    monatBauen(nb, y, mm); zeichneBalken(nb);
+    monatBauen(nb, y, mm);
+    nb.appendChild(kopfBauen(MONATE[mm] + " " + y));
+    zeichneBalken(nb);
     st.nb = nb;
   };
   const lage = (dx) => {
-    const W = g.offsetWidth + 4, dir = dx < 0 ? 1 : -1;
+    const W = g.offsetWidth + 24, dir = dx < 0 ? 1 : -1;
     nachbar(dir);
     g.style.transform = "translateX(" + (st.nb ? dx : dx * 0.3) + "px)";
     if (st.nb) st.nb.style.transform = "translateX(" + (dir * W + dx) + "px)";
@@ -2043,7 +2053,7 @@ document.getElementById("calNext").addEventListener("click", () => { calM++; if 
     if (!st || e.touches.length !== 1) return;
     const dx = e.touches[0].clientX - st.x, dy = e.touches[0].clientY - st.y;
     if (!st.mode) {
-      if (Math.abs(dx) > 10 && Math.abs(dx) > 1.5 * Math.abs(dy)) { st.mode = "x"; const el = g.parentElement; if (el) el.style.overflowX = "clip"; g.style.transition = "none"; }
+      if (Math.abs(dx) > 10 && Math.abs(dx) > 1.5 * Math.abs(dy)) { st.mode = "x"; const el = g.parentElement; if (el) { el.style.overflowX = "clip"; el.classList.add("zieht"); } g.style.transition = "none"; const ti = document.getElementById("calTitle"); st.gk = kopfBauen(ti.textContent); g.appendChild(st.gk); ti.style.visibility = "hidden"; }
       else if (Math.abs(dy) > 10) st.mode = "y";
     }
     if (st.mode === "x") lage(dx);
@@ -2053,7 +2063,7 @@ document.getElementById("calNext").addEventListener("click", () => { calM++; if 
     const s0 = st; st = null;
     if (s0.mode !== "x") return;
     stumm = Date.now() + 350;
-    const t = e.changedTouches && e.changedTouches[0], dx = t ? t.clientX - s0.x : 0, W = g.offsetWidth + 4, dir = dx < 0 ? 1 : -1;
+    const t = e.changedTouches && e.changedTouches[0], dx = t ? t.clientX - s0.x : 0, W = g.offsetWidth + 24, dir = dx < 0 ? 1 : -1;
     st = s0;
     const wechsel = !!s0.nb && e.type !== "touchcancel" && (Math.abs(dx) > g.offsetWidth * 0.3 || (Date.now() - s0.t < 300 && Math.abs(dx) >= 60));
     const tr = ruhig() ? "none" : "transform .2s ease-out";
