@@ -597,6 +597,7 @@
   #bestKasten .vk-acts .btn.quiet { border-style: dashed; font-weight: 500; opacity: 0.85; }
   #bestKasten .vk-acts .full { grid-column: 1 / -1; }
   #bestKasten .vk-acts .hint { grid-column: 1 / -1; }
+  label .hl { background: #FFD54A; color: #1a1a1a; padding: 0 5px; border-radius: 5px; }
   #bestKasten .einn-jahr { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 10px 0 6px; font-size: 1.15em; }
   #bestKasten .einn-jahr .btn { min-width: 48px; justify-content: center; }
   #bestKasten .eintab { width: 100%; border-collapse: collapse; font-size: .84em; font-variant-numeric: tabular-nums; }
@@ -905,7 +906,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.56.0.1";
+let VERSION = "2.56.0.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1128,7 +1129,7 @@ const FIELDS = [
   { id: "fam", label: "👨‍👩‍👧‍👦 Wie viele Personen aus der Familie kommen?", type: "num",
     hint: (d) => "Alle zählen, auch Kleinkinder: du selbst, Geschwister, Partner, Enkelkinder. Beispiel: Tochter, Sohn und 2 Enkel sind 4. Kleinkinder im Kinderbettchen oder bei den eigenen Eltern gibst du danach an." + (d.kkFix ? " Bei " + S.fam + " Personen sind " + d.kkMin + " davon Kleinkinder im Kinderbettchen oder bei den eigenen Eltern, das setzt der Rechner automatisch." : ""),
     visible: (d) => S.wer === MFG, opts: () => range(2, P.maxPersonen + 2) },
-  { id: "kk", label: "👶 Wie viele davon brauchen kein normales Bett und schlafen in einem Kinderbettchen oder bei den eigenen Eltern?", type: "num",
+  { id: "kk", label: "👶 Wie viele davon brauchen {{kein}} normales Bett und schlafen in einem Kinderbettchen oder bei den eigenen Eltern?", type: "num",
     hint: () => "Kinder bis etwa 2½ Jahren. Sie belegen kein Bett und zählen bei der Reinigung nicht mit.",
     visible: (d) => d.kkMax > 0 && !d.kkFix, opts: (d) => range(d.kkMin, d.kkMax) },
   { id: "gaeste", label: "🧑‍🤝‍🧑 Gäste (ausserhalb der Familie)", type: "num",
@@ -1185,7 +1186,7 @@ function build() {
   FIELDS.forEach((f) => {
     const wrap = document.createElement("div");
     wrap.className = "field"; wrap.id = "f-" + f.id;
-    const lab = document.createElement("label"); lab.htmlFor = "s-" + f.id; lab.textContent = f.label;
+    const lab = document.createElement("label"); lab.htmlFor = "s-" + f.id; lab.innerHTML = esc(f.label).replace(/\{\{(.+?)\}\}/g, '<span class="hl">$1</span>');   // {{Wort}} im Fragetext = hervorgehoben
     const sel = document.createElement("select"); sel.id = "s-" + f.id;
     const hint = document.createElement("p"); hint.className = "hint"; hint.id = "h-" + f.id;
     sel.addEventListener("change", () => {
