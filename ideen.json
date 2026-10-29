@@ -93,7 +93,7 @@
       "art": "wunsch",
       "status": "geplant",
       "titel": "Symbole in den Balken aussortieren",
-      "text": "Klären, welche Symbole in den Balken künftig noch zu sehen sind. Viele sollen entfallen. Der Name hat Vorrang."
+      "text": "Klären, welche Symbole in den Balken künftig noch zu sehen sind. Viele sollen entfallen. Der Name hat Vorrang. Entschieden am 29.10.2026: Bei Gästebalken steht «Ext.» (Airbnb, Extern und Vertrag) und «Fam.» (Familie) als Kürzel statt des Symbols, das Symbol für «Blockiert» bleibt. Bei ganz kurzen Balken fällt das Kürzel weg, der Name bleibt."
     },
     {
       "art": "wunsch",
@@ -112,6 +112,12 @@
       "status": "neu",
       "titel": "Neues und Änderungen",
       "text": "Welche Symbole in den Balken bleiben.\nDie Legende muss die blasse Fortsetzung erklären.\nDie Freischaltung von Version 2, das Aufräumen der Testdaten und die Version 3."
+    },
+    {
+      "art": "wunsch",
+      "status": "neu",
+      "titel": "Beträge externer Gäste eintragen, Monatssummen",
+      "text": "In der Box ein Feld für den Betrag von Ext.-Gästen (von Hand, nur für Papi sichtbar) und eine Monatsübersicht mit Familie (aus den Buchungen), Ext. und Total. Noch zu klären: Speicherort (die Daten im öffentlichen Repo wären nicht privat, Alternativen: nur im Browser des Geräts oder privates Repo), Zuordnung zum Monat bei Aufenthalten über den Monatswechsel, brutto oder netto, mit oder ohne Reinigung. Nur als Übersicht, die Buchhaltung bleibt die Grundlage."
     }
   ]
 }
