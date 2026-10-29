@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.49.1.0",
+      "v": "2.43.3.0 bis 2.49.2.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -20,8 +20,8 @@
         "Versionshistorie: Die Einträge sind aufklappbar, nur der neueste ist offen. Alles von einem Tag steht in einem Eintrag.",
         "Belegung am Airbnb-Tag (nur Papi): Das Formular ist auf Art (Ext., Fam., Blockiert), Name und Beträge verkleinert. Beträge: Preis Nächte, Preis Reinigung, Provision (nur Airbnb), mit Brutto und netto. Sie gehen in einen privaten Speicher (Repository «Tschentomat-privat»), der noch eingerichtet werden muss; bis dahin zeigt die App einen Hinweis.",
         "Einnahmen (Papi): Zeile zeigt zusätzlich Ext. im Monat und seit Jahresanfang, sobald der private Speicher läuft.",
-        "Kalender-Import: Die Art der Belegung steht im Kalendertitel: «Airbnb: Ali», «Extern: Janine Collins belegt Adelboden», «Familie: Marianne und Yolanda», «Blockiert:» (genügt allein, es steht kein Name auf dem Balken). Ohne Kürzel gilt wie bisher «<Name> belegt» als Airbnb.",
-        "Beschriftung der Gastbalken nach Art: «Fam.», «BnB» (Airbnb), «Ext.» (Gast mit Vertrag); «Blockiert» zeigt nur das Symbol 🚫 ohne Namen. Das Flugzeug ist überall ersetzt (Box, Verwaltung, Auswahl der Art)."
+        "Kalender-Import: Die Art der Belegung steht im Kalendertitel: «Airbnb: Ali», «Extern: Janine Collins belegt Adelboden», «Familie: Marianne und Yolanda», «Blockiert: Reinigung» (der Text dahinter ist frei, «Blockiert:» allein genügt). Ohne Kürzel gilt wie bisher «<Name> belegt» als Airbnb.",
+        "Beschriftung der Gastbalken nach Art: «Fam.», «BnB» (Airbnb), «Ext.» (Gast mit Vertrag), 🚫 für Blockiert. Bei «Blockiert» ist ein Name frei wählbar (z. B. «Reinigung», «Arbeiten»); ohne Text steht nur das Symbol. Das Flugzeug ist überall ersetzt (Box, Verwaltung, Auswahl der Art)."
       ]
     },
     {

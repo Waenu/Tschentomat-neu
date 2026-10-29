@@ -5,7 +5,7 @@ Regeln (mit Wänu abgesprochen):
 - Titel «<Name> belegt/belegen …»: alles vor « belegt»/« belegen» ist der Name (Art: Airbnb). Andere Titel werden ignoriert.
 - Mit Kürzel am Anfang bestimmt der Titel die Art (Gross- und Kleinschreibung egal, «belegt» ist dann freiwillig):
   «Airbnb: Ali belegt», «Extern: Janine Collins belegt Adelboden» (Gast mit Vertrag), «Familie: Marianne und Yolanda»,
-  «Blockiert:» (auch ohne Text, «Block:», «Fam:», «Ext:»). Alles nach dem Namen und « belegt» wird ignoriert.
+  «Blockiert: Reinigung» (Text frei, auch ganz ohne; «Block:», «Fam:», «Ext:» gehen ebenfalls). Alles nach dem Namen und « belegt» wird ignoriert.
 - Anreise = Starttag, Abreise = letzter angezeigter Tag (Google speichert das Ende einen Tag später).
 - Eintrag aus dem Kalender kommt mit der Art aus dem Titel (ohne Kürzel: «airbnb»), markiert mit quelle=kalender und kal=<Name>.
 - Von Hand eingetragene oder in der App geänderte Einträge werden NIE überschrieben (die App entfernt die Markierung beim Speichern).
@@ -34,7 +34,7 @@ def titel_lesen(t):
         m = MARKER.match(rest)
         name = kurz((m.group(1) if m else rest).rstrip(" .:;,"))
         if not name and art == "block":
-            name = "Blockiert"   # «Blockiert:» allein genügt, auf dem Balken steht nur das Symbol
+            name = "Blockiert"   # «Blockiert:» allein genügt; die App zeigt dann nur das Symbol
         return (art, name) if name else None
     m = MARKER.match(t)
     name = kurz(m.group(1)) if m else ""

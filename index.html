@@ -890,7 +890,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.49.1.0";
+let VERSION = "2.49.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1837,7 +1837,7 @@ function zeichneBalken(gr) {
     });
   };
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
-  gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.typ === "block" ? "" : x.name, null, TYP_SYM[x.typ] || TYP_SYM.airbnb));
+  gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.typ === "block" && /^blockiert$/i.test(x.name) ? "" : x.name, null, TYP_SYM[x.typ] || TYP_SYM.airbnb));
   BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, b.sb ? "🧹" : "🪣"));
   balkenPassen(g);
 }
