@@ -17,9 +17,9 @@
       "text": "Zum Beispiel Kalenderblatt und Cheminée-Flamme, bewegt wie Koffer und Häkchen."
     },
     {
-      "status": "idee",
+      "status": "fertig",
       "titel": "Namen der Airbnb-Gäste aus dem Android-Kalender übernehmen",
-      "text": "Zurückgestellt, die Namen trägt Papi von Hand ein."
+      "text": "Läuft automatisch: Ein Eintrag «Name belegt Adelboden.» in Pimlical erscheint nach spätestens etwa einer halben Stunde in der App."
     },
     {
       "status": "idee",
@@ -55,9 +55,9 @@
     },
     {
       "art": "wunsch",
-      "status": "arbeit",
+      "status": "fertig",
       "titel": "Automatischer Abgleich Name",
-      "text": "Blockiert in Airbnb vom 5. bis 8. November. Wenn sichtbar in App bei Piml eintragen. Müsste danach Name eintragen."
+      "text": "Blockiert in Airbnb vom 5. bis 8. November. Wenn sichtbar in App bei Piml eintragen. Müsste danach Name eintragen. Test am 29.10.2026 erfolgreich."
     },
     {
       "art": "wunsch",
@@ -88,6 +88,24 @@
       "status": "neu",
       "titel": "Balken",
       "text": "Es haben nicht alle Icons Platz bei kurzen Buchungen. Ich möchte, dass wenn man einen Balken anklickt die entsprechenden Icons mit Beschreibung in der Box stehen und unterhalb die Sachen wie Preis, Quittung etc."
+    },
+    {
+      "art": "wunsch",
+      "status": "geplant",
+      "titel": "Symbole in den Balken aussortieren",
+      "text": "Klären, welche Symbole in den Balken künftig noch zu sehen sind. Viele sollen entfallen. Der Name hat Vorrang."
+    },
+    {
+      "art": "wunsch",
+      "status": "geplant",
+      "titel": "Legende: blasse Fortsetzung erklären",
+      "text": "Die Legende im Kalender erklärt noch nicht, dass ein Termin über den Monatsrand blass in die leeren Felder weiterläuft."
+    },
+    {
+      "art": "idee",
+      "status": "geplant",
+      "titel": "Freischaltung Version 2 und später Version 3",
+      "text": "Version 2 ersetzt die Live-Version 1.10.5 nach der Testphase. Vorher Testdaten aufräumen (nur mit Okay) und den Kalender-Abgleich im Live-Repo einrichten. Später evtl. Version 3 zum Vereinfachen und Optimieren."
     }
   ]
 }
