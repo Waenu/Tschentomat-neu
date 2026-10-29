@@ -906,7 +906,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.56.0.3";
+let VERSION = "2.56.0.4";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2410,7 +2410,7 @@ function anfrageKasten(r) {
   if (r.d.SB) {
     const f = familienText();
     LETZTE_FAMILIE = f;
-    h += '<span class="hint" style="margin-top:12px"><b>Kommt jemand von den Kindern nach dir?</b> Frag im «Adelboden Airbnb Chat». Hier im Rechner steht ' + chf(0) + ' für die Reinigung, weil ihr selbst reinigt. Die Endreinigung der Eltern (' + chf(P.reinigung) + ') kommt erst, wenn die Staffel endet. Dann bezahlt die letzte Reisegruppe und teilt die Kosten mit den anderen Gruppen der Staffel. Regeln siehe «Endreinigung» ' + symBtn('b-endrein', '🪣') + '.</span><div class="btns">' +
+    h += '<span class="hint" style="margin-top:12px"><b>Kommt jemand von den Geschwistern nach dir?</b> Frag im «Adelboden Airbnb Chat». Hier im Rechner steht ' + chf(0) + ' für die Reinigung, weil ihr selbst reinigt. Die Endreinigung der Eltern (' + chf(P.reinigung) + ') kommt erst, wenn die Staffel endet. Dann bezahlt die letzte Reisegruppe und teilt die Kosten mit den anderen Gruppen der Staffel. Regeln siehe «Endreinigung» ' + symBtn('b-endrein', '🪣') + '.</span><div class="btns">' +
       (ok ? '<a class="btn" href="https://wa.me/?text=' + encodeURIComponent(f) + '" target="_blank" rel="noopener">' + WA_SVG + 'Umfrage starten</a>' : '<span class="btn off" aria-disabled="true">' + WA_SVG + 'Umfrage starten</span>') +
       '<button type="button" class="btn" id="copyFam"' + (ok ? "" : " disabled") + '>📋 Text kopieren</button></div>';
   }
