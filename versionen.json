@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.50.0.0",
+      "v": "2.43.3.0 bis 2.50.1.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -24,7 +24,8 @@
         "Beschriftung der Gastbalken nach Art: «Fam.», «BnB» (Airbnb), «Ext.» (Gast mit Vertrag), 🚫 für Blockiert. Bei «Blockiert» ist ein Name frei wählbar (z. B. «Reinigung», «Arbeiten»); ohne Text steht nur das Symbol. Das Flugzeug ist überall ersetzt (Box, Verwaltung, Auswahl der Art).",
         "Kalender: Das Kürzel (BnB, Ext., Fam.) steht einmal pro Umbruch im längeren Balkenstück ganz vorne. Kurze Schwänzchen, wo es nicht hineinpasst, bleiben leer.",
         "Titel gekürzt: «Preisberechnung» und «Versteckte Menüs» (passen jetzt in eine Zeile).",
-        "Kalender: Buchungen aus der App sehen aus wie die Gastbalken (gleiche Schrift, Kürzel «Fam.» statt Schloss und Eimer). Die Sicherheit zeigt die Farbe, alles Weitere steht in der Box. Legende angepasst."
+        "Kalender: Buchungen aus der App sehen aus wie die Gastbalken (gleiche Schrift, Kürzel «Fam.» statt Schloss und Eimer). Die Sicherheit zeigt die Farbe, alles Weitere steht in der Box. Legende angepasst.",
+        "Ansicht als Kind (Verwaltung): Das Formular «Belegung» mit den Beträgen erscheint dort nicht mehr, und der Kalender aktualisiert sich beim Wechsel des Kindes."
       ]
     },
     {
