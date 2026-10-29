@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.48.1.0",
+      "v": "2.43.3.0 bis 2.49.0.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -20,7 +20,8 @@
         "Versionshistorie: Die Einträge sind aufklappbar, nur der neueste ist offen. Alles von einem Tag steht in einem Eintrag.",
         "Belegung am Airbnb-Tag (nur Papi): Das Formular ist auf Art (Ext., Fam., Blockiert), Name und Beträge verkleinert. Beträge: Preis Nächte, Preis Reinigung, Provision (nur Airbnb), mit Brutto und netto. Sie gehen in einen privaten Speicher (Repository «Tschentomat-privat»), der noch eingerichtet werden muss; bis dahin zeigt die App einen Hinweis.",
         "Einnahmen (Papi): Zeile zeigt zusätzlich Ext. im Monat und seit Jahresanfang, sobald der private Speicher läuft.",
-        "Flugzeug und Schriftrolle sind überall durch «Ext.» ersetzt (Box, Verwaltung, Auswahl der Art)."
+        "Flugzeug und Schriftrolle sind überall durch «Ext.» ersetzt (Box, Verwaltung, Auswahl der Art).",
+        "Kalender-Import: Die Art der Belegung lässt sich im Kalendertitel festlegen: «Airbnb: Ali belegt», «Extern: Janine Collins belegt Adelboden», «Familie: Marianne und Yolanda», «Block: Blockiert». Ohne Kürzel gilt wie bisher «<Name> belegt» als Airbnb."
       ]
     },
     {

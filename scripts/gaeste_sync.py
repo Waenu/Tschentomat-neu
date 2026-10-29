@@ -2,9 +2,12 @@
 """Gästenamen aus dem Google-Kalender «Gäste Tschenten» in gaeste.json übernehmen.
 
 Regeln (mit Wänu abgesprochen):
-- Titel «<Name> belegt/belegen …»: alles vor « belegt»/« belegen» ist der Name. Andere Titel werden ignoriert.
+- Titel «<Name> belegt/belegen …»: alles vor « belegt»/« belegen» ist der Name (Art: Airbnb). Andere Titel werden ignoriert.
+- Mit Kürzel am Anfang bestimmt der Titel die Art (Gross- und Kleinschreibung egal, «belegt» ist dann freiwillig):
+  «Airbnb: Ali belegt», «Extern: Janine Collins belegt Adelboden» (Gast mit Vertrag), «Familie: Marianne und Yolanda»,
+  «Block: Blockiert» (auch «Fam:», «Ext:», «Blockiert:»). Alles nach dem Namen und « belegt» wird ignoriert.
 - Anreise = Starttag, Abreise = letzter angezeigter Tag (Google speichert das Ende einen Tag später).
-- Eintrag aus dem Kalender kommt als Typ «airbnb», markiert mit quelle=kalender und kal=<Name>.
+- Eintrag aus dem Kalender kommt mit der Art aus dem Titel (ohne Kürzel: «airbnb»), markiert mit quelle=kalender und kal=<Name>.
 - Von Hand eingetragene oder in der App geänderte Einträge werden NIE überschrieben (die App entfernt die Markierung beim Speichern).
 - Überschneidet sich ein Kalendereintrag mit einer bestätigten Buchung im Tschentomat, gewinnt die Buchung:
   der Kalendereintrag wird übersprungen und ein früher von uns eingetragener wieder entfernt.
@@ -18,6 +21,22 @@ from zoneinfo import ZoneInfo
 
 MAX_ENTFERNEN = 3
 MARKER = re.compile(r"^\s*(.+?)\s+bel(?:egt|egen)\b", re.IGNORECASE)
+PRAEFIX = re.compile(r"^\s*(familie|fam|airbnb|extern|ext|blockiert|block)\.?\s*:\s*(.*)$", re.IGNORECASE)
+ARTEN = {"familie": "fam", "fam": "fam", "airbnb": "airbnb", "extern": "extern", "ext": "extern", "block": "block", "blockiert": "block"}
+
+
+def titel_lesen(t):
+    """Titel -> (art, name) oder None, wenn es kein Gast-Eintrag ist."""
+    p = PRAEFIX.match(t)
+    if p:
+        art = ARTEN[p.group(1).lower()]
+        rest = p.group(2).strip()
+        m = MARKER.match(rest)
+        name = kurz((m.group(1) if m else rest).rstrip(" .:;,"))
+        return (art, name) if name else None
+    m = MARKER.match(t)
+    name = kurz(m.group(1)) if m else ""
+    return ("airbnb", name) if name else None
 
 
 def kurz(n):  # wie gastKurz() in der App
@@ -101,15 +120,13 @@ def abgleichen(gaeste, buchungen, ereignisse, heute):
             meld.append("Übersprungen (wiederkehrend): " + t)
             continue
         if not e.get("ganztags"):
-            if MARKER.match(t):
+            if titel_lesen(t):
                 meld.append("Übersprungen (nicht ganztägig): " + t)
             continue
-        m = MARKER.match(t)
-        if not m:
+        tl = titel_lesen(t)
+        if not tl:
             continue   # kein Gast-Eintrag
-        name = kurz(m.group(1))
-        if not name:
-            continue
+        art, name = tl
         arr = iso(e["start"])
         dep = None
         if e.get("end") and e["end"] - timedelta(days=1) > e["start"]:
@@ -119,7 +136,7 @@ def abgleichen(gaeste, buchungen, ereignisse, heute):
         if arr in ziel:
             meld.append("Doppelter Anreisetag %s, nur der erste zählt: %s" % (arr, t))
             continue
-        ziel[arr] = {"name": name, "dep": dep}
+        ziel[arr] = {"name": name, "dep": dep, "typ": art}
 
     neu = [dict(x) for x in gaeste]
     entfernen = []
@@ -132,10 +149,12 @@ def abgleichen(gaeste, buchungen, ereignisse, heute):
             continue
         if vorh:
             x = vorh[0]
-            if x.get("quelle") == "kalender" and x.get("name") == x.get("kal") and x.get("typ") == "airbnb":
+            if x.get("quelle") == "kalender" and x.get("name") == x.get("kal"):   # unverändert aus dem Kalender (die App entfernt die Markierung beim Speichern)
                 aend = []
                 if x.get("name") != z["name"]:
                     x["name"] = z["name"]; x["kal"] = z["name"]; aend.append("Name")
+                if x.get("typ") != z["typ"]:
+                    x["typ"] = z["typ"]; aend.append("Art")
                 if (x.get("dep") or None) != z["dep"]:
                     if z["dep"]:
                         x["dep"] = z["dep"]
@@ -150,13 +169,13 @@ def abgleichen(gaeste, buchungen, ereignisse, heute):
         e = {"arr": arr}
         if z["dep"]:
             e["dep"] = z["dep"]
-        e.update({"name": z["name"], "typ": "airbnb", "quelle": "kalender", "kal": z["name"]})
+        e.update({"name": z["name"], "typ": z["typ"], "quelle": "kalender", "kal": z["name"]})
         neu.append(e)
-        meld.append("Neu: %s, %s bis %s" % (z["name"], arr, z["dep"] or "?"))
+        meld.append("Neu (%s): %s, %s bis %s" % (z["typ"], z["name"], arr, z["dep"] or "?"))
 
     # Früher von uns eingetragene Einträge prüfen: gelöscht im Kalender oder jetzt Tschentomat-Buchung?
     for x in list(neu):
-        if x.get("quelle") != "kalender" or x.get("name") != x.get("kal") or x.get("typ") != "airbnb":
+        if x.get("quelle") != "kalender" or x.get("name") != x.get("kal"):
             continue
         if (x.get("dep") or x.get("arr")) < heute:
             continue
