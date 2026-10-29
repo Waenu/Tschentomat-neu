@@ -906,7 +906,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.56.0.4";
+let VERSION = "2.57.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1118,7 +1118,8 @@ const FIELDS = [
         return "Dieser Termin liegt in der Hochsaison. " + (S.art === ART_V ? v + " Anders wäre «Mit Vorbehalt»: Gäste möglich, aber ein Airbnb-Gast hat Vorrang." : S.art === ART_P ? p + " Anders wäre «Verbindlich»: fest und gesperrt, dafür ohne Gäste." : v + " " + p);
       }
       const st = "Staffel: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Regeln siehe «🧹 Selbstreinigung» im Kalender.", no = "Normal: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.";
-      return "Dieser Termin liegt in der Staffel-Zeit und ist fest. " + (S.art === ART_S ? st + " Mit Gästen wäre nur «Normal» möglich." : S.art === ART_N ? no + " Ohne Gäste ginge auch die Staffel: ihr reinigt selbst und spart die Reinigung." : st + " " + no);
+      const vgl = " Vergleich der Reinigung: Normal " + chf(P.reinigung) + " (die Eltern reinigen). Staffel: " + chf(P.reinigungSelbst) + " beim Aufenthalt, dazu euer Anteil an der Endreinigung, sobald die Staffel endet: allein " + chf(P.reinigung) + ", zu zweit je " + chf(P.reinigung / 2) + ", zu dritt je " + chf(P.reinigung / 3) + ". Dafür reinigt ihr selbst. Je mehr Reisegruppen anschliessen, desto günstiger wird es.";
+      return "Dieser Termin liegt in der Staffel-Zeit und ist fest. " + (S.art === ART_S ? st + " Mit Gästen wäre nur «Normal» möglich." + vgl : S.art === ART_N ? no + " Ohne Gäste ginge auch die Staffel." + vgl : st + " " + no + vgl);
     },
     visible: () => artOpts().length > 0, opts: () => artOpts() },
   { id: "wer", label: "👨‍👩‍👧‍👦 Wer von der Familie kommt?", type: "str",
