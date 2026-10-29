@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.56.0.2",
+      "v": "2.43.3.0 bis 2.56.0.3",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -42,7 +42,8 @@
         "Layout: In den Einnahmen-Tabellen sind die Spalten weiter auseinander. In der Preisberechnung im Kalender-Hinweis brechen die Beträge nicht mehr mitten in der Zahl um (CHF 55.– und CHF 385.– stehen in einer Zeile).",
         "Aufteilung der Reinigungskosten: Neu «Nach Parteien». Die Familie zählt als eine Partei, jeder Gast als eine weitere (bei 3 Gästen zahlt die Familie ¼, bei 4 Gästen ⅕). Die festen Zeilen «Familie ¼, Gäste ¾» und «Hälfte Familie, Hälfte Gäste» sind entfallen.",
         "Aufteilung der Reinigungskosten: «Familie ¾, Gäste ¼» entfernt. Es bleiben Nach Personen, Nach Parteien, Gäste zahlen alles und Familie zahlt alles.",
-        "Frage zu den Kleinkindern: Das Wort «kein» in «brauchen kein normales Bett» ist gelb hervorgehoben, damit man es nicht überliest."
+        "Frage zu den Kleinkindern: Das Wort «kein» in «brauchen kein normales Bett» ist gelb hervorgehoben, damit man es nicht überliest.",
+        "Text bei Selbstreinigung: Der Hinweis «Hier steht CHF 0.– für die Reinigung. Dann teilt ihr die Reinigungskosten» klang, als werde 0 aufgeteilt. Jetzt steht: Die Endreinigung der Eltern kommt erst am Ende der Staffel, die letzte Reisegruppe bezahlt und teilt mit den anderen."
       ]
     },
     {
