@@ -645,7 +645,7 @@
   #calBlase .ar[aria-expanded="true"] { background: var(--note-bg); }
   #calBlase .ar + .ipan { margin: 6px 0 0; padding: 6px 12px; border: 0; border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--surface); font-size: .92rem; }
   #calBlase .ar-nur { margin: 14px 0 0; padding-top: 8px; border-top: 2px dashed var(--accent); font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 700; color: var(--muted); }
-  #calBlase .ipan table { width: 100%; border-collapse: collapse; } #calBlase .ipan td { padding: 3px 0; vertical-align: top; } #calBlase .ipan td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; }
+  #calBlase .ipan table { width: 100%; border-collapse: collapse; } #calBlase .ipan td { padding: 3px 0; vertical-align: top; } #calBlase .ipan td:last-child { text-align: right; padding-left: 10px; white-space: nowrap; } #calBlase .ipan .rechtab td:last-child { white-space: normal; overflow-wrap: anywhere; } #calBlase .ipan .rechtab td:first-child { padding-right: 6px; }
   #calBlase .ar-h { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); } #calBlase .ar-h:first-child { border-top: 0; }
   #calBlase .ar-hi { flex: none; width: 26px; text-align: center; font-size: 1.15rem; line-height: 1.3; } #calBlase .ar-h b { display: block; }
   #calBlase .ipan { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 4px; }
@@ -896,7 +896,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.51.0.0";
+let VERSION = "2.51.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3108,10 +3108,10 @@ function vkChips(x, anfrage) {
 function rechnungHtml(r, bt) {
   if (!r) return '<p class="hint">Für diese Buchung ist keine Berechnung gespeichert, nur der Betrag.</p>';
   let h = "", tab = "";
-  const zu = () => { if (tab) { h += "<table><tbody>" + tab + "</tbody></table>"; tab = ""; } };
+  const zu = () => { if (tab) { h += '<table class="rechtab"><tbody>' + tab + "</tbody></table>"; tab = ""; } };
   r.split("\n").forEach((t) => {
     t = t.trim(); if (!t) return;
-    if (t.indexOf("\t") > 0) { const q = t.split("\t"); tab += "<tr><td>" + esc(q[0]) + "</td><td>" + esc(q.slice(1).join(" ")) + "</td></tr>"; }
+    if (t.indexOf("\t") > 0) { const q = t.split("\t"); tab += "<tr><td>" + esc(q[0]) + "</td><td>" + esc(q.slice(1).join(" ")).replace(/CHF (?=[\d−–-])/g, "CHF\u00a0") + "</td></tr>"; }
     else { zu(); h += t[0] === "#" ? "<h4>" + esc(t.slice(1)) + "</h4>" : '<p class="hint">' + esc(t) + "</p>"; }
   });
   zu();
@@ -3585,7 +3585,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) zb.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
       else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) zb.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> (" + P.verbMin + " bis " + P.verbMax + " Nächte, ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest) oder <b>mit Vorbehalt</b> (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
-      else if (istRuhe(k) && !GAP.has(k)) zb.push(fld("ruhe") + "Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
+      else if (istRuhe(k) && !GAP.has(k) && !stay.some((b) => b.sb)) zb.push(fld("ruhe") + "Eigene Wäsche möglich: Ohne Gäste reinigt ihr, wenn erwünscht, selbst " + symBtn("b-ruhe", "🧹") + " und die Familienstaffel ist möglich " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern.");
       else if (!stay.length) zb.push("Nur mit Endreinigung: normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Zeit «Eigene Wäsche»" + fld("ruhe") + ".") + "");
       if (festStay(k, addDays(k, 1))) zb.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
       else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
