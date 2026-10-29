@@ -82,6 +82,12 @@
       "status": "neu",
       "titel": "Menu bei Terminbalken",
       "text": "Die neue Ansicht wenn man einen Termin im Kalender klickt muss anders sein. Nicht nur Symbole sondern auch Beschriftung. Die Bedienerführung stringent halten."
+    },
+    {
+      "art": "wunsch",
+      "status": "neu",
+      "titel": "Balken",
+      "text": "Es haben nicht alle Icons Platz bei kurzen Buchungen. Ich möchte, dass wenn man einen Balken anklickt die entsprechenden Icons mit Beschreibung in der Box stehen und unterhalb die Sachen wie Preis, Quittung etc."
     }
   ]
 }
