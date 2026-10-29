@@ -882,7 +882,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.47.1.0";
+let VERSION = "2.47.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1538,8 +1538,10 @@ function zurueckGehen() {
   if (!ZURUECK) return;
   const z = ZURUECK; ZURUECK = null;
   for (let i = z.offen.length - 1; i >= 0; i--) z.offen[i][0].open = z.offen[i][1];
+  if (z.tag) ansichtZu();   // kam aus der Verwaltung: Verwaltung zu, Kalender wieder offen
   setHilfe(z.hilfeAn); setRechner(z.rechnerAn);
   window.scrollTo({ top: z.y, behavior: "auto" });
+  if (z.tag && window._gastBlase) requestAnimationFrame(() => { window.scrollTo({ top: z.y, behavior: "auto" }); window._gastBlase(z.tag, true); });   // Box des Tages wieder öffnen
 }
 // Bestätigte Aufenthalte als Balken im Kalender: von der Mitte des Anreisetags bis zur Mitte des Abreisetags (wie bei Airbnb)
 // Schweif: nach einem Aufenthalt mit Selbstreinigung bleibt die Familienstaffel in den erlaubten Zeiten offen,
@@ -3211,11 +3213,11 @@ function zumKalender(k) {
     if (window._gastBlase) window._gastBlase(k);
   });
 }
-window._zurVerwaltung = (key) => {   // Auge im Kalender-Hinweis (nur Papi): in die Verwaltung zum gleichen Aufenthalt springen
+window._zurVerwaltung = (key, tag) => {   // Auge im Kalender-Hinweis (nur Papi): in die Verwaltung zum gleichen Aufenthalt springen
   if (!TOKEN || ABSENDER) return;
-  ZURUECK = null; document.getElementById("zurueck").hidden = true;
   const yKal = window.scrollY;
   setHilfe(false); hilfeZuklappen(); setChem(false); setRechner(false);
+  ZURUECK = { y: yKal, hilfeAn: false, rechnerAn: true, offen: [], tag: tag || "" }; document.getElementById("zurueck").hidden = false;   // «↩ zurück» bringt zur Box im Kalender
   zeigAns = true; bestMsg = ""; bestZeigen();
   requestAnimationFrame(() => {
     const k = document.getElementById("bestKasten"), c = [...k.querySelectorAll("[data-vk]")].find((el) => el.getAttribute("data-vk") === key);
@@ -3413,6 +3415,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
 (function () {
   const knopf = document.getElementById("hilfeKnopf"), blase = document.getElementById("calBlase"), grid = document.getElementById("calGrid"), cal = document.getElementById("cal");
   if (!knopf || !blase || !grid || !cal) return;
+  let lastK = "";   // zuletzt gezeigter Tag (für «↩ zurück» aus der Verwaltung)
   let an = true, erst = false, zu = false;   // Hilfe ist bei jedem Öffnen der Seite an; nach «✕» bleibt die Startbox für den Rest des Besuchs zu
   try { if (localStorage.getItem("tm2_hilfe") === null) erst = true; } catch (e) {}
   const speichern = () => { try { localStorage.setItem("tm2_hilfe", an ? "1" : "0"); } catch (e) {} };
@@ -3467,6 +3470,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   }
   function text(k) {
     const heute = heuteKey(), kopf = "<b>" + esc(fmtTag(k)) + "</b>";
+    lastK = k;
     if (k < heute) return kopf + "<p>Dieser Tag liegt in der Vergangenheit.</p>";
     const z = [], zs = [], zh = [];
     const stay = BUCH.filter((b) => b.arr <= k && k < b.dep), abr = BUCH.filter((b) => b.dep === k), zb = stay.length ? zh : z;
@@ -3500,7 +3504,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
     return kopf + (gn ? "<p>" + TYP_SYM[gn.typ] + " " + TYP_TXT[gn.typ] + ": <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + iconLeiste(k, stay, zs, zh) + gf;
   }
-  window._gastBlase = (k) => zeigen(text(k), grid.querySelector('[data-k="' + k + '"]'));
+  window._gastBlase = (k, still) => zeigen(text(k), grid.querySelector('[data-k="' + k + '"]'), !!still);
   function zelle(e) {
     let c = e.target.closest ? e.target.closest(".cal-d") : null;
     if (c) return c;
@@ -3516,7 +3520,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     speichern();
   }
   grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(c && c.dataset.k && (c.classList.contains("occ") || c.classList.contains("provtag") || BUCH.some((b) => b.arr <= c.dataset.k && c.dataset.k <= b.dep)))) return; if (c && c.dataset.k) zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); });
-  blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; return; } const vw = e.target.closest("[data-vw]"); if (vw && TOKEN && !ABSENDER) { window._zurVerwaltung(vw.getAttribute("data-vw")); return; } const ip = e.target.closest("[data-ip]"); if (ip) { const auf = ip.getAttribute("aria-expanded") !== "true"; blase.querySelectorAll("[data-ip]").forEach((x) => { x.setAttribute("aria-expanded", "false"); x.classList.remove("on"); }); blase.querySelectorAll("[data-ipan]").forEach((x) => { x.hidden = true; }); if (auf) { ip.setAttribute("aria-expanded", "true"); ip.classList.add("on"); const pn = blase.querySelector('[data-ipan="' + ip.dataset.ip + '"]'); if (pn) pn.hidden = false; } } });
+  blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; return; } const vw = e.target.closest("[data-vw]"); if (vw && TOKEN && !ABSENDER) { window._zurVerwaltung(vw.getAttribute("data-vw"), lastK); return; } const ip = e.target.closest("[data-ip]"); if (ip) { const auf = ip.getAttribute("aria-expanded") !== "true"; blase.querySelectorAll("[data-ip]").forEach((x) => { x.setAttribute("aria-expanded", "false"); x.classList.remove("on"); }); blase.querySelectorAll("[data-ipan]").forEach((x) => { x.hidden = true; }); if (auf) { ip.setAttribute("aria-expanded", "true"); ip.classList.add("on"); const pn = blase.querySelector('[data-ipan="' + ip.dataset.ip + '"]'); if (pn) pn.hidden = false; } } });
   document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && !zu) zeigen(START, null, true); });
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
   grid.classList.toggle("hilfe", an);

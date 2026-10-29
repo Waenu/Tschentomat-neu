@@ -2,6 +2,17 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
+      "v": "2.47.2.0",
+      "datum": "2026-10-29",
+      "titel": "Zurück aus der Verwaltung zur Box",
+      "arten": [
+        "Funktion"
+      ],
+      "punkte": [
+        "Springst du aus der Box in die Verwaltung, erscheint der Knopf «↩ zurück». Er schliesst die Verwaltung und öffnet den Kalender mit der Box des Tages an der alten Stelle."
+      ]
+    },
+    {
       "v": "2.47.1.0",
       "datum": "2026-10-29",
       "titel": "Aufklapp-Pfeile ohne Glühbirnen, Beträge einheitlich",
