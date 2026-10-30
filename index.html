@@ -934,7 +934,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.63.0.0";
+let VERSION = "2.64.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2888,7 +2888,7 @@ document.addEventListener("toggle", (e) => {
     if (!((TOKEN && !ABSENDER) || mamiAn())) { kasten.innerHTML = h; const t0 = document.getElementById("meldTxt"); if (t0) { t0.value = text; aktualisieren(); } return; }   // Kinder sehen nur das Meldeformular, die Liste nur Papi und Mami
     h += '<h3>🗒️ Geplant und Ideen</h3><p class="hint">Was schon läuft und was angedacht ist.</p>';
     if (TOKEN && !ABSENDER) {   // nur Papi: Wunsch, Idee oder Fehler direkt in die Liste schreiben
-      h += '<div class="idneu"><b>➕ Neuer Eintrag</b><span class="idlab">Art</span><div class="typ" role="group" aria-label="Art des Eintrags">' + Object.keys(ART).map((k) => '<button type="button" data-iart="' + k + '" aria-pressed="' + (k === iArt) + '">' + ART[k] + "</button>").join("") + '</div>' +
+      h += '<div class="idneu"><b>➕ Neuer Eintrag</b><label for="iPaste">WhatsApp-Nachricht einfügen (füllt alles vor)</label><textarea id="iPaste" rows="3" placeholder="Ganze Nachricht hier einfügen"></textarea><button type="button" class="btn" id="iPasteGo">📋 Übernehmen</button><span class="idlab">Art</span><div class="typ" role="group" aria-label="Art des Eintrags">' + Object.keys(ART).map((k) => '<button type="button" data-iart="' + k + '" aria-pressed="' + (k === iArt) + '">' + ART[k] + "</button>").join("") + '</div>' +
         '<span class="idlab">Stand</span><div class="typ vier" role="group" aria-label="Stand des Eintrags">' + STAND_NEU.map((k) => '<button type="button" data-istand="' + k + '" aria-pressed="' + (k === iStatus) + '">' + STATUS[k] + "</button>").join("") + '</div>' +
         '<span class="idlab">Priorität</span><div class="typ vier" role="group" aria-label="Priorität des Eintrags">' + ["hoch", "normal", "tief", "-"].map((k) => '<button type="button" data-iprio="' + k + '" aria-pressed="' + (k === iPrio) + '">' + (PRIO[k] || "ohne") + "</button>").join("") + '</div>' +
         '<label for="iTitel">Titel</label><input id="iTitel" type="text" maxlength="80" autocomplete="off" placeholder="z. B. Wunsch: Sortierung nach Name">' +
@@ -2921,6 +2921,13 @@ document.addEventListener("toggle", (e) => {
     if (ek) { delAsk = +ek.dataset.eask; edOpen = delAsk; zeichnen(); return; }
     if (e.target.closest("[data-enein]")) { delAsk = -1; zeichnen(); return; }
     if (ed) { const i = +ed.dataset.edel; ideeAendern(i, (l) => l.filter((_, k) => k !== i), "🗑️ Gelöscht."); return; }
+    if (e.target.closest("#iPasteGo")) {
+      const r = meldeLesen(document.getElementById("iPaste").value);
+      if (!r) { iMsg = "Das ist keine Meldung aus dem TSCHENT-O-MAT. Es fehlt die erste Zeile «TSCHENT-O-MAT: …»."; zeichnen(); return; }
+      if (r.art) iArt = r.art;
+      iStatus = "neu"; iTitel = r.titel; iText = r.text; iMsg = "Übernommen. Bitte prüfen, Priorität wählen und speichern.";
+      zeichnen(); return;
+    }
     if (e.target.closest("#iSave")) ideeSpeichern();
   });
   async function ideeAendern(i, fn, ok) {   // Eintrag ändern oder löschen (nur Papi); prüft, dass noch derselbe Eintrag an der Stelle steht
@@ -2933,6 +2940,26 @@ document.addEventListener("toggle", (e) => {
       if (ok.indexOf("Gelöscht") >= 0) edOpen = -1;
     } catch (err) { lMsg = "⚠️ " + (err && err.message ? err.message : "Das hat nicht geklappt."); }
     delAsk = -1; lBusy = false; zeichnen();
+  }
+  function meldeLesen(raw) {   // WhatsApp-Meldung der Kinder («TSCHENT-O-MAT: Wunsch / Von: … / Version … / Handy: …») in Art, Absender, Titel und Text zerlegen
+    const m = /TSCHENT-O-MAT:\s*(Fehler|Wunsch|Idee|Frage)/i.exec(raw || "");
+    if (!m) return null;
+    const zeilen = raw.slice(m.index).split(/\r?\n/), kopf = [], rest = [];
+    let inKopf = true;
+    zeilen.forEach((z, n) => {
+      if (inKopf && (n === 0 || /^(Von|Version|Handy|Gewählt):/i.test(z.trim()) || /^Version\s+\d/i.test(z.trim()))) kopf.push(z.trim());
+      else { inKopf = false; rest.push(z.replace(/\s+$/, "")); }
+    });
+    const von = (kopf.map((z) => /^Von:\s*(.+)$/i.exec(z)).filter(Boolean)[0] || [0, ""])[1].replace(/^\(.*\)$/, "").trim();
+    const art = { fehler: "fehler", wunsch: "wunsch", idee: "idee" }[m[1].toLowerCase()] || null;
+    const koepfe = /^(Was wolltest du tun\?|Was ist passiert\?|Was hätte passieren sollen\?|Ich wünsche mir:|Das würde helfen, weil:|Meine Idee:|Meine Frage:)\s*$/i;
+    const koerper = rest.join("\n").replace(/^\n+/, "").replace(/\n{3,}/g, "\n\n").trim();
+    const erste = rest.map((z) => z.trim()).filter((z) => z && !koepfe.test(z))[0] || "";
+    const zl = rest.map((z) => z.trim()), pi = zl.findIndex((z) => /^Was ist passiert\?/i.test(z)), passiert = pi >= 0 ? zl.slice(pi + 1).filter((z) => z && !koepfe.test(z))[0] : "";
+    let titel = (von ? von + ": " : "") + (art === "fehler" && passiert ? passiert : erste);
+    if (titel.length > 80) titel = titel.slice(0, 77).replace(/\s+\S*$/, "") + " …";
+    const info = kopf.filter((z) => /^(Version|Handy|Gewählt)/i.test(z)).join(", ");
+    return { art: art, titel: titel, text: koerper + (von || info ? "\n\n(Von " + (von || "unbekannt") + (info ? ", " + info : "") + ")" : "") };
   }
   async function ideeSpeichern() {
     if (iBusy || !TOKEN || ABSENDER) return;
