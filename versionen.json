@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.70.1.0",
+      "v": "2.57.4.0 bis 2.70.1.1",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -64,7 +64,7 @@
         "Neu: Einchecken ab 16 Uhr, Auschecken bis 10 Uhr steht bei jeder Buchung: in der Tagesbox, in der Buchungsübersicht des Rechners, im «Bestätigt»-Hinweis für die Kinder und im WhatsApp-Bescheid.",
         "Fehler behoben: Endet eine laufende Staffel zwangsläufig, weil direkt danach ein Airbnb-Gast anreist, zeigt die App «Wie möchtest du buchen?» schon als «Staffel» gewählt und gesperrt (ohne Gäste, die Eltern reinigen, die Endreinigung wird unter den Reisegruppen aufgeteilt). Der Text darunter erklärt, warum.",
         "Neu: In der Verwaltung (nur für Papi) steht eine kurze Anleitung «Ablauf bei Buchungen»: was bei einem Familientermin, einem Airbnb-Gast und einer reinen Sperre zu tun ist, mit fertigen Pimlical-Titeln zum Kopieren für jedes Kind, Marianne und Wänu sowie für Airbnb, Extern und Blockiert.",
-        "Layout: Die Anleitung «Ablauf bei Buchungen» erklärt mit einer kleinen Zeichnung, wie in Airbnb gesperrt wird: Anreisetag sperren, Abreisetag frei lassen (gesperrt werden die Nächte)."
+        "Layout: Die Anleitung «Ablauf bei Buchungen» erklärt mit einer kleinen Zeichnung, wie in Airbnb gesperrt wird: Anreisetag sperren, Abreisetag frei lassen (gesperrt werden die Nächte). Der gebuchte Termin ist in der Zeichnung umrahmt."
       ]
     },
     {
