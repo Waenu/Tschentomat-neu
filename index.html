@@ -936,7 +936,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.67.0.0";
+let VERSION = "2.68.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1602,6 +1602,11 @@ function zurueckGehen() {
   document.getElementById("zurueck").hidden = true;
   if (!ZURUECK) return;
   const z = ZURUECK; ZURUECK = null;
+  if (z.verw) {   // kam aus der Verwaltung in den Kalender: zurück zur Verwaltung an dieselbe Stelle
+    zeigAns = true; bestMsg = ""; bestZeigen();
+    requestAnimationFrame(() => window.scrollTo({ top: z.y, behavior: "auto" }));
+    return;
+  }
   for (let i = z.offen.length - 1; i >= 0; i--) z.offen[i][0].open = z.offen[i][1];
   if (z.tag) ansichtZu();   // kam aus der Verwaltung: Verwaltung zu, Kalender wieder offen
   setHilfe(z.hilfeAn); setRechner(z.rechnerAn);
@@ -3383,7 +3388,7 @@ function bestZeigen() {
     const kf = bl.filter(provKonflikt);
     if (kf.length) s += '<div class="note h rot-warn"><b>⚠️ Konflikt mit Airbnb-Gast:</b> ' + kf.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Auf dem Termin mit Vorbehalt liegt eine Airbnb-Belegung. Gib dem Kind Bescheid. Hast du den Termin selbst in Airbnb gesperrt, tippe bei «Mit Vorbehalt» auf «In Airbnb gesperrt».</div>';
     const ng = bl.filter(nichtGesperrt).sort((p, q) => (p.arr < q.arr ? -1 : 1));
-    if (ng.length) s += '<div class="note h"><b>🔓 ' + ng.length + (ng.length === 1 ? " bestätigter Termin ist" : " bestätigte Termine sind") + ' in Airbnb noch nicht gesperrt:</b> ' + ng.map((x) => esc(x.name) + " (" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ")").join(", ") + '. Bitte in Airbnb sperren. Die Airbnb-Daten kommen mit Verzögerung, kurz nach dem Sperren kann der Hinweis noch stehen.</div>';
+    if (ng.length) s += '<div class="note h"><b>🔓 ' + ng.length + (ng.length === 1 ? " bestätigter Termin ist" : " bestätigte Termine sind") + ' in Airbnb noch nicht gesperrt:</b> ' + "Bitte in Airbnb sperren. Die Airbnb-Daten kommen mit Verzögerung, kurz nach dem Sperren kann der Hinweis noch stehen." + '<div class="vk-nav">' + ng.map((x) => '<button type="button" class="btn" data-zk="' + esc(x.arr) + '">📅 ' + esc(x.name) + ", " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + " ›</button>").join("") + "</div></div>";
     const zl = BUCH.filter((x) => zahlOffen(x) && x.dep < h).sort((p, q) => (p.dep < q.dep ? -1 : 1));
     if (zl.length) s += vkSek("💳 Zahlungen offen", zl.length) + zl.map((x) => zahlZeile(x)).join("");
     const wl = BUCH.filter((x) => (x.waesche === "bringen" || x.waesche === "senden") && !x.waescheZurueck && x.dep < h).sort((p, q) => (waescheBis(p) < waescheBis(q) ? -1 : 1));   // Wäsche bleibt gemeldet, bis Papi den Eingang quittiert
@@ -3670,7 +3675,12 @@ window._zurVerwaltung = (key, tag) => {   // Auge im Kalender-Hinweis (nur Papi)
 document.addEventListener("click", (e) => { const z = e.target.closest ? e.target.closest(".zum-heute") : null; if (z) { e.preventDefault(); zumKalender(heuteKey()); } });
 document.getElementById("bestKasten").addEventListener("click", async (e) => {
   const zk = e.target.closest("[data-zk]");
-  if (zk) { zumKalender(zk.getAttribute("data-zk")); return; }
+  if (zk) {
+    const yV = window.scrollY, papiV = !!(TOKEN && !ABSENDER);
+    zumKalender(zk.getAttribute("data-zk"));
+    if (papiV) { ZURUECK = { y: yV, verw: true, hilfeAn: false, rechnerAn: true, offen: [] }; document.getElementById("zurueck").hidden = false; }   // «↩ zurück» bringt wieder in die Verwaltung
+    return;
+  }
   const wa = e.target.closest("[data-bescheid]");
   if (wa) { bescheidVermerken(wa.getAttribute("data-bescheid")); return; }
   const wi = e.target.closest("[data-wainfo]");
@@ -3910,7 +3920,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       const konf = stay.some((x) => x.prov && provKonflikt(x)), sicher = !konf && stay.every((x) => !x.prov || k < provSicherBis());
       const ng = papi && !konf && stay.some(nichtGesperrt);   // nur für Papi: bestätigt, aber in Airbnb noch nicht gesperrt
       const zsx = ng ? ["⚠️ <b>Noch nicht in Airbnb gesperrt:</b> Dieser Termin ist bestätigt, Airbnb zeigt die Tage aber noch als frei. Bitte sperren, sonst kann ein Airbnb-Gast sie noch buchen. Die Airbnb-Daten kommen mit Verzögerung: Kurz nach dem Sperren kann dieser Hinweis noch stehen."].concat(zs.filter((t) => t.indexOf("🔒 <b>Gesichert:") !== 0)) : zs;
-      h += zeile("sich", konf ? "⚠️" : ng ? "🔓" : sicher ? "🔒" : "🔓", "Buchungssicherheit", konf ? "Konflikt mit Airbnb-Gast" : ng ? "in Airbnb noch nicht gesperrt" : sicher ? "gesichert" : "noch nicht gesichert", !sicher || ng) + '<div class="ipan" data-ipan="sich" hidden>' + zsx.map((t) => "<p>" + t + "</p>").join("") + "</div>";
+      h += zeile("sich", konf ? "⚠️" : ng ? "🔓" : sicher ? "🔒" : "🔓", "Buchungssicherheit", konf ? "Konflikt mit Airbnb-Gast" : ng ? "in Airbnb noch nicht gesperrt" : sicher ? "gesichert" : "noch nicht gesichert", !sicher || ng) + '<div class="ipan" data-ipan="sich" hidden>' + zsx.map((t) => "<p>" + t + "</p>").join("") + (papi && (ng || konf) ? '<button type="button" class="btn main" data-vw="' + esc(bKey(b)) + '">👁️ Zum Termin in der Verwaltung</button>' : "") + "</div>";
     }
     if (zh.length) {
       const it = zh.map(hinItem);
