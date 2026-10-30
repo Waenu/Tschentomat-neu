@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.69.0.1",
+      "v": "2.57.4.0 bis 2.69.0.2",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -62,7 +62,7 @@
         "Neu: Kürzere Wege zwischen Kalender und Verwaltung (nur Papi). In der Zeile «Buchungssicherheit» der Tagesbox führt der Knopf «Zum Termin in der Verwaltung» direkt zur Karte. Im Hinweis «Termine noch nicht in Airbnb gesperrt» zeigt ein Knopf pro Termin den Tag im Kalender. Von der Verwaltung in den Kalender bringt «↩ zurück» wieder an dieselbe Stelle in der Verwaltung.",
         "Neu: Tippt man einen Balken an, zeigt die Box die ganze Dauer («Do 19.11.2026 bis Mo 23.11.2026 (4 Nächte)») statt des einzelnen Tages. Das gilt für Aufenthalte der Familie und für Airbnb-Gäste.",
         "Neu: Einchecken ab 16 Uhr, Auschecken bis 10 Uhr steht bei jeder Buchung: in der Tagesbox, in der Buchungsübersicht des Rechners, im «Bestätigt»-Hinweis für die Kinder und im WhatsApp-Bescheid.",
-        "Fehler behoben: Endet eine laufende Staffel zwangsläufig, weil direkt danach ein Airbnb-Gast anreist, fragt die App nicht mehr «Wie möchtest du buchen?». Der Termin gilt als Staffel-Ende (ohne Gäste, die Eltern reinigen, die Endreinigung wird unter den Reisegruppen aufgeteilt) und ein Hinweis erklärt das."
+        "Fehler behoben: Endet eine laufende Staffel zwangsläufig, weil direkt danach ein Airbnb-Gast anreist, zeigt die App «Wie möchtest du buchen?» schon als «Staffel» gewählt und gesperrt (ohne Gäste, die Eltern reinigen, die Endreinigung wird unter den Reisegruppen aufgeteilt). Der Text darunter erklärt, warum."
       ]
     },
     {
