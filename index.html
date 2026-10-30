@@ -907,7 +907,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.4.0";
+let VERSION = "2.57.4.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2466,7 +2466,7 @@ function render() {
   const bar = document.getElementById("bar");
   const lab = document.getElementById("barLab"), val = document.getElementById("barVal");
   if (!r.ok) {
-    res.innerHTML = '<h2>Preis</h2><p class="empty">' + r.msg.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</p>';
+    res.innerHTML = '<h2>Preis</h2><p class="empty">' + (/^Bitte wählen/.test(r.msg) ? "Der Preis erscheint, sobald alles gewählt ist." : r.msg.replace(/&/g, "&amp;").replace(/</g, "&lt;")) + '</p>';   // «Bitte wählen» steht schon in der Leiste unten, hier nicht doppelt
     bar.classList.add("err"); bar.classList.toggle("wahl", /^Bitte wählen/.test(r.msg)); lab.textContent = r.msg; val.textContent = "";
     return;
   }

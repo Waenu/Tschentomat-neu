@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.57.4.0",
+      "v": "2.43.3.0 bis 2.57.4.1",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -50,7 +50,8 @@
         "Untere Leiste: Ist Zimmer 1 in Gebrauch, steht unter dem Total klein in Grün «Bleibt Zimmer 1 zu, sparst du CHF …» (echter Unterschied aus der Rechnung).",
         "Hochsaison: Hinweistexte unter «Wie möchtest du buchen?» kürzer und klarer. Bei «Verbindlich» steht jetzt der Grund, warum keine Gäste möglich sind (Pauschalpreis fürs ganze Chalet).",
         "Hochsaison unter 7 oder über 14 Nächten: Rote Meldung «Nur mit Vorbehalt möglich» direkt bei der Terminwahl im Kalender, statt des neutralen Hinweises.",
-        "Hervorhebung wieder kräftig gelb, aber nur wenig höher als das Wort. Sie gilt jetzt auch in den Hinweisen unter den Fragen: «Staffel», «Normal», «Verbindlich», «Mit Vorbehalt», «Ja» und «Nein» stechen heraus. Staffel-Zeit: «fest (in Airbnb gesperrt)»."
+        "Hervorhebung wieder kräftig gelb, aber nur wenig höher als das Wort. Sie gilt jetzt auch in den Hinweisen unter den Fragen: «Staffel», «Normal», «Verbindlich», «Mit Vorbehalt», «Ja» und «Nein» stechen heraus. Staffel-Zeit: «fest (in Airbnb gesperrt)».",
+        "Preisfeld: Bei einer fehlenden Auswahl steht dort «Der Preis erscheint, sobald alles gewählt ist.» statt der doppelten Meldung «Bitte wählen …», die schon in der Leiste unten steht."
       ]
     },
     {
