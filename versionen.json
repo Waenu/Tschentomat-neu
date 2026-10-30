@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.66.0.0",
+      "v": "2.57.4.0 bis 2.66.0.1",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -53,7 +53,8 @@
         "Neu: Staffelbeginn. Die App erkennt, wer eine Staffel beginnt. Dieser Aufenthalt findet das Chalet gereinigt und bezogen vor und bringt keine Wäsche mit. Beim Buchen wählt der Starter Pflicht: benutzte Wäsche persönlich bringen oder per Post senden, spätestens 3 Tage nach der Rückreise. Die Wahl steht in der Bestätigung. Papi sieht den Termin in der Verwaltung und vermerkt mit «Wäsche ist zurück». Wird vor dem Starter eine Staffel eingetragen, warnt die App, und der bisherige Starter bringt dann eigene Wäsche mit.",
         "Korrektur: Liegt direkt nach einem Aufenthalt schon eine Staffel (zum Beispiel Deborah), ist eine Staffel davor möglich. Statt «Keine Staffel möglich» erscheint der Hinweis «Staffel vor einer bestehenden»: Wer davor beginnt, beginnt die Kette, die Bestehende schliesst an und bringt dann eigene Wäsche mit.",
         "Neu: Erinnerung in der Verwaltung. Wird jemand durch eine neue Staffel davor vom Beginn zum Folge-Aufenthalt, steht beim Termin «Noch nicht informiert: bringt jetzt eigene Wäsche» mit einem Knopf «Wäsche-Info senden» (WhatsApp). Mit dem Senden wird «Wäsche-Info gegeben am …» vermerkt.",
-        "Text: Die Tagesbox in der Staffel-Zeit sagt, dass der Beginn einer Staffel keine eigene Wäsche mitbringt, und nennt eine direkt folgende Staffel. Mit «Normal» ändert sich für diese nichts. Der Bescheid an einen Starter nennt die Rückgabe der Wäsche und führt keine Wäsche-Liste mehr auf."
+        "Text: Die Tagesbox in der Staffel-Zeit sagt, dass der Beginn einer Staffel keine eigene Wäsche mitbringt, und nennt eine direkt folgende Staffel. Mit «Normal» ändert sich für diese nichts. Der Bescheid an einen Starter nennt die Rückgabe der Wäsche und führt keine Wäsche-Liste mehr auf.",
+        "Korrektur: Die Wäsche bleibt in der Verwaltung gemeldet, auch nach der Abreise. Unter «🧺 Wäsche noch nicht zurück» steht sie mit Frist, nach Ablauf mit «Frist abgelaufen», bis Papi mit «Wäsche ist zurück» den Eingang quittiert. Vorher verschwand der Termin mit der Abreise aus der Liste."
       ]
     },
     {
