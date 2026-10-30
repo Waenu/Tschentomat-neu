@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.58.0.2",
+      "v": "2.43.3.0 bis 2.59.0.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -68,7 +68,8 @@
         "Aufräumen: toter Code der Balken (Besen und Eimer im Familienbalken) entfernt. Keine sichtbare Änderung.",
         "Neu: Der eigene Balken leuchtet sanft und zeigt 👆, bis man ihn einmal antippt (nur wenn der eigene Name gewählt ist). Bei «Bewegung aus» bleibt ein ruhiges Leuchten ohne Pulsieren.",
         "Eigener Balken: Leuchten deutlich stärker und es pulsiert jetzt auch bei «Nur Wichtiges». Bei «Bewegung aus» bleibt ein kräftiges, ruhiges Leuchten.",
-        "Eigener Balken: Leuchten wieder etwas sanfter (war bei «Alles» und «Nur Wichtiges» zu heftig)."
+        "Eigener Balken: Leuchten wieder etwas sanfter (war bei «Alles» und «Nur Wichtiges» zu heftig).",
+        "Neu: Eigene Balken bleiben nach dem Antippen als leiser Dauerschein markiert (Suchhilfe). Es leuchten alle Balken mit dem gewählten Namen: Buchungen aus der App und Familien-Einträge aus dem Kalender, auch «Manuel und Freunde» bei Manuel."
       ]
     },
     {
