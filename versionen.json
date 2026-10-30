@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.65.0.0",
+      "v": "2.57.4.0 bis 2.65.0.1",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -50,7 +50,8 @@
         "Neu: Papi kann eine WhatsApp-Meldung der Kinder in «Neuer Eintrag» einfügen. Die App erkennt Art und Absender und füllt Titel und Text vor, Papi wählt die Priorität und speichert.",
         "Text: Beim Hinweis zur Reinigung steht bei «Nach Parteien», dass es nur fair ist, wenn alle Parteien gleich gross sind, sonst nach Personen teilen.",
         "Text: Neue Regel «Wer die Staffel beginnt» in der Selbstreinigung: Wer beginnt, findet das Chalet gereinigt und bezogen, bringt keine Wäsche mit und zahlt die Endreinigung gleich wie alle anderen der Staffel.",
-        "Neu: Staffelbeginn. Die App erkennt, wer eine Staffel beginnt. Dieser Aufenthalt findet das Chalet gereinigt und bezogen vor und bringt keine Wäsche mit. Beim Buchen wählt der Starter Pflicht: benutzte Wäsche persönlich bringen oder per Post senden, spätestens 3 Tage nach der Rückreise. Die Wahl steht in der Bestätigung. Papi sieht den Termin in der Verwaltung und vermerkt mit «Wäsche ist zurück». Wird vor dem Starter eine Staffel eingetragen, warnt die App, und der bisherige Starter bringt dann eigene Wäsche mit."
+        "Neu: Staffelbeginn. Die App erkennt, wer eine Staffel beginnt. Dieser Aufenthalt findet das Chalet gereinigt und bezogen vor und bringt keine Wäsche mit. Beim Buchen wählt der Starter Pflicht: benutzte Wäsche persönlich bringen oder per Post senden, spätestens 3 Tage nach der Rückreise. Die Wahl steht in der Bestätigung. Papi sieht den Termin in der Verwaltung und vermerkt mit «Wäsche ist zurück». Wird vor dem Starter eine Staffel eingetragen, warnt die App, und der bisherige Starter bringt dann eigene Wäsche mit.",
+        "Korrektur: Liegt direkt nach einem Aufenthalt schon eine Staffel (zum Beispiel Deborah), ist eine Staffel davor möglich. Statt «Keine Staffel möglich» erscheint der Hinweis «Staffel vor einer bestehenden»: Wer davor beginnt, beginnt die Kette, die Bestehende schliesst an und bringt dann eigene Wäsche mit."
       ]
     },
     {
