@@ -2,7 +2,50 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.61.0.0",
+      "v": "2.57.4.0 bis 2.61.1.0",
+      "datum": "2026-10-30",
+      "titel": "Änderungen vom 30.10.2026",
+      "arten": [
+        "Neu",
+        "Funktion",
+        "Layout",
+        "Fehler",
+        "Text"
+      ],
+      "punkte": [
+        "Hervorhebung wieder kräftig gelb, aber nur wenig höher als das Wort. Sie gilt jetzt auch in den Hinweisen unter den Fragen: «Staffel», «Normal», «Verbindlich», «Mit Vorbehalt», «Ja» und «Nein» stechen heraus. Staffel-Zeit: «fest (in Airbnb gesperrt)».",
+        "Fehlt noch eine Auswahl, bleibt das Preisfeld weg. Die Leiste unten sagt «Bitte wählen: …» und darunter in einer neuen Zeile «Der Preis erscheint, sobald alles gewählt ist.»",
+        "Beim Buchen (Preisrechner offen) wird der Knopf «Cheminée-Anleitung» unten nicht mehr angezeigt. Auf der Startseite bleibt er.",
+        "Kalender: Tippst du den gewählten Abreisetag an, erscheint die Box nur noch, wenn sie etwas Neues sagt (zum Beispiel Anreise eines Airbnb-Gasts oder Ende der Staffel). Die doppelte Zeile «Dein Aufenthalt: … Nächte» ist weg.",
+        "Der aufklappbare Bereich auf der Buchungsseite heisst jetzt «Buchungsübersicht» statt «Preisberechnung» (auch im Hilfetext), weil er mehr als den Preis zeigt.",
+        "Die Knöpfe «↑ Menü» und «Zurück» liegen immer über der unteren Leiste und verdecken sie nicht mehr, auch wenn die Leiste mehrere Zeilen hat.",
+        "Spartipp «Bleibt Zimmer 1 zu, sparst du CHF …» in der unteren Leiste: zwei Sterne links und rechts leuchten abwechselnd, auch bei «Bewegung aus» (bei «Bewegung reduzieren» des Handys nur sanftes Aufhellen ohne Grössenänderung).",
+        "Kalender, Abreisetag: Der Satz «Wählst du Staffel, endet sie hier …» erscheint nur noch, wenn die Staffel für diesen Termin überhaupt möglich ist (nicht mehr in der Nebensaison oder Hochsaison).",
+        "Text: «Normale Familienpreise» nach dem Doppelpunkt mit grossem N (Hinweise unter dem Kalender).",
+        "Termin mit Vorbehalt: Der Risiko-Hinweis ist freundlicher formuliert («Ein Airbnb-Gast hat Vorrang. Bucht jemand diese Tage, muss euer Aufenthalt weichen …»). Die doppelte Aussage zum Vorrang in der Tages-Box ist weg.",
+        "Hochsaison-Hinweis im Kalender: Verbindlich nur ab 7 Nächten, mit Vorbehalt bei jeder Dauer.",
+        "Legende der Buchungsübersicht: «von Papi eingetragen» entfernt (unverständlich für die Kinder); doppelter Eintrag «Familie» weggelassen.",
+        "Hochsaison-Hinweis im Kalender: «mit Vorbehalt ab 4 Nächten» statt «bei jeder Dauer» (Wert aus den Einstellungen).",
+        "Hochsaison-Hinweis im Kalender: «Termin ist fest und in Airbnb gesperrt» (wie im Glossar).",
+        "Legende der Buchungsübersicht: Besen und Eimer entfernt, sie erscheinen nicht mehr im Balken (nur in der Tages-Box).",
+        "Aufräumen: toter Code der Balken (Besen und Eimer im Familienbalken) entfernt. Keine sichtbare Änderung.",
+        "Neu: Der eigene Balken leuchtet sanft und zeigt 👆, bis man ihn einmal antippt (nur wenn der eigene Name gewählt ist). Bei «Bewegung aus» bleibt ein ruhiges Leuchten ohne Pulsieren.",
+        "Eigener Balken: Leuchten deutlich stärker und es pulsiert jetzt auch bei «Nur Wichtiges». Bei «Bewegung aus» bleibt ein kräftiges, ruhiges Leuchten.",
+        "Eigener Balken: Leuchten wieder etwas sanfter (war bei «Alles» und «Nur Wichtiges» zu heftig).",
+        "Neu: Eigene Balken bleiben nach dem Antippen als leiser Dauerschein markiert (Suchhilfe). Es leuchten alle Balken mit dem gewählten Namen: Buchungen aus der App und Familien-Einträge aus dem Kalender, auch «Manuel und Freunde» bei Manuel.",
+        "Ideenliste: «Suche mit Lupe im Kalender» eingetragen.",
+        "Text «Wie möchtest du buchen?» in der Staffel-Zeit: langer Vergleich der Reinigung durch einen Satz ersetzt (Staffel: jetzt CHF 0.–, später Anteil an der Endreinigung).",
+        "Untere Leiste: Hinweis «maximal CHF … mit Endreinigung» in kleinerer Schrift, damit die Leiste niedriger bleibt (Wunsch von Jerome bleibt erhalten).",
+        "Papi: In der «Ansicht als» (Kindansicht) leuchten die Balken des gewählten Kindes zum Testen. «Gesehen» gilt dort nur bis zum Neuladen, damit sich das Leuchten wiederholen lässt.",
+        "Aufräumen: neun ungenutzte Funktionen und zwei ungenutzte Stilregeln entfernt. Keine sichtbare Änderung.",
+        "Neu (nur Papi): Bestätigte feste Termine, die Airbnb noch nicht als belegt meldet, werden gemeldet: Zähler im Papi-Bereich und in der Zeile «Buchungssicherheit» («in Airbnb noch nicht gesperrt»).",
+        "Neu: Suche mit Lupe (oben neben dem Hell/Dunkel-Schalter). Sie findet Termine (Name, Art, fest, mit Vorbehalt, Datum, Monat) und Stellen in der Hilfe. Treffer sind rosa hinterlegt. Kinder finden alle Familien-Termine und nur die eigenen Beträge, Airbnb-Gäste und Gäste mit Vertrag findet nur Papi.",
+        "Suche: Auch die Kinder (und alle ohne Papi-Zugang) finden Airbnb-Gäste und Gäste mit Vertrag, ohne Beträge.",
+        "Versionshistorie: Einträge pro Tag zusammengefasst (26.10. und 27.10.), der 29.10. und der 30.10. getrennt."
+      ]
+    },
+    {
+      "v": "2.43.3.0 bis 2.57.3.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -49,34 +92,7 @@
         "Das Wort «kein» in der Frage zum normalen Bett ist dezenter markiert (kleiner, nur leicht gelb unterlegt).",
         "Untere Leiste: Ist Zimmer 1 in Gebrauch, steht unter dem Total klein in Grün «Bleibt Zimmer 1 zu, sparst du CHF …» (echter Unterschied aus der Rechnung).",
         "Hochsaison: Hinweistexte unter «Wie möchtest du buchen?» kürzer und klarer. Bei «Verbindlich» steht jetzt der Grund, warum keine Gäste möglich sind (Pauschalpreis fürs ganze Chalet).",
-        "Hochsaison unter 7 oder über 14 Nächten: Rote Meldung «Nur mit Vorbehalt möglich» direkt bei der Terminwahl im Kalender, statt des neutralen Hinweises.",
-        "Hervorhebung wieder kräftig gelb, aber nur wenig höher als das Wort. Sie gilt jetzt auch in den Hinweisen unter den Fragen: «Staffel», «Normal», «Verbindlich», «Mit Vorbehalt», «Ja» und «Nein» stechen heraus. Staffel-Zeit: «fest (in Airbnb gesperrt)».",
-        "Fehlt noch eine Auswahl, bleibt das Preisfeld weg. Die Leiste unten sagt «Bitte wählen: …» und darunter in einer neuen Zeile «Der Preis erscheint, sobald alles gewählt ist.»",
-        "Beim Buchen (Preisrechner offen) wird der Knopf «Cheminée-Anleitung» unten nicht mehr angezeigt. Auf der Startseite bleibt er.",
-        "Kalender: Tippst du den gewählten Abreisetag an, erscheint die Box nur noch, wenn sie etwas Neues sagt (zum Beispiel Anreise eines Airbnb-Gasts oder Ende der Staffel). Die doppelte Zeile «Dein Aufenthalt: … Nächte» ist weg.",
-        "Der aufklappbare Bereich auf der Buchungsseite heisst jetzt «Buchungsübersicht» statt «Preisberechnung» (auch im Hilfetext), weil er mehr als den Preis zeigt.",
-        "Die Knöpfe «↑ Menü» und «Zurück» liegen immer über der unteren Leiste und verdecken sie nicht mehr, auch wenn die Leiste mehrere Zeilen hat.",
-        "Spartipp «Bleibt Zimmer 1 zu, sparst du CHF …» in der unteren Leiste: zwei Sterne links und rechts leuchten abwechselnd, auch bei «Bewegung aus» (bei «Bewegung reduzieren» des Handys nur sanftes Aufhellen ohne Grössenänderung).",
-        "Kalender, Abreisetag: Der Satz «Wählst du Staffel, endet sie hier …» erscheint nur noch, wenn die Staffel für diesen Termin überhaupt möglich ist (nicht mehr in der Nebensaison oder Hochsaison).",
-        "Text: «Normale Familienpreise» nach dem Doppelpunkt mit grossem N (Hinweise unter dem Kalender).",
-        "Termin mit Vorbehalt: Der Risiko-Hinweis ist freundlicher formuliert («Ein Airbnb-Gast hat Vorrang. Bucht jemand diese Tage, muss euer Aufenthalt weichen …»). Die doppelte Aussage zum Vorrang in der Tages-Box ist weg.",
-        "Hochsaison-Hinweis im Kalender: Verbindlich nur ab 7 Nächten, mit Vorbehalt bei jeder Dauer.",
-        "Legende der Buchungsübersicht: «von Papi eingetragen» entfernt (unverständlich für die Kinder); doppelter Eintrag «Familie» weggelassen.",
-        "Hochsaison-Hinweis im Kalender: «mit Vorbehalt ab 4 Nächten» statt «bei jeder Dauer» (Wert aus den Einstellungen).",
-        "Hochsaison-Hinweis im Kalender: «Termin ist fest und in Airbnb gesperrt» (wie im Glossar).",
-        "Legende der Buchungsübersicht: Besen und Eimer entfernt, sie erscheinen nicht mehr im Balken (nur in der Tages-Box).",
-        "Aufräumen: toter Code der Balken (Besen und Eimer im Familienbalken) entfernt. Keine sichtbare Änderung.",
-        "Neu: Der eigene Balken leuchtet sanft und zeigt 👆, bis man ihn einmal antippt (nur wenn der eigene Name gewählt ist). Bei «Bewegung aus» bleibt ein ruhiges Leuchten ohne Pulsieren.",
-        "Eigener Balken: Leuchten deutlich stärker und es pulsiert jetzt auch bei «Nur Wichtiges». Bei «Bewegung aus» bleibt ein kräftiges, ruhiges Leuchten.",
-        "Eigener Balken: Leuchten wieder etwas sanfter (war bei «Alles» und «Nur Wichtiges» zu heftig).",
-        "Neu: Eigene Balken bleiben nach dem Antippen als leiser Dauerschein markiert (Suchhilfe). Es leuchten alle Balken mit dem gewählten Namen: Buchungen aus der App und Familien-Einträge aus dem Kalender, auch «Manuel und Freunde» bei Manuel.",
-        "Ideenliste: «Suche mit Lupe im Kalender» eingetragen.",
-        "Text «Wie möchtest du buchen?» in der Staffel-Zeit: langer Vergleich der Reinigung durch einen Satz ersetzt (Staffel: jetzt CHF 0.–, später Anteil an der Endreinigung).",
-        "Untere Leiste: Hinweis «maximal CHF … mit Endreinigung» in kleinerer Schrift, damit die Leiste niedriger bleibt (Wunsch von Jerome bleibt erhalten).",
-        "Papi: In der «Ansicht als» (Kindansicht) leuchten die Balken des gewählten Kindes zum Testen. «Gesehen» gilt dort nur bis zum Neuladen, damit sich das Leuchten wiederholen lässt.",
-        "Aufräumen: neun ungenutzte Funktionen und zwei ungenutzte Stilregeln entfernt. Keine sichtbare Änderung.",
-        "Neu (nur Papi): Bestätigte feste Termine, die Airbnb noch nicht als belegt meldet, werden gemeldet: Zähler im Papi-Bereich und in der Zeile «Buchungssicherheit» («in Airbnb noch nicht gesperrt»).",
-        "Neu: Suche mit Lupe (oben neben dem Hell/Dunkel-Schalter). Sie findet Termine (Name, Art, fest, mit Vorbehalt, Datum, Monat) und Stellen in der Hilfe. Treffer sind rosa hinterlegt. Kinder finden alle Familien-Termine und nur die eigenen Beträge, Airbnb-Gäste und Gäste mit Vertrag findet nur Papi."
+        "Hochsaison unter 7 oder über 14 Nächten: Rote Meldung «Nur mit Vorbehalt möglich» direkt bei der Terminwahl im Kalender, statt des neutralen Hinweises."
       ]
     },
     {
@@ -101,647 +117,183 @@
       ]
     },
     {
-      "v": "2.21.1.0",
+      "v": "2.0.0.0 bis 2.21.1.0",
       "datum": "2026-10-27",
-      "titel": "Hinweisleiste unten in Orange",
+      "titel": "Änderungen vom 27.10.2026",
       "arten": [
+        "Funktion",
+        "Text",
+        "Layout",
         "Fehler",
-        "Layout"
-      ],
-      "punkte": [
-        "Fehlt noch eine Wahl («Bitte wählen …»), ist die Leiste unten orange wie die Felder «– wählen –» statt rot. Echte Fehler bleiben rot"
-      ]
-    },
-    {
-      "v": "2.21.0.0",
-      "datum": "2026-10-27",
-      "titel": "Meldeformular in der Kinder-Ansicht",
-      "arten": [
-        "Funktion"
-      ],
-      "punkte": [
-        "Wählt Papi «Ansicht als» ein Kind, sieht er unter «Wünsche und Fehler» das Formular wie das Kind. Ohne Kinder-Ansicht bleibt es für Papi ausgeblendet"
-      ]
-    },
-    {
-      "v": "2.20.1.0",
-      "datum": "2026-10-27",
-      "titel": "Hinweis für Papi aufgeräumt",
-      "arten": [
-        "Layout"
-      ],
-      "punkte": [
-        "Der Hinweis «Versteckte Menüs» hat Abstand zu den Knöpfen darüber und passt jetzt in den Rahmen"
-      ]
-    },
-    {
-      "v": "2.20.0.0",
-      "datum": "2026-10-27",
-      "titel": "Schalter für die Bewegung",
-      "arten": [
         "Neu"
       ],
       "punkte": [
-        "Oben neben Schriftgrösse und Dunkelmodus: ein Knopf ✨, der alle kleinen Animationen aus- und wieder einschaltet; die Wahl merkt sich das Handy",
-        "Ohne eigene Wahl gilt die Einstellung «Bewegung reduzieren» des Handys",
-        "Neu in der Verwaltung, nur für Papi sichtbar: Hinweis, wie man die versteckten Menüs einblendet (Token, Testmodus, Kinder-Ansicht)"
-      ]
-    },
-    {
-      "v": "2.19.0.0",
-      "datum": "2026-10-27",
-      "titel": "Bewegte Symbole und Ameisenpfad",
-      "punkte": [
-        "Kalenderbalken, Legende und Beispiele: Besen kehrt, Eimer kippt um, Familie hüpft, Schloss klickt, Flugzeug fliegt, Vertrag rollt, Sperre pulsiert; jedes Symbol bewegt sich nur kurz, mit versetztem Beginn",
-        "Staffel: eigene Läufer-Figur, die auf jedem Handy von links nach rechts läuft",
-        "Verlinkende Symbole: der gepunktete Rand wandert als Ameisenpfad",
-        "Legende: Balken und Symbole so gross wie im Kalender",
-        "Bei «Bewegung reduzieren» im Handy stehen alle Symbole still"
-      ]
-    },
-    {
-      "v": "2.18.0.1",
-      "datum": "2026-10-27",
-      "titel": "Ersteller in zwei Zeilen",
-      "punkte": [
-        "Oben in der Versionshistorie stehen «Idee und Konzept: Wänu» und «Umsetzung: Claude KI» untereinander"
-      ]
-    },
-    {
-      "v": "2.18.0.0",
-      "datum": "2026-10-27",
-      "titel": "Startseite: immer nur ein Bereich offen",
-      "punkte": [
-        "Ansichten (Auge) folgen dem gleichen Schema wie Anleitung & Infos, Reservieren und Cheminée: Öffnet man einen Bereich, schliessen sich die anderen"
-      ]
-    },
-    {
-      "v": "2.17.0.0",
-      "datum": "2026-10-27",
-      "titel": "Wünsche und Fehler melden, Liste Geplant und Ideen",
-      "punkte": [
-        "Neu unter «Anleitung & Infos»: Fehler, Wunsch oder Frage mit Vorlage schreiben und per WhatsApp an Papi senden, Version, Handy und gewählte Daten fügt die App selbst an",
-        "Neu: Liste «Geplant und Ideen» aus der Datei ideen.json",
-        "Auf Papis Handy erscheint nur die Liste, nicht das Meldeformular"
-      ]
-    },
-    {
-      "v": "2.16.0.0",
-      "datum": "2026-10-27",
-      "titel": "Dickere Balken, eigene Schlösser",
-      "punkte": [
-        "Kalender: Die Balken sind höher und die Symbole darin grösser, das Datum steht kleiner weiter oben im Feld",
-        "Schloss geschlossen und offen sind jetzt eigene Zeichnungen: Beim offenen Schloss ist der Bügel angehoben"
-      ]
-    },
-    {
-      "v": "2.15.0.0",
-      "datum": "2026-10-27",
-      "titel": "Im Kalender 12 Monate zurückblättern",
-      "punkte": [
-        "Der Pfeil ‹ im Kalender geht jetzt bis 12 Monate zurück. Vergangene Tage sind nur zur Ansicht und nicht wählbar, Aufenthalte der Familie bleiben als Balken sichtbar"
-      ]
-    },
-    {
-      "v": "2.14.0.2",
-      "datum": "2026-10-27",
-      "titel": "Kalender springt beim Monatswechsel nicht mehr",
-      "arten": [
-        "Fehler"
-      ],
-      "punkte": [
-        "Bei eingeschalteter Hilfe schob die Hilfe-Box beim Monatswechsel die Seite nach unten, sodass die Pfeile oben aus dem Bild verschwanden. Jetzt bleibt die Seite stehen"
-      ]
-    },
-    {
-      "v": "2.14.0.1",
-      "datum": "2026-10-27",
-      "titel": "Staffel-Warnung erst nach Anreise und Abreise",
-      "punkte": [
-        "Die rote Warnung zur Familienstaffel erschien schon nach dem Tippen der Anreise, obwohl noch gar nicht klar war, ob selbst gereinigt wird. Jetzt erscheint sie erst, wenn Anreise und Abreise gewählt sind"
-      ]
-    },
-    {
-      "v": "2.14.0.0",
-      "datum": "2026-10-27",
-      "titel": "Kindansicht, orange Rahmen, bewegte Symbole",
-      "punkte": [
-        "Ansicht als Kind: Die Verwaltung ist ausgeblendet, oben zeigt ein blauer Streifen «Du siehst die App als …» mit Knopf «Zurück zu Eltern»",
-        "Verwaltung: Offene Anfragen und Karten ohne Bescheid haben einen orangen Rahmen",
-        "Verwaltung: Abgelehnte, Logbuch und Gäste stehen unter einer Trennlinie «Nachschlagen»",
-        "Knöpfe «Anreise-Wäsche» und «Reinigungs-Checkliste»: eigene Symbole (Koffer rollt, Häkchen zeichnet sich), bei «Bewegung reduzieren» still"
-      ]
-    },
-    {
-      "v": "2.13.3.2",
-      "datum": "2026-10-27",
-      "titel": "Staffel: Beginn und Fortsetzung genauer erklärt",
-      "punkte": [
-        "Der Text sagt jetzt: Die 2 freien Nächte brauchen nur, wer eine Staffel beginnt. Wer eine laufende Staffel fortsetzt, kann immer mitmachen und holt die Anteile der Familien davor zurück"
-      ]
-    },
-    {
-      "v": "2.13.3.1",
-      "datum": "2026-10-27",
-      "titel": "Texte: Staffel, Zahlung, Preise",
-      "punkte": [
-        "Staffel: Es steht klar, wann ein Termin nicht als Staffel geht und wo der Rechner es meldet",
-        "Zahlung: Papi schickt zusätzlich eine WhatsApp als Erinnerung",
-        "Selber reinigen: erklärt, dass die Endreinigung erst anfällt, wenn der nächste Airbnb-Gast kommt",
-        "Preise: PriceLabs schreibt sie mehrmals täglich in Airbnb"
-      ]
-    },
-    {
-      "v": "2.13.3.0",
-      "datum": "2026-10-27",
-      "titel": "Redner begrüsst die Familie",
-      "punkte": [
-        "Unter «Benutzung» begrüsst ein kleiner Redner am Pult mit «Liebi Fraue und Mane»: Die Arme heben sich zusammen nach vorn, der Mund klappt auf und zu",
-        "Mit der Einstellung «Bewegung reduzieren» im Handy steht er ruhig"
-      ]
-    },
-    {
-      "v": "2.13.2.1",
-      "datum": "2026-10-27",
-      "titel": "Ersteller ganz oben",
-      "punkte": [
-        "Versionshistorie: «Idee und Konzept: Wänu · Umsetzung: Claude KI» steht jetzt ganz oben"
-      ]
-    },
-    {
-      "v": "2.13.2.0",
-      "datum": "2026-10-27",
-      "titel": "Texte und Bedienzeichen überarbeitet",
-      "punkte": [
-        "Bedienzeichen im Text (‹ ›, «?», durchgestrichenes «?», «↩ zurück», «↑ Menü») als echte Symbole in Textgrösse, Zeilen rücken nicht mehr auseinander",
-        "«Begriffe» heisst jetzt «Glossar»",
-        "Februar und Hochsaison: Grund der Mindestdauer (Stückelung), Mindestpreis CHF 1’920.– als Preis für Stammgäste, Hotel-Vergleich statt Tessin",
-        "Fest oder mit Vorbehalt: Zeiten aus den Einstellungen aufgelistet, Vorlaufzeit von Airbnb richtig erklärt",
-        "Grün und Gelb exakt gleich hoch, roter Rand bei Konflikt in Legende und Bild",
-        "Staffel-Bild: Namen nicht mehr abgeschnitten, Text «Manuel bezahlt die Rechnung»",
-        "Zahlung: Symbole in einer Spalte, «Nur über die App» ohne WhatsApp, Hinweis auf Idee und Umsetzung in der Versionshistorie"
-      ]
-    },
-    {
-      "v": "2.13.1.0",
-      "datum": "2026-10-27",
-      "titel": "Formular: Hinweis passt zur Auswahl",
-      "punkte": [
-        "Unter «Wie möchtest du buchen?» steht nur noch die Erklärung zur gewählten Art, dazu ein kurzer Satz zur Alternative",
-        "Dasselbe bei «Bleibt Zimmer 1 unberührt?» und «Reinigt selbst?»: nur der Text zur Auswahl"
-      ]
-    },
-    {
-      "v": "2.13.0.0",
-      "datum": "2026-10-27",
-      "titel": "Details auf belegten Tagen antippen",
-      "punkte": [
-        "Ein Tipp auf einen belegten Tag oder Balken zeigt die Details (Name, Reinigung, Vorbehalt oder Konflikt) auch ohne die Hilfe «?»",
-        "Die Zeile «Bestätigte Aufenthalte» unter dem Kalender entfällt",
-        "Neuer Hinweis unter dem Kalender: Tippe einen belegten Tag an"
-      ]
-    },
-    {
-      "v": "2.12.0.3",
-      "datum": "2026-10-27",
-      "titel": "Hilfe: Eltern verzichten auf eigene Ferien",
-      "punkte": [
-        "Unter Februar, Hochsaison und «Wie wird gerechnet» steht, dass auch die Eltern in der Hochsaison und im Februar auf eigene Ferien im Chalet verzichten, damit Einnahmen hereinkommen"
-      ]
-    },
-    {
-      "v": "2.12.0.2",
-      "datum": "2026-10-27",
-      "titel": "Knopf «Vertrag»",
-      "punkte": [
-        "Der Auswahlknopf 📜 heisst «Vertrag» statt «Extern»"
-      ]
-    },
-    {
-      "v": "2.12.0.1",
-      "datum": "2026-10-27",
-      "titel": "Legende: Gast mit Vertrag",
-      "punkte": [
-        "Der externe Gast heisst in Legende und Erklärung «Gast mit Vertrag»"
-      ]
-    },
-    {
-      "v": "2.12.0.0",
-      "datum": "2026-10-27",
-      "titel": "Keine Warnung für Sonntage ohne Check-in",
-      "punkte": [
-        "Die Warnung «in Airbnb nicht gesperrt» erscheint nicht mehr für Sonntagnächte, denn sonntags kann in Airbnb niemand einchecken"
-      ]
-    },
-    {
-      "v": "2.11.1.1",
-      "datum": "2026-10-27",
-      "titel": "Legende: Name von Papi eingetragen",
-      "punkte": [
-        "In der Legende steht bei Airbnb-Gast und externem Gast «Name von Papi eingetragen»"
-      ]
-    },
-    {
-      "v": "2.11.1.0",
-      "datum": "2026-10-27",
-      "titel": "Abreise auch über freie Tage hinaus",
-      "punkte": [
-        "Die Abreise eines Namens darf nach einer in Airbnb noch freien Nacht liegen",
-        "Die App warnt, welche Nächte in Airbnb nicht gesperrt sind"
-      ]
-    },
-    {
-      "v": "2.11.0.0",
-      "datum": "2026-10-27",
-      "titel": "Familie von Hand eintragen",
-      "punkte": [
-        "Neue Art «Familie» 👨‍👦 bei den Namen, für Familientermine, die schon in Airbnb gesperrt sind",
-        "Gibt es für dieselben Tage einen bestätigten Familienaufenthalt, zeigt der Kalender nur dessen Balken",
-        "Vier Arten nebeneinander: Airbnb, Extern, Familie, Blockiert"
-      ]
-    },
-    {
-      "v": "2.10.0.0",
-      "datum": "2026-10-27",
-      "titel": "Neu: Blockiert 🚫",
-      "punkte": [
-        "Neben Airbnb ✈️ und Extern 📜 gibt es die Art «Blockiert» 🚫, z. B. wenn niemand reinigen kann",
-        "Die drei Arten stehen nebeneinander zur Auswahl; bei «Blockiert» ist der Name freiwillig",
-        "Auch «Blockiert» steht in der Legende"
-      ]
-    },
-    {
-      "v": "2.9.0.0",
-      "datum": "2026-10-27",
-      "titel": "Gästenamen mit Anreise und Abreise",
-      "punkte": [
-        "Beim Namen wählt Papi Anreise und Abreise im Kalender, der Balken läuft nur über diese Tage",
-        "Geblockte Tage davor oder danach bleiben ohne Namen",
-        "Ändern und Entfernen weiterhin nur von Hand, Entfernen mit Nachfrage"
-      ]
-    },
-    {
-      "v": "2.8.1.1",
-      "datum": "2026-10-27",
-      "titel": "Hilfe: Browser am Computer",
-      "punkte": [
-        "Unter «Benutzung» steht, dass am PC Chrome oder Edge empfohlen ist und Firefox abweichen kann"
-      ]
-    },
-    {
-      "v": "2.8.1.0",
-      "datum": "2026-10-27",
-      "titel": "Symbole für Airbnb, extern und Familie",
-      "punkte": [
-        "Airbnb ✈️, extern 📜 (Vertrag), Familie 👨‍👦; die Familie bekommt ihr Symbol automatisch",
-        "Papi wählt die Art beim Namen mit zwei Symbol-Knöpfen",
-        "Alle drei stehen in der Legende"
-      ]
-    },
-    {
-      "v": "2.8.0.0",
-      "datum": "2026-10-27",
-      "titel": "Airbnb, extern und Familie: Namen mit Symbol",
-      "punkte": [
-        "Beim Namen wählt Papi die Art: 🏠 Airbnb oder 🤝 extern (ausserhalb Airbnb)",
-        "Der Balken im Kalender ist grün und zeigt Symbol und Name",
-        "Wird eine Buchung storniert (Tage nicht mehr belegt), entfernt die App den Namen beim nächsten Öffnen durch Papi selbst",
-        "Bei fehlerhaft geladener Belegung wird nie etwas entfernt"
-      ]
-    },
-    {
-      "v": "2.7.3.0",
-      "datum": "2026-10-27",
-      "titel": "Legende unter dem Kalender einklappbar",
-      "punkte": [
-        "Die Legende hat die Überschrift «🎨 Legende» und ist zugeklappt, bis man sie antippt",
-        "Gleiche Farbe wie «Benutzung»"
-      ]
-    },
-    {
-      "v": "2.7.2.0",
-      "datum": "2026-10-27",
-      "titel": "Gästenamen direkt im Kalender eingeben",
-      "punkte": [
-        "Papi tippt einen von Airbnb belegten Tag an und gibt dort den Namen ein, auch ohne eingeschaltete Hilfe",
-        "Bei mehreren Gästen hintereinander: «Neuer Gast ab diesem Tag»",
-        "Name entfernen nur von Hand mit Nachfrage"
-      ]
-    },
-    {
-      "v": "2.7.1.0",
-      "datum": "2026-10-27",
-      "titel": "Gästenamen: so, wie du sie eingibst",
-      "punkte": [
-        "Der Name wird nicht mehr gekürzt, er steht so im Kalender, wie Papi ihn eingibt",
-        "Gästenamen werden nie automatisch gelöscht, nur von Hand mit Nachfrage",
-        "Fehlermeldungen erscheinen direkt unter dem Formular"
-      ]
-    },
-    {
-      "v": "2.7.0.0",
-      "datum": "2026-10-27",
-      "titel": "Namen der Airbnb-Gäste im Kalender",
-      "punkte": [
-        "Papi trägt unter «Ansichten» den Namen eines Airbnb-Gastes ein; die App kürzt den Nachnamen auf die Initiale (z. B. Maria K.)",
-        "Der Name erscheint für alle als Balken im Kalender und in der Legende",
-        "Die Namen liegen in gaeste.json; Gäste nach der Abreise werden beim nächsten Speichern entfernt"
-      ]
-    },
-    {
-      "v": "2.6.4.0",
-      "datum": "2026-10-27",
-      "titel": "Staffel im Kalender: Ameisenpfad",
-      "punkte": [
-        "Die gestrichelte Linie bei der Staffel läuft jetzt als Ameisenpfad um den Balken",
-        "Bei eingestellter «Bewegung reduzieren» steht sie still"
-      ]
-    },
-    {
-      "v": "2.6.3.0",
-      "datum": "2026-10-27",
-      "titel": "Animierte Menü-Symbole",
-      "punkte": [
-        "Kalender: das oberste Blatt fällt ab",
-        "Auge zwinkert, Glühbirne blendet ein und aus, Feuer lodert",
-        "Bei eingestellter «Bewegung reduzieren» stehen die Symbole still"
-      ]
-    },
-    {
-      "v": "2.6.2.0",
-      "datum": "2026-10-27",
-      "titel": "Verwaltung aufgeräumt",
-      "punkte": [
-        "Jeder Eintrag ist eine Karte mit Name, Datum, Kurzinfos und Status",
-        "Alle Knöpfe sind gleich hoch und gleich breit, pro Karte ein Hauptknopf",
-        "Neue Gruppe «Mit Vorbehalt, noch nicht fest» direkt unter den Anfragen, mit «Fest machen» (🔓→🔒)",
-        "Statt des ✖ gibt es einen beschrifteten Knopf «Entfernen» mit Nachfrage",
-        "Bestätigte Aufenthalte sind immer sichtbar; Abgelehnte und Logbuch lassen sich ein- und ausblenden"
-      ]
-    },
-    {
-      "v": "2.6.1.2",
-      "datum": "2026-10-27",
-      "titel": "Satz zum Familienpreis korrigiert",
-      "punkte": [
-        "Der Satz zum Familienpreis unter «Wie wird gerechnet» ist grammatikalisch korrekt"
-      ]
-    },
-    {
-      "v": "2.6.1.1",
-      "datum": "2026-10-27",
-      "titel": "Hilfetexte: Hochsaison, Preise, Buchungsart",
-      "punkte": [
-        "Neuer Begriff «Hochsaison» mit Preis, Gästen, verbindlicher Buchung und Vorbehalt",
-        "«Wie wird gerechnet» erklärt, woher die Preise kommen (PriceLabs), und nennt den Mindestpreis genauer",
-        "Termin mit Vorbehalt, Selber reinigen, Familienstaffel und Auswahlfelder passen zur neuen Buchungsart"
-      ]
-    },
-    {
-      "v": "2.6.1.0",
-      "datum": "2026-10-27",
-      "titel": "Staffel nur, wo sie möglich ist",
-      "punkte": [
-        "Die Staffel wird nur angeboten, wenn nach der Abreise noch mindestens 2 freie Nächte bis zum nächsten Airbnb-Gast bleiben oder der Termin eine laufende Staffel fortsetzt",
-        "Sonst gilt der normale Termin und der Kalender erklärt, warum"
-      ]
-    },
-    {
-      "v": "2.6.0.0",
-      "datum": "2026-10-27",
-      "titel": "Neuer Buchungsablauf: zuerst die Buchungsart",
-      "punkte": [
-        "Nach dem Termin fragt die App zuerst «Wie möchtest du buchen?», mit höchstens zwei Möglichkeiten pro Datum",
-        "Hochsaison: verbindlich oder mit Vorbehalt; Staffel-Zeit: Staffel (selbst reinigen, ohne Gäste) oder normal (Eltern reinigen, Gäste möglich)",
-        "Alle anderen Termine (Mai, September, Februar, Lücke) haben nur eine Art, dort gibt es keine Auswahl",
-        "Die Frage «Reinigt ihr selbst?» entfällt, sie steckt in der Buchungsart"
-      ]
-    },
-    {
-      "v": "2.5.0.0",
-      "datum": "2026-10-27",
-      "titel": "Verbindliche Buchung in der Hochsaison",
-      "punkte": [
-        "Neu: In der Hochsaison (mindestens 7 Nächte, höchstens 14) kann man verbindlich buchen: fest, grün, in Airbnb gesperrt, ohne Gäste",
-        "Preis: 200 pro Nacht in der Hochsaison, übrige Nächte 70, dazu die Endreinigung",
-        "Die Anfrage enthält den Satz, dass die Zeit in Airbnb blockiert werden soll",
-        "Ein Termin mit Vorbehalt in der Hochsaison braucht mindestens 4 Nächte"
-      ]
-    },
-    {
-      "v": "2.4.0.0",
-      "datum": "2026-10-27",
-      "titel": "Hochsaison-Preis: mindestens 200 pro Nacht",
-      "punkte": [
-        "In der Hochsaison (Januar, Juni, Juli, August) zahlt die Familie mindestens 200 pro Nacht plus Endreinigung, also 1640 für 7 Nächte",
-        "Mit Gästen sinkt der Anteil der Familie, genau wie im Februar; mit vielen Gästen steigt der Gesamtpreis darüber",
-        "Gilt, wenn alle Nächte in der Hochsaison liegen; Aufenthalte über den Monatswechsel folgen mit der verbindlichen Buchung"
-      ]
-    },
-    {
-      "v": "2.3.2.1",
-      "datum": "2026-10-27",
-      "titel": "Zahlungsmeldung deutlich rot",
-      "punkte": [
-        "Die Zahlungsmeldung beim Kind ist jetzt kräftig rot mit weisser Schrift",
-        "WhatsApp-Erinnerung beginnt mit «dein Aufenthalt war hoffentlich schön»"
-      ]
-    },
-    {
-      "v": "2.3.1.0",
-      "datum": "2026-10-27",
-      "titel": "Zahlung erst bei festem Termin",
-      "punkte": [
-        "Bei einem Termin mit Vorbehalt gibt es noch keine Zahlungsmeldung und keine Erinnerung; sie beginnen erst, wenn Papi den Termin fest gemacht hat"
-      ]
-    },
-    {
-      "v": "2.3.0.0",
-      "datum": "2026-10-27",
-      "titel": "Zahlungsmeldung und Logbuch",
-      "punkte": [
-        "Beim Bestätigen wird der Betrag gespeichert (nur wenn er nicht 0 ist)",
-        "7 Tage nach der Abreise erscheint beim Kind eine rote Meldung, die sich nicht wegklicken lässt",
-        "Papi verbucht die Zahlung mit «Zahlung eingegangen»; dann verschwindet die Meldung",
-        "Ab 10 Tagen nach der Abreise kann Papi per WhatsApp erinnern; «erinnert am» wird vermerkt",
-        "Neues Logbuch für Bestätigen, Ablehnen, Zahlung und Erinnerung"
-      ]
-    },
-    {
-      "v": "2.2.0.0",
-      "datum": "2026-10-27",
-      "titel": "Doppelbuchung behoben, Listen nach Bestätigung, Hilfe immer an",
-      "punkte": [
-        "Behoben: Über einen bestätigten Aufenthalt (auch mit Vorbehalt) kann nicht mehr gebucht werden",
-        "Wäsche-Liste und Reinigungs-Checkliste erscheinen erst, wenn Papi bestätigt hat; vorher steht «Anfrage gesendet»",
-        "Kalender-Hilfe ist bei jedem Öffnen der Seite an und bleibt nach «✕» für den Rest des Besuchs zu, auch beim Monatswechsel",
-        "Hilfetexte dazu angepasst"
-      ]
-    },
-    {
-      "v": "2.1.1.1",
-      "datum": "2026-10-27",
-      "titel": "Hilfebild und Fehlermeldung",
-      "punkte": [
-        "Hilfebild «Termin mit Vorbehalt» zeigt den verbundenen Balken wie im Kalender",
-        "Fehlermeldung beim Speichern nennt das Repository und die fehlende Berechtigung"
-      ]
-    },
-    {
-      "v": "2.1.1.0",
-      "datum": "2026-10-27",
-      "titel": "Neue Farben und Symbole im Kalender",
-      "punkte": [
-        "Balkenfarbe zeigt nur noch die Sicherheit: grün gesichert, gelb noch nicht gesichert (Termin mit Vorbehalt)",
-        "Schloss 🔒 und 🔓 statt Haken und Streifen, Besen 🧹 und Eimer 🪣 für die Reinigung",
-        "Ein Termin mit gesichertem und ungesichertem Teil ist ein einziger Balken: grün mit nach innen gerundetem Ende, gelb mündet darin",
-        "Offene Familienstaffel: eigener grün gestrichelter Balken mit 🏃🏃",
-        "Mai, September und 19. bis 31. Dezember sind rosa (Nebensaison)",
-        "Ausgewählter Tag: schwarz im Hellmodus, weiss im Dunkelmodus",
-        "Legende in Gruppen gegliedert, Hilfetexte und Bilder an die neuen Farben angepasst"
-      ]
-    },
-    {
-      "v": "2.1.0.4",
-      "datum": "2026-10-27",
-      "titel": "Text",
-      "punkte": [
-        "Versionszeile kürzer, ohne Zeilenumbruch"
-      ]
-    },
-    {
-      "v": "2.1.0.3",
-      "datum": "2026-10-27",
-      "titel": "Text",
-      "punkte": [
-        "Mit Vorbehalt: Hinweis, dass ein Airbnb-Gast 3 Tage Vorlauf hat (so in Airbnb eingestellt), in der Beschreibung und in der Kalender-Hilfe"
-      ]
-    },
-    {
-      "v": "2.1.0.2",
-      "datum": "2026-10-27",
-      "titel": "Text",
-      "punkte": [
-        "Wie wird gerechnet: Familienmitglied zahlt CHF 25, wenn ein Gast im selben Zimmer schläft"
-      ]
-    },
-    {
-      "v": "2.1.0.1",
-      "datum": "2026-10-27",
-      "titel": "Hilfekapitel überarbeitet",
-      "punkte": [
-        "«So sparst du Geld» ist jetzt eine kurze Liste mit Sprung-Symbolen, ohne Doppelungen",
-        "«Preisberechnung» heisst «Wie wird gerechnet» und erklärt nur die Grundidee"
-      ]
-    },
-    {
-      "v": "2.1.0.0",
-      "datum": "2026-10-27",
-      "titel": "Texte, Testmodus-Knopf, Anleitung",
-      "punkte": [
-        "«Mit Vorbehalt» statt «unter Vorbehalt» überall",
+        "Vorschau-Version gestartet: Eigene Vorschau neben der gültigen Version, mit eigenem Speicher und eigenen Daten",
+        "Versionshistorie eingebaut",
+        "Texte, Testmodus-Knopf, Anleitung: «Mit Vorbehalt» statt «unter Vorbehalt» überall",
         "Benutzung beginnt mit dem Kasten «Liebe Kinder»",
         "Neu in Benutzung: Buchungen nur über die App, Anfrage ist verbindlich",
         "«Reinigungskosten» statt «Reinigung» bei der Aufteilung",
         "Reisegruppe: Satz neu formuliert",
         "Aufgeklapptes Thema der Anleitung rutscht an den oberen Rand",
         "Testmodus-Knopf unter dem Tokenfeld",
-        "Seite für Suchmaschinen gesperrt"
+        "Seite für Suchmaschinen gesperrt",
+        "Hilfekapitel überarbeitet: «So sparst du Geld» ist jetzt eine kurze Liste mit Sprung-Symbolen, ohne Doppelungen",
+        "«Preisberechnung» heisst «Wie wird gerechnet» und erklärt nur die Grundidee",
+        "Text: Wie wird gerechnet: Familienmitglied zahlt CHF 25, wenn ein Gast im selben Zimmer schläft",
+        "Text: Mit Vorbehalt: Hinweis, dass ein Airbnb-Gast 3 Tage Vorlauf hat (so in Airbnb eingestellt), in der Beschreibung und in der Kalender-Hilfe",
+        "Text: Versionszeile kürzer, ohne Zeilenumbruch",
+        "Neue Farben und Symbole im Kalender: Balkenfarbe zeigt nur noch die Sicherheit: grün gesichert, gelb noch nicht gesichert (Termin mit Vorbehalt)",
+        "Schloss 🔒 und 🔓 statt Haken und Streifen, Besen 🧹 und Eimer 🪣 für die Reinigung",
+        "Ein Termin mit gesichertem und ungesichertem Teil ist ein einziger Balken: grün mit nach innen gerundetem Ende, gelb mündet darin",
+        "Offene Familienstaffel: eigener grün gestrichelter Balken mit 🏃🏃",
+        "Mai, September und 19. bis 31. Dezember sind rosa (Nebensaison)",
+        "Ausgewählter Tag: schwarz im Hellmodus, weiss im Dunkelmodus",
+        "Legende in Gruppen gegliedert, Hilfetexte und Bilder an die neuen Farben angepasst",
+        "Hilfebild und Fehlermeldung: Hilfebild «Termin mit Vorbehalt» zeigt den verbundenen Balken wie im Kalender",
+        "Fehlermeldung beim Speichern nennt das Repository und die fehlende Berechtigung",
+        "Doppelbuchung behoben, Listen nach Bestätigung, Hilfe immer an: Behoben: Über einen bestätigten Aufenthalt (auch mit Vorbehalt) kann nicht mehr gebucht werden",
+        "Wäsche-Liste und Reinigungs-Checkliste erscheinen erst, wenn Papi bestätigt hat; vorher steht «Anfrage gesendet»",
+        "Kalender-Hilfe ist bei jedem Öffnen der Seite an und bleibt nach «✕» für den Rest des Besuchs zu, auch beim Monatswechsel",
+        "Hilfetexte dazu angepasst",
+        "Zahlungsmeldung und Logbuch: Beim Bestätigen wird der Betrag gespeichert (nur wenn er nicht 0 ist)",
+        "7 Tage nach der Abreise erscheint beim Kind eine rote Meldung, die sich nicht wegklicken lässt",
+        "Papi verbucht die Zahlung mit «Zahlung eingegangen»; dann verschwindet die Meldung",
+        "Ab 10 Tagen nach der Abreise kann Papi per WhatsApp erinnern; «erinnert am» wird vermerkt",
+        "Neues Logbuch für Bestätigen, Ablehnen, Zahlung und Erinnerung",
+        "Zahlung erst bei festem Termin: Bei einem Termin mit Vorbehalt gibt es noch keine Zahlungsmeldung und keine Erinnerung; sie beginnen erst, wenn Papi den Termin fest gemacht hat",
+        "Zahlungsmeldung deutlich rot: Die Zahlungsmeldung beim Kind ist jetzt kräftig rot mit weisser Schrift",
+        "WhatsApp-Erinnerung beginnt mit «dein Aufenthalt war hoffentlich schön»",
+        "Hochsaison-Preis: mindestens 200 pro Nacht: In der Hochsaison (Januar, Juni, Juli, August) zahlt die Familie mindestens 200 pro Nacht plus Endreinigung, also 1640 für 7 Nächte",
+        "Mit Gästen sinkt der Anteil der Familie, genau wie im Februar; mit vielen Gästen steigt der Gesamtpreis darüber",
+        "Gilt, wenn alle Nächte in der Hochsaison liegen; Aufenthalte über den Monatswechsel folgen mit der verbindlichen Buchung",
+        "Verbindliche Buchung in der Hochsaison: Neu: In der Hochsaison (mindestens 7 Nächte, höchstens 14) kann man verbindlich buchen: fest, grün, in Airbnb gesperrt, ohne Gäste",
+        "Preis: 200 pro Nacht in der Hochsaison, übrige Nächte 70, dazu die Endreinigung",
+        "Die Anfrage enthält den Satz, dass die Zeit in Airbnb blockiert werden soll",
+        "Ein Termin mit Vorbehalt in der Hochsaison braucht mindestens 4 Nächte",
+        "Neuer Buchungsablauf: zuerst die Buchungsart: Nach dem Termin fragt die App zuerst «Wie möchtest du buchen?», mit höchstens zwei Möglichkeiten pro Datum",
+        "Hochsaison: verbindlich oder mit Vorbehalt; Staffel-Zeit: Staffel (selbst reinigen, ohne Gäste) oder normal (Eltern reinigen, Gäste möglich)",
+        "Alle anderen Termine (Mai, September, Februar, Lücke) haben nur eine Art, dort gibt es keine Auswahl",
+        "Die Frage «Reinigt ihr selbst?» entfällt, sie steckt in der Buchungsart",
+        "Staffel nur, wo sie möglich ist: Die Staffel wird nur angeboten, wenn nach der Abreise noch mindestens 2 freie Nächte bis zum nächsten Airbnb-Gast bleiben oder der Termin eine laufende Staffel fortsetzt",
+        "Sonst gilt der normale Termin und der Kalender erklärt, warum",
+        "Hilfetexte: Hochsaison, Preise, Buchungsart: Neuer Begriff «Hochsaison» mit Preis, Gästen, verbindlicher Buchung und Vorbehalt",
+        "«Wie wird gerechnet» erklärt, woher die Preise kommen (PriceLabs), und nennt den Mindestpreis genauer",
+        "Termin mit Vorbehalt, Selber reinigen, Familienstaffel und Auswahlfelder passen zur neuen Buchungsart",
+        "Satz zum Familienpreis korrigiert: Der Satz zum Familienpreis unter «Wie wird gerechnet» ist grammatikalisch korrekt",
+        "Verwaltung aufgeräumt: Jeder Eintrag ist eine Karte mit Name, Datum, Kurzinfos und Status",
+        "Alle Knöpfe sind gleich hoch und gleich breit, pro Karte ein Hauptknopf",
+        "Neue Gruppe «Mit Vorbehalt, noch nicht fest» direkt unter den Anfragen, mit «Fest machen» (🔓→🔒)",
+        "Statt des ✖ gibt es einen beschrifteten Knopf «Entfernen» mit Nachfrage",
+        "Bestätigte Aufenthalte sind immer sichtbar; Abgelehnte und Logbuch lassen sich ein- und ausblenden",
+        "Animierte Menü-Symbole: Kalender: das oberste Blatt fällt ab",
+        "Auge zwinkert, Glühbirne blendet ein und aus, Feuer lodert",
+        "Bei eingestellter «Bewegung reduzieren» stehen die Symbole still",
+        "Staffel im Kalender: Ameisenpfad: Die gestrichelte Linie bei der Staffel läuft jetzt als Ameisenpfad um den Balken",
+        "Bei eingestellter «Bewegung reduzieren» steht sie still",
+        "Namen der Airbnb-Gäste im Kalender: Papi trägt unter «Ansichten» den Namen eines Airbnb-Gastes ein; die App kürzt den Nachnamen auf die Initiale (z. B. Maria K.)",
+        "Der Name erscheint für alle als Balken im Kalender und in der Legende",
+        "Die Namen liegen in gaeste.json; Gäste nach der Abreise werden beim nächsten Speichern entfernt",
+        "Gästenamen: so, wie du sie eingibst: Der Name wird nicht mehr gekürzt, er steht so im Kalender, wie Papi ihn eingibt",
+        "Gästenamen werden nie automatisch gelöscht, nur von Hand mit Nachfrage",
+        "Fehlermeldungen erscheinen direkt unter dem Formular",
+        "Gästenamen direkt im Kalender eingeben: Papi tippt einen von Airbnb belegten Tag an und gibt dort den Namen ein, auch ohne eingeschaltete Hilfe",
+        "Bei mehreren Gästen hintereinander: «Neuer Gast ab diesem Tag»",
+        "Name entfernen nur von Hand mit Nachfrage",
+        "Legende unter dem Kalender einklappbar: Die Legende hat die Überschrift «🎨 Legende» und ist zugeklappt, bis man sie antippt",
+        "Gleiche Farbe wie «Benutzung»",
+        "Airbnb, extern und Familie: Namen mit Symbol: Beim Namen wählt Papi die Art: 🏠 Airbnb oder 🤝 extern (ausserhalb Airbnb)",
+        "Der Balken im Kalender ist grün und zeigt Symbol und Name",
+        "Wird eine Buchung storniert (Tage nicht mehr belegt), entfernt die App den Namen beim nächsten Öffnen durch Papi selbst",
+        "Bei fehlerhaft geladener Belegung wird nie etwas entfernt",
+        "Symbole für Airbnb, extern und Familie: Airbnb ✈️, extern 📜 (Vertrag), Familie 👨‍👦; die Familie bekommt ihr Symbol automatisch",
+        "Papi wählt die Art beim Namen mit zwei Symbol-Knöpfen",
+        "Alle drei stehen in der Legende",
+        "Hilfe: Browser am Computer: Unter «Benutzung» steht, dass am PC Chrome oder Edge empfohlen ist und Firefox abweichen kann",
+        "Gästenamen mit Anreise und Abreise: Beim Namen wählt Papi Anreise und Abreise im Kalender, der Balken läuft nur über diese Tage",
+        "Geblockte Tage davor oder danach bleiben ohne Namen",
+        "Ändern und Entfernen weiterhin nur von Hand, Entfernen mit Nachfrage",
+        "Neu: Blockiert 🚫: Neben Airbnb ✈️ und Extern 📜 gibt es die Art «Blockiert» 🚫, z. B. wenn niemand reinigen kann",
+        "Die drei Arten stehen nebeneinander zur Auswahl; bei «Blockiert» ist der Name freiwillig",
+        "Auch «Blockiert» steht in der Legende",
+        "Familie von Hand eintragen: Neue Art «Familie» 👨‍👦 bei den Namen, für Familientermine, die schon in Airbnb gesperrt sind",
+        "Gibt es für dieselben Tage einen bestätigten Familienaufenthalt, zeigt der Kalender nur dessen Balken",
+        "Vier Arten nebeneinander: Airbnb, Extern, Familie, Blockiert",
+        "Abreise auch über freie Tage hinaus: Die Abreise eines Namens darf nach einer in Airbnb noch freien Nacht liegen",
+        "Die App warnt, welche Nächte in Airbnb nicht gesperrt sind",
+        "Legende: Name von Papi eingetragen: In der Legende steht bei Airbnb-Gast und externem Gast «Name von Papi eingetragen»",
+        "Keine Warnung für Sonntage ohne Check-in: Die Warnung «in Airbnb nicht gesperrt» erscheint nicht mehr für Sonntagnächte, denn sonntags kann in Airbnb niemand einchecken",
+        "Legende: Gast mit Vertrag: Der externe Gast heisst in Legende und Erklärung «Gast mit Vertrag»",
+        "Knopf «Vertrag»: Der Auswahlknopf 📜 heisst «Vertrag» statt «Extern»",
+        "Hilfe: Eltern verzichten auf eigene Ferien: Unter Februar, Hochsaison und «Wie wird gerechnet» steht, dass auch die Eltern in der Hochsaison und im Februar auf eigene Ferien im Chalet verzichten, damit Einnahmen hereinkommen",
+        "Details auf belegten Tagen antippen: Ein Tipp auf einen belegten Tag oder Balken zeigt die Details (Name, Reinigung, Vorbehalt oder Konflikt) auch ohne die Hilfe «?»",
+        "Die Zeile «Bestätigte Aufenthalte» unter dem Kalender entfällt",
+        "Neuer Hinweis unter dem Kalender: Tippe einen belegten Tag an",
+        "Formular: Hinweis passt zur Auswahl: Unter «Wie möchtest du buchen?» steht nur noch die Erklärung zur gewählten Art, dazu ein kurzer Satz zur Alternative",
+        "Dasselbe bei «Bleibt Zimmer 1 unberührt?» und «Reinigt selbst?»: nur der Text zur Auswahl",
+        "Texte und Bedienzeichen überarbeitet: Bedienzeichen im Text (‹ ›, «?», durchgestrichenes «?», «↩ zurück», «↑ Menü») als echte Symbole in Textgrösse, Zeilen rücken nicht mehr auseinander",
+        "«Begriffe» heisst jetzt «Glossar»",
+        "Februar und Hochsaison: Grund der Mindestdauer (Stückelung), Mindestpreis CHF 1’920.– als Preis für Stammgäste, Hotel-Vergleich statt Tessin",
+        "Fest oder mit Vorbehalt: Zeiten aus den Einstellungen aufgelistet, Vorlaufzeit von Airbnb richtig erklärt",
+        "Grün und Gelb exakt gleich hoch, roter Rand bei Konflikt in Legende und Bild",
+        "Staffel-Bild: Namen nicht mehr abgeschnitten, Text «Manuel bezahlt die Rechnung»",
+        "Zahlung: Symbole in einer Spalte, «Nur über die App» ohne WhatsApp, Hinweis auf Idee und Umsetzung in der Versionshistorie",
+        "Ersteller ganz oben: Versionshistorie: «Idee und Konzept: Wänu · Umsetzung: Claude KI» steht jetzt ganz oben",
+        "Redner begrüsst die Familie: Unter «Benutzung» begrüsst ein kleiner Redner am Pult mit «Liebi Fraue und Mane»: Die Arme heben sich zusammen nach vorn, der Mund klappt auf und zu",
+        "Mit der Einstellung «Bewegung reduzieren» im Handy steht er ruhig",
+        "Texte: Staffel, Zahlung, Preise: Staffel: Es steht klar, wann ein Termin nicht als Staffel geht und wo der Rechner es meldet",
+        "Zahlung: Papi schickt zusätzlich eine WhatsApp als Erinnerung",
+        "Selber reinigen: erklärt, dass die Endreinigung erst anfällt, wenn der nächste Airbnb-Gast kommt",
+        "Preise: PriceLabs schreibt sie mehrmals täglich in Airbnb",
+        "Staffel: Beginn und Fortsetzung genauer erklärt: Der Text sagt jetzt: Die 2 freien Nächte brauchen nur, wer eine Staffel beginnt. Wer eine laufende Staffel fortsetzt, kann immer mitmachen und holt die Anteile der Familien davor zurück",
+        "Kindansicht, orange Rahmen, bewegte Symbole: Ansicht als Kind: Die Verwaltung ist ausgeblendet, oben zeigt ein blauer Streifen «Du siehst die App als …» mit Knopf «Zurück zu Eltern»",
+        "Verwaltung: Offene Anfragen und Karten ohne Bescheid haben einen orangen Rahmen",
+        "Verwaltung: Abgelehnte, Logbuch und Gäste stehen unter einer Trennlinie «Nachschlagen»",
+        "Knöpfe «Anreise-Wäsche» und «Reinigungs-Checkliste»: eigene Symbole (Koffer rollt, Häkchen zeichnet sich), bei «Bewegung reduzieren» still",
+        "Staffel-Warnung erst nach Anreise und Abreise: Die rote Warnung zur Familienstaffel erschien schon nach dem Tippen der Anreise, obwohl noch gar nicht klar war, ob selbst gereinigt wird. Jetzt erscheint sie erst, wenn Anreise und Abreise gewählt sind",
+        "Kalender springt beim Monatswechsel nicht mehr: Bei eingeschalteter Hilfe schob die Hilfe-Box beim Monatswechsel die Seite nach unten, sodass die Pfeile oben aus dem Bild verschwanden. Jetzt bleibt die Seite stehen",
+        "Im Kalender 12 Monate zurückblättern: Der Pfeil ‹ im Kalender geht jetzt bis 12 Monate zurück. Vergangene Tage sind nur zur Ansicht und nicht wählbar, Aufenthalte der Familie bleiben als Balken sichtbar",
+        "Dickere Balken, eigene Schlösser: Kalender: Die Balken sind höher und die Symbole darin grösser, das Datum steht kleiner weiter oben im Feld",
+        "Schloss geschlossen und offen sind jetzt eigene Zeichnungen: Beim offenen Schloss ist der Bügel angehoben",
+        "Wünsche und Fehler melden, Liste Geplant und Ideen: Neu unter «Anleitung & Infos»: Fehler, Wunsch oder Frage mit Vorlage schreiben und per WhatsApp an Papi senden, Version, Handy und gewählte Daten fügt die App selbst an",
+        "Neu: Liste «Geplant und Ideen» aus der Datei ideen.json",
+        "Auf Papis Handy erscheint nur die Liste, nicht das Meldeformular",
+        "Startseite: immer nur ein Bereich offen: Ansichten (Auge) folgen dem gleichen Schema wie Anleitung & Infos, Reservieren und Cheminée: Öffnet man einen Bereich, schliessen sich die anderen",
+        "Ersteller in zwei Zeilen: Oben in der Versionshistorie stehen «Idee und Konzept: Wänu» und «Umsetzung: Claude KI» untereinander",
+        "Bewegte Symbole und Ameisenpfad: Kalenderbalken, Legende und Beispiele: Besen kehrt, Eimer kippt um, Familie hüpft, Schloss klickt, Flugzeug fliegt, Vertrag rollt, Sperre pulsiert; jedes Symbol bewegt sich nur kurz, mit versetztem Beginn",
+        "Staffel: eigene Läufer-Figur, die auf jedem Handy von links nach rechts läuft",
+        "Verlinkende Symbole: der gepunktete Rand wandert als Ameisenpfad",
+        "Legende: Balken und Symbole so gross wie im Kalender",
+        "Bei «Bewegung reduzieren» im Handy stehen alle Symbole still",
+        "Schalter für die Bewegung: Oben neben Schriftgrösse und Dunkelmodus: ein Knopf ✨, der alle kleinen Animationen aus- und wieder einschaltet; die Wahl merkt sich das Handy",
+        "Ohne eigene Wahl gilt die Einstellung «Bewegung reduzieren» des Handys",
+        "Neu in der Verwaltung, nur für Papi sichtbar: Hinweis, wie man die versteckten Menüs einblendet (Token, Testmodus, Kinder-Ansicht)",
+        "Hinweis für Papi aufgeräumt: Der Hinweis «Versteckte Menüs» hat Abstand zu den Knöpfen darüber und passt jetzt in den Rahmen",
+        "Meldeformular in der Kinder-Ansicht: Wählt Papi «Ansicht als» ein Kind, sieht er unter «Wünsche und Fehler» das Formular wie das Kind. Ohne Kinder-Ansicht bleibt es für Papi ausgeblendet",
+        "Hinweisleiste unten in Orange: Fehlt noch eine Wahl («Bitte wählen …»), ist die Leiste unten orange wie die Felder «– wählen –» statt rot. Echte Fehler bleiben rot"
       ]
     },
     {
-      "v": "2.0.0.0",
-      "datum": "2026-10-27",
-      "titel": "Vorschau-Version gestartet",
-      "punkte": [
-        "Eigene Vorschau neben der gültigen Version, mit eigenem Speicher und eigenen Daten",
-        "Versionshistorie eingebaut"
-      ]
-    },
-    {
-      "v": "1.10.5",
+      "v": "1.9.9 bis 1.10.5",
       "datum": "2026-10-26",
-      "titel": "Texte",
+      "titel": "Änderungen vom 26.10.2026",
       "punkte": [
-        "Menü-Absatz wieder am Ende",
+        "Ansichten: Ansichten-Kasten einklappbar mit Knopf (Auge)",
+        "Layout: Icons der grossen Knöpfe bündig übereinander, Text linksbündig",
+        "Begriffe: Neuer Eintrag «Februar» unter Begriffe (Regeln, Gäste, Mindestpreis)",
+        "Sprung-Icons in den Kalender-Hinweisen",
+        "Texte: Februar-Text klarer (Geltung, Beispiel 7 Nächte)",
+        "Februar-Mindestpreis: Februar: Mindestpreis 1920 statt Mindestgäste und 2500",
+        "Februar-Beispiel für Familie mit Partner und 2 Kindern",
+        "Texte: Selbstreinigung klarer (ohne Gäste, wenn erwünscht)",
+        "Kein Meiden-Hinweis im Februar",
+        "Texte: Februar-Text: bei mehr Nächten anteilig",
+        "Texte: Trinkgeld-Text mit Papi",
+        "Hilfetext zu Anreise-Wäsche und Checkliste",
+        "Texte: Wäsche-Liste unter Begriffe «Selber reinigen» erklärt",
+        "Benutzung mit Verweis darauf",
+        "Texte: Menü-Absatz wieder am Ende",
         "Bestätigung klarer formuliert"
-      ]
-    },
-    {
-      "v": "1.10.4",
-      "datum": "2026-10-26",
-      "titel": "Texte",
-      "punkte": [
-        "Wäsche-Liste unter Begriffe «Selber reinigen» erklärt",
-        "Benutzung mit Verweis darauf"
-      ]
-    },
-    {
-      "v": "1.10.3",
-      "datum": "2026-10-26",
-      "titel": "Texte",
-      "punkte": [
-        "Trinkgeld-Text mit Papi",
-        "Hilfetext zu Anreise-Wäsche und Checkliste"
-      ]
-    },
-    {
-      "v": "1.10.2",
-      "datum": "2026-10-26",
-      "titel": "Texte",
-      "punkte": [
-        "Februar-Text: bei mehr Nächten anteilig"
-      ]
-    },
-    {
-      "v": "1.10.1",
-      "datum": "2026-10-26",
-      "titel": "Texte",
-      "punkte": [
-        "Selbstreinigung klarer (ohne Gäste, wenn erwünscht)",
-        "Kein Meiden-Hinweis im Februar"
-      ]
-    },
-    {
-      "v": "1.10.0",
-      "datum": "2026-10-26",
-      "titel": "Februar-Mindestpreis",
-      "punkte": [
-        "Februar: Mindestpreis 1920 statt Mindestgäste und 2500",
-        "Februar-Beispiel für Familie mit Partner und 2 Kindern"
-      ]
-    },
-    {
-      "v": "1.9.12",
-      "datum": "2026-10-26",
-      "titel": "Texte",
-      "punkte": [
-        "Februar-Text klarer (Geltung, Beispiel 7 Nächte)"
-      ]
-    },
-    {
-      "v": "1.9.11",
-      "datum": "2026-10-26",
-      "titel": "Begriffe",
-      "punkte": [
-        "Neuer Eintrag «Februar» unter Begriffe (Regeln, Gäste, Mindestpreis)",
-        "Sprung-Icons in den Kalender-Hinweisen"
-      ]
-    },
-    {
-      "v": "1.9.10",
-      "datum": "2026-10-26",
-      "titel": "Layout",
-      "punkte": [
-        "Icons der grossen Knöpfe bündig übereinander, Text linksbündig"
-      ]
-    },
-    {
-      "v": "1.9.9",
-      "datum": "2026-10-26",
-      "titel": "Ansichten",
-      "punkte": [
-        "Ansichten-Kasten einklappbar mit Knopf (Auge)"
       ]
     },
     {
