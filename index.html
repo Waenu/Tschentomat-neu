@@ -139,12 +139,12 @@
   #animBtn { position: relative; width: 44px; height: 44px; font-size: 1.3rem; line-height: 1; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
   #animBtn[data-st="0"] { opacity: .75; }
   /* Bewegung in drei Stufen (Erde): 2 = alles (Erde dreht schnell), 1 = nur Wichtiges (Erde dreht langsam), 0 = aus (Erde steht still, nichts bewegt sich) */
-  .aus *, .aus *::before, .aus *::after { animation: none !important; }
+  .aus *:not(.stern), .aus *::before, .aus *::after { animation: none !important; }   /* der Stern beim Spartipp (.stern) bleibt immer in Bewegung */
   #bewHinweis { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 60; max-width: 86vw; padding: 10px 16px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 700; font-size: .95rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: opacity .25s; }
   #bewHinweis.da { opacity: 1; }
   /* Bewegung aus (Schalter oben oder «Bewegung reduzieren» im Handy): alle kleinen Animationen stehen still */
   /* Wichtig, daher immer in Bewegung (auch bei «Bewegung aus»): Redner (.rd), Ameisenpfade (.sym, .ant) und Staffel-Läufer (.laeufer, .rn) */
-  .ruhig *:not(.rd):not(.rd *):not(.sym):not(.ant):not(.ant *):not(.laeufer):not(.laeufer *):not(.rn):not(.rn *):not(.glb-land), .ruhig *:not(.rd *):not(.sym)::before, .ruhig *:not(.rd *):not(.sym)::after { animation: none !important; }
+  .ruhig *:not(.stern):not(.rd):not(.rd *):not(.sym):not(.ant):not(.ant *):not(.laeufer):not(.laeufer *):not(.rn):not(.rn *):not(.glb-land), .ruhig *:not(.rd *):not(.sym)::before, .ruhig *:not(.rd *):not(.sym)::after { animation: none !important; }
   #animBtn .glb { width: 28px; height: 28px; display: block; margin: auto; overflow: visible; }
   .glb-land { animation: glbDreh 9s linear infinite; }
   html:not(.ruhig) .glb-land { animation-duration: 2.4s; }
@@ -358,6 +358,11 @@
   .bar .lab { font-size: 0.95rem; min-width: 0; }
   .bar .lab small { font-size: var(--t-small); opacity: 0.9; }
   .bar .lab small.spar { opacity: 1; font-weight: 700; color: #0A5A2A; }
+  /* Spartipp: zwei Sterne leuchten abwechselnd, auch bei «Bewegung aus» (nur Aufhellen, keine grosse Bewegung) */
+  .stern { display: inline-block; animation: sternWechsel 1.6s ease-in-out infinite; }
+  .stern.s2 { animation-delay: .8s; }
+  @keyframes sternWechsel { 0%, 100% { opacity: .2; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.2); } }
+  @media (prefers-reduced-motion: reduce) { .stern { animation-name: sternSanft; } @keyframes sternSanft { 0%, 100% { opacity: .35; } 50% { opacity: 1; } } }
   #nachOben { position: fixed; left: 16px; bottom: calc(max(var(--bar-h, 0px), 74px) + 10px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
   .start { display: flex; flex-direction: column; gap: 10px; }
   body.rechner-an .start2 { display: none; }   /* beim Buchen steht die Cheminée-Anleitung nicht im Weg */
@@ -908,7 +913,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.6.2";
+let VERSION = "2.57.7.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2483,7 +2488,7 @@ function render() {
   lab.textContent = totTxt + nTxt; val.textContent = chf(r.TOT + tip);
   if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
   const sb = sparBetrag(r.d);
-  if (sb > 0) lab.innerHTML += '<br><small class="spar">Bleibt Zimmer 1 zu, sparst du ' + chf(sb) + '</small>';
+  if (sb > 0) lab.innerHTML += '<br><small class="spar"><span class="stern s1" aria-hidden="true">⭐</span>Bleibt Zimmer 1 zu, sparst du ' + chf(sb) + '<span class="stern s2" aria-hidden="true">⭐</span></small>';
   const x = r.d;
   const spR = spitzTermin();
   if (spR) {
