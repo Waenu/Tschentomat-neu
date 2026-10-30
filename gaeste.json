@@ -31,12 +31,6 @@
       "typ": "fam"
     },
     {
-      "arr": "2027-01-07",
-      "dep": "2027-01-10",
-      "name": "Chuenisbärgli Familie",
-      "typ": "fam"
-    },
-    {
       "arr": "2027-01-15",
       "dep": "2027-01-22",
       "name": "Janine Collins",
@@ -67,12 +61,6 @@
       "typ": "extern",
       "quelle": "kalender",
       "kal": "Leo van den Berg"
-    },
-    {
-      "arr": "2027-02-21",
-      "dep": "2027-02-27",
-      "name": "Leo van den Berg",
-      "typ": "extern"
     },
     {
       "arr": "2027-03-04",
