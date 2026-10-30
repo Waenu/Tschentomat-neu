@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.71.0.1",
+      "v": "2.57.4.0 bis 2.71.1.0",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -65,7 +65,7 @@
         "Fehler behoben: Endet eine laufende Staffel zwangsläufig, weil direkt danach ein Airbnb-Gast anreist, zeigt die App «Wie möchtest du buchen?» schon als «Staffel» gewählt und gesperrt (ohne Gäste, die Eltern reinigen, die Endreinigung wird unter den Reisegruppen aufgeteilt). Der Text darunter erklärt, warum.",
         "Neu: In der Verwaltung (nur für Papi) steht eine kurze Anleitung «Ablauf bei Buchungen»: was bei einem Familientermin, einem Airbnb-Gast und einer reinen Sperre zu tun ist, mit fertigen Pimlical-Titeln zum Kopieren für jedes Kind, Marianne und Wänu sowie für Airbnb, Extern und Blockiert.",
         "Layout: Die Anleitung «Ablauf bei Buchungen» erklärt mit einer kleinen Zeichnung, wie in Airbnb gesperrt wird: Anreisetag sperren, Abreisetag frei lassen (gesperrt werden die Nächte). Der gebuchte Termin ist in der Zeichnung umrahmt.",
-        "Neu: Im Kalender zeigt ein gestrichelter Balken «Dein Termin» den gewählten Wunschtermin von der Mitte des Anreisetags bis zur Mitte des Abreisetags, so wie die bestätigten Balken. Der Balken ist blau und durchgezogen, damit er nicht wie die gestrichelte Staffel aussieht."
+        "Neu: Im Kalender zeigt ein gestrichelter Balken «Dein Termin» den gewählten Wunschtermin von der Mitte des Anreisetags bis zur Mitte des Abreisetags, so wie die bestätigten Balken. Er ist ein durchsichtiges Band in der Farbe der Tage über die ganze Höhe, damit er nicht wie die gestrichelte Staffel aussieht."
       ]
     },
     {
