@@ -61,10 +61,34 @@
       "typ": "extern"
     },
     {
+      "arr": "2027-02-20",
+      "dep": "2027-02-27",
+      "name": "Leo van den Berg",
+      "typ": "extern",
+      "quelle": "kalender",
+      "kal": "Leo van den Berg"
+    },
+    {
       "arr": "2027-02-21",
       "dep": "2027-02-27",
       "name": "Leo van den Berg",
       "typ": "extern"
+    },
+    {
+      "arr": "2027-03-04",
+      "dep": "2027-03-08",
+      "name": "Manuel",
+      "typ": "fam",
+      "quelle": "kalender",
+      "kal": "Manuel"
+    },
+    {
+      "arr": "2027-03-09",
+      "dep": "2027-03-14",
+      "name": "Jerome",
+      "typ": "fam",
+      "quelle": "kalender",
+      "kal": "Jerome"
     }
   ]
 }
