@@ -77,6 +77,14 @@
       "typ": "fam",
       "quelle": "kalender",
       "kal": "Manuel"
+    },
+    {
+      "arr": "2027-03-10",
+      "dep": "2027-03-14",
+      "name": "Jerome",
+      "typ": "fam",
+      "quelle": "kalender",
+      "kal": "Jerome"
     }
   ]
 }
