@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.72.2.0",
+      "v": "2.57.4.0 bis 2.72.2.1",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -70,7 +70,8 @@
         "Layout behoben: Die Preisberechnung auf den Karten in der Verwaltung läuft auf schmalen Handys nicht mehr über den rechten Rand, lange Angaben wie «Freitag 6.11.2026 (4 Nächte)» brechen jetzt um.",
         "Layout: «Sperren und Pimlical» auf der Karte hat jetzt dieselbe Schrift und Farbe wie «Preisberechnung» (vorher blass). Die Kopierzeilen sind deutlich kleiner, damit der Text nicht Buchstabe für Buchstabe umbricht.",
         "Anleitung und «Jetzt erledigen»: In Pimlical wird vom Anreisetag bis und mit Abreisetag eingetragen, damit der Abreisetag dort sichtbar ist und die App ihn richtig liest.",
-        "Layout: Die aufgeklappte Buchungskarte in der Verwaltung folgt jetzt den übrigen Menüs der App: Die Kopfzeile füllt sich beim Öffnen mit der Akzentfarbe, und die Rahmen sind dünn (2 statt 3 Punkte). Die Statusfarbe des Rahmens (grün, gelb) bleibt."
+        "Layout: Die aufgeklappte Buchungskarte in der Verwaltung folgt jetzt den übrigen Menüs der App: Die Kopfzeile füllt sich beim Öffnen mit der Akzentfarbe, und die Rahmen sind dünn (2 statt 3 Punkte). Die Statusfarbe des Rahmens (grün, gelb) bleibt.",
+        "Korrigiert: Wechselt Papi mit «Ansicht als» zu einem Kind (oder zurück), schliesst sich die offene Tagesinfo im Kalender. Vorher blieb sie mit den Zeilen «Einnahmen» und «Verwaltung» der alten Ansicht stehen, obwohl ein Kind sie nie sieht."
       ]
     },
     {
