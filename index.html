@@ -950,7 +950,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.73.1.0";
+let VERSION = "2.74.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3806,6 +3806,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   const nein = f("data-nein");
   if (nein) {
     const x = find(OFFEN, nein); if (!x) return;
+    if (!confirm("Anfrage von " + x.name + " (" + fmtTag(x.arr) + " bis " + fmtTag(x.dep) + ") wirklich ablehnen?")) return;
     bestBusy = true; bestFehler = "";
     const btn = e.target.closest("button"); btn.disabled = true; btn.textContent = "Speichere …";
     try {

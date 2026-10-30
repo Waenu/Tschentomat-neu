@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.73.1.0",
+      "v": "2.57.4.0 bis 2.74.0.0",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -75,7 +75,8 @@
         "Neu: Eine bestätigte Buchung, die in Airbnb noch nicht gesperrt ist, zeigt in der Verwaltung einen roten Marker 🟥 mit roter Umrandung und der Zeile «In Airbnb noch nicht gesperrt». Die Karte und «Sperren und Pimlical» stehen dann von selbst offen. Sobald Airbnb die Sperre meldet (stündlich), wird die Karte wieder grün. Im Kalender steht die Sperr-Warnung für Papi jetzt unter «Nur für dich» in einer eigenen Zeile «In Airbnb sperren» mit dem Knopf zur Verwaltung. Die Zeile «Buchungssicherheit» sieht für Papi aus wie beim Kind.",
         "Text: Bei Papi heisst die Sperr-Warnung jetzt «Aufgabe: in Airbnb sperren» (Kalender, unter «Nur für dich») und «Aufgabe offen: in Airbnb sperren» (Verwaltung). So wird sie nicht mehr mit «gesichert» verwechselt, das die Zusage ans Kind meint.",
         "Layout: In der Verwaltung haben alle Rahmen jetzt dieselbe Dicke (2 Punkte) und Rundung (8 Punkte) wie die übrigen Menüs der App. Vorher waren es 3, 12 und 14 Punkte gemischt.",
-        "Korrigiert: Nach «Ablehnen», «Bestätigen», «In Airbnb gesperrt» oder «Entfernen» springt die Verwaltung zur Meldung oben (mit dem Knopf «Absage schicken» bzw. «Dem Kind Bescheid geben»). Vorher stand die Meldung ausser Sichtweite, und es sah aus, als sei keine Nachricht möglich."
+        "Korrigiert: Nach «Ablehnen», «Bestätigen», «In Airbnb gesperrt» oder «Entfernen» springt die Verwaltung zur Meldung oben (mit dem Knopf «Absage schicken» bzw. «Dem Kind Bescheid geben»). Vorher stand die Meldung ausser Sichtweite, und es sah aus, als sei keine Nachricht möglich.",
+        "Neu: Vor dem Ablehnen einer Anfrage fragt die Verwaltung nach («Anfrage von … wirklich ablehnen?»). Ein versehentliches Tippen auf «Ablehnen» gilt nicht mehr sofort."
       ]
     },
     {
