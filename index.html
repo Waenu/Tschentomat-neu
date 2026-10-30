@@ -357,6 +357,7 @@
   .bar .in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; }
   .bar .lab { font-size: 0.95rem; min-width: 0; }
   .bar .lab small { font-size: var(--t-small); opacity: 0.9; }
+  .bar .lab small.max { font-size: calc(var(--t-small) * 0.82); line-height: 1.15; }   /* Hinweis «maximal …»: bewusst kleiner, damit die Leiste niedrig bleibt */
   .bar .lab small.spar { opacity: 1; font-weight: 700; color: #0A5A2A; }
   /* Spartipp: zwei Sterne leuchten abwechselnd, auch bei «Bewegung aus» (nur Aufhellen, keine grosse Bewegung) */
   .stern { display: inline-block; animation: sternWechsel 1.6s ease-in-out infinite; }
@@ -918,7 +919,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.59.0.2";
+let VERSION = "2.59.0.3";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2505,7 +2506,7 @@ function render() {
   const nTxt = r.d.nights + " " + (r.d.nights === 1 ? "Nacht" : "Nächte");
   const totTxt = tip > 0 ? "Total inkl. Trinkgeld für " : "Total für ";
   lab.textContent = totTxt + nTxt; val.textContent = chf(r.TOT + tip);
-  if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small>maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
+  if (r.d.SB) lab.innerHTML = totTxt + nTxt + "<br><small class=\"max\">maximal " + chf(r.TOT + tip + P.reinigung) + " mit Endreinigung</small>";
   const sb = sparBetrag(r.d);
   if (sb > 0) lab.innerHTML += '<br><small class="spar"><span class="stern s1" aria-hidden="true">⭐</span>Bleibt Zimmer 1 zu, sparst du ' + chf(sb) + '<span class="stern s2" aria-hidden="true">⭐</span></small>';
   const x = r.d;
