@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.72.2.1",
+      "v": "2.57.4.0 bis 2.73.0.0",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -71,7 +71,8 @@
         "Layout: «Sperren und Pimlical» auf der Karte hat jetzt dieselbe Schrift und Farbe wie «Preisberechnung» (vorher blass). Die Kopierzeilen sind deutlich kleiner, damit der Text nicht Buchstabe für Buchstabe umbricht.",
         "Anleitung und «Jetzt erledigen»: In Pimlical wird vom Anreisetag bis und mit Abreisetag eingetragen, damit der Abreisetag dort sichtbar ist und die App ihn richtig liest.",
         "Layout: Die aufgeklappte Buchungskarte in der Verwaltung folgt jetzt den übrigen Menüs der App: Die Kopfzeile füllt sich beim Öffnen mit der Akzentfarbe, und die Rahmen sind dünn (2 statt 3 Punkte). Die Statusfarbe des Rahmens (grün, gelb) bleibt.",
-        "Korrigiert: Wechselt Papi mit «Ansicht als» zu einem Kind (oder zurück), schliesst sich die offene Tagesinfo im Kalender. Vorher blieb sie mit den Zeilen «Einnahmen» und «Verwaltung» der alten Ansicht stehen, obwohl ein Kind sie nie sieht."
+        "Korrigiert: Wechselt Papi mit «Ansicht als» zu einem Kind (oder zurück), schliesst sich die offene Tagesinfo im Kalender. Vorher blieb sie mit den Zeilen «Einnahmen» und «Verwaltung» der alten Ansicht stehen, obwohl ein Kind sie nie sieht.",
+        "Neu: Eine bestätigte Buchung, die in Airbnb noch nicht gesperrt ist, zeigt in der Verwaltung einen roten Marker 🟥 mit roter Umrandung und der Zeile «In Airbnb noch nicht gesperrt». Die Karte und «Sperren und Pimlical» stehen dann von selbst offen. Sobald Airbnb die Sperre meldet (stündlich), wird die Karte wieder grün. Im Kalender steht die Sperr-Warnung für Papi jetzt unter «Nur für dich» in einer eigenen Zeile «In Airbnb sperren» mit dem Knopf zur Verwaltung. Die Zeile «Buchungssicherheit» sieht für Papi aus wie beim Kind."
       ]
     },
     {

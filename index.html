@@ -606,6 +606,8 @@
   #bestKasten .vkd { margin: 6px 0; }
   #bestKasten .vkd > summary { min-height: 44px; border: 2px solid var(--gruen); border-radius: 14px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
   #bestKasten .vkd.prov > summary { border-color: #C9A227; }
+  #bestKasten .vkd.rot > summary { border-color: #C62828; }
+  #bestKasten .bs-fehlt.rotb { color: #E5534B; }
   #bestKasten .vkd[open] > summary { margin-bottom: 4px; }
   #bestKasten .vkd[open] > summary { background: var(--accent); color: var(--accent-fg); }   /* offen: gefüllt wie alle Menüs der App */
   #bestKasten .vkd > .vk { border-width: 2px; }
@@ -949,7 +951,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.72.2.1";
+let VERSION = "2.73.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3340,19 +3342,21 @@ function festKarte(x) {
   let st = "";
   if (prov) st += "<span>" + (konf ? "⚠️ Konflikt mit Airbnb-Gast" : "Nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "")) + "</span>";
   st += bescheidStatus(x);
+  const ng = !prov && nichtGesperrt(x);   // bestätigt (nicht Vorbehalt), aber in Airbnb noch nicht gesperrt
+  if (ng) st = "<span><b class=\"bs-fehlt rotb\">🔓 In Airbnb noch nicht gesperrt</b></span>" + st;
   const wInfo = !!(x.sb && x.waesche && !istStaffelStart(x.arr, x));
   if (wInfo) st += "<span>" + (x.waescheInfo ? "🧺 Wäsche-Info gegeben am " + esc(fmtTag(x.waescheInfo.slice(0, 10))) : '<b class="bs-fehlt">🧺 Noch nicht informiert: ' + esc(x.name) + " bringt jetzt eigene Wäsche</b>") + "</span>";
   const wik = wInfo ? ' <a class="btn" data-wainfo="' + key + '" href="https://wa.me/?text=' + encodeURIComponent(waescheInfoText(x)) + '" target="_blank" rel="noopener">' + WA_SVG + (x.waescheInfo ? "Nochmals Wäsche-Info" : "Wäsche-Info senden") + "</a>" : "";
   const wzk = (x.waesche === "bringen" || x.waesche === "senden") && !x.waescheZurueck ? '<button type="button" class="btn main" data-wz="' + key + '">🧺 Wäsche ist zurück</button>' : "";
   const acts = wik + wzk + (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
-  if (x.dep >= heuteKey()) st += '<details class="todo-d"><summary>📌 Sperren und Pimlical</summary>' + erledigenHtml(x) + "</details>";
-  const karte = vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
+  if (x.dep >= heuteKey()) st += '<details class="todo-d"' + (ng ? " open" : "") + '><summary>📌 Sperren und Pimlical</summary>' + erledigenHtml(x) + "</details>";
+  const karte = vkKarte(x, konf || ng ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
   // Zugeklappt, wenn nichts mehr zu tun ist; offen, solange etwas fehlt (Konflikt, kein Bescheid, Vorbehalt noch nicht gesperrt oder praktisch sicher). Offene Zahlungen stehen nach der Abreise oben unter «Zahlungen offen».
-  const fehlt = konf || !x.bescheid || (prov && !hochVorbehalt(x) && !provSicher(x));
+  const fehlt = konf || ng || !x.bescheid || (prov && !hochVorbehalt(x) && !provSicher(x));
   const ov = VK_STAND.get(bKey(x)), offen = fehlt || ov === true;
   const kd = (k) => k.slice(8, 10) + "." + k.slice(5, 7) + ".";
-  return '<details class="vkd' + (fehlt ? " fehlt" : "") + (prov ? " prov" : "") + '"' + (offen ? " open" : "") + ' data-vkd="' + key + '"><summary><span class="vkd-t">' + (fehlt ? "🟧 " : prov ? "🔓 " : "✅ ") + "<b>" + esc(x.name) + "</b>, " + kd(x.arr) + "–" + kd(x.dep) + esc(x.dep.slice(0, 4)) + (x.betrag > 0 ? ", " + esc(chf(x.betrag).replace(" ", "\u00a0")) : "") + "</span></summary>" + karte + "</details>";
+  return '<details class="vkd' + (fehlt ? " fehlt" : "") + (prov ? " prov" : "") + (ng || konf ? " rot" : "") + '"' + (offen ? " open" : "") + ' data-vkd="' + key + '"><summary><span class="vkd-t">' + (ng || konf ? "🟥 " : fehlt ? "🟧 " : prov ? "🔓 " : "✅ ") + "<b>" + esc(x.name) + "</b>, " + kd(x.arr) + "–" + kd(x.dep) + esc(x.dep.slice(0, 4)) + (x.betrag > 0 ? ", " + esc(chf(x.betrag).replace(" ", "\u00a0")) : "") + "</span></summary>" + karte + "</details>";
 }
 const VK_STAND = new Map();   // vom Nutzer aufgeklappte/zugeklappte Karten in der Verwaltung (bis zum Neuladen)
 document.addEventListener("click", (e) => { const sm = e.target.closest && e.target.closest(".vkd > summary"); if (!sm) return; const d = sm.parentNode; VK_STAND.set(d.getAttribute("data-vkd"), !d.open); });
@@ -3990,9 +3994,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     }
     if (zs.length) {
       const konf = stay.some((x) => x.prov && provKonflikt(x)), sicher = !konf && stay.every((x) => !x.prov || k < provSicherBis());
-      const ng = papi && !konf && stay.some(nichtGesperrt);   // nur für Papi: bestätigt, aber in Airbnb noch nicht gesperrt
-      const zsx = ng ? ["⚠️ <b>Noch nicht in Airbnb gesperrt:</b> Dieser Termin ist bestätigt, Airbnb zeigt die Tage aber noch als frei. Bitte sperren, sonst kann ein Airbnb-Gast sie noch buchen. Die Airbnb-Daten kommen mit Verzögerung: Kurz nach dem Sperren kann dieser Hinweis noch stehen."].concat(zs.filter((t) => t.indexOf("🔒 <b>Gesichert:") !== 0)) : zs;
-      h += zeile("sich", konf ? "⚠️" : ng ? "🔓" : sicher ? "🔒" : "🔓", "Buchungssicherheit", konf ? "Konflikt mit Airbnb-Gast" : ng ? "in Airbnb noch nicht gesperrt" : sicher ? "gesichert" : "noch nicht gesichert", !sicher || ng) + '<div class="ipan" data-ipan="sich" hidden>' + zsx.map((t) => "<p>" + t + "</p>").join("") + (papi && (ng || konf) ? '<button type="button" class="btn main" data-vw="' + esc(bKey(b)) + '">👁️ Zum Termin in der Verwaltung</button>' : "") + "</div>";
+      h += zeile("sich", konf ? "⚠️" : sicher ? "🔒" : "🔓", "Buchungssicherheit", konf ? "Konflikt mit Airbnb-Gast" : sicher ? "gesichert" : "noch nicht gesichert", !sicher) + '<div class="ipan" data-ipan="sich" hidden>' + zs.map((t) => "<p>" + t + "</p>").join("") + (papi && konf ? '<button type="button" class="btn main" data-vw="' + esc(bKey(b)) + '">👁️ Zum Termin in der Verwaltung</button>' : "") + "</div>";
     }
     if (zh.length) {
       const it = zh.map(hinItem);
@@ -4005,7 +4007,9 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       const mn = MONATE[Number(ym.slice(5, 7)) - 1];
       einn = zeile("einn", "💰", "Einnahmen", kurzChf(b.betrag) + ", zählt im " + esc(mn), false) + '<div class="ipan" data-ipan="einn" hidden><p>Diese Buchung: <b>' + esc(kurzChf(b.betrag)) + "</b></p><p>" + esc(mn) + " " + jj + " (Familie): <b>" + esc(kurzChf(mon)) + "</b></p><p>Seit Jahresanfang bis heute: <b>" + esc(kurzChf(jahrBis)) + "</b><br>Gebucht für " + jj + ": <b>" + esc(kurzChf(jahrAll)) + '</b></p><p class="hint">' + (EINN_STATUS === "ok" ? "Familie aus den Buchungen, Ext. aus dem privaten Speicher. Ein Betrag zählt im Monat der Anreise." : "Nur Familie. Die Beträge der Ext.-Gäste fehlen noch (privater Speicher nicht eingerichtet oder nicht geladen).") + "</p>" + extZeilen(ym, jj, heute) + "</div>";
     }
-    if (seher) h += '<div class="ar-nur">🔐 ' + (papi ? "Nur für dich" : "Nur für Eltern") + '</div>' + einn + (!papi ? "" : '<button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>');
+    const ngP = papi && !stay.some((x) => x.prov && provKonflikt(x)) && stay.some(nichtGesperrt);   // nur für Papi: bestätigt, aber in Airbnb noch nicht gesperrt
+    const sperrZ = !ngP ? "" : zeile("sperr", "🔓", "In Airbnb sperren", "noch nicht gesperrt", true) + '<div class="ipan" data-ipan="sperr" hidden><p>⚠️ <b>Noch nicht in Airbnb gesperrt:</b> Dieser Termin ist bestätigt, Airbnb zeigt die Tage aber noch als frei. Bitte sperren, sonst kann ein Airbnb-Gast sie noch buchen. Die Airbnb-Daten kommen mit Verzögerung: Kurz nach dem Sperren kann dieser Hinweis noch stehen.</p><button type="button" class="btn main" data-vw="' + esc(bKey(b)) + '">👁️ Zum Termin in der Verwaltung</button></div>';
+    if (seher) h += '<div class="ar-nur">🔐 ' + (papi ? "Nur für dich" : "Nur für Eltern") + '</div>' + sperrZ + einn + (!papi ? "" : '<button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>');
     return h;
   }
   function text(k) {
