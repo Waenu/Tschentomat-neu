@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.57.6.1",
+      "v": "2.43.3.0 bis 2.57.6.2",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -54,7 +54,8 @@
         "Fehlt noch eine Auswahl, bleibt das Preisfeld weg. Die Leiste unten sagt «Bitte wählen: …» und darunter in einer neuen Zeile «Der Preis erscheint, sobald alles gewählt ist.»",
         "Beim Buchen (Preisrechner offen) wird der Knopf «Cheminée-Anleitung» unten nicht mehr angezeigt. Auf der Startseite bleibt er.",
         "Kalender: Tippst du den gewählten Abreisetag an, erscheint die Box nur noch, wenn sie etwas Neues sagt (zum Beispiel Anreise eines Airbnb-Gasts oder Ende der Staffel). Die doppelte Zeile «Dein Aufenthalt: … Nächte» ist weg.",
-        "Der aufklappbare Bereich auf der Buchungsseite heisst jetzt «Buchungsübersicht» statt «Preisberechnung» (auch im Hilfetext), weil er mehr als den Preis zeigt."
+        "Der aufklappbare Bereich auf der Buchungsseite heisst jetzt «Buchungsübersicht» statt «Preisberechnung» (auch im Hilfetext), weil er mehr als den Preis zeigt.",
+        "Die Knöpfe «↑ Menü» und «Zurück» liegen immer über der unteren Leiste und verdecken sie nicht mehr, auch wenn die Leiste mehrere Zeilen hat."
       ]
     },
     {
