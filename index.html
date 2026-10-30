@@ -405,7 +405,7 @@
   #mamiStreifen { background: #7B3F8C; color: #fff; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
   #mamiStreifen[hidden] { display: none; }
   #kindStreifen .btn { background: #fff; color: #1F5FA8; border: 0; border-radius: 8px; min-height: 44px; padding: 6px 14px; font: inherit; font-weight: 700; cursor: pointer; }
-  #bestKasten .vk.offen { border: 3px solid #F28C28; }
+  #bestKasten .vk.offen { border: 2px solid #F28C28; }
   #bestKasten .vk-trenn { border: 0; border-top: 2px solid rgba(127,127,127,0.4); margin: 18px 0 0; }
   #meldenKasten .typ { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   #meldenKasten .typ button { font: inherit; font-weight: 700; min-height: 48px; border-radius: 10px; border: 2px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; padding: 4px; }
@@ -476,7 +476,7 @@
   #btnBuch[hidden], #btnAnsichten[hidden] { display: none; }
   .bigbtn.blau { color: var(--ruhe-line); border-color: var(--ruhe-line); }
   .bigbtn.blau.on { background: var(--ruhe-line); color: var(--accent-fg); }
-  #bestKasten.note.h { border-width: 3px; border-radius: 12px; padding: 14px 16px; }
+  #bestKasten.note.h { border-width: 2px; border-radius: 8px; padding: 14px 16px; }
   #ver { user-select: none; -webkit-user-select: none; touch-action: manipulation; }
   .bigbtn.on { background: var(--accent); color: var(--accent-fg); }
   #hilfe { display: flex; flex-direction: column; gap: 12px; }
@@ -584,7 +584,7 @@
   .art-neu { color: #2E9E5B; } .art-fun { color: #3B7DC4; } .art-feh { color: #E07B1A; } .art-lay { color: #8E63C9; } .art-txt { color: #8A9490; }
   .ov { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); overflow-y: auto; padding: 16px; box-sizing: border-box; }
   .ov[hidden] { display: none; }
-  .todo-box { margin: 8px 0 2px; padding: 8px 10px; border: 2px solid var(--accent); border-radius: 12px; background: var(--note-bg); color: var(--fg); }
+  .todo-box { margin: 8px 0 2px; padding: 8px 10px; border: 2px solid var(--accent); border-radius: 8px; background: var(--note-bg); color: var(--fg); }
   .todo-box p { margin: 6px 0 2px; }
   .todo-d { margin: 6px 0 0; }
   .todo-d, .todo-d > summary, .todo-d .todo-box { color: var(--fg); font-size: .9rem; }
@@ -597,20 +597,19 @@
   .ov h2 { margin: 0; font-size: 1.35rem; }
   #bestKasten .vk-sec { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; font-weight: 700; }
   #bestKasten .vk-sec .n { background: var(--accent); color: var(--accent-fg, #fff); border-radius: 999px; padding: 0 8px; font-size: 0.8em; }
-  #bestKasten .vk { background: var(--surface); border: 3px solid var(--accent); border-radius: 14px; padding: 12px; margin: 6px 0; display: flex; flex-direction: column; gap: 8px; }
+  #bestKasten .vk { background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; padding: 12px; margin: 6px 0; display: flex; flex-direction: column; gap: 8px; }
   #bestKasten .vk.spring { outline: 4px solid var(--missing-line); outline-offset: 2px; }
   #bestKasten .vk.ok { border-color: var(--gruen); }
   #bestKasten .bs-fehlt { color: var(--missing-line); }
   #bestKasten .vk.warn { border-color: #C9A227; }
   #bestKasten .vk.rot { border-color: #C62828; }
   #bestKasten .vkd { margin: 6px 0; }
-  #bestKasten .vkd > summary { min-height: 44px; border: 2px solid var(--gruen); border-radius: 14px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
+  #bestKasten .vkd > summary { min-height: 44px; border: 2px solid var(--gruen); border-radius: 8px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
   #bestKasten .vkd.prov > summary { border-color: #C9A227; }
   #bestKasten .vkd.rot > summary { border-color: #C62828; }
   #bestKasten .bs-fehlt.rotb { color: #E5534B; }
   #bestKasten .vkd[open] > summary { margin-bottom: 4px; }
   #bestKasten .vkd[open] > summary { background: var(--accent); color: var(--accent-fg); }   /* offen: gefüllt wie alle Menüs der App */
-  #bestKasten .vkd > .vk { border-width: 2px; }
   #bestKasten .vkd > summary b { font-weight: 700; }
   #bestKasten .vkd-t { flex: 1; min-width: 0; display: block; }
   #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -742,7 +741,7 @@
   .bk.air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-weight: 600; }
   .bk-leg .k-air { background: var(--gruen); color: var(--gruen-fg); box-shadow: 0 0 0 1.5px var(--gruen-ol); font-size: .6rem; }
   #bestKasten .vk-gast { display: grid; gap: 8px; }
-  #bestKasten .vk-gast input, #bestKasten .vk-gast select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
+  #bestKasten .vk-gast input, #bestKasten .vk-gast select { font: inherit; min-height: 44px; padding: 6px 10px; border: 2px solid var(--accent); border-radius: 6px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
   .zk { display: inline-flex; align-items: center; justify-content: center; background: var(--chip); color: var(--chip-fg); border-radius: 6px; padding: 0 3px; margin-right: 3px; height: 22px; min-width: 24px; line-height: 1; font-size: .92rem; font-weight: 400; vertical-align: top; }
   .bk .zk { margin-right: 0; flex: none; } .zk.zl { font-size: .7rem; font-weight: 700; padding: 0 4px; letter-spacing: .01em; }
   .bkn { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -951,7 +950,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.73.0.1";
+let VERSION = "2.73.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3527,6 +3526,7 @@ function zahlZeile(x) {
 // Hochsaison: Buchungssicherheit gibt es nur zum Preis für «verbindlich». Darum kein Knopf, der einen Termin mit Vorbehalt (Familienpreis) nachträglich sperrt
 const hochVorbehalt = (x) => P.hochNachtMin > 0 && hochNaechte(x.arr, x.dep) > 0;
 function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
+function bestMsgZeigen() { const b = document.querySelector("#bestKasten [data-zu]"), p = b && b.closest("p"); if (p) p.scrollIntoView({ behavior: "auto", block: "start" }); }   // die Meldung (mit Knopf «Absage schicken» usw.) steht oben, nach dem Klick soll sie sichtbar sein
 function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + WA_SVG + (label || "Dem Kind Bescheid geben") + "</a>"; }
 function bestText(x, abgelehnt) {
   return abgelehnt
@@ -3814,7 +3814,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       OFFEN = OFFEN.filter((y) => y !== x); ABGEL.push(x); listeSichern("tm2_offen", OFFEN); listeSichern("tm2_abgelehnt", ABGEL);
       const text = "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung.";
       bestMsg = "Abgelehnt und gespeichert: " + esc(x.name) + ", " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ". Im Handy des Kindes erscheint die Absage beim nächsten Öffnen." + bestWaLink(text, bKey(x), "Absage schicken");
-      bestBusy = false; bestNeuZeichnen();
+      bestBusy = false; bestNeuZeichnen(); bestMsgZeigen();
     } catch (err) { bestBusy = false; bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; bestZeigen(); }
     return;
   }
@@ -3826,7 +3826,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       bestMsg = "🔒 Als in Airbnb gesperrt eingetragen. Der Preis bleibt wie berechnet. Sperre den Termin in Airbnb, falls noch nicht geschehen.";
     } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
-    bestBusy = false; bestNeuZeichnen(); return;
+    bestBusy = false; bestNeuZeichnen(); bestMsgZeigen(); return;
   }
   const ja = f("data-ja"), del = f("data-bdel");
   if (!ja && !del) return;
@@ -3855,7 +3855,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       bestMsg = "Entfernt: " + esc(name) + ", " + esc(fmtTag(arr)) + " bis " + esc(fmtTag(dep)) + ".";
     }
-    bestBusy = false; bestNeuZeichnen();
+    bestBusy = false; bestNeuZeichnen(); bestMsgZeigen();
   } catch (err) { bestBusy = false; bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; bestZeigen(); }
 });
 // Zugriff einrichten (versteckt: 5 Tipps auf die Versionszeile)
