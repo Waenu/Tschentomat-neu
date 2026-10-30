@@ -934,7 +934,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.64.0.1";
+let VERSION = "2.64.0.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1152,7 +1152,7 @@ const FIELDS = [
         const v = "{{Verbindlich}}: Der Termin gehört euch fest, die Eltern sperren ihn in Airbnb. Ihr zahlt pauschal " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung für das ganze Chalet. Darum sind keine Gäste möglich.", p = "{{Mit Vorbehalt}}: Gäste sind möglich. Der Termin ist in Airbnb nicht gesperrt, ein Airbnb-Gast hat Vorrang.";
         return "Dieser Termin liegt in der Hochsaison. " + (S.art === ART_V ? v + " {{Mit Vorbehalt}} wäre nicht gesperrt und mit Gästen möglich." : S.art === ART_P ? p + " {{Verbindlich}} wäre fest und gesperrt, aber ohne Gäste." : "Du hast zwei Möglichkeiten. " + v + " " + p);
       }
-      const st = "{{Staffel}}: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Regeln siehe «🧹 Selbstreinigung» im Kalender.", no = "{{Normal}}: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.";
+      const st = "{{Staffel}}: Ihr bringt frische Bettwäsche, Handtücher und Küchentücher mit und reinigt selbst, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Das geht nur ohne Gäste. Beginnt ihr die Staffel, bringt ihr keine Wäsche mit: Das Chalet ist gereinigt und bezogen. Regeln siehe «🧹 Selbstreinigung» im Kalender.", no = "{{Normal}}: Die Eltern reinigen (" + chf(P.reinigung) + "), Gäste sind möglich.";
       const vgl = " Bei der {{Staffel}} zahlt ihr jetzt " + chf(P.reinigungSelbst) + " und später euren Anteil an der Endreinigung (" + chf(P.reinigung) + " geteilt durch alle Reisegruppen: zu zweit je " + chf(P.reinigung / 2) + ", zu dritt je " + chf(P.reinigung / 3) + ").";
       return "Dieser Termin liegt in der Staffel-Zeit und ist fest (in Airbnb gesperrt). " + (S.art === ART_S ? st + " Mit Gästen wäre nur {{Normal}} möglich." + vgl : S.art === ART_N ? no + " Ohne Gäste ginge auch die {{Staffel}}." + vgl : st + " " + no + vgl);
     },
@@ -1533,6 +1533,7 @@ function begriffeFuellen() {
     "<li>Für euch Kinder mit Partnern und Kindern. Ohne Gäste wählt ihr beim Buchen «Staffel» und reinigt selbst. Mit Gästen wählt ihr «Normal», dann reinigen die Eltern.</li>" +
     "<li><b>Nicht jeder Termin geht als Staffel.</b> Eine Staffel beginnen kann nur, wer nach seiner Abreise noch eine weitere Familie anschliessen lassen kann: Bis zum nächsten Airbnb-Gast müssen mindestens " + P.minNaechte + " freie Nächte bleiben. Sonst trägt er die ganze Endreinigung allein, weil niemand seinen Anteil zahlt, und muss zusätzlich selbst putzen. Dann gilt der normale Termin, die Eltern reinigen. Wer eine laufende Staffel fortsetzt, kann immer mitmachen: Er zahlt die Endreinigung den Eltern und holt die Anteile der Familien davor zurück. Ob es geht, meldet euch der Rechner nach der Wahl des Datums («Keine Staffel möglich»).</li>" +
     "<li>Frische Bettwäsche, Handtücher und Küchentücher mitbringen und selbst beziehen. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Alles nehmt ihr wieder mit. Nur die Moltons bleiben nach dem Benutzen auf der Matratze. Die Liste mit den Mengen für eure Personenzahl findet ihr nach der Bestätigung im Knopf «🧳 Anreise-Wäsche» auf der Startseite, zum Abhaken.</li>" +
+    "<li><b>Wer die Staffel beginnt:</b> Die Eltern haben das Chalet gereinigt und die Betten bezogen. Ihr bringt keine Wäsche mit und benutzt, was bereitliegt. Beim Abreisen zieht ihr die Betten ab (die Moltons bleiben) und lasst die benutzte Wäsche für die Eltern im Chalet, damit die nächste Familie ihre eigene Wäsche aufziehen kann. Die Endreinigung zahlen alle Familien der Staffel gleich viel, auch ihr. Euer Vorteil ist die Arbeit, die ihr spart.</li>" +
     "<li>Wer geht, reinigt: WC putzen, staubsaugen, Küche sauber, Abfall entsorgen, alles picobello.</li>" +
     "<li>Ihr zahlt den Eltern noch keine Reinigung (" + chf(P.reinigungSelbst) + "). Die Endreinigung durch die Eltern ist trotzdem Pflicht, weil sie ihren Standard wahren wollen.</li></ul>" : "<p>Zurzeit gibt es keine Zeiten, in denen ihr selbst reinigen könnt.</p>");
   set("bc-endrein", "<p><b>Aufwand</b></p><ul>" +

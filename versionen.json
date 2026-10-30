@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.64.0.1",
+      "v": "2.57.4.0 bis 2.64.0.2",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -48,7 +48,8 @@
         "Text: Im Streifen der Ansicht «Mami» steht «Bestätigen und ändern kann nur Silvan».",
         "Neu: Wünsche, Ideen und Fehler. Die Kinder melden nur noch Wunsch, Idee oder Fehler (Frage entfällt) und sehen die Liste «Geplant und Ideen» nicht mehr. Papi vergibt jedem Eintrag eine Priorität (hoch, normal, tief) und kann danach sortieren.",
         "Neu: Papi kann eine WhatsApp-Meldung der Kinder in «Neuer Eintrag» einfügen. Die App erkennt Art und Absender und füllt Titel und Text vor, Papi wählt die Priorität und speichert.",
-        "Text: Beim Hinweis zur Reinigung steht bei «Nach Parteien», dass es nur fair ist, wenn alle Parteien gleich gross sind, sonst nach Personen teilen."
+        "Text: Beim Hinweis zur Reinigung steht bei «Nach Parteien», dass es nur fair ist, wenn alle Parteien gleich gross sind, sonst nach Personen teilen.",
+        "Text: Neue Regel «Wer die Staffel beginnt» in der Selbstreinigung: Wer beginnt, findet das Chalet gereinigt und bezogen, bringt keine Wäsche mit und zahlt die Endreinigung gleich wie alle anderen der Staffel."
       ]
     },
     {
