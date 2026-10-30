@@ -12,17 +12,6 @@
       "bestaetigt": "2026-10-30T08:54"
     },
     {
-      "name": "Miriam",
-      "arr": "2026-11-19",
-      "dep": "2026-11-24",
-      "selbst": true,
-      "pers": 3,
-      "waesche": "bringen",
-      "betrag": 275,
-      "rechnung": "Gesendet am Fr 30.10.2026, 14:24 Uhr. App-Version 2.66.0.1.\nAnreise\tDonnerstag 19.11.2026\nAbreise\tDienstag 24.11.2026 (5 Nächte)\nFamilie\tIch und 2 Kinder\nGäste\t0\nZimmer 1 unberührt\tJa\nSelbstreinigung\tJa\nTotal laut Rechner\tCHF 275.–\nReinigungskosten sind erst nach Ablauf der Familienstaffel bekannt und werden nachbelastet.\n#Preisberechnung\nFamilie pro Nacht\tCHF 55.–\nÜbernachtung (5 Nächte)\tCHF 275.–\nReinigung\tCHF 0.–\nZimmer 1 und rotes Bad bleiben unberührt: CHF 15.– weniger pro Nacht, die Familie zahlt CHF 55.– statt CHF 70.–.",
-      "bestaetigt": "2026-10-30T14:25"
-    },
-    {
       "name": "Manuel",
       "arr": "2026-11-24",
       "dep": "2026-11-26",
@@ -261,6 +250,10 @@
     {
       "t": "2026-10-30T14:27",
       "text": "Bestätigt: Manuel, Di 24.11.2026 bis Do 26.11.2026, CHF 110"
+    },
+    {
+      "t": "2026-10-30T18:27",
+      "text": "Entfernt: Miriam, Do 19.11.2026 bis Di 24.11.2026"
     }
   ]
 }
