@@ -168,7 +168,6 @@
   .sign .ver { display: inline-block; align-self: center; margin-top: 8px; padding: 3px 10px; border: 2px solid currentColor; border-radius: 4px; font-weight: 700; letter-spacing: 0.04em; opacity: 1; }
   .sign p { margin: 0; font-size: calc(0.95rem / var(--fs)); letter-spacing: 0.02em; opacity: 0.92; }
 
-  .intro { margin: 0; color: var(--muted); font-size: var(--t-text); }
   .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: var(--t-small); color: var(--muted); }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .legend i { width: 14px; height: 14px; border-radius: 3px; border: 2px solid; display: inline-block; }
@@ -316,7 +315,6 @@
   .sw-ruhe { border-color: var(--ruhe-line); background: var(--ruhe-bg); }
   .sw-normal { border-color: var(--line); background: transparent; }
   .sw.sw-k { width: 15px; height: 15px; margin: 0 3px 0 5px; vertical-align: -2px; border-radius: 4px; }
-  .sw-sperr { border-color: var(--sperr-line); background: var(--sperr-bg); }
   .cal-leg { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0 0; font-size: var(--t-small); }
   .cal-leg p { margin: 0; }
   .cal-leg[hidden] { display: none; }
@@ -919,7 +917,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.59.1.0";
+let VERSION = "2.59.1.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1302,12 +1300,6 @@ function belegtMischen() {
   GAESTE.forEach((x) => { if (x.dep && BELEGT_AIR.has(x.arr)) for (let k = x.arr; k < x.dep; k = addDays(k, 1)) s.add(k); });
   BELEGT = s;
 }
-// Normale Zeit: kein Tag des Aufenthalts in Hochsaison, Spitzenzeit oder Eigene-Wäsche-Zeit
-function normalStay() {
-  if (!(ARR && DEP) || S.luecke) return false;
-  for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istRuhe(k) || istHoch(k) || spitzVon(k)) return false;
-  return true;
-}
 // Staffel ist nur sinnvoll, wenn danach noch eine weitere Familie anschliessen kann (mindestens minNaechte freie Nächte in der Staffel-Zeit bis zur nächsten Belegung)
 // oder wenn der Termin eine laufende Staffel fortsetzt (dann teilen sich die Gruppen die Endreinigung)
 function staffelSinn(arr, dep) {
@@ -1446,20 +1438,6 @@ function bildKalender() {
   h += '<div class="exb selbst" style="grid-column:1/span 2">' + zkB("🧹") + 'Jerome</div><div class="exb stf" style="grid-column:3/span 2">' + RUN + RUN + ' offen</div><div class="exb occ" style="grid-column:6/span 2">Airbnb</div>';
   h += '</div><p class="exbild-cap">Grün: gesichert (🧹 ihr reinigt selbst, 🪣 die Eltern reinigen). Gelb: noch nicht gesichert, Termin mit Vorbehalt. Gestrichelt 🏃🏃: Die Familienstaffel ist noch offen. Gestreift: Airbnb-Gast. Die Balken erscheinen im Kalender erst, nachdem die Eltern einen Aufenthalt bestätigt haben.</p></div>';
   return h;
-}
-function bildSparen(bsp) {
-  const zeilen = [];
-  for (let g = 2; g <= Math.max(2, P.maxPersonen - 1); g++) { const r = bsp(g); if (r.ok) zeilen.push([g, r]); }
-  if (!zeilen.length) return "";
-  const max = Math.max.apply(null, zeilen.map((z) => z[1].TOT)), z0 = (x) => Math.round(x).toLocaleString("de-CH");
-  let h = '<div class="exbild" role="img" aria-label="Wer zahlt wie viel bei 7 Nächten"><p class="extl">7 Nächte, Beträge in CHF</p>';
-  zeilen.forEach((z) => {
-    const g = z[0], r = z[1], du = r.FZ, ga = r.TOT - r.FZ, w = (r.TOT / max) * 100;
-    h += '<div class="exrow" style="margin-top:8px"><span class="extl" style="flex:0 0 52px">' + g + ' Gäste</span><div style="flex:1;display:flex;gap:2px;min-width:0;width:' + w + '%;max-width:' + w + '%">';
-    if (du > 0) h += '<div class="exb fam" style="flex:' + Math.max(du, 1) + ';min-width:44px;justify-content:center">' + z0(du) + '</div>';
-    h += '<div class="exb gast" style="flex:' + Math.max(ga, 1) + ';justify-content:center">' + z0(ga) + '</div></div><span class="extl" style="flex:0 0 52px;text-align:right">' + z0(r.TOT) + '</span></div>';
-  });
-  return h + '<p class="exbild-cap"><span class="exb fam" style="display:inline-flex;height:16px;padding:0 6px">du</span> <span class="exb gast" style="display:inline-flex;height:16px;padding:0 6px">Gäste</span> Rechts steht der Gesamtpreis. Je mehr Gäste, desto weniger zahlst du. Der Gesamtpreis sinkt nie unter ' + chf(P.mindestpreisWoche) + ' pro Woche.</p></div>';
 }
 function bildRuhe() {
   const mt = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], mn = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
@@ -1699,7 +1677,6 @@ document.querySelectorAll("[data-run]").forEach((e) => { e.innerHTML = ANT + LAE
 const typMarke = (t) => (t === "block" ? "🚫" : '<b class="zk zl">' + (t === "fam" ? "Fam." : t === "extern" ? "Ext." : "BnB") + "</b>");   // statt Flugzeug und Schriftrolle: Ext. (Airbnb, Vertrag), Fam., Blockiert
 const typNorm = (t) => (t === "extern" || t === "block" || t === "fam" ? t : "airbnb");
 const typKnoepfe3 = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Belegung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + { airbnb: "BnB", extern: "Ext.", fam: "Fam.", block: "🚫 Blockiert" }[k] + "</button>").join("") + "</div>";
-const typKnoepfe = (id, t) => '<div class="gtyp" id="' + id + '" role="group" aria-label="Art der Buchung">' + ["airbnb", "extern", "fam", "block"].map((k) => '<button type="button" class="btn typ' + (typNorm(t) === k ? " on" : "") + '" data-typ="' + k + '">' + TYP_SYM[k] + " " + { airbnb: "Airbnb", extern: "Vertrag", fam: "Familie", block: "Blockiert" }[k] + "</button>").join("") + "</div>";
 const typWahl = (id) => { const b = document.querySelector("#" + id + " .typ.on"); return typNorm(b && b.getAttribute("data-typ")); };
 const gbSumme = () => { const o = document.getElementById("gbSum"); if (!o) return; const v = (id) => frZahl((document.getElementById(id) || {}).value), n = v("gbN"), r = v("gbR"), p = v("gbP"); o.textContent = n || r || p ? "Nächte " + frk(Math.max(0, n + p - r)) + ", Reinigung " + frk(r) + (p ? ", Provision " + frk(p) : "") + ", brutto " + frk(n + p) + ", du erhältst " + frk(n) : ""; };
 document.addEventListener("input", (ev) => { if (ev.target.closest && ev.target.closest("#gbBetr")) gbSumme(); });
@@ -1711,7 +1688,6 @@ function gaesteBalken() {
   return l.filter((x) => !(x.typ === "fam" && BUCH.some((b) => b.arr < gastEnde(x) && b.dep > x.arr))).map((x, i) => { let end = gastEnde(x); const nx = l[i + 1]; if (nx && nx.arr > x.arr && nx.arr < end) end = nx.arr; return { arr: x.arr, end: end, name: x.name, typ: x.typ }; });
 }
 function gastKurz(n) { return String(n || "").replace(/[<>"&]/g, "").trim().replace(/\s+/g, " ").slice(0, 30); }   // Name bleibt, wie er eingegeben wird
-function gastLaufStart(k) { let n = k; while (BELEGT_AIR && BELEGT_AIR.has(addDays(n, -1))) n = addDays(n, -1); return n; }
 function gastEintragFuer(k) { const l = GAESTE.filter((x) => BELEGT_AIR && BELEGT_AIR.has(x.arr) && x.arr <= k && k < gastEnde(x)).sort((p, q) => (p.arr < q.arr ? -1 : 1)); return l.length ? l[l.length - 1] : null; }
 let GFORM = null;   // Eingabe zu einem Namen im Kalender: {k, alt, arr, dep, name, typ, mode}
 function gastFormularFuer(k) {
@@ -2245,12 +2221,6 @@ async function ladeBelegt() {
   }
 }
 
-function ketteText() {
-  return "Die " + chf(P.reinigung) + " Endreinigung fallen an, sobald die Familienstaffel endet, also sobald nach einer Reisegruppe die Eltern oder ein Airbnb-Gast kommen. Der Aufenthalt wird wie üblich bezahlt. Die Eltern stellen nur eine Rechnung für die Endreinigung, getrennt vom Aufenthalt, an die letzte Reisegruppe der Familienstaffel. War sie allein in der Staffel, sind es die vollen " + chf(P.reinigung) + ". Waren mehrere Reisegruppen in der Staffel, bezahlt die letzte zuerst alles und holt sich die Anteile der anderen zurück, anteilig nach Reisegruppe. Das Eintreiben des Geldes regeln die Reisegruppen untereinander. Nutzt die Familienstaffel, um die Reinigungskosten möglichst zu drücken: Je mehr Reisegruppen nacheinander kommen, desto weniger zahlt jede Reisegruppe. Sind Geschwister gleichzeitig dort, regeln sie die Kosten untereinander.";
-}
-function putzText() {
-  return "Danach gehen die Eltern die Wohnung reinigen. Die Wäsche darf nur von den Kindern selbst kommen und muss frisch sein. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Nach dem Benutzen bleiben die Moltons auf der Matratze. Wer geht, reinigt selbst: WC putzen, staubsaugen, Küche sauber, Abfall entsorgen, alles picobello. Die Endreinigung durch die Eltern ist trotzdem Pflicht, weil sie ihren Standard wahren wollen.";
-}
 
 const ABS = ["Jerome", "Deborah", "Miriam", "Manuel"];
 let ABSENDER = "";
@@ -2364,14 +2334,6 @@ function endreinigungInfo(r) {
     '</div>';
 }
 
-function einladenBox(r) {
-  const ich = S.wer === "Nur ich";
-  const nb = (t) => '<span style="white-space:nowrap">' + t + '</span>';
-  const sum = r.FZ + r.HZ;
-  return '<details><summary>🤝 Gast einladen und selbst bezahlen?</summary><div class="rows"><p>' +
-    (ich ? "Du lädst" : "Ihr ladet") + ' Gast 1 (den Hauptgast) ein und ' + (ich ? "übernimmst" : "übernehmt") + ' seinen Anteil? Dann ' + (ich ? "zahlst du" : "zahlt die Familie") + ' ' +
-    nb(chf(r.FZ)) + ' + ' + nb(chf(r.HZ)) + ' = <b>' + nb(chf(sum)) + '</b>.</p></div></details>';
-}
 
 let ELTERN = false;
 let RECH_OFFEN = false;
@@ -3339,22 +3301,12 @@ function zahlZeile(x) {
 }
 // Hochsaison: Buchungssicherheit gibt es nur zum Preis für «verbindlich». Darum kein Knopf, der einen Termin mit Vorbehalt (Familienpreis) nachträglich sperrt
 const hochVorbehalt = (x) => P.hochNachtMin > 0 && hochNaechte(x.arr, x.dep) > 0;
-function provZeile(x) {
-  if (!x.prov) return "";
-  const txt = provKonflikt(x) ? "⚠️ Konflikt mit Airbnb-Gast" : "🔓 mit Vorbehalt, nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "");
-  return '<br><span class="hint">' + txt + '</span>' + (hochVorbehalt(x) ? "" : ' <button type="button" class="btn" data-fest="' + esc(bKey(x)) + '">🔒 In Airbnb gesperrt</button>');
-}
 function bestNeuZeichnen() { aufentZeigen(); renderKalender(); bestZeigen(); }
 function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="' + esc(key) + '" href="https://wa.me/?text=' + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + WA_SVG + (label || "Dem Kind Bescheid geben") + "</a>"; }
 function bestText(x, abgelehnt) {
   return abgelehnt
     ? "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung."
     : "Hoi " + x.name + ", dein Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " ist bestätigt. 🎉 Im TSCHENT-O-MAT findest du jetzt " + (x.sb || x.selbst || x.luecke ? "die Wäsche-Liste für die Anreise und " : "") + "die Checkliste für die Abreise." + (provVon(x) ? " Achtung: Der Termin steht mit Vorbehalt und ist nicht in Airbnb gesperrt. Kommt ein Airbnb-Gast, hat er Vorrang, dann müsst ihr ausweichen." : "");
-}
-function bestBescheidZeile(x, abgelehnt) {
-  const b = x.bescheid || "", key = bKey(x);
-  const wann = b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "✉️ Noch kein Bescheid gegeben";
-  return "<br><span class=\"hint\">" + wann + "</span>" + bestWaLink(bestText(x, abgelehnt), key, b ? (abgelehnt ? "Nochmals Absage schicken" : "Nochmals Bescheid geben") : (abgelehnt ? "Absage schicken" : "Bescheid geben"));
 }
 async function erinnertVermerken(key) {
   const jetzt = jetztStr();
