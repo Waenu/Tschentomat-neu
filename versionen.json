@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.62.0.1",
+      "v": "2.57.4.0 bis 2.62.0.2",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -44,7 +44,8 @@
         "Versionshistorie: Einträge pro Tag zusammengefasst (26.10. und 27.10.), der 29.10. und der 30.10. getrennt.",
         "Ideenliste: Suche auf «fertig» gesetzt, neuer Wunsch «Ansicht Mami (nur lesen)».",
         "Neu: Ansicht «Mami» (nur lesen). Mami sieht alles, auch Rechnungen und Einnahmen, kann aber nichts bestätigen oder ändern. Aktivierung einmalig per Link mit Code, danach bleibt sie auf dem Handy in dieser Ansicht.",
-        "Text: In der Anleitung steht hinter «Wunschtermin» ein Link «📅 zum Kalender», der zum heutigen Tag im Kalender springt."
+        "Text: In der Anleitung steht hinter «Wunschtermin» ein Link «📅 zum Kalender», der zum heutigen Tag im Kalender springt.",
+        "Text: Im Streifen der Ansicht «Mami» steht «Bestätigen und ändern kann nur Silvan»."
       ]
     },
     {
