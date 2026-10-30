@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.72.0.0",
+      "v": "2.57.4.0 bis 2.72.1.0",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -66,7 +66,8 @@
         "Neu: In der Verwaltung (nur für Papi) steht eine kurze Anleitung «Ablauf bei Buchungen»: was bei einem Familientermin, einem Airbnb-Gast und einer reinen Sperre zu tun ist, mit fertigen Pimlical-Titeln zum Kopieren für jedes Kind, Marianne und Wänu sowie für Airbnb, Extern und Blockiert.",
         "Layout: Die Anleitung «Ablauf bei Buchungen» erklärt mit einer kleinen Zeichnung, wie in Airbnb gesperrt wird: Anreisetag sperren, Abreisetag frei lassen (gesperrt werden die Nächte). Der gebuchte Termin ist in der Zeichnung umrahmt.",
         "Neu: Im Kalender zeigt ein gestrichelter Balken «Dein Termin» den gewählten Wunschtermin von der Mitte des Anreisetags bis zur Mitte des Abreisetags, so wie die bestätigten Balken. Er ist ein durchsichtiges Band in der Farbe der Tage über die ganze Höhe, damit er nicht wie die gestrichelte Staffel aussieht. Das Band nimmt auch in der Hochsaison und in der Staffel-Zeit die richtige Tagesfarbe an.",
-        "Neu: Nach dem Bestätigen einer Buchung zeigt das Fenster «📌 Jetzt erledigen»: von wann bis wann in Airbnb zu sperren ist (Abreisetag frei lassen) und die fertige Pimlical-Zeile zum Kopieren. Dasselbe steht auf der Karte in der Verwaltung unter «Sperren und Pimlical». Die allgemeine Liste mit den Familienzeilen ist aus der Anleitung entfernt."
+        "Neu: Nach dem Bestätigen einer Buchung zeigt das Fenster «📌 Jetzt erledigen»: von wann bis wann in Airbnb zu sperren ist (Abreisetag frei lassen) und die fertige Pimlical-Zeile zum Kopieren. Dasselbe steht auf der Karte in der Verwaltung unter «Sperren und Pimlical». Die allgemeine Liste mit den Familienzeilen ist aus der Anleitung entfernt.",
+        "Layout behoben: Die Preisberechnung auf den Karten in der Verwaltung läuft auf schmalen Handys nicht mehr über den rechten Rand, lange Angaben wie «Freitag 6.11.2026 (4 Nächte)» brechen jetzt um."
       ]
     },
     {
