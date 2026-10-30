@@ -721,7 +721,7 @@
   .bk.eigen-q { filter: drop-shadow(0 0 3px rgba(255, 213, 74, .6)); }   /* nach dem Antippen: leiser Dauerschein als Suchhilfe */
   .bk.eigen-h::after { content: "👆"; position: absolute; right: 7px; top: 50%; transform: translateY(-50%); font-size: .85rem; line-height: 1; }
   @media (prefers-reduced-motion: reduce) { .bk.eigen { animation: none; } }
-  .bk.wunsch { background: color-mix(in srgb, var(--accent) 22%, transparent); border: 2px dashed var(--accent); color: var(--fg); font-weight: 700; pointer-events: none; box-sizing: border-box; z-index: 3; }
+  .bk.wunsch { background: var(--bk-selbst); color: var(--bk-selbst-fg); box-shadow: inset 0 0 0 1.5px var(--bk-selbst-ol); font-weight: 700; opacity: .9; pointer-events: none; z-index: 3; }
   .bk.sw { padding: 0 4px; line-height: 24px; justify-content: center; text-align: center; background: transparent; border: 0; border-radius: 14px; opacity: 1; color: var(--fg); font-size: .7rem; }
   .bk.sw, .bk-leg .k-sw { background-color: transparent; }
   /* Ameisenpfad um den Läufer-Balken: gestrichelte Linie, die dem runden Rand folgt wie bei den Symbolen */
@@ -940,7 +940,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.71.0.0";
+let VERSION = "2.71.0.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
