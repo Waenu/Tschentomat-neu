@@ -402,6 +402,8 @@
   @media (prefers-reduced-motion: reduce) { .ik-koffer, .ik-rad, .ik-kreis, .ik-haken { animation: none; } }
   #kindStreifen { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: #1F5FA8; color: #fff; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
   #kindStreifen[hidden] { display: none; }
+  #mamiStreifen { background: #7B3F8C; color: #fff; border-radius: 12px; padding: 10px 14px; font-weight: 700; }
+  #mamiStreifen[hidden] { display: none; }
   #kindStreifen .btn { background: #fff; color: #1F5FA8; border: 0; border-radius: 8px; min-height: 44px; padding: 6px 14px; font: inherit; font-weight: 700; cursor: pointer; }
   #bestKasten .vk.offen { border: 3px solid #F28C28; }
   #bestKasten .vk-trenn { border: 0; border-top: 2px solid rgba(127,127,127,0.4); margin: 18px 0 0; }
@@ -773,6 +775,7 @@
   </header>
 
   <nav class="start" aria-label="Start">
+    <div id="mamiStreifen" role="status" hidden>👩 Ansicht Mami: Du siehst alles. Bestätigen und ändern kann nur Papi.</div>
     <div id="kindStreifen" role="status" hidden><span id="kindStreifenTxt"></span><button type="button" class="btn" id="btnZurEltern">Zurück zu Eltern</button></div>
     <button type="button" class="bigbtn blau" id="btnAnsichten" aria-expanded="false" aria-controls="bestKasten" hidden><span class="bi" aria-hidden="true"><span class="an-auge">👁️</span></span>Verwaltung</button>
     <div class="note h" id="bestKasten" hidden></div>
@@ -929,7 +932,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.61.1.1";
+let VERSION = "2.62.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3005,6 +3008,27 @@ document.getElementById("aufStatus").addEventListener("click", aufentWeg);
 const GH_REPO = "Waenu/Tschentomat-neu", GH_DATEI = "buchungen.json";
 let TOKEN = "";
 try { TOKEN = localStorage.getItem("tm2_token") || ""; } catch (e) {}
+// Ansicht «Mami»: darf alles sehen, aber nichts ändern oder bestätigen. Papi schickt einen Link (…/#mami=CODE) per WhatsApp; öffnet ihn Mami einmal, merkt sich ihr Handy die Ansicht. Im Programm steht nur der Fingerabdruck des Codes. «#mami=aus» schaltet sie wieder ab.
+const MAMI_HASH = "b05dd35cebc3542bac2078f0b932bbe34307a853f197ac9e817ed592db78721d";
+let MAMI = false;
+try { MAMI = localStorage.getItem("tm2_mami") === "1"; } catch (e) {}
+const mamiAn = () => MAMI && !TOKEN && !ABSENDER;
+async function mamiPruefen() {
+  const m = /[#&]mami=([^&]+)/.exec(location.hash || "");
+  if (!m) return;
+  try {
+    const code = decodeURIComponent(m[1]);
+    if (code === "aus") { localStorage.removeItem("tm2_mami"); MAMI = false; }
+    else if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(code));
+      const hex = Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+      if (hex === MAMI_HASH) { localStorage.setItem("tm2_mami", "1"); MAMI = true; }
+    }
+  } catch (e) {}
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  try { aufentZeigen(); render(); bestZeigen(); renderKalender(); } catch (e) {}
+}
+mamiPruefen();
 // «Ansicht als» Kind (nur mit Zugriff von Papi): beim Start immer zurück zu Eltern
 if (TOKEN && ABSENDER) { ABSENDER = ""; try { localStorage.setItem("tm2_absender", ""); } catch (e) {} }
 function bestLink(name, arr, dep, selbst, pers, luecke, betrag, verb, snap) {
@@ -3266,6 +3290,7 @@ function bestZeigen() {
   }
   OFFEN = OFFEN.filter((x) => x.dep >= h && !BUCH.some((y) => bKey(y) === bKey(x)));
   listeSichern("tm2_offen", OFFEN);
+  { document.getElementById("mamiStreifen").hidden = !mamiAn(); }
   { const ks = document.getElementById("kindStreifen"); ks.hidden = !(TOKEN && ABSENDER); if (!ks.hidden) document.getElementById("kindStreifenTxt").textContent = "👁️ Du siehst die App als " + ABSENDER; }
   if (!TOKEN && !bestMsg) { k.hidden = true; k.innerHTML = ""; kn.hidden = true; return; }
   kn.hidden = false; kn.classList.toggle("on", zeigAns); kn.setAttribute("aria-expanded", zeigAns ? "true" : "false");
@@ -3414,7 +3439,7 @@ function sMark(text, terme) {   // maskierter HTML-Text mit rosa Treffern
   return h + esc(text.slice(p));
 }
 function sTermine(terme) {
-  const papi = !!(TOKEN && !ABSENDER), heute = heuteKey(), liste = [];
+  const papi = !!(TOKEN && !ABSENDER) || mamiAn(), heute = heuteKey(), liste = [];
   const typ = { fam: "Familie", airbnb: "Airbnb-Gast", extern: "Gast mit Vertrag", block: "blockiert" };
   const datum = (a, d) => fmtTag(a) + " bis " + fmtTag(d) + " (" + MONATE[monatVon(a) - 1] + ", " + diffDays(a, d) + (diffDays(a, d) === 1 ? " Nacht)" : " Nächte)");
   BUCH.forEach((b) => {
@@ -3746,7 +3771,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   }
   function iconLeiste(k, stay, zs, zh) {   // gebuchter Tag: ausklappbare Zeilen mit Symbol und Text, nur eine offen; Papi zusätzlich «Nur für dich»
     if (!stay.length) return "";
-    const papi = !!(TOKEN && !ABSENDER), b = stay[0], eig = papi || (ABSENDER !== "" && b.name === ABSENDER);
+    const papi = !!(TOKEN && !ABSENDER), seher = papi || mamiAn(), b = stay[0], eig = seher || (ABSENDER !== "" && b.name === ABSENDER);
     const zeile = (id, sym, titel, kurz, warn) => '<button type="button" class="ar' + (warn ? " warn" : "") + '" data-ip="' + id + '" aria-expanded="false"><span class="ar-i">' + sym + '</span><span class="ar-t">' + titel + "<small>" + kurz + '</small></span><span class="ar-c" aria-hidden="true"></span></button>';
     let h = "", einn = "";
     if (eig) {
@@ -3764,14 +3789,14 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       const it = zh.map(hinItem);
       h += zeile("hin", "ℹ️", "Hinweise", it.slice(0, 2).map((x) => esc(x.ti)).join(", "), false) + '<div class="ipan ar-list" data-ipan="hin" hidden>' + it.map((x) => x.html).join("") + "</div>";
     }
-    if (papi && b.betrag > 0) {   // Einnahmen nur Familie: ein Betrag zählt im Monat der Anreise
+    if (seher && b.betrag > 0) {   // Einnahmen nur Familie: ein Betrag zählt im Monat der Anreise
       const ym = b.arr.slice(0, 7), jj = b.arr.slice(0, 4), heute = heuteKey(), kurzChf = (n) => chf(n).replace(" ", "\u00a0");
       const sum = (f) => BUCH.filter((x) => x.betrag > 0 && f(x)).reduce((t, x) => t + x.betrag, 0);
       const mon = sum((x) => x.arr.slice(0, 7) === ym), jahrBis = sum((x) => x.arr.slice(0, 4) === jj && x.arr <= heute), jahrAll = sum((x) => x.arr.slice(0, 4) === jj);
       const mn = MONATE[Number(ym.slice(5, 7)) - 1];
       einn = zeile("einn", "💰", "Einnahmen", kurzChf(b.betrag) + ", zählt im " + esc(mn), false) + '<div class="ipan" data-ipan="einn" hidden><p>Diese Buchung: <b>' + esc(kurzChf(b.betrag)) + "</b></p><p>" + esc(mn) + " " + jj + " (Familie): <b>" + esc(kurzChf(mon)) + "</b></p><p>Seit Jahresanfang bis heute: <b>" + esc(kurzChf(jahrBis)) + "</b><br>Gebucht für " + jj + ": <b>" + esc(kurzChf(jahrAll)) + '</b></p><p class="hint">' + (EINN_STATUS === "ok" ? "Familie aus den Buchungen, Ext. aus dem privaten Speicher. Ein Betrag zählt im Monat der Anreise." : "Nur Familie. Die Beträge der Ext.-Gäste fehlen noch (privater Speicher nicht eingerichtet oder nicht geladen).") + "</p>" + extZeilen(ym, jj, heute) + "</div>";
     }
-    if (papi) h += '<div class="ar-nur">🔐 Nur für dich</div>' + einn + '<button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>';
+    if (seher) h += '<div class="ar-nur">🔐 ' + (papi ? "Nur für dich" : "Nur für Eltern") + '</div>' + einn + (!papi ? "" : '<button type="button" class="ar" data-vw="' + esc(bKey(b)) + '"><span class="ar-i">👁️</span><span class="ar-t">Verwaltung<small>Buchung bearbeiten</small></span><span class="ar-c go" aria-hidden="true"></span></button>');
     return h;
   }
   function text(k) {

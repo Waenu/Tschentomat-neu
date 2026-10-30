@@ -149,10 +149,10 @@
       "text": "Fertig (Version 2.61.1.0): Lupe oben neben dem Hell/Dunkel-Schalter. Sucht in Terminen (Buchungen und Gästeliste, auch Airbnb-Gäste und Gäste mit Vertrag, für alle) und in den Hilfekapiteln. Treffer rosa. Kinder sehen nur die eigenen Beträge. Nicht durchsucht: Hinweise unter dem Wählfenster, Versionshistorie, Ideenliste."
     },
     {
-      "status": "geplant",
+      "status": "fertig",
       "art": "wunsch",
       "titel": "Ansicht «Mami» (nur lesen)",
-      "text": "Marianne soll mehr sehen als ein Kind (Rechnungen und Beträge aller Termine), aber nichts ändern. Ohne gewählten Namen geht das nicht: Kinder starten auch ohne Namen und würden sonst alle Beträge sehen. Vorschlag: einmaliger Link von Papi, der das Handy als «Mami» merkt (nur Lesen, kein Bestätigen, kein Ändern). Offen: Was genau soll sie sehen (Rechnungen, Einnahmen, Verwaltung)?"
+      "text": "Umgesetzt in 2.62.0.0: Aktivierung einmalig per Link mit Code (WhatsApp), danach dauerhaft auf dem Handy. Sieht alles, ändert nichts."
     }
   ]
 }
