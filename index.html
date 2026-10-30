@@ -919,7 +919,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.59.0.3";
+let VERSION = "2.59.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1817,7 +1817,8 @@ function balkenPassen(gr) {
 }
 // Eigener Balken leuchtet, bis die Person ihn einmal angetippt hat (merkt sich das Handy). Nur wenn sie ihren Namen gewählt hat.
 function eigenKey(b) { return b.arr + "|" + b.dep; }
-function eigenListe() { try { const l = JSON.parse(localStorage.getItem("tm2_balkengesehen")); return Array.isArray(l) ? l : []; } catch (e) { return []; } }
+let EIGEN_MEM = [];   // Papi in der Kindansicht: «gesehen» nur bis zum Neuladen (so lässt sich das Leuchten wieder testen), bei den Kindern bleibt es im Handy gespeichert
+function eigenListe() { try { if (TOKEN) return EIGEN_MEM; const l = JSON.parse(localStorage.getItem("tm2_balkengesehen")); return Array.isArray(l) ? l : []; } catch (e) { return []; } }
 function eigenNameTrifft(n) { n = String(n || "").toLowerCase(); const a = ABSENDER.toLowerCase(); return a !== "" && n.indexOf(a) === 0 && !/[a-zäöüéèà]/.test(n.charAt(a.length) || ""); }
 // "neu": leuchtet und pulsiert bis zum ersten Antippen, "ruhig": danach leiser Dauerschein (Suchhilfe), "": nichts. gast = Eintrag aus der Gästeliste (nur Familie, Name beginnt mit dem gewählten Namen)
 function eigenStatus(b, gast) {
@@ -1834,7 +1835,7 @@ function eigenMerken(k) {
     BUCH.filter((b) => b.arr <= k && k <= b.dep && eigenStatus(b) === "neu").forEach((b) => { l.push(eigenKey(b)); neu = true; });
     gaesteBalken().filter((x) => x.arr <= k && k <= x.end && eigenStatus(x, true) === "neu").forEach((x) => { l.push("g|" + x.arr); neu = true; });
     if (!neu) return;
-    try { localStorage.setItem("tm2_balkengesehen", JSON.stringify(l.slice(-80))); } catch (e) {}
+    if (TOKEN) EIGEN_MEM = l; else { try { localStorage.setItem("tm2_balkengesehen", JSON.stringify(l.slice(-80))); } catch (e) {} }
     zeichneBalken();
   } catch (e) {}
 }
