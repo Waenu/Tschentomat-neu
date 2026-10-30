@@ -584,6 +584,9 @@
   .art-neu { color: #2E9E5B; } .art-fun { color: #3B7DC4; } .art-feh { color: #E07B1A; } .art-lay { color: #8E63C9; } .art-txt { color: #8A9490; }
   .ov { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); overflow-y: auto; padding: 16px; box-sizing: border-box; }
   .ov[hidden] { display: none; }
+  .cp-zeile { display: flex; gap: .5rem; align-items: center; margin: .3rem 0; }
+  .cp-zeile code { flex: 1; word-break: break-word; }
+  .cp-zeile .btn { flex: none; width: auto; padding: .35rem .6rem; }
   #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
   .ov-in { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
   .ov h2 { margin: 0; font-size: 1.35rem; }
@@ -936,7 +939,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.70.0.0";
+let VERSION = "2.70.0.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2655,6 +2658,7 @@ function kopiere(text, btn, fertig, vorher) {
     document.body.removeChild(t);
   }
 }
+document.addEventListener("click", (e) => { const b = e.target.closest && e.target.closest("[data-cp]"); if (b) kopiere(b.getAttribute("data-cp"), b, "Kopiert"); });
 let LETZTE_ANFRAGE = "";
 let LETZTE_FAMILIE = "";
 document.getElementById("result").addEventListener("change", (e) => {
@@ -3425,14 +3429,19 @@ function bestZeigen() {
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, xx.bescheid ? "" : "offen", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
+    const cpZ = (t) => '<div class="cp-zeile"><code>' + esc(t) + '</code><button type="button" class="btn" data-cp="' + esc(t) + '">📋 Kopieren</button></div>';
     s += '<details class="papi-hinweis"><summary>📋 Ablauf bei Buchungen</summary>' +
       '<p><b>Familie</b></p><ol>' +
       '<li>Termin hier bestätigen.</li>' +
       '<li>Die Tage in Airbnb sperren.</li>' +
-      '<li>In Pimlical eintragen mit «/Familie» am Ende, zum Beispiel «Deborah /Familie». Zuerst bestätigen, dann in Pimlical eintragen. Ein doppelter Eintrag schadet nicht: Die bestätigte Buchung gilt, der Pimlical-Eintrag wird übersprungen.</li></ol>' +
-      '<p><b>Airbnb-Gast</b></p><ol>' +
+      '<li>In Pimlical als Titel eintragen (Zeile kopieren):</li></ol>' +
+      ["Jerome", "Deborah", "Miriam", "Manuel"].map((n) => cpZ(n + " belegt Adelboden. /Familie")).join("") + cpZ("Marianne und ich belegen Adelboden. /Familie") +
+      '<p class="hint">Ein doppelter Eintrag schadet nicht: Die bestätigte Buchung gilt, der Pimlical-Eintrag wird übersprungen.</p>' +
+      '<p><b>Airbnb-Gast und Extern</b></p><ol>' +
       '<li>Der Eintrag erscheint von selbst als belegt (Abruf stündlich).</li>' +
-      '<li>In Pimlical eintragen mit «/Airbnb» oder «/Extern» (Gast mit Vertrag), zum Beispiel «Ali belegt /Airbnb». Der Eintrag beginnt am Anreisetag. Der Name erscheint nach etwa 30 Minuten.</li></ol>' +
+      '<li>In Pimlical eintragen, am Anreisetag beginnend. Zeile kopieren und den Namen davor schreiben:</li></ol>' +
+      cpZ("belegt Adelboden. /Airbnb") + cpZ("belegt Adelboden. /Extern") +
+      '<p class="hint">«Extern» ist für Gäste mit Vertrag. Der Name erscheint nach etwa 30 Minuten über dem Tag.</p>' +
       '<p><b>Nur sperren</b> (zum Beispiel Reinigung): in Airbnb sperren. Soll das Symbol in der App erscheinen, in Pimlical «/Blockiert» eintragen.</p></details>' +
       '<details class="papi-hinweis"><summary>🔧 Versteckte Menüs</summary><ul>' +
       '<li><b>Zugriff (Token) und Buchhaltung:</b> fünfmal schnell auf die Versionszeile ganz unten tippen («Vorschau …»). Es erscheinen das Feld für das Token und der Buchhaltungs-Link, bis zum Neuladen.</li>' +
