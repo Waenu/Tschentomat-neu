@@ -640,6 +640,8 @@
   #calGrid { position: relative; }
   .note.h.rot-warn { background: #C62828; border: 3px solid #8E1B1B; color: #fff; }
   .note.h.rot-warn b { color: #fff; }
+  .note.h.gelb-warn { background: var(--gelb); border: 3px solid var(--gelb-ol); color: var(--gelb-fg); }
+  .note.h.gelb-warn b { color: var(--gelb-fg); }
   #hilfeKnopf { position: fixed; right: 16px; bottom: calc(140px + env(safe-area-inset-bottom, 0px)); z-index: 6; width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 3px solid var(--accent); background: var(--surface); color: var(--accent); font: inherit; font-size: 1.5rem; font-weight: 800; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,.35); cursor: pointer; }
   #hilfeKnopf[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
   #hilfeKnopf[aria-pressed="false"]::after { content: ""; position: absolute; left: 7px; right: 7px; top: 50%; border-top: 3px solid currentColor; transform: rotate(-45deg); }
@@ -934,7 +936,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.66.0.3";
+let VERSION = "2.67.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2507,7 +2509,7 @@ function render() {
     const hEl = document.getElementById("h-" + f.id);
     if (f.id === "selbst") { hEl.textContent = ""; const r = document.createElement("span"); r.className = "rot"; r.textContent = "Selbst reinigen geht nur ohne Gäste (für euch Kinder mit Partnern und Kindern). Mit Gästen reinigen immer die Eltern."; hEl.appendChild(r); hEl.appendChild(document.createTextNode(" " + f.hint(d))); }
     else hEl.innerHTML = esc(f.hint(d)).replace(/\{\{(.+?)\}\}/g, '<span class="hl">$1</span>');   // {{Wort}} im Hinweis = hervorgehoben
-    if (f.id === (d.SM ? "art" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h rot-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
+    if (f.id === (d.SM ? "art" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h gelb-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
   });
   const nb = document.getElementById("notice");
   nb.hidden = !notice; nb.textContent = notice;
@@ -3241,7 +3243,7 @@ function listeLaden(k) { try { const l = JSON.parse(localStorage.getItem(k) || "
 function listeSichern(k, l) { try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
 const bKey = (x) => x.name + "|" + x.arr + "|" + x.dep;
 let OFFEN = listeLaden("tm2_offen"), ABGEL = listeLaden("tm2_abgelehnt");
-let zeigG = false, zeigE = false, EJAHR = 0;   // Einnahmen-Übersicht in der Verwaltung
+let zeigG = false, zeigE = false, zeigW = false, EJAHR = 0;   // Einnahmen-Übersicht in der Verwaltung
 let bestMsg = "", bestFehler = "", zeigB = false, zeigA = false, zeigL = false, bestBusy = false, zeigAns = false;
 function bestBeschr(b) { return fmtTag(b.arr) + " bis " + fmtTag(b.dep) + ", " + ((b.selbst || b.sb) ? "reinigt selbst" : "Reinigung durch Eltern") + ((b.luecke || b.lg) ? ", ganze Lücke" : "") + ", " + b.pers + (b.pers === 1 ? " Person" : " Personen") + (provVon(b) ? ", mit Vorbehalt" : "") + (b.verb ? ", verbindlich" : "") + (b.waesche === "bringen" ? ", bringt die Wäsche zurück" : b.waesche === "senden" ? ", sendet die Wäsche zurück" : ""); }
 function vkChips(x, anfrage) {
@@ -3398,6 +3400,9 @@ function bestZeigen() {
     s += '<div class="vk-nav"><button type="button" class="btn" data-zeig="A">' + (zeigA ? "Abgelehnte ausblenden" : "Abgelehnte anzeigen (" + ABGEL.length + ")") + '</button><button type="button" class="btn" data-zeig="L">' + (zeigL ? "Logbuch ausblenden" : "Logbuch anzeigen (" + LOGBUCH.length + ")") + "</button></div>";
     s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="G">' + (zeigG ? "Gäste ausblenden" : "👤 Gäste mit Namen (" + GAESTE.length + ")") + "</button></div>";
     if (zeigG) s += gaesteFormular();
+    const wp = BUCH.filter((x) => x.waesche === "bringen" || x.waesche === "senden").sort((p, q) => (p.dep < q.dep ? 1 : -1));
+    s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="W">' + (zeigW ? "Wäsche-Protokoll ausblenden" : "🧺 Wäsche-Protokoll (" + wp.length + ")") + "</button></div>";
+    if (zeigW) s += waescheProtokoll(wp);
     s += '<div class="vk-nav"><button type="button" class="btn" style="grid-column:1/-1" data-zeig="E">' + (zeigE ? "Einnahmen ausblenden" : "💰 Einnahmen") + "</button></div>";
     if (zeigE) s += einnahmenHtml();
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
@@ -3414,6 +3419,16 @@ function bestZeigen() {
 }
 function zahlText(x) {
   return "Hoi " + x.name + ", dein Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " war hoffentlich schön. 😊 Die Zahlung von " + chf(x.betrag) + " ist bei uns noch nicht eingegangen (Frist war der " + fmtTagV(zahlFrist(x)) + "). Bitte überweise den Betrag in den nächsten Tagen. Die Bankverbindung findest du im TSCHENT-O-MAT unter «Zahlung». Danke dir! Gruss, Papi";
+}
+function waescheProtokoll(l) {   // jede Wäsche-Rückgabe mit Weg, Frist, Info und Quittierung
+  if (!l.length) return '<p class="hint">Noch keine Wäsche-Rückgabe. Sie erscheint hier, sobald jemand eine Staffel beginnt.</p>';
+  const h = heuteKey();
+  return "<b>🧺 Wäsche-Protokoll</b><ul>" + l.map((x) => {
+    const bis = waescheBis(x), zu = x.waescheZurueck ? x.waescheZurueck.slice(0, 10) : "", spaet = zu ? diffDays(bis, zu) : 0;
+    const stand = zu ? "✅ quittiert am " + esc(fmtTag(zu)) + (spaet > 0 ? " (" + spaet + (spaet === 1 ? " Tag" : " Tage") + " zu spät)" : " (rechtzeitig)") : (h > bis ? "⚠️ überfällig seit " + esc(fmtTag(addDays(bis, 1))) : "⏳ offen");
+    const folge = x.sb && !istStaffelStart(x.arr, x) ? " · jetzt Folge-Aufenthalt, bringt eigene Wäsche (" + (x.waescheInfo ? "Info gegeben am " + esc(fmtTag(x.waescheInfo.slice(0, 10))) : "noch nicht informiert") + ")" : "";
+    return "<li><b>" + esc(x.name) + "</b>, " + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(x.dep)) + ": " + (x.waesche === "senden" ? "sendet per Post" : "bringt persönlich") + ", Frist bis " + esc(fmtTag(bis)) + " · " + stand + folge + "</li>";
+  }).join("") + "</ul>";
 }
 function waescheZeile(x) {
   const key = esc(bKey(x)), faellig = heuteKey() > waescheBis(x);
@@ -3455,7 +3470,8 @@ async function waescheZurueck(key) {
   bestBusy = true; bestFehler = "";
   try {
     const jetzt = jetztStr();
-    const j = await ghAendern((l, jj) => { logEintrag(jj, "Wäsche zurück: " + keyText(key)); return l.map((y) => (bKey(y) === key ? Object.assign({}, y, { waescheZurueck: jetzt }) : y)); });
+    const y0 = BUCH.find((y) => bKey(y) === key), spaet = y0 ? diffDays(waescheBis(y0), jetzt.slice(0, 10)) : 0;
+    const j = await ghAendern((l, jj) => { logEintrag(jj, "Wäsche zurück quittiert: " + keyText(key) + (y0 ? ", " + (y0.waesche === "senden" ? "per Post" : "persönlich") + ", Frist " + fmtTag(waescheBis(y0)) + (spaet > 0 ? ", " + spaet + (spaet === 1 ? " Tag" : " Tage") + " zu spät" : ", rechtzeitig") : "")); return l.map((y) => (bKey(y) === key ? Object.assign({}, y, { waescheZurueck: jetzt }) : y)); });
     buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
     bestMsg = "🧺 Wäsche zurück vermerkt: " + esc(keyText(key)) + ".";
   } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
@@ -3670,7 +3686,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   const find = (l, key) => l.find((x) => bKey(x) === key);
   if (e.target.closest("[data-zu]")) { bestMsg = ""; bestFehler = ""; bestZeigen(); return; }
   const ej = f("data-ejahr"); if (ej) { EJAHR = (EJAHR || Number(heuteKey().slice(0, 4))) + Number(ej); bestZeigen(); return; }
-  const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else if (z === "L") zeigL = !zeigL; else if (z === "G") zeigG = !zeigG; else if (z === "E") zeigE = !zeigE; else zeigA = !zeigA; bestZeigen(); return; }
+  const z = f("data-zeig"); if (z) { if (z === "B") zeigB = !zeigB; else if (z === "L") zeigL = !zeigL; else if (z === "G") zeigG = !zeigG; else if (z === "E") zeigE = !zeigE; else if (z === "W") zeigW = !zeigW; else zeigA = !zeigA; bestZeigen(); return; }
   if (e.target.closest("[data-gsave]")) {
     const q = (id) => (document.getElementById(id) || {}).value || "";
     const arr = q("gDat") || q("gSel"), typ = typWahl("gTyp"), name = gastKurz(q("gName")) || (typ === "block" ? "blockiert" : "");
@@ -3741,7 +3757,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       if (x.betrag > 0) eintrag.betrag = x.betrag;
       if (x.rechnung) eintrag.rechnung = x.rechnung;
       eintrag.bestaetigt = jetztStr();
-      const j = await ghAendern((l, jj) => { logEintrag(jj, "Bestätigt: " + keyText(ja) + (eintrag.betrag ? ", CHF " + eintrag.betrag : "") + (pv ? ", mit Vorbehalt" : "") + (x.verb ? ", verbindlich" : "")); return l.filter((y) => bKey(y) !== ja).concat([eintrag]); });
+      const j = await ghAendern((l, jj) => { logEintrag(jj, "Bestätigt: " + keyText(ja) + (eintrag.betrag ? ", CHF " + eintrag.betrag : "") + (pv ? ", mit Vorbehalt" : "") + (x.verb ? ", verbindlich" : "") + (eintrag.waesche ? ", Wäsche: " + (eintrag.waesche === "senden" ? "per Post senden" : "persönlich bringen") + " bis " + fmtTag(waescheBis(eintrag)) : "")); return l.filter((y) => bKey(y) !== ja).concat([eintrag]); });
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm2_offen", OFFEN);
       const text = bestText({ name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, luecke: x.luecke, prov: pv });

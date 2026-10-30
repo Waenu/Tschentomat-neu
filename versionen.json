@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.57.4.0 bis 2.66.0.3",
+      "v": "2.57.4.0 bis 2.67.0.0",
       "datum": "2026-10-30",
       "titel": "Änderungen vom 30.10.2026",
       "arten": [
@@ -56,7 +56,9 @@
         "Text: Die Tagesbox in der Staffel-Zeit sagt, dass der Beginn einer Staffel keine eigene Wäsche mitbringt, und nennt eine direkt folgende Staffel. Mit «Normal» ändert sich für diese nichts. Der Bescheid an einen Starter nennt die Rückgabe der Wäsche und führt keine Wäsche-Liste mehr auf.",
         "Korrektur: Die Wäsche bleibt in der Verwaltung gemeldet, auch nach der Abreise. Unter «🧺 Wäsche noch nicht zurück» steht sie mit Frist, nach Ablauf mit «Frist abgelaufen», bis Papi mit «Wäsche ist zurück» den Eingang quittiert. Vorher verschwand der Termin mit der Abreise aus der Liste.",
         "Text: Im Glossar unter «Familienstaffel» steht ein Satz zum Staffelbeginn (keine Wäsche mitbringen, Rückgabe der benutzten Wäsche) mit Verweis auf «Selber reinigen».",
-        "Text: Zwei holprige Sätze zum Staffelbeginn sprachlich bereinigt."
+        "Text: Zwei holprige Sätze zum Staffelbeginn sprachlich bereinigt.",
+        "Neu: «🧺 Wäsche-Protokoll» unter «Nachschlagen» in der Verwaltung. Jede Wäsche-Rückgabe steht mit Weg (persönlich oder Post), Frist, Stand (offen, überfällig oder quittiert, rechtzeitig oder zu spät) und der Info an einen Folge-Aufenthalt. Das Logbuch hält die Wahl bei der Bestätigung und die Quittierung mit Frist und Rechtzeitigkeit fest.",
+        "Layout: Die Staffel-Warnung im Rechner ist jetzt gelb statt rot. Rot bleibt für Konflikt und Zahlung."
       ]
     },
     {
