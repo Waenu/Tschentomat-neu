@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.57.9.3",
+      "v": "2.43.3.0 bis 2.57.9.4",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -63,7 +63,8 @@
         "Hochsaison-Hinweis im Kalender: Verbindlich nur ab 7 Nächten, mit Vorbehalt bei jeder Dauer.",
         "Legende der Buchungsübersicht: «von Papi eingetragen» entfernt (unverständlich für die Kinder); doppelter Eintrag «Familie» weggelassen.",
         "Hochsaison-Hinweis im Kalender: «mit Vorbehalt ab 4 Nächten» statt «bei jeder Dauer» (Wert aus den Einstellungen).",
-        "Hochsaison-Hinweis im Kalender: «Termin ist fest und in Airbnb gesperrt» (wie im Glossar)."
+        "Hochsaison-Hinweis im Kalender: «Termin ist fest und in Airbnb gesperrt» (wie im Glossar).",
+        "Legende der Buchungsübersicht: Besen und Eimer entfernt, sie erscheinen nicht mehr im Balken (nur in der Tages-Box)."
       ]
     },
     {
