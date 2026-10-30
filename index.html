@@ -697,8 +697,8 @@
   .bk.gruen.mit { -webkit-mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); mask: radial-gradient(circle 16px at 100% 50%, transparent 15.5px, #000 16px); }
   .bk.gelb.ein { padding-left: 19px; }
   .bk.konf { box-shadow: 0 0 0 2.5px #C0392B; }
-  .bk.eigen { filter: drop-shadow(0 0 4px #FFD54A) drop-shadow(0 0 2px #FFD54A); animation: eigenGlow 3.2s ease-in-out infinite; }   /* eigener, noch nicht angetippter Balken */
-  @keyframes eigenGlow { 0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 213, 74, .7)); } 40% { filter: drop-shadow(0 0 12px #FFD54A) drop-shadow(0 0 5px #FFD54A) drop-shadow(0 0 2px #FFD54A); } }
+  .bk.eigen { filter: drop-shadow(0 0 3px #FFD54A); animation: eigenGlow 3.2s ease-in-out infinite; }   /* eigener, noch nicht angetippter Balken */
+  @keyframes eigenGlow { 0%, 100% { filter: drop-shadow(0 0 2px rgba(255, 213, 74, .6)); } 40% { filter: drop-shadow(0 0 7px #FFD54A) drop-shadow(0 0 2px #FFD54A); } }
   .bk.eigen-h::after { content: "👆"; position: absolute; right: 7px; top: 50%; transform: translateY(-50%); font-size: .85rem; line-height: 1; }
   @media (prefers-reduced-motion: reduce) { .bk.eigen { animation: none; } }
   .bk.sw { padding: 0 4px; line-height: 24px; justify-content: center; text-align: center; background: transparent; border: 0; border-radius: 14px; opacity: 1; color: var(--fg); font-size: .7rem; }
@@ -917,7 +917,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.58.0.1";
+let VERSION = "2.58.0.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
