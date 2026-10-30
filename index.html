@@ -721,6 +721,7 @@
   .bk.eigen-q { filter: drop-shadow(0 0 3px rgba(255, 213, 74, .6)); }   /* nach dem Antippen: leiser Dauerschein als Suchhilfe */
   .bk.eigen-h::after { content: "👆"; position: absolute; right: 7px; top: 50%; transform: translateY(-50%); font-size: .85rem; line-height: 1; }
   @media (prefers-reduced-motion: reduce) { .bk.eigen { animation: none; } }
+  .bk.wunsch { background: color-mix(in srgb, var(--accent) 22%, transparent); border: 2px dashed var(--accent); color: var(--fg); font-weight: 700; pointer-events: none; box-sizing: border-box; z-index: 3; }
   .bk.sw { padding: 0 4px; line-height: 24px; justify-content: center; text-align: center; background: transparent; border: 0; border-radius: 14px; opacity: 1; color: var(--fg); font-size: .7rem; }
   .bk.sw, .bk-leg .k-sw { background-color: transparent; }
   /* Ameisenpfad um den Läufer-Balken: gestrichelte Linie, die dem runden Rand folgt wie bei den Symbolen */
@@ -939,7 +940,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.70.1.1";
+let VERSION = "2.71.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1895,7 +1896,7 @@ function eigenMerken(k) {
 function zeichneBalken(gr) {
   const g = gr || document.getElementById("calGrid");
   g.querySelectorAll(".bk").forEach((e) => e.remove());
-  if ((!BUCH.length && !GAESTE.length) || g.offsetWidth === 0) return;
+  if ((!BUCH.length && !GAESTE.length && !(ARR && DEP)) || g.offsetWidth === 0) return;
   const zell = new Map();
   g.querySelectorAll("button.cal-d").forEach((c) => zell.set(c.dataset.k, c));
   const ks = Array.from(zell.keys()).sort();
@@ -1943,6 +1944,7 @@ function zeichneBalken(gr) {
         const kopf = lab ? ((labZ.has(arr[0]) && (nm ? breite >= (zl.length === 1 && (von < ks[0] || bis > ks[ks.length - 1]) ? nmBr + 3 + 40 : 72) : breite >= 40)) ? '<b class="zk zl">' + lab + "</b>" : "") : (breite >= 26 ? zk(rz) : "");   // Beschriftung einmal pro Umbruch im längeren Stück, ganz vorne; der Name kürzt oder bricht um
         mk("air", links, breite, kopf + (nm ? '<span class="bkn">' + esc(text) + "</span>" : "")); return;
       }
+      if (klasse === "wunsch") { mk("wunsch", links, breite, breite >= 64 ? "Dein Termin" : ""); return; }
       if (klasse === "sw") { mk("sw", links, breite, ANT + (breite >= 34 ? LAEUFER : "")); return; }
       const konf = /\bkonf\b/.test(klasse) ? " konf" : "";
       // Buchungen aus der App: gleiche Schrift wie die Gastbalken, Beschriftung "Fam." einmal pro Umbruch im längeren Stück; Sicherheit zeigt die Farbe, alles Weitere steht in der Box
@@ -1975,6 +1977,7 @@ function zeichneBalken(gr) {
   schweifListe().forEach((s) => zeichne(s.von < heuteKey() ? heuteKey() : s.von, s.bis, s.von >= heuteKey(), s.bisMitte, "sw", "", null, ""));
   gaesteBalken().forEach((x) => zeichne(x.arr, x.end, true, true, "air", x.typ === "block" && /^blockiert$/i.test(x.name) ? "" : x.name, null, TYP_SYM[x.typ] || TYP_SYM.airbnb, eigenStatus(x, true)));
   BUCH.forEach((b) => zeichne(b.arr, b.dep, true, true, (b.prov ? "gelb" : "gruen") + (provKonflikt(b) ? " konf" : ""), b.name, b.prov && !provKonflikt(b) ? provSicherBis() : null, "", eigenStatus(b)));
+  if (ARR && DEP) zeichne(ARR, DEP, true, true, "wunsch", "", null, "");   // gewählter Wunschtermin: Balken von der Mitte des Anreisetags bis zur Mitte des Abreisetags
   balkenPassen(g);
 }
 // Baut die Zellen eines Monats (Wochentage, Tage, Tage des Nachbarmonats) in das Gitter g
