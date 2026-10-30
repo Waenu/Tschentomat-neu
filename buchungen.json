@@ -1,6 +1,17 @@
 {
   "_hinweis": "Bestätigte Aufenthalte der Familie (Vorschau 2.0.0.0, getrennt von der gültigen Version). Pro Eintrag: name, arr = Anreise, dep = Abreise (JJJJ-MM-TT), selbst = true wenn die Kinder selbst reinigen, pers = Personen mit Bett. Eintrag löschen = Storno.",
-  "buchungen": [],
+  "buchungen": [
+    {
+      "name": "Miriam",
+      "arr": "2026-12-09",
+      "dep": "2026-12-13",
+      "selbst": false,
+      "pers": 3,
+      "betrag": 460,
+      "rechnung": "Gesendet am Fr 30.10.2026, 03:49 Uhr. App-Version 2.57.9.3.\nAnreise\tMittwoch 9.12.2026\nAbreise\tSonntag 13.12.2026 (4 Nächte)\nFamilie\tIch und 2 Kinder\nGäste\t0\nZimmer 1 unberührt\tJa\nTotal laut Rechner\tCHF 460.–\n#Preisberechnung\nFamilie pro Nacht\tCHF 55.–\nÜbernachtung (4 Nächte)\tCHF 220.–\nReinigung\tCHF 240.–\nZimmer 1 und rotes Bad bleiben unberührt: CHF 15.– weniger pro Nacht, die Familie zahlt CHF 55.– statt CHF 70.–.",
+      "bestaetigt": "2026-10-30T03:49"
+    }
+  ],
   "logbuch": [
     {
       "t": "2026-10-27T11:05",
@@ -201,6 +212,10 @@
     {
       "t": "2026-10-30T03:21",
       "text": "Entfernt: Miriam, Sa 15.05.2027 bis Sa 22.05.2027"
+    },
+    {
+      "t": "2026-10-30T03:49",
+      "text": "Bestätigt: Miriam, Mi 9.12.2026 bis So 13.12.2026, CHF 460"
     }
   ]
 }
