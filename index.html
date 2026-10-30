@@ -604,9 +604,11 @@
   #bestKasten .vk.warn { border-color: #C9A227; }
   #bestKasten .vk.rot { border-color: #C62828; }
   #bestKasten .vkd { margin: 6px 0; }
-  #bestKasten .vkd > summary { min-height: 44px; border: 3px solid var(--gruen); border-radius: 14px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
+  #bestKasten .vkd > summary { min-height: 44px; border: 2px solid var(--gruen); border-radius: 14px; padding: 8px 12px; background: var(--surface); color: inherit; white-space: normal; font-size: 1rem; justify-content: space-between; text-align: left; }
   #bestKasten .vkd.prov > summary { border-color: #C9A227; }
   #bestKasten .vkd[open] > summary { margin-bottom: 4px; }
+  #bestKasten .vkd[open] > summary { background: var(--accent); color: var(--accent-fg); }   /* offen: gefüllt wie alle Menüs der App */
+  #bestKasten .vkd > .vk { border-width: 2px; }
   #bestKasten .vkd > summary b { font-weight: 700; }
   #bestKasten .vkd-t { flex: 1; min-width: 0; display: block; }
   #bestKasten .vk-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
@@ -947,7 +949,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.72.1.3";
+let VERSION = "2.72.2.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
