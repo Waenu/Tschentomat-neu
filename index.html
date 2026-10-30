@@ -360,6 +360,7 @@
   .bar .lab small.spar { opacity: 1; font-weight: 700; color: #0A5A2A; }
   #nachOben { position: fixed; left: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); z-index: 6; background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 22px; padding: 10px 16px; font: inherit; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
   .start { display: flex; flex-direction: column; gap: 10px; }
+  body.rechner-an .start2 { display: none; }   /* beim Buchen steht die Cheminée-Anleitung nicht im Weg */
   #rechner[hidden] + .start2 { margin-top: -8px; }   /* ohne offenen Rechner bleibt der Abstand wie zwischen den Knöpfen */
   .bigbtn { display: flex; align-items: center; justify-content: flex-start; gap: 12px; width: 100%; min-height: 96px; font: inherit; font-size: 1.2rem; font-weight: 700; color: var(--accent); background: var(--surface); border: 3px solid var(--accent); border-radius: 12px; cursor: pointer; padding: 10px 16px 10px 24px; }
   .an-auge, .an-bulb, .an-fire { display: inline-block; }
@@ -907,7 +908,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.4.2";
+let VERSION = "2.57.5.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
