@@ -908,7 +908,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.57.5.0";
+let VERSION = "2.57.6.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3617,6 +3617,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   const speichern = () => { try { localStorage.setItem("tm2_hilfe", an ? "1" : "0"); } catch (e) {} };
   const START = "<b>💡 Hilfe ist an.</b> Tippe einen Tag an, dann erklärt er sich. Zum Wechseln des Monats wischst du im Kalender nach links oder rechts. Mit gestrichelten Symbolen wie " + symBtn("b-luecke", "🧩") + " springst du zur ausführlichen Erklärung. Mehr dazu unter «Benutzung» " + symBtn("b-benutzung", "📖") + ". Mit dem Knopf <span class='zei hilfe'>?</span> unten rechts schaltest du die Hilfe aus.";
   const zeigen = (html, zelle, still) => {
+    if (html == null) { blase.hidden = true; return; }   // nichts Neues zu sagen: keine Box
     blase.innerHTML = '<div class="txt">' + html + '</div><button type="button" id="calBlaseZu" aria-label="Hilfe schliessen">✕</button>';
     blase.hidden = false;
     try { gbSumme(); } catch (e) {}
@@ -3677,10 +3678,11 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (k < heute) return kopf + "<p>Dieser Tag liegt in der Vergangenheit.</p>";
     if (ARR && DEP && k === DEP && !BUCH.some((b) => b.arr <= k && k < b.dep)) {   // gewählter Abreisetag: Box zur Auswahl statt der Tagesinfo
       const p = [], n = diffDays(ARR, DEP), gast = BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null, folge = BUCH.find((b) => b.arr === k);
-      p.push("Dein Aufenthalt: " + esc(fmtTag(ARR)) + " bis " + esc(fmtTag(DEP)) + " = " + n + (n === 1 ? " Nacht" : " Nächte") + ".");
+      // «Dein Aufenthalt: … = n Nächte» steht schon oben beim Termin, darum hier nicht nochmals
       if (folge) p.push("Am Abreisetag beginnt der Aufenthalt von <b>" + esc(folge.name) + "</b>.");
       else if (BELEGT.has(k)) p.push("Am Abreisetag reist " + (gast && gast.name ? "ein Airbnb-Gast (<b>" + esc(gast.name) + "</b>)" : "ein Airbnb-Gast") + " an. Er kommt erst nachmittags, bis dahin seid ihr abgereist.");
       if ((BELEGT.has(k) || !istRuhe(k)) && S.selbst !== "Nein") p.push(S.selbst === "Ja" ? "🔗 <b>Staffel endet hier.</b> Die Endreinigung (" + chf(P.reinigung) + ") fällt jetzt an und wird unter den Reisegruppen der Staffel aufgeteilt." : "🔗 Wählst du «Staffel», endet sie hier. Die Endreinigung (" + chf(P.reinigung) + ") fällt dann an und wird unter den Reisegruppen der Staffel aufgeteilt.");
+      if (!p.length) return null;   // am Abreisetag gibt es sonst nichts zu sagen
       return "<b>Abreise: " + esc(fmtTag(k)) + "</b>" + p.map((t) => "<p>" + t + "</p>").join("");
     }
     const z = [], zs = [], zh = [];

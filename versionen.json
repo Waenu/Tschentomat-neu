@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.57.5.0",
+      "v": "2.43.3.0 bis 2.57.6.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -52,7 +52,8 @@
         "Hochsaison unter 7 oder über 14 Nächten: Rote Meldung «Nur mit Vorbehalt möglich» direkt bei der Terminwahl im Kalender, statt des neutralen Hinweises.",
         "Hervorhebung wieder kräftig gelb, aber nur wenig höher als das Wort. Sie gilt jetzt auch in den Hinweisen unter den Fragen: «Staffel», «Normal», «Verbindlich», «Mit Vorbehalt», «Ja» und «Nein» stechen heraus. Staffel-Zeit: «fest (in Airbnb gesperrt)».",
         "Fehlt noch eine Auswahl, bleibt das Preisfeld weg. Die Leiste unten sagt «Bitte wählen: …» und darunter in einer neuen Zeile «Der Preis erscheint, sobald alles gewählt ist.»",
-        "Beim Buchen (Preisrechner offen) wird der Knopf «Cheminée-Anleitung» unten nicht mehr angezeigt. Auf der Startseite bleibt er."
+        "Beim Buchen (Preisrechner offen) wird der Knopf «Cheminée-Anleitung» unten nicht mehr angezeigt. Auf der Startseite bleibt er.",
+        "Kalender: Tippst du den gewählten Abreisetag an, erscheint die Box nur noch, wenn sie etwas Neues sagt (zum Beispiel Anreise eines Airbnb-Gasts oder Ende der Staffel). Die doppelte Zeile «Dein Aufenthalt: … Nächte» ist weg."
       ]
     },
     {
