@@ -31,6 +31,14 @@
       "typ": "fam"
     },
     {
+      "arr": "2027-01-07",
+      "dep": "2027-01-10",
+      "name": "Manuel und Freunde",
+      "typ": "fam",
+      "quelle": "kalender",
+      "kal": "Manuel und Freunde"
+    },
+    {
       "arr": "2027-01-15",
       "dep": "2027-01-22",
       "name": "Janine Collins",
