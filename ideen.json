@@ -143,10 +143,10 @@
       "text": "Idee von Papi am 29.10.2026, zum Andenken: Eine Belohnung für Familienmitglieder, die Gäste ins Chalet bringen. Noch nichts festgelegt. Offen: Wer gilt als «Gäste bringen» (Mitreisende, Ext.-Gäste mit Vertrag), welche Art von Belohnung (Preisvorteil, Betrag, Geste), und wie sie zur bestehenden Ersparnis «Mit Gästen sparst du» passt."
     },
     {
-      "status": "geplant",
+      "status": "arbeit",
       "art": "wunsch",
       "titel": "Suche mit Lupe im Kalender",
-      "text": "Lupe oben am Kalender, Suchfeld. Eingabe wie «Jerome», «BnB», «Ext.» oder «Marianne» zeigt alle passenden Termine als Liste. Gruppen: Künftige (nächster zuoberst) und Vergangene (zugeklappt). Zeile: Datum, Name, Art (Fam., BnB, Ext.), Nächte. Antippen springt in den Monat und zeigt die Tages-Box. Läuft nur auf bereits geladenen Daten (Buchungen und Gästeliste). Kinder sehen nur, was sie im Kalender auch sehen; Airbnb-Gastnamen bleiben den Eltern vorbehalten. Offen: Airbnb-Gäste für Papi durchsuchbar (Vorschlag: ja), Platz der Lupe."
+      "text": "Stufe 1 gebaut (Version 2.61.0.0): Lupe oben neben dem Hell/Dunkel-Schalter, Suche in Terminen und Hilfekapiteln, Treffer rosa, gruppiert nach Künftige Termine, Vergangene Termine und Hilfe. Kinder: alle Familien-Termine, Beträge nur die eigenen; Airbnb-Gäste und Gäste mit Vertrag nur Papi. Noch offen (Stufe 2): Texte, die nicht im Hilfekapitel stehen, und Hinweise unter dem Wählfenster."
     }
   ]
 }

@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.43.3.0 bis 2.60.0.0",
+      "v": "2.43.3.0 bis 2.61.0.0",
       "datum": "2026-10-29",
       "titel": "Änderungen vom 29.10.2026",
       "arten": [
@@ -75,7 +75,8 @@
         "Untere Leiste: Hinweis «maximal CHF … mit Endreinigung» in kleinerer Schrift, damit die Leiste niedriger bleibt (Wunsch von Jerome bleibt erhalten).",
         "Papi: In der «Ansicht als» (Kindansicht) leuchten die Balken des gewählten Kindes zum Testen. «Gesehen» gilt dort nur bis zum Neuladen, damit sich das Leuchten wiederholen lässt.",
         "Aufräumen: neun ungenutzte Funktionen und zwei ungenutzte Stilregeln entfernt. Keine sichtbare Änderung.",
-        "Neu (nur Papi): Bestätigte feste Termine, die Airbnb noch nicht als belegt meldet, werden gemeldet: Zähler im Papi-Bereich und in der Zeile «Buchungssicherheit» («in Airbnb noch nicht gesperrt»)."
+        "Neu (nur Papi): Bestätigte feste Termine, die Airbnb noch nicht als belegt meldet, werden gemeldet: Zähler im Papi-Bereich und in der Zeile «Buchungssicherheit» («in Airbnb noch nicht gesperrt»).",
+        "Neu: Suche mit Lupe (oben neben dem Hell/Dunkel-Schalter). Sie findet Termine (Name, Art, fest, mit Vorbehalt, Datum, Monat) und Stellen in der Hilfe. Treffer sind rosa hinterlegt. Kinder finden alle Familien-Termine und nur die eigenen Beträge, Airbnb-Gäste und Gäste mit Vertrag findet nur Papi."
       ]
     },
     {

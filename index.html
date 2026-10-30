@@ -135,6 +135,17 @@
   #fsBtn span.on { color: var(--fg); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
   #fsBtn .s1 { font-size: 0.8rem; } #fsBtn .s2 { font-size: 1rem; } #fsBtn .s3 { font-size: 1.3rem; }
   #themeBtn { width: 44px; height: 44px; font-size: 1.3rem; line-height: 1; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
+  #suchBtn { width: 44px; height: 44px; font-size: 1.2rem; line-height: 1; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
+  /* Suche: Treffer rosa (gelb ist schon vergeben) */
+  mark.such { background: #F6A5C8; color: #1a1a1a; border-radius: 4px; padding: 0 2px; font-weight: 700; }
+  #suchFeld { font: inherit; font-size: 1.1rem; padding: 12px 14px; border: 2px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--fg); width: 100%; box-sizing: border-box; }
+  .such-gr { border: 2px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--surface); }
+  .such-gr > summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+  .such-gr .n { color: var(--muted); font-weight: 400; margin-left: 6px; }
+  .such-z, .such-h { display: block; width: 100%; text-align: left; font: inherit; color: var(--fg); background: var(--bg); border: 2px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 8px 0; cursor: pointer; line-height: 1.35; }
+  .such-h small { display: block; color: var(--muted); }
+  .such-h .ti { font-weight: 700; display: block; }
+  .such-w { }
   #themeBtn[data-mode="light"] { background: #000; border-color: #000; }
   #animBtn { position: relative; width: 44px; height: 44px; font-size: 1.3rem; line-height: 1; background: var(--surface); color: var(--fg); border: 2px solid var(--line); border-radius: 50%; cursor: pointer; padding: 0; }
   #animBtn[data-st="0"] { opacity: .75; }
@@ -752,7 +763,7 @@
 <body>
 <div id="vorschau" style="background:#C98A00;color:#1a1200;text-align:center;font:700 14px system-ui,sans-serif;padding:6px 10px;padding-top:calc(6px + env(safe-area-inset-top,0px))">VORSCHAU 2.0.0.0 · nicht die gültige Version</div>
 <div class="wrap">
-  <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="animBtn" aria-label="Bewegung ändern" data-st="1" title="Bewegung ändern"><svg class="glb" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><clipPath id="glbK"><circle cx="16" cy="16" r="13"/></clipPath></defs><circle cx="16" cy="16" r="13" fill="#2F7FD0"/><g clip-path="url(#glbK)"><g class="glb-land" fill="#4CAF6A"><path id="glbL" d="M3 11 q4-5 9-2 q3 3 -1 6 q-3 3 -6 1 z M17 18 q5-3 8 1 q1 5 -4 6 q-4 -1 -4 -7 z M22 8 q3-2 6 1 q0 3 -4 3 z"/><use href="#glbL" x="32"/></g></g><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 8 q3-3 7-3" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
+  <div class="themeRow"><button type="button" id="fsBtn" aria-label="Schriftgrösse ändern"><span class="s1">A</span><span class="s2">A</span><span class="s3">A</span></button><button type="button" id="animBtn" aria-label="Bewegung ändern" data-st="1" title="Bewegung ändern"><svg class="glb" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><clipPath id="glbK"><circle cx="16" cy="16" r="13"/></clipPath></defs><circle cx="16" cy="16" r="13" fill="#2F7FD0"/><g clip-path="url(#glbK)"><g class="glb-land" fill="#4CAF6A"><path id="glbL" d="M3 11 q4-5 9-2 q3 3 -1 6 q-3 3 -6 1 z M17 18 q5-3 8 1 q1 5 -4 6 q-4 -1 -4 -7 z M22 8 q3-2 6 1 q0 3 -4 3 z"/><use href="#glbL" x="32"/></g></g><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 8 q3-3 7-3" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></button><button type="button" id="suchBtn" aria-label="Suchen" title="Suchen">🔍</button><button type="button" id="themeBtn" aria-label="Hell- oder Dunkelmodus umschalten"></button></div>
   <header class="sign">
     <button type="button" id="testTip" tabindex="-1" aria-hidden="true"></button>
     <h1>TSCHENT-O-MAT</h1>
@@ -908,6 +919,7 @@
 <button type="button" id="nachOben" hidden aria-label="Nach oben zum Menü">↑ Menü</button>
 <div class="bar" id="bar" role="status"><div class="in"><span class="lab" id="barLab"></span><span class="val" id="barVal"></span></div></div>
 
+<div class="ov" id="ovSuche" hidden role="dialog" aria-label="Suche"><div class="ov-in" id="ovSucheIn"></div></div>
 <div class="ov" id="ovVer" hidden role="dialog" aria-label="Versionshistorie"><div class="ov-in" id="ovVerIn"></div></div>
 <div class="ov" id="ovAnreise" hidden role="dialog" aria-label="Anreise: Wäsche mitnehmen"><div class="ov-in" id="ovAnreiseIn"></div></div>
 <div class="ov" id="ovCheck" hidden role="dialog" aria-label="Reinigungs-Checkliste"><div class="ov-in" id="ovCheckIn"></div></div>
@@ -917,7 +929,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.60.0.0";
+let VERSION = "2.61.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1570,6 +1582,7 @@ function springeZu(id) {
   document.getElementById("zurueck").hidden = false;
 }
 function zurueckGehen() {
+  suchMarkenWeg();
   document.getElementById("zurueck").hidden = true;
   if (!ZURUECK) return;
   const z = ZURUECK; ZURUECK = null;
@@ -3383,6 +3396,103 @@ document.getElementById("bestKasten").addEventListener("change", (e) => {
     aufentZeigen(); render(); bestZeigen(); renderKalender();
     ladeBuchungen().then(() => { aufentZeigen(); render(); bestZeigen(); renderKalender(); });   // frische Daten, ein Neuladen der Seite ist nicht nötig
   }
+});
+// ---- Suche (Lupe): Termine (Buchungen und Gästeliste) und Hilfekapitel, Treffer rosa ----
+const sFold = (t) => String(t).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const sTerme = (q) => sFold(q).split(/\s+/).filter((w) => w.length >= 2);
+const sTrifft = (t, terme) => { const f = sFold(t); return terme.length > 0 && terme.every((w) => f.indexOf(w) >= 0); };
+function sMark(text, terme) {   // maskierter HTML-Text mit rosa Treffern
+  const f = sFold(text);
+  if (f.length !== text.length) return esc(text);
+  const rng = [];
+  terme.forEach((w) => { let i = f.indexOf(w); while (i >= 0) { rng.push([i, i + w.length]); i = f.indexOf(w, i + w.length); } });
+  rng.sort((a, b) => a[0] - b[0]);
+  const m = [];
+  rng.forEach((r) => { const l = m[m.length - 1]; if (l && r[0] <= l[1]) l[1] = Math.max(l[1], r[1]); else m.push(r.slice()); });
+  let h = "", p = 0;
+  m.forEach((r) => { h += esc(text.slice(p, r[0])) + '<mark class="such">' + esc(text.slice(r[0], r[1])) + "</mark>"; p = r[1]; });
+  return h + esc(text.slice(p));
+}
+function sTermine(terme) {
+  const papi = !!(TOKEN && !ABSENDER), heute = heuteKey(), liste = [];
+  const typ = { fam: "Familie", airbnb: "Airbnb-Gast", extern: "Gast mit Vertrag", block: "blockiert" };
+  const datum = (a, d) => fmtTag(a) + " bis " + fmtTag(d) + " (" + MONATE[monatVon(a) - 1] + ", " + diffDays(a, d) + (diffDays(a, d) === 1 ? " Nacht)" : " Nächte)");
+  BUCH.forEach((b) => {
+    const eig = papi || (ABSENDER !== "" && b.name === ABSENDER);
+    const t = [b.name, "Familie", b.prov ? "mit Vorbehalt" : "fest", b.sb ? "reinigt selbst" : "Eltern reinigen"];
+    if (eig && b.betrag > 0) { t.push(chf(b.betrag)); t.push(b.bezahlt ? "bezahlt" : "offen"); }
+    t.push(datum(b.arr, b.dep));
+    liste.push({ arr: b.arr, end: b.dep, teile: t });
+  });
+  GAESTE.forEach((x) => {
+    const end = gastEnde(x);
+    if (x.typ === "fam" ? BUCH.some((b) => b.arr < end && b.dep > x.arr) : !papi) return;
+    const t = [x.name, typ[x.typ] || "Airbnb-Gast"];
+    if (x.typ === "fam") t.push("fest");
+    t.push(datum(x.arr, end));
+    liste.push({ arr: x.arr, end: end, teile: t });
+  });
+  return liste.filter((e) => sTrifft(e.teile.join(" · "), terme));
+}
+function sHilfe(terme) {
+  const out = [];
+  document.querySelectorAll("#b-begriffe details.sub").forEach((d) => {
+    for (let e = d; e && e.id !== "b-begriffe"; e = e.parentElement) if (e.hidden) return;
+    const bc = d.querySelector(".bc"), sm = d.querySelector("summary");
+    if (!bc) return;
+    const titel = (sm ? sm.textContent : "").replace(/\s+/g, " ").trim(), text = bc.textContent.replace(/\s+/g, " ").trim();
+    if (!sTrifft(titel + " " + text, terme)) return;
+    const saetze = text.split(/(?<=[.!?:;])\s+/).filter((z) => terme.some((w) => sFold(z).indexOf(w) >= 0));
+    out.push({ id: d.id, titel: titel, saetze: saetze });
+  });
+  return out;
+}
+function sKurz(satz, terme) {   // langen Satz um den ersten Treffer kürzen
+  if (satz.length <= 230) return satz;
+  const f = sFold(satz); let i = -1;
+  terme.forEach((w) => { const k = f.indexOf(w); if (k >= 0 && (i < 0 || k < i)) i = k; });
+  const von = Math.max(0, i - 90), bis = Math.min(satz.length, von + 230);
+  return (von > 0 ? "… " : "") + satz.slice(von, bis) + (bis < satz.length ? " …" : "");
+}
+function sucheLos() {
+  const feld = document.getElementById("suchFeld"), ziel = document.getElementById("suchErg");
+  if (!feld || !ziel) return;
+  suchMarkenWeg();
+  const terme = sTerme(feld.value);
+  if (!terme.length) { ziel.innerHTML = '<p class="hint">Tippe ein Wort, mindestens 2 Buchstaben: ein Name (z. B. «Jerome»), eine Art («BnB», «Ext.», «Familie») oder ein Begriff («fest», «Vorbehalt», «Staffel»). Gesucht wird in den Terminen und in der Hilfe.</p>'; return; }
+  const heute = heuteKey(), t = sTermine(terme), kuenftig = t.filter((e) => e.end >= heute).sort((p, q) => (p.arr < q.arr ? -1 : 1)), vorbei = t.filter((e) => e.end < heute).sort((p, q) => (p.arr < q.arr ? 1 : -1));
+  const zeile = (e) => '<button type="button" class="such-z" data-k="' + esc(e.arr) + '"><b>' + sMark(e.teile[0], terme) + "</b> · " + e.teile.slice(1).map((x) => sMark(x, terme)).join(" · ") + "</button>";
+  const gruppe = (titel, n, inhalt, offen) => n ? '<details class="such-gr"' + (offen ? " open" : "") + "><summary>" + titel + '<span class="n">' + n + "</span></summary>" + inhalt + "</details>" : "";
+  const max = 30, kz = (l) => l.slice(0, max).map(zeile).join("") + (l.length > max ? '<p class="hint">… und ' + (l.length - max) + " weitere. Suche genauer.</p>" : "");
+  const h = sHilfe(terme);
+  const hz = h.map((x) => '<button type="button" class="such-h" data-id="' + esc(x.id) + '"><span class="ti">' + sMark(x.titel, terme) + "</span>" + x.saetze.slice(0, 3).map((z) => "<small>" + sMark(sKurz(z, terme), terme) + "</small>").join("") + (x.saetze.length > 3 ? "<small>… " + (x.saetze.length - 3) + " weitere Stellen im Kapitel</small>" : "") + "</button>").join("");
+  const html = gruppe("📅 Künftige Termine", kuenftig.length, kz(kuenftig), true) + gruppe("🕘 Vergangene Termine", vorbei.length, kz(vorbei), false) + gruppe("📖 In der Hilfe", h.length, hz, true);
+  ziel.innerHTML = html || '<p class="hint">Nichts gefunden für «' + esc(feld.value.trim()) + '».</p>';
+}
+function suchMarkieren(wurzel, terme) {   // Treffer im geöffneten Hilfekapitel rosa markieren
+  const tw = document.createTreeWalker(wurzel, NodeFilter.SHOW_TEXT, null), liste = [];
+  while (tw.nextNode()) liste.push(tw.currentNode);
+  liste.forEach((n) => {
+    if (!n.parentNode || (n.parentNode.closest && n.parentNode.closest("script, style, mark.such"))) return;
+    const t = n.nodeValue, html = sMark(t, terme);
+    if (html === esc(t)) return;
+    const sp = document.createElement("span"); sp.className = "such-w"; sp.innerHTML = html; n.parentNode.replaceChild(sp, n);
+  });
+}
+function suchMarkenWeg() { document.querySelectorAll("span.such-w").forEach((sp) => sp.replaceWith(document.createTextNode(sp.textContent))); }
+function sucheZeigen() {
+  document.getElementById("ovSucheIn").innerHTML = '<button type="button" class="ov-back" data-ov="ovSuche">← Zurück</button><h2>🔍 Suche</h2><input id="suchFeld" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" placeholder="z. B. Jerome, Vorbehalt, fest" aria-label="Suchbegriff"><div id="suchErg"></div>';
+  ovOeffnen("ovSuche", true); sucheLos();
+  setTimeout(() => { const f = document.getElementById("suchFeld"); if (f) f.focus(); }, 60);
+}
+document.getElementById("suchBtn").addEventListener("click", sucheZeigen);
+document.getElementById("ovSuche").addEventListener("input", (e) => { if (e.target && e.target.id === "suchFeld") sucheLos(); });
+document.getElementById("ovSuche").addEventListener("click", (e) => {
+  if (e.target.closest("[data-ov]")) { ovOeffnen("ovSuche", false); return; }
+  const z = e.target.closest(".such-z"), h = e.target.closest(".such-h"), feld = document.getElementById("suchFeld");
+  const terme = feld ? sTerme(feld.value) : [];
+  if (z) { ovOeffnen("ovSuche", false); zumKalender(z.dataset.k); }
+  else if (h) { ovOeffnen("ovSuche", false); springeZu(h.dataset.id); const d = document.getElementById(h.dataset.id); if (d) suchMarkieren(d, terme); }
 });
 // Von einem Eintrag in der Verwaltung zum Kalender springen: Monat öffnen, Anreisetag zeigen und kurz markieren
 function zumKalender(k) {
