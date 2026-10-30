@@ -934,7 +934,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.64.0.0";
+let VERSION = "2.64.0.1";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1183,7 +1183,7 @@ const FIELDS = [
     hint: () => S.selbst === "Nein" ? "Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")." : "Ja: Ihr bringt frische Wäsche mit und reinigt selbst. Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Regeln siehe «🧹 Selbstreinigung» im Kalender." + (S.selbst === "Ja" ? "" : " Nein: Es gilt die normale Reinigung (" + chf(P.reinigung) + ")."),
     visible: () => false, opts: () => ["Ja", "Nein"] },
   { id: "reinig", label: "🍰 Wie werden die Reinigungskosten (" + chf(P.reinigung) + ") aufgeteilt?", type: "str",
-    hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht. Bei «Nach Parteien» ist die Familie eine Partei und jeder Gast eine weitere: bei 3 Gästen zahlt die Familie ¼, bei 4 Gästen ⅕.",
+    hint: () => "Das entscheidet ihr selbst. Das Total ändert sich nicht, nur wer wie viel zahlt. Die Familie gilt immer als ein Block. Bei «Nach Personen» zählen Kinder ab 2½ Jahren wie Erwachsene, Kinder unter 2½ Jahren zählen nicht. Bei «Nach Parteien» ist die Familie eine Partei und jeder Gast eine weitere: bei 3 Gästen zahlt die Familie ¼, bei 4 Gästen ⅕. Das ist nur fair, wenn alle Parteien gleich gross sind. Sonst teilt nach Personen.",
     visible: (d) => d.GE > 0, opts: () => REINIG }
 ];
 
