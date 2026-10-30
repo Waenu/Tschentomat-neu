@@ -584,6 +584,10 @@
   .art-neu { color: #2E9E5B; } .art-fun { color: #3B7DC4; } .art-feh { color: #E07B1A; } .art-lay { color: #8E63C9; } .art-txt { color: #8A9490; }
   .ov { position: fixed; inset: 0; z-index: 100; background: var(--bg); color: var(--fg); overflow-y: auto; padding: 16px; box-sizing: border-box; }
   .ov[hidden] { display: none; }
+  .todo-box { margin: 8px 0 2px; padding: 8px 10px; border: 2px solid var(--accent); border-radius: 12px; background: var(--note-bg); color: var(--fg); }
+  .todo-box p { margin: 6px 0 2px; }
+  .todo-d { margin: 6px 0 0; }
+  .todo-d summary { cursor: pointer; font-weight: 700; }
   .cp-zeile { display: flex; gap: .5rem; align-items: center; margin: .3rem 0; }
   .cp-zeile code { flex: 1; word-break: break-word; }
   .cp-zeile .btn { flex: none; width: auto; padding: .35rem .6rem; }
@@ -942,7 +946,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.71.1.1";
+let VERSION = "2.72.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3314,6 +3318,20 @@ function vkKarte(x, cls, chips, status, acts) {
 function vkSek(titel, n) { return '<div class="vk-sec">' + titel + ' <span class="n">' + n + "</span></div>"; }
 function bescheidStatus(x) { const b = x.bescheid || ""; return "<span>" + (b ? "✉️ Bescheid gegeben am " + esc(fmtTag(b.slice(0, 10))) + ", " + b.slice(11, 16) + " Uhr" : "<b class=\"bs-fehlt\">✉️ Noch kein Bescheid gegeben</b>") + "</span>"; }
 function bescheidKnopf(x, abgelehnt) { const b = x.bescheid || ""; return bestWaLink(bestText(x, abgelehnt), bKey(x), b ? (abgelehnt ? "Nochmals Absage" : "Nochmals Bescheid") : (abgelehnt ? "Absage schicken" : "Bescheid geben")); }
+// Kopierzeile (Knopf kopiert den Text) und Titel für den Pimlical-Eintrag
+const cpZeile = (t) => '<div class="cp-zeile"><code>' + esc(t) + '</code><button type="button" class="btn" data-cp="' + esc(t) + '">📋 Kopieren</button></div>';
+function pimTitel(name, typ) {
+  const n = String(name || "").trim(), v = /\bund\b/i.test(n) ? "belegen" : "belegt";
+  if (typ === "block") return "/Blockiert";
+  return n + " " + v + " Adelboden. /" + (typ === "extern" ? "Extern" : typ === "airbnb" ? "Airbnb" : "Familie");
+}
+// Was nach einer Buchung zu tun ist: in Airbnb die Nächte sperren (Abreisetag frei lassen) und den Pimlical-Eintrag machen
+function erledigenHtml(x) {
+  const n = diffDays(x.arr, x.dep), letzte = addDays(x.dep, -1), zu = !x.prov && !nichtGesperrt(x) && BELEGT_AIR && BELEGT_AIR.has(x.arr);
+  const sp = x.prov ? "<p>🔓 <b>Mit Vorbehalt:</b> nicht in Airbnb sperren.</p>"
+    : "<p>" + (zu ? "✅ In Airbnb schon gesperrt: " : "🔒 <b>In Airbnb sperren:</b> ") + "<b>" + esc(fmtTag(x.arr)) + " bis " + esc(fmtTag(letzte)) + "</b> (" + n + (n === 1 ? " Nacht" : " Nächte") + "). Den Abreisetag <b>" + esc(fmtTag(x.dep)) + "</b> frei lassen.</p>";
+  return '<div class="todo-box"><b>📌 Jetzt erledigen</b>' + sp + "<p>🗓️ <b>In Pimlical eintragen</b> (Zeile kopieren):</p>" + cpZeile(pimTitel(x.name, "fam")) + "</div>";
+}
 function festKarte(x) {
   const key = esc(bKey(x)), prov = !!x.prov, konf = prov && provKonflikt(x);
   let st = "";
@@ -3325,6 +3343,7 @@ function festKarte(x) {
   const wzk = (x.waesche === "bringen" || x.waesche === "senden") && !x.waescheZurueck ? '<button type="button" class="btn main" data-wz="' + key + '">🧺 Wäsche ist zurück</button>' : "";
   const acts = wik + wzk + (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
+  if (x.dep >= heuteKey()) st += '<details class="todo-d"><summary>📌 Sperren und Pimlical</summary>' + erledigenHtml(x) + "</details>";
   const karte = vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
   // Zugeklappt, wenn nichts mehr zu tun ist; offen, solange etwas fehlt (Konflikt, kein Bescheid, Vorbehalt noch nicht gesperrt oder praktisch sicher). Offene Zahlungen stehen nach der Abreise oben unter «Zahlungen offen».
   const fehlt = konf || !x.bescheid || (prov && !hochVorbehalt(x) && !provSicher(x));
@@ -3444,7 +3463,7 @@ function bestZeigen() {
     if (zeigL) s += "<b>📒 Logbuch</b>" + (LOGBUCH.length ? "<ul>" + LOGBUCH.slice().reverse().map((e) => "<li><span class=\"hint\">" + esc(fmtTag(e.t.slice(0, 10))) + ", " + esc(e.t.slice(11, 16)) + " Uhr</span> " + esc(e.text) + "</li>").join("") + "</ul>" : '<p class="hint">Noch keine Einträge.</p>');
     if (zeigA) s += vkSek("✖ Abgelehnt", ABGEL.length) + (ABGEL.length ? ABGEL.map((x) => { const z = BUCH_ABGEL.find((y) => bKey(y) === bKey(x)); const xx = Object.assign({}, x, { bescheid: z ? z.bescheid : "" }); return vkKarte(xx, xx.bescheid ? "" : "offen", '<div class="vk-chips"><span class="vk-chip">' + (xx.pers ? xx.pers + (xx.pers === 1 ? " Person" : " Personen") : "Absage") + "</span></div>", bescheidStatus(xx), bescheidKnopf(xx, true) + '<button type="button" class="btn" data-wieder="' + esc(bKey(x)) + '">↩️ wieder offen</button>'); }).join("") : '<p class="hint">Keine abgelehnten Anfragen.</p>');
     if (bestFehler && !zeigG) s += '<p class="hint">⚠️ ' + esc(bestFehler) + "</p>";
-    const cpZ = (t) => '<div class="cp-zeile"><code>' + esc(t) + '</code><button type="button" class="btn" data-cp="' + esc(t) + '">📋 Kopieren</button></div>';
+    const cpZ = cpZeile;
     s += '<details class="papi-hinweis"><summary>📋 Ablauf bei Buchungen</summary>' +
       '<p><b>🔒 Richtig in Airbnb sperren</b></p>' +
       '<p>Du sperrst die <b>Nächte</b>: den <b>Anreisetag ja</b>, den <b>Abreisetag nein</b>. Am Abreisetag muss die Nacht frei bleiben, sonst kann niemand anreisen und keine Staffel anschliessen. Beispiel Deborah, Do 26. bis So 29.11. (3 Nächte): 26., 27. und 28. sperren, den 29. frei lassen. Bei mehreren Terminen in Folge sperrst du jeden bis zum Vortag seiner Abreise.</p>' +
@@ -3452,8 +3471,7 @@ function bestZeigen() {
       '<p><b>Familie</b></p><ol>' +
       '<li>Termin hier bestätigen.</li>' +
       '<li>Die Nächte in Airbnb sperren (siehe oben: den Abreisetag frei lassen).</li>' +
-      '<li>In Pimlical als Titel eintragen (Zeile kopieren):</li></ol>' +
-      ["Jerome", "Deborah", "Miriam", "Manuel"].map((n) => cpZ(n + " belegt Adelboden. /Familie")).join("") + cpZ("Marianne und ich belegen Adelboden. /Familie") +
+      '<li>In Pimlical eintragen: Die fertige Zeile zum Kopieren erscheint nach dem Bestätigen im Fenster und auf der Karte unter «📌 Sperren und Pimlical».</li></ol>' +
       '<p class="hint">Ein doppelter Eintrag schadet nicht: Die bestätigte Buchung gilt, der Pimlical-Eintrag wird übersprungen.</p>' +
       '<p><b>Airbnb-Gast und Extern</b></p><ol>' +
       '<li>Der Eintrag erscheint von selbst als belegt (Abruf stündlich).</li>' +
@@ -3819,7 +3837,7 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
       buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
       OFFEN = OFFEN.filter((y) => bKey(y) !== ja); listeSichern("tm2_offen", OFFEN);
       const text = bestText({ name: x.name, arr: x.arr, dep: x.dep, selbst: x.selbst, luecke: x.luecke, prov: pv });
-      bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle, dann erscheinen beim Kind die Listen." + (pv ? " <b>Mit Vorbehalt: nicht in Airbnb sperren.</b>" : (x.verb ? " <b>Verbindlich: bitte in Airbnb sperren.</b>" : "")) + bestWaLink(text, bKey(x));
+      bestMsg = "✅ Bestätigt und gespeichert (" + esc(x.name) + "). In 1 bis 2 Minuten sehen es alle, dann erscheinen beim Kind die Listen." + (pv ? " <b>Mit Vorbehalt: nicht in Airbnb sperren.</b>" : (x.verb ? " <b>Verbindlich: bitte in Airbnb sperren.</b>" : "")) + bestWaLink(text, bKey(x)) + erledigenHtml(Object.assign({}, x, { prov: pv }));
     } else {
       const [name, arr, dep] = del.split("|");
       if (!confirm("Aufenthalt von " + name + " (" + fmtTag(arr) + " bis " + fmtTag(dep) + ") wirklich entfernen?")) { bestBusy = false; bestZeigen(); return; }
