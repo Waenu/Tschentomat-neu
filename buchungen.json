@@ -1,6 +1,18 @@
 {
   "_hinweis": "Bestätigte Aufenthalte der Familie (Vorschau 2.0.0.0, getrennt von der gültigen Version). Pro Eintrag: name, arr = Anreise, dep = Abreise (JJJJ-MM-TT), selbst = true wenn die Kinder selbst reinigen, pers = Personen mit Bett. Eintrag löschen = Storno.",
-  "buchungen": [],
+  "buchungen": [
+    {
+      "name": "Jerome",
+      "arr": "2026-11-02",
+      "dep": "2026-11-06",
+      "selbst": true,
+      "pers": 2,
+      "waesche": "bringen",
+      "betrag": 220,
+      "rechnung": "Gesendet am Fr 30.10.2026, 23:15 Uhr. App-Version 2.72.1.1.\nAnreise\tMontag 2.11.2026\nAbreise\tFreitag 6.11.2026 (4 Nächte)\nFamilie\tIch und Partner\nGäste\t0\nZimmer 1 unberührt\tJa\nSelbstreinigung\tJa\nTotal laut Rechner\tCHF 220.–\nReinigungskosten sind erst nach Ablauf der Familienstaffel bekannt und werden nachbelastet.\n#Preisberechnung\nFamilie pro Nacht\tCHF 55.–\nÜbernachtung (4 Nächte)\tCHF 220.–\nReinigung\tCHF 0.–\nZimmer 1 und rotes Bad bleiben unberührt: CHF 15.– weniger pro Nacht, die Familie zahlt CHF 55.– statt CHF 70.–.",
+      "bestaetigt": "2026-10-30T23:15"
+    }
+  ],
   "logbuch": [
     {
       "t": "2026-10-27T11:05",
@@ -249,6 +261,10 @@
     {
       "t": "2026-10-30T23:00",
       "text": "Entfernt: Jerome, Mo 2.11.2026 bis Fr 6.11.2026"
+    },
+    {
+      "t": "2026-10-30T23:15",
+      "text": "Bestätigt: Jerome, Mo 2.11.2026 bis Fr 6.11.2026, CHF 220, Wäsche: persönlich bringen bis Mo 9.11.2026"
     }
   ]
 }
