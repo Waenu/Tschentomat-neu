@@ -934,7 +934,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.65.0.1";
+let VERSION = "2.66.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2731,7 +2731,7 @@ function buchungenAn(j) {
   const bes = (b) => (typeof b.bescheid === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(b.bescheid) ? b.bescheid : "");
   BUCH_ABGEL = gut.filter((b) => b.status === "abgelehnt").map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, bescheid: bes(b) }));
   BUCH = gut.filter((b) => b.status !== "abgelehnt")
-    .map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, sb: b.selbst === true, lg: b.luecke === true, prov: PROV_AN && b.prov === true, verb: b.verb === true, waesche: b.waesche === "bringen" || b.waesche === "senden" ? b.waesche : "", waescheZurueck: typeof b.waescheZurueck === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.waescheZurueck) ? b.waescheZurueck : "", pers: Math.max(1, Number(b.pers) || 1), bescheid: bes(b), betrag: Number(b.betrag) > 0 ? Math.round(Number(b.betrag)) : 0, rechnung: typeof b.rechnung === "string" ? b.rechnung.slice(0, 4000) : "", bestaetigt: typeof b.bestaetigt === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(b.bestaetigt) ? b.bestaetigt : "", bezahlt: typeof b.bezahlt === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.bezahlt) ? b.bezahlt : "", erinnert: Array.isArray(b.erinnert) ? b.erinnert.filter((t) => typeof t === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) : [] }))
+    .map((b) => ({ name: b.name.trim(), arr: b.arr, dep: b.dep, sb: b.selbst === true, lg: b.luecke === true, prov: PROV_AN && b.prov === true, verb: b.verb === true, waesche: b.waesche === "bringen" || b.waesche === "senden" ? b.waesche : "", waescheInfo: typeof b.waescheInfo === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.waescheInfo) ? b.waescheInfo : "", waescheZurueck: typeof b.waescheZurueck === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.waescheZurueck) ? b.waescheZurueck : "", pers: Math.max(1, Number(b.pers) || 1), bescheid: bes(b), betrag: Number(b.betrag) > 0 ? Math.round(Number(b.betrag)) : 0, rechnung: typeof b.rechnung === "string" ? b.rechnung.slice(0, 4000) : "", bestaetigt: typeof b.bestaetigt === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(b.bestaetigt) ? b.bestaetigt : "", bezahlt: typeof b.bezahlt === "string" && /^\d{4}-\d{2}-\d{2}/.test(b.bezahlt) ? b.bezahlt : "", erinnert: Array.isArray(b.erinnert) ? b.erinnert.filter((t) => typeof t === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) : [] }))
     .sort((p, q) => (p.arr < q.arr ? -1 : 1));
   LOGBUCH = Array.isArray(j.logbuch) ? j.logbuch.filter((e) => e && typeof e.t === "string" && typeof e.text === "string").slice(-200) : [];
   BUCH_TAG.clear();
@@ -3281,8 +3281,11 @@ function festKarte(x) {
   let st = "";
   if (prov) st += "<span>" + (konf ? "⚠️ Konflikt mit Airbnb-Gast" : "Nicht in Airbnb gesperrt" + (provSicher(x) ? " · praktisch sicher ✓" : "")) + "</span>";
   st += bescheidStatus(x);
+  const wInfo = !!(x.sb && x.waesche && !istStaffelStart(x.arr, x));
+  if (wInfo) st += "<span>" + (x.waescheInfo ? "🧺 Wäsche-Info gegeben am " + esc(fmtTag(x.waescheInfo.slice(0, 10))) : '<b class="bs-fehlt">🧺 Noch nicht informiert: ' + esc(x.name) + " bringt jetzt eigene Wäsche</b>") + "</span>";
+  const wik = wInfo ? ' <a class="btn" data-wainfo="' + key + '" href="https://wa.me/?text=' + encodeURIComponent(waescheInfoText(x)) + '" target="_blank" rel="noopener">' + WA_SVG + (x.waescheInfo ? "Nochmals Wäsche-Info" : "Wäsche-Info senden") + "</a>" : "";
   const wzk = (x.waesche === "bringen" || x.waesche === "senden") && !x.waescheZurueck ? '<button type="button" class="btn main" data-wz="' + key + '">🧺 Wäsche ist zurück</button>' : "";
-  const acts = wzk + (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
+  const acts = wik + wzk + (prov && !hochVorbehalt(x) ? '<button type="button" class="btn main" data-fest="' + key + '">🔓→🔒 In Airbnb gesperrt</button>' : "") + bescheidKnopf(x, false) +
     '<button type="button" class="btn quiet' + (prov ? " full" : "") + '" data-bdel="' + key + '" aria-label="Aufenthalt entfernen">🗑️ ' + (prov ? "Termin entfernen" : "Entfernen") + "</button>";
   const karte = vkKarte(x, konf ? "rot" : (prov ? (!x.bescheid ? "offen" : "warn") : "ok"), vkChips(x), st, acts);   // fest = grün, offen/Vorbehalt ohne Bescheid = orange
   // Zugeklappt, wenn nichts mehr zu tun ist; offen, solange etwas fehlt (Konflikt, kein Bescheid, Vorbehalt noch nicht gesperrt oder praktisch sicher). Offene Zahlungen stehen nach der Abreise oben unter «Zahlungen offen».
@@ -3427,8 +3430,10 @@ function bestWaLink(text, key, label) { return ' <a class="btn" data-bescheid="'
 function bestText(x, abgelehnt) {
   return abgelehnt
     ? "Hoi " + x.name + ", deine Anfrage vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " können wir leider nicht bestätigen. Melde dich bei uns, dann suchen wir zusammen eine Lösung."
-    : "Hoi " + x.name + ", dein Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " ist bestätigt. 🎉 Im TSCHENT-O-MAT findest du jetzt " + (x.sb || x.selbst || x.luecke ? "die Wäsche-Liste für die Anreise und " : "") + "die Checkliste für die Abreise." + (provVon(x) ? " Achtung: Der Termin steht mit Vorbehalt und ist nicht in Airbnb gesperrt. Kommt ein Airbnb-Gast, hat er Vorrang, dann müsst ihr ausweichen." : "");
+    : "Hoi " + x.name + ", dein Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " ist bestätigt. 🎉 Im TSCHENT-O-MAT findest du jetzt " + (((x.sb || x.selbst) && !istStaffelStart(x.arr, x)) || x.luecke ? "die Wäsche-Liste für die Anreise und " : "") + "die Checkliste für die Abreise." + (provVon(x) ? " Achtung: Der Termin steht mit Vorbehalt und ist nicht in Airbnb gesperrt. Kommt ein Airbnb-Gast, hat er Vorrang, dann müsst ihr ausweichen." : "") + ((x.sb || x.selbst) && istStaffelStart(x.arr, x) ? " Du beginnst die Staffel: Das Chalet ist gereinigt und bezogen, du bringst keine Wäsche mit. Dafür nimmst du die benutzte Wäsche mit und " + (x.waesche === "senden" ? "sendest sie uns" : "bringst sie uns") + " bis spätestens " + fmtTagV(addDays(x.dep, WAESCHE_TAGE)) + "." : "");
 }
+// Hinweis an eine Familie, deren Aufenthalt nicht mehr der Beginn der Staffel ist (vor ihr wurde eine Staffel eingetragen)
+function waescheInfoText(x) { return "Hoi " + x.name + ", für deinen Aufenthalt vom " + fmtTagV(x.arr) + " bis " + fmtTagV(x.dep) + " hat sich etwas geändert: Vor dir beginnt jetzt eine andere Familie die Staffel. Du bringst deshalb eigene Bettwäsche, Handtücher und Küchentücher mit, siehe «Anreise-Wäsche» im TSCHENT-O-MAT. Die benutzte Wäsche musst du nicht zurückbringen. Das Chalet reinigst du am Schluss selbst."; }
 async function erinnertVermerken(key) {
   const jetzt = jetztStr();
   try {
@@ -3457,6 +3462,15 @@ async function zahlungVerbuchen(key) {
     bestMsg = "💳 Zahlung verbucht: " + esc(keyText(key)) + ". Die rote Meldung ist beim Kind verschwunden (nach 1 bis 2 Minuten).";
   } catch (err) { bestFehler = err && err.message ? err.message : "Das hat nicht geklappt."; }
   bestBusy = false; bestNeuZeichnen();
+}
+async function waescheInfoVermerken(key) {
+  const jetzt = jetztStr();
+  try {
+    const j = await ghAendern((l, jj) => { logEintrag(jj, "Wäsche-Info gegeben: " + keyText(key)); return l.map((y) => (bKey(y) === key ? Object.assign({}, y, { waescheInfo: jetzt }) : y)); });
+    buchungenAn(j); try { localStorage.setItem("tm2_buchungen", JSON.stringify(j)); } catch (e2) {}
+    bestFehler = "";
+  } catch (err) { bestFehler = "Der Vermerk «Wäsche-Info gegeben» konnte nicht gespeichert werden: " + (err && err.message ? err.message : "Fehler"); }
+  bestZeigen();
 }
 async function bescheidVermerken(key) {
   const jetzt = jetztStr();
@@ -3635,6 +3649,8 @@ document.getElementById("bestKasten").addEventListener("click", async (e) => {
   if (zk) { zumKalender(zk.getAttribute("data-zk")); return; }
   const wa = e.target.closest("[data-bescheid]");
   if (wa) { bescheidVermerken(wa.getAttribute("data-bescheid")); return; }
+  const wi = e.target.closest("[data-wainfo]");
+  if (wi) { waescheInfoVermerken(wi.getAttribute("data-wainfo")); return; }
   const er = e.target.closest("[data-erinnert]");
   if (er) { erinnertVermerken(er.getAttribute("data-erinnert")); return; }
   if (bestBusy) return;
@@ -3920,7 +3936,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) zb.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
       else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) zb.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> nur ab " + P.verbMin + " Nächten (bis " + P.verbMax + ", ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest und in Airbnb gesperrt) oder <b>mit Vorbehalt</b> " + (P.hochMinNaechte > 0 ? "ab " + P.hochMinNaechte + " Nächten" : "bei jeder Dauer") + " (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
-      else if (istRuhe(k) && !GAP.has(k) && !stay.length) zb.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Ohne Gäste kannst du die Staffel wählen: ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + " und bringt eigene Wäsche mit, die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern (Normal).");
+      else if (istRuhe(k) && !GAP.has(k) && !stay.length) zb.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Ohne Gäste kannst du die Staffel wählen: ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + (istStaffelStart(ARR || k) ? " und beginnt damit eine Staffel: Das Chalet ist gereinigt und bezogen, ihr bringt keine eigene Wäsche mit, besorgt aber die Rückgabe der benutzten Wäsche" : " und bringt eigene Wäsche mit") + ", die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern (Normal)." + (ARR && DEP && istStaffelStart(ARR) && schweifStop({ arr: ARR, dep: DEP }).stopper && schweifStop({ arr: ARR, dep: DEP }).stopper.sb ? " Direkt danach folgt die Staffel von " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + ": Mit «Staffel» beginnt ihr die Kette, mit «Normal» ändert sich für " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + " nichts." : ""));
       else if (!stay.length) zb.push("Nur mit Endreinigung: Normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Staffel-Zeit" + fld("ruhe") + ".") + "");
       if (festStay(k, addDays(k, 1))) zb.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
       else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
