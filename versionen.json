@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.76.1.3",
+      "v": "2.75.0.0 bis 2.77.0.0",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -19,7 +19,8 @@
         "Wo es eine Auswahl gibt (Staffel-Zeit, Hochsaison), steht jede Möglichkeit mit Doppelpunkt und gelb hinterlegt: Staffel: …, Normal: …, Verbindlich: …, Mit Vorbehalt: …",
         "Die Frage «Wie möchtest du buchen?» steht schon vor der Datumswahl da, grau und gesperrt.",
         "Das graue Feld «Wie möchtest du buchen?» ist in den Kapiteln Hochsaison und Selber reinigen erklärt (auch über die Suche mit «grau» zu finden), im Feld selbst steht ein kurzer Hinweis.",
-        "Am Abreisetag mit Airbnb-Gast steht jetzt, dass die Wohnung bis 10 Uhr verlassen sein muss."
+        "Am Abreisetag mit Airbnb-Gast steht jetzt, dass die Wohnung bis 10 Uhr verlassen sein muss.",
+        "Neu für Papi: Warnung «Abreisetag fälschlicherweise gesperrt», wenn in Airbnb nur die Nacht des Abreisetags gesperrt ist (nicht bei Sonntag, anderer Buchung oder Gast). Sie steht in der Verwaltung und im Kalender."
       ]
     },
     {
