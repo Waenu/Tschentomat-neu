@@ -846,7 +846,6 @@
         <details class="sub" id="b-prov"><summary>🔓 Termin mit Vorbehalt</summary><div class="bc" id="bc-prov"></div></details>
         <details class="sub" id="b-luecke"><summary>🧩 Lücken</summary><div class="bc" id="bc-luecke"></div></details>
         <details class="sub" id="b-ruhe"><summary>🧹 Selber reinigen</summary><div class="bc" id="bc-ruhe"></div></details>
-        <details class="sub" id="b-graufeld"><summary>⬜ Graues Feld: Wie möchtest du buchen?</summary><div class="bc" id="bc-graufeld"></div></details>
         <details class="sub" id="b-endrein"><summary>🪣 Endreinigung</summary><div class="bc" id="bc-endrein"></div></details>
         <details class="sub" id="b-zahlung"><summary>💰 Zahlung</summary><div class="bc" id="bc-zahlung"></div></details>
         <details class="sub" id="b-trinkgeld"><summary>🐖 Trinkgeld</summary><div class="bc" id="bc-trinkgeld"></div></details>
@@ -954,7 +953,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.76.1.1";
+let VERSION = "2.76.1.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -1504,7 +1503,6 @@ function bildRuhe() {
 function begriffeFuellen() {
   const ruhe = RUHE.length ? RUHE.map((a) => fmtMD(a[0]) + " bis " + fmtMD(a[1])).join(" und ") : "";
   const set = (id, html) => { const e = document.getElementById(id); if (e) e.innerHTML = html; };
-  set("bc-graufeld", "<p>Das graue Feld «Wie möchtest du buchen?» ist gesperrt, bis du im Kalender Anreise und Abreise gewählt hast. Die Möglichkeiten hängen vom ganzen Aufenthalt ab, nicht nur vom Anreisetag. Darum zeigt die App erst mit beiden Daten, was bei deinem Termin geht, und nur das.</p><p>Beispiele: In der Hochsaison geht <b>verbindlich</b> nur bei " + P.verbMin + " bis " + P.verbMax + " Nächten, <b>mit Vorbehalt</b> ab " + P.hochMinNaechte + " Nächten. In der Staffel-Zeit gibt es die <b>Staffel</b> nur, wenn nach eurer Abreise noch mindestens " + P.minNaechte + " Nächte bis zum nächsten Airbnb-Gast frei bleiben oder ihr eine laufende Staffel fortsetzt.</p><p>Gibt es bei deinem Termin nur eine Möglichkeit, erscheint das Feld nicht mehr.</p>");
   set("bc-trinkgeld", "<p>Es war ein Anliegen von Mami, dass die Kinder günstiger nach Adelboden gehen können. Dafür macht sie viel Arbeit: Fahrt, Reinigung und Wäsche, siehe «Endreinigung» " + symBtn("b-endrein", "🪣") + ".</p><p>Auch Papi packt selbstverständlich mit an: Er reinigt, repariert und hält das Chalet in Schuss.</p><p>Wer möchte, gibt Mami deshalb ein Trinkgeld. Das ist freiwillig, aber ein schönes Zeichen der Wertschätzung. Gebt, was euch passt: Es freut sie, und ihr dürft grosszügig sein 😉</p><p>Wenn ihr unter «Trinkgeld für Mami» einen Betrag eintragt, wird er zum Preis dazugerechnet und extra ausgewiesen.</p>");
   set("bc-zahlung", "<p>Die Familie überweist den ganzen Betrag, auch wenn Gäste dabei sind. Spätestens " + ZAHL_TAGE + " Tage nach dem letzten Ferientag, ohne Aufforderung.</p><p>" + esc(BANK) + "</p><p>Bitte mit Name und Datum der Ferien überweisen.</p><p>Ist die Zahlung nach Ablauf der Frist nicht verbucht, erscheint auf deinem Handy eine rote Meldung. Sie lässt sich nicht wegklicken und verschwindet erst, wenn Papi die Zahlung verbucht hat. Ab " + ERINNERUNG_AB + " Tagen nach der Abreise schickt dir Papi zusätzlich eine WhatsApp als Erinnerung. Bei Aufenthalten, die nichts kosten, gibt es keine Meldung.</p><p>Wie die Reinigung unter euch und den Gästen aufgeteilt wird, entscheidet ihr selbst. Das Total bleibt gleich, nur wer wie viel zahlt ändert sich.</p><div class=\"exbild\">" + bildAuswahl() + "</div>");
   (function () {
@@ -1555,7 +1553,7 @@ function begriffeFuellen() {
     if (!(P.hochNachtMin > 0) || !ms.length) { det.hidden = true; return; }
     det.hidden = false;
     const mon = ms.map((m) => MONATE[m - 1]).join(", ").replace(/, ([^,]*)$/, " und $1"), w7 = P.hochNachtMin * 7 + P.reinigung;
-    set("bc-hochsaison", "<p>" + fld("hoch") + "Hochsaison sind " + mon + ". Dann sind die Nächte bei Airbnb-Gästen besonders gefragt. Darum gibt es zwei Möglichkeiten: Wer Buchungssicherheit will, zahlt mehr (verbindlich). Wer den normalen Familienpreis zahlt, trägt das Risiko (mit Vorbehalt).</p><ul>" +
+    set("bc-hochsaison", "<p>" + fld("hoch") + "Hochsaison sind " + mon + ". Dann sind die Nächte bei Airbnb-Gästen besonders gefragt. Darum gibt es zwei Möglichkeiten: Wer Buchungssicherheit will, zahlt mehr (verbindlich). Wer den normalen Familienpreis zahlt, trägt das Risiko (mit Vorbehalt). Das graue Feld «Wie möchtest du buchen?» wird erst frei, wenn Anreise und Abreise gewählt sind, denn ob verbindlich oder mit Vorbehalt geht, hängt von der Zahl der Nächte ab.</p><ul>" +
       "<li><b>Preis verbindlich:</b> Eine Nacht kostet " + chf(P.hochNachtMin) + ", dazu kommt die Endreinigung (" + chf(P.reinigung) + "). Für 7 Nächte sind das " + chf(w7) + ". Ferien im Hotel sind teurer, und im Chalet habt ihr die ganze Wohnung für euch.</li>" +
       "<li><b>Preis mit Vorbehalt:</b> der normale Familienpreis wie in den anderen Monaten (" + chf(P.famPausch) + " pro Nacht für die Familie, dazu Endreinigung). Dafür trägt ihr das Risiko: Kommt ein Airbnb-Gast, müsst ihr weichen.</li>" +
       "<li><b>Auch wir Eltern verzichten:</b> In der Hochsaison verzichten wir Eltern auf eigene Ferien im Chalet, damit Einnahmen hereinkommen.</li>" +
@@ -1568,7 +1566,7 @@ function begriffeFuellen() {
   set("bc-wunschtermin", "<p>Den Wunschtermin wählt ihr im Kalender. Wie das geht, steht unter «Erklärung Kalender». Die Farben stehen als Legende unter dem Kalender. " + symBtn("b-kalender", "🗓️") + "</p>");
   set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Einzelne Nächte daraus sind nicht buchbar.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
   set("bc-ruhe", RUHE.length ? bildRuhe() + "<ul><li>Möglich vom " + ruhe.replace(" und ", " und vom ") + ".</li>" +
-    "<li>Für euch Kinder mit Partnern und Kindern. Ohne Gäste wählt ihr beim Buchen «Staffel» und reinigt selbst. Mit Gästen wählt ihr «Normal», dann reinigen die Eltern.</li>" +
+    "<li>Für euch Kinder mit Partnern und Kindern. Ohne Gäste wählt ihr beim Buchen «Staffel» und reinigt selbst. Mit Gästen wählt ihr «Normal», dann reinigen die Eltern. Das graue Feld «Wie möchtest du buchen?» wird erst frei, wenn Anreise und Abreise gewählt sind, denn ob eine Staffel geht, hängt vom Abreisetag ab.</li>" +
     "<li><b>Nicht jeder Termin geht als Staffel.</b> Eine Staffel beginnen kann nur, wer nach seiner Abreise noch eine weitere Familie anschliessen lassen kann: Bis zum nächsten Airbnb-Gast müssen mindestens " + P.minNaechte + " freie Nächte bleiben. Sonst trägt er die ganze Endreinigung allein, weil niemand seinen Anteil zahlt, und muss zusätzlich selbst putzen. Dann gilt der normale Termin, die Eltern reinigen. Wer eine laufende Staffel fortsetzt, kann immer mitmachen: Er zahlt die Endreinigung den Eltern und holt die Anteile der Familien davor zurück. Ob es geht, meldet euch der Rechner nach der Wahl des Datums («Keine Staffel möglich»).</li>" +
     "<li>Frische Bettwäsche, Handtücher und Küchentücher mitbringen und selbst beziehen. Bettdecken und Kissen nie ohne frischen Duvet- und Kissenbezug benutzen. Alles nehmt ihr wieder mit. Nur die Moltons bleiben nach dem Benutzen auf der Matratze. Die Liste mit den Mengen für eure Personenzahl findet ihr nach der Bestätigung im Knopf «🧳 Anreise-Wäsche» auf der Startseite, zum Abhaken.</li>" +
     "<li><b>Wer die Staffel beginnt:</b> Die Eltern haben das Chalet gereinigt und die Betten bezogen. Ihr bringt keine Wäsche mit und benutzt, was bereitliegt. Beim Abreisen zieht ihr die Betten ab (die Moltons bleiben), damit die nächste Familie ihre eigene Wäsche aufziehen kann. Die benutzte Wäsche nehmt ihr mit. Dafür sorgt ihr, dass sie zurückkommt: Ihr bringt sie den Eltern oder sendet sie per Post, spätestens " + WAESCHE_TAGE + " Tage nach eurer Rückreise. Das Porto zahlt, wer sendet. Beim Buchen wählt ihr, ob ihr bringt oder sendet. Dafür bezieht ihr eine fertige Wohnung und spart die eigene Wäsche. Die Endreinigung zahlen alle Familien der Staffel gleich viel, auch ihr.</li>" +
@@ -2559,7 +2557,7 @@ function render() {
     sel.classList.toggle("locked", sperr);
     const hEl = document.getElementById("h-" + f.id);
     if (f.id === "selbst") { hEl.textContent = ""; const r = document.createElement("span"); r.className = "rot"; r.textContent = "Selbst reinigen geht nur ohne Gäste (für euch Kinder mit Partnern und Kindern). Mit Gästen reinigen immer die Eltern."; hEl.appendChild(r); hEl.appendChild(document.createTextNode(" " + f.hint(d))); }
-    else if (vorab) hEl.innerHTML = "Wähle zuerst Anreise und Abreise im Kalender. Dann siehst du, was möglich ist. " + symBtn("b-graufeld", "⬜");
+    else if (vorab) hEl.textContent = "Wähle zuerst Anreise und Abreise im Kalender. Dann siehst du, was möglich ist.";
     else hEl.innerHTML = esc(f.hint(d)).replace(/\{\{(.+?)\}\}/g, '<span class="hl">$1</span>');   // {{Wort}} im Hinweis = hervorgehoben
     if (f.id === (d.SM ? "art" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h gelb-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
   });
