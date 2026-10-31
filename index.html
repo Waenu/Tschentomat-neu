@@ -981,7 +981,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.83.0.1";
+let VERSION = "2.83.0.2";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -4150,7 +4150,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     try { gbSumme(); } catch (e) {}
     if (still) return;   // Monatswechsel: nicht scrollen, sonst verschwinden die Pfeile oben aus dem Bild
     // Box ins Bild holen, falls sie unter dem Bildschirmrand liegt (der angetippte Tag bleibt sichtbar)
-    const r = blase.getBoundingClientRect(), unten = window.innerHeight - 90;
+    const r = blase.getBoundingClientRect(), unten = window.innerHeight - ((document.getElementById("bar") || {}).offsetHeight || 90) - 10;
     const ruhig = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (r.bottom > unten) {
       let d = r.bottom - unten + 10;
@@ -4247,7 +4247,8 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       if (!p.length) return null;   // am Abreisetag gibt es sonst nichts zu sagen
       return "<b>Abreise: " + esc(fmtTag(k)) + "</b><p>" + monKurz(k) + "</p>" + p.map((t) => "<p>" + t + "</p>").join("");
     }
-    const z = [], zs = [], zh = [], mon = [];   // mon: Erklärung der Monatsfarbe, steht zuoberst
+    const z = [], zs = [], zh = [], mon = [];
+    const vz = [];   // Lücke / «Kurzfristig frei»: steht ganz oben unter dem Datum, damit es nicht unter dem Bildschirmrand verschwindet   // mon: Erklärung der Monatsfarbe, steht zuoberst
     const stay = BUCH.filter((b) => b.arr <= k && k < b.dep), abr = BUCH.filter((b) => b.dep === k), zb = stay.length ? zh : z;
     stay.forEach((b) => z.push("Reserviert für <b>" + esc(b.name) + "</b> (" + (b.sb ? "reinigt selbst 🧹" : "Reinigung durch Eltern 🪣") + (b.prov ? ", mit Vorbehalt" : "") + ")."));
     stay.filter((b) => !b.prov).forEach(() => zs.push("🔒 <b>Gesichert:</b> Dieser Aufenthalt ist in Airbnb gesperrt."));
@@ -4264,10 +4265,10 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       const n = kurzMap().get(k);
       z.push("<b>Buchung unmöglich:</b> Zwischen den Belegungen " + (n === 1 ? "bleibt nur 1 freie Nacht" : "bleiben nur " + n + " freie Nächte") + ", mindestens " + P.minNaechte + " Nächte sind nötig.");
     } else if (!BELEGT.has(k)) {
-      if (GAPSPERR.has(k)) zb.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
-      else if (GAPDYNN.has(k)) zb.push("<b>Lücke, ohne Rabatt:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und ohne Vorbehalt. Es gelten die Lückenregeln. " + symBtn("b-luecke", "🧩") + symBtn("b-sicht", "🔔"));
-      else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: Wer die ganze Lücke bucht, erhält " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. Ein Teil davon geht auch, dann zum normalen Preis. " + symBtn("b-luecke", "🧩"));
-      if (SICHT.has(k)) zb.push("<b>Kurzfristig frei:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und <b>ohne Vorbehalt</b>, mindestens " + sichtMinFuer(k) + " Nächte. " + symBtn("b-sicht", "🔔"));
+      if (GAPSPERR.has(k)) vz.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
+      else if (GAPDYNN.has(k)) vz.push("<b>Lücke, ohne Rabatt:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und ohne Vorbehalt. Es gelten die Lückenregeln. " + symBtn("b-luecke", "🧩") + symBtn("b-sicht", "🔔"));
+      else if (GAP.has(k) && P.lueckeRabatt > 0) vz.push("Lücke zwischen zwei Gästen: Wer die ganze Lücke bucht, erhält " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. Ein Teil davon geht auch, dann zum normalen Preis. " + symBtn("b-luecke", "🧩"));
+      if (SICHT.has(k)) vz.push("<b>Kurzfristig frei:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und <b>ohne Vorbehalt</b>, mindestens " + sichtMinFuer(k) + " Nächte. " + symBtn("b-sicht", "🔔"));
       if (spitzVon(k)) mon.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
       else if (istHoch(k) && !sichtNacht(k)) { if (!festStay(k, addDays(k, 1))) mon.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen, du hast die Wahl:<br><span class=\"hl\">Verbindlich</span>: Nur ab " + P.verbMin + " Nächten (bis " + P.verbMax + ", ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Der Termin ist fest und in Airbnb gesperrt.<br><span class=\"hl\">Mit Vorbehalt</span>: " + (P.hochMinNaechte > 0 ? "Ab " + P.hochMinNaechte + " Nächten" : "Bei jeder Dauer") + ", Gäste möglich. Ein Airbnb-Gast hat Vorrang." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
       else if (istRuhe(k) && !GAP.has(k) && !stay.length) mon.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Du hast die Wahl:<br><span class=\"hl\">Staffel</span>: Nur ohne Gäste, ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + (istStaffelStart(ARR || k) ? ". Ihr beginnt eine Staffel: Das Chalet ist gereinigt und bezogen, ihr bringt keine eigene Wäsche mit, besorgt aber die Rückgabe der benutzten Wäsche" : " und bringt eigene Wäsche mit") + ". Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ".<br><span class=\"hl\">Normal</span>: Die Eltern reinigen, das geht auch mit Gästen." + (ARR && DEP && istStaffelStart(ARR) && schweifStop({ arr: ARR, dep: DEP }).stopper && schweifStop({ arr: ARR, dep: DEP }).stopper.sb ? " Direkt danach folgt die Staffel von " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + ": Mit «Staffel» beginnt ihr die Kette, mit «Normal» ändert sich für " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + " nichts." : ""));
@@ -4284,7 +4285,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     const gn = !stay.length && BELEGT_AIR && BELEGT_AIR.has(k) ? gastEintragFuer(k) : null;
     const bz = stay[0], vonBis = (a, d) => "<b>" + esc(fmtTag(a)) + " bis " + esc(fmtTag(d)) + '</b> <span class="hint">(' + diffDays(a, d) + (diffDays(a, d) === 1 ? " Nacht" : " Nächte") + ")</span>";
     const kopfX = bz ? vonBis(bz.arr, bz.dep) : (gn && gn.arr && gn.dep ? vonBis(gn.arr, gn.dep) : kopf);   // Balken berührt: die ganze Dauer statt des einzelnen Tages
-    return kopfX + "<p>" + monZeilen(k, mon).join("</p><p>") + "</p>" + (gn ? "<p>" + typMarke(gn.typ) + " <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + (bz ? "<p>🕓 " + esc(zeitenKurz()) + ".</p>" : "") + iconLeiste(k, stay, zs, zh) + gf;
+    return kopfX + "<p>" + vz.concat(monZeilen(k, mon)).join("</p><p>") + "</p>" + (gn ? "<p>" + typMarke(gn.typ) + " <b>" + esc(gn.name) + "</b></p>" : "") + z.map((s) => "<p>" + s + "</p>").join("") + (bz ? "<p>🕓 " + esc(zeitenKurz()) + ".</p>" : "") + iconLeiste(k, stay, zs, zh) + gf;
   }
   window._gastBlase = (k, still) => zeigen(text(k), grid.querySelector('[data-k="' + k + '"]'), !!still);
   function zelle(e) {
