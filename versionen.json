@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.79.1.0",
+      "v": "2.75.0.0 bis 2.80.0.0",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -24,7 +24,8 @@
         "Am Abreisetag mit Airbnb-Gast steht jetzt, dass die Wohnung bis 10 Uhr verlassen sein muss.",
         "Neu für Papi: Warnung «Abreisetag fälschlicherweise gesperrt», wenn in Airbnb nur die Nacht des Abreisetags gesperrt ist (nicht bei Sonntag, anderer Buchung oder Gast). Sie steht in der Verwaltung und im Kalender.",
         "Neu: Jahresübersicht. Das Symbol 🗓️ beim Kalender zeigt die nächsten 12 Monate, jeder Tag in der Farbe seiner Zeit (belegte Tage grau). Tippen auf einen Monat springt dorthin, ✕ schliesst. Die Legende erscheint nur, wenn unten Platz ist.",
-        "Jahresübersicht: Legende kompakter, damit sie auf dem Handy erscheint. Sie wird nur ausgeblendet, wenn wirklich kein Platz ist."
+        "Jahresübersicht: Legende kompakter, damit sie auf dem Handy erscheint. Sie wird nur ausgeblendet, wenn wirklich kein Platz ist.",
+        "Neu: Mögliche Lücken, die noch nicht freigegeben sind (erst 4 Tage vor Beginn buchbar), sind im Kalender gestrichelt grün eingezeichnet. Antippen erklärt, warum und ab wann. Dazu ein Legendeneintrag und ein Absatz im Glossar «Lücke»."
       ]
     },
     {
