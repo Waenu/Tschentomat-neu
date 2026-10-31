@@ -316,6 +316,11 @@
   .cal-d.occ.rosa { background-color: var(--rosa-bg); }
   .cal-d.ruhe { background-color: var(--ruhe-bg); border-color: var(--ruhe-line); border-width: 2px; }
   .cal-d.kurz, .cal-d.kurz.occ { border-color: #FF0000 !important; border-width: 3px !important; border-style: solid !important; }
+  /* Kurzfristig frei: der Rahmen wächst nach innen (Zellgrösse bleibt), die Mitte bleibt offen und trägt das Datum */
+  .cal-d.sicht { --sz: var(--accent); border-width: 2px; border-color: var(--sz); box-shadow: inset 0 0 0 3px var(--sz); padding-top: 6px; font-weight: 700; }
+  .cal-d.sicht:not(.in):not(.sel) { background-color: transparent; }
+  .cal-d.sicht.hoch { --sz: var(--hoch-line); } .cal-d.sicht.fest { --sz: var(--fest-line); } .cal-d.sicht.spitz { --sz: var(--spitz-line); } .cal-d.sicht.rosa { --sz: var(--rosa-line); } .cal-d.sicht.ruhe { --sz: var(--ruhe-line); }
+  .sw-sicht { border-color: var(--accent); background: transparent; box-shadow: inset 0 0 0 3px var(--accent); }
   .sw-kurz { border-color: #FF0000; border-width: 3px; background: repeating-linear-gradient(45deg, transparent 0 3px, var(--line) 3px 5px); }
   .cal-d.in.ruhe { background-color: var(--note-bg); border-color: var(--accent); }
   .cal-d.sel.ruhe { background: var(--sel); color: var(--sel-fg); border-color: var(--sel); }
@@ -609,6 +614,7 @@
   .jahr-t i { aspect-ratio: 1; border-radius: 3px; border: 2px solid var(--zc, var(--line)); box-sizing: border-box; background: var(--zc, var(--line)); }
   .jahr-t i.z-hoch, .jahr-leg i.z-hoch { --zc: var(--hoch-line); } .jahr-t i.z-fest, .jahr-leg i.z-fest { --zc: var(--fest-line); } .jahr-t i.z-spitz, .jahr-leg i.z-spitz { --zc: var(--spitz-line); } .jahr-t i.z-rosa, .jahr-leg i.z-rosa { --zc: var(--rosa-line); } .jahr-t i.z-ruhe, .jahr-leg i.z-ruhe { --zc: var(--ruhe-line); } .jahr-t i.z-gap, .jahr-leg i.z-gap { --zc: var(--sperr-line); } .jahr-t i.z-n, .jahr-leg i.z-n { --zc: var(--muted); }
   .jahr-t i.st-b, .jahr-leg i.st-b { background: #6b7b78; }
+  .jahr-t i.st-s, .jahr-leg i.st-s { background: transparent; box-shadow: inset 0 0 0 1px var(--zc, var(--line)); }
   .jahr-t i.st-p, .jahr-leg i.st-p { --zc: var(--line); background: transparent; }
   .jahr-t i.leer { border: 0; background: none; }
   .jahr-m b em { font-style: normal; font-weight: 400; color: var(--muted); }
@@ -865,6 +871,7 @@
         <details class="sub" id="b-hochsaison" hidden><summary>🏔️ Hochsaison</summary><div class="bc" id="bc-hochsaison"></div></details>
         <details class="sub" id="b-prov"><summary>🔓 Termin mit Vorbehalt</summary><div class="bc" id="bc-prov"></div></details>
         <details class="sub" id="b-luecke"><summary>🧩 Lücken</summary><div class="bc" id="bc-luecke"></div></details>
+        <details class="sub" id="b-sicht"><summary>🔔 Kurzfristig frei</summary><div class="bc" id="bc-sicht"></div></details>
         <details class="sub" id="b-ruhe"><summary>🧹 Selber reinigen</summary><div class="bc" id="bc-ruhe"></div></details>
         <details class="sub" id="b-endrein"><summary>🪣 Endreinigung</summary><div class="bc" id="bc-endrein"></div></details>
         <details class="sub" id="b-zahlung"><summary>💰 Zahlung</summary><div class="bc" id="bc-zahlung"></div></details>
@@ -974,7 +981,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.81.0.0";
+let VERSION = "2.82.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -991,6 +998,8 @@ let FEST_MONATE = [];  // Monate, in denen Familien-Aufenthalte nie mit Vorbehal
 let LUECKE_VORLAUF = 0;      // 0 = Lücken sind sofort für die Familie buchbar. Wert > 0: Lücken ausserhalb der Staffel-Zeit erst so viele Tage vor Beginn
 let LUECKE_SPERR = [1, 2];  // Lücken, deren erste Nacht in diesen Monaten liegt, sind für die Familie immer gesperrt (nie freigegeben)
 let LUECKE_MAX = 3;  // Luecken zwischen zwei Buchungen bis zu dieser Zahl Naechte gelten als "Luecke" (Airbnb verlangt mindestens 4)
+let SICHT_AN = true;   // Sichtbarkeitsregel «Kurzfristig frei»: Zeit, die Airbnb nicht mehr verkaufen kann, steht der Familie ohne Vorbehalt offen
+let AIRBNB_MIN = 4;    // Mindestaufenthalt bei Airbnb in Nächten (Einstellung in Airbnb)
 let HOCH_MONATE = [];  // Hochsaison: ganze Monate, z.B. [2] fuer Februar (jedes Jahr)
 let SPITZ = [];      // Spitzenzeit (nur hohe Preise, z.B. Skirennen): Liste von ["von", "bis", "Name"]
 let RUHE = [];       // Ruhezeiten, jedes Jahr gleich: Liste von ["MM-TT", "MM-TT"] (von, bis), dort darf die Familie selbst reinigen
@@ -1019,7 +1028,8 @@ const P = {
   verbMax: 14,         // Verbindliche Buchung: höchstens so viele Nächte
   hochNachtMin: 0,     // Hochsaison (ausserhalb der festMonate): Mindestpreis pro Nacht ohne Reinigung (CHF, 0 = aus). Boden = Nächte x dieser Betrag + Reinigung; sonst gleiche Rechnung wie im Februar. Gilt nur, wenn alle Nächte in der Hochsaison liegen
   mindestpreisWoche: 0, // Boden pro 7 Nächte (CHF, 0 = aus), nur mit Gästen: Übersteigt der Gesamtpreis den Boden (anteilig nach Nächten), entfällt der Anteil der Familie, aber der Gesamtpreis sinkt nie unter den Boden
-  lueckeRabatt: 50      // Prozent Ermässigung auf die Übernachtungen, wenn der Aufenthalt in einer Lücke zwischen zwei Airbnb-Buchungen liegt (Reinigung bleibt gleich)
+  lueckeRabatt: 50,     // Prozent Ermässigung auf die Übernachtungen, wenn der Aufenthalt in einer Lücke zwischen zwei Airbnb-Buchungen liegt (Reinigung bleibt gleich)
+  sichtMinNaechte: 2    // «Kurzfristig frei» (Zeit, die Airbnb nicht mehr verkaufen kann): Mindestnächte für einen Aufenthalt darin
 };
 const MFG = "Meine Familie und Geschwister";
 const ART_V = "Verbindlich buchen (fest, in Airbnb gesperrt)", ART_P = "Mit Vorbehalt (nicht in Airbnb gesperrt)";
@@ -1076,7 +1086,7 @@ function derive(s) {
   const sparGrund = SO ? "so" : (voll ? "pers" : (LG ? "luecke" : (VERB ? "verb" : "")));
   const sparLock = sparGrund !== "";
   const sp = (s.spar === "Ja" && !sparLock) || sparGrund === "luecke";
-  const LR = (s.luecke === true) ? P.lueckeRabatt : 0;
+  const LR = (s.luecke === true && s.lueckeDyn !== true) ? P.lueckeRabatt : 0;   // später entstandene Lücke («Kurzfristig frei»): Lückenregeln, aber kein Rabatt
   const rd = (v) => LR > 0 ? Math.round(v * (100 - LR) / 100) : v;
   const FN0 = SO ? P.famAnteil : P.famPausch - (sp ? P.sparEin : 0);
   const FN = rd(FN0);
@@ -1172,7 +1182,7 @@ function calc(s) {
 // CALC-END
 
 /* ============ Oberfläche ============ */
-const EMPTY = { art: "", luecke: false, selbstOK: false, selbst: "", nights: null, wer: "", fam: null, gaeste: null, zimmer: "", kk: null, spar: "", sparAuto: false, reinig: "", waesche: "" };
+const EMPTY = { art: "", luecke: false, lueckeDyn: false, selbstOK: false, selbst: "", nights: null, wer: "", fam: null, gaeste: null, zimmer: "", kk: null, spar: "", sparAuto: false, reinig: "", waesche: "" };
 let S = Object.assign({}, EMPTY);
 let notice = "";
 
@@ -1315,14 +1325,17 @@ const nachtGebucht = (k) => BUCH.some((x) => x.arr <= k && k < x.dep);
 function naechteFrei(von, bis) { for (let k = von; k < bis; k = addDays(k, 1)) if (BELEGT.has(k) || GAPSPERR.has(k) || nachtGebucht(k)) return false; return true; }
 function kannAnreise(k) {
   if (!(k >= heuteKey() && !BELEGT.has(k) && !GAPSPERR.has(k) && !nachtGebucht(k))) return false;
-  if (GAP.has(k) && !GAPSTART.has(k)) { const lg = lueckeVon(k); return !!lg && diffDays(k, lg[1]) >= minFuer(k, lg[1]); }   // mitten in einer Lücke: nur wenn ein Teil lang genug ist
+  if (GAP.has(k) && !GAPSTART.has(k)) { const lg = lueckeVon(k); return !!lg && (GAPDYN.has(lg[0]) || diffDays(k, lg[1]) >= minFuer(k, lg[1])); }   // mitten in einer Lücke: nur wenn ein Teil lang genug ist (später entstandene Lücke: auch länger, dann ist es ein normaler Aufenthalt)
   return true;
 }
 function kannAbreise(k) {
   if (!ARR || k <= ARR) return false;
   const n = diffDays(ARR, k);
   const lg = lueckeVon(ARR);   // in einer Lücke: bis zum Ende der Lücke, die ganze Lücke immer, ein Teil nur ab der Mindestzahl Nächte (ohne Rabatt)
-  if (lg) return k <= lg[1] && (GAPSTART.get(ARR) === k || n >= minFuer(ARR, k));
+  if (lg) {
+    if (k <= lg[1]) return GAPSTART.get(ARR) === k || n >= minFuer(ARR, k);
+    if (!GAPDYN.has(lg[0])) return false;   // eine später entstandene Lücke endet nicht an einer Buchung: ein längerer Aufenthalt ist ein normaler Termin
+  }
   if (n > P.maxNaechte || !naechteFrei(ARR, k)) return false;
   return n >= minFuer(ARR, k);
 }
@@ -1337,9 +1350,13 @@ const NEBEN_MONATE = [5, 9], NEBEN_TAGE = [["12-19", "12-31"]];   // Nebensaison
 const istNeben = (k) => NEBEN_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || NEBEN_TAGE.some((a) => k.slice(5) >= a[0] && k.slice(5) <= a[1]);
 const monatVon = (k) => parseInt(k.slice(5, 7), 10);
 function festStay(arr, dep) { if (!arr || !dep || !FEST_MONATE.length) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (FEST_MONATE.indexOf(monatVon(k)) >= 0) return true; return false; }
-function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; if (P.hochMinNaechte > m && istHoch(k) && FEST_MONATE.indexOf(monatVon(k)) < 0) m = P.hochMinNaechte; } return m; }
+function minFuer(arr, dep) { let m = P.minNaechte; if (!arr || !dep) return m; for (let k = arr; k < dep; k = addDays(k, 1)) { const x = MIN_MONATE[monatVon(k)]; if (x > m) m = x; if (P.hochMinNaechte > m && istHoch(k) && FEST_MONATE.indexOf(monatVon(k)) < 0) m = P.hochMinNaechte; } if (P.sichtMinNaechte > m && inSicht(arr, dep)) m = P.sichtMinNaechte; return m; }
+// Mindestnächte für «Kurzfristig frei» ab Tag k (Hochsaison: Vorgabe für Termine mit Vorbehalt bleibt)
+function sichtMinFuer(k) { let m = Math.max(P.minNaechte, P.sichtMinNaechte); if (istHoch(k) && FEST_MONATE.indexOf(monatVon(k)) < 0 && P.hochMinNaechte > m) m = P.hochMinNaechte; return m; }
+// «Kurzfristig frei»: alle Nächte des Aufenthalts liegen in Zeit, die Airbnb nicht mehr verkaufen kann
+function inSicht(arr, dep) { if (!SICHT.size || !arr || !dep) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (!SICHT.has(k)) return false; return true; }
 // Mit Vorbehalt nur, wenn mindestens eine Nacht in der Hochsaison liegt (ohne Februar). Staffel-Zeit, Nebensaison und Februar sind fest.
-function provStay(arr, dep) { if (!PROV_AN || !arr || !dep || festStay(arr, dep)) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (istHoch(k)) return true; return false; }
+function provStay(arr, dep) { if (!PROV_AN || !arr || !dep || festStay(arr, dep)) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (istHoch(k) && !sichtNacht(k)) return true; return false; }   // Nächte, die Airbnb nicht mehr verkaufen kann, brauchen keinen Vorbehalt
 // Fest ohne Februar: Aufenthalt mit mindestens einer Nacht in der Nebensaison, aber keiner in der Hochsaison
 const nebenFest = (arr, dep) => { if (!arr || !dep || festStay(arr, dep) || provStay(arr, dep)) return false; for (let k = arr; k < dep; k = addDays(k, 1)) if (istNeben(k)) return true; return false; };
 const provVon = (x) => (typeof x.prov === "boolean" ? x.prov : (x.verb === true ? false : provStay(x.arr, x.dep)));
@@ -1397,6 +1414,37 @@ const istHoch = (k) => HOCH_MONATE.indexOf(Number(k.slice(5, 7))) >= 0 || HOCH.s
 let GAP = new Set();           // alle Naechte, die in einer Luecke liegen
 let GAPSPERR = new Set();       // gesperrte Luecken-Naechte (Familie)
 let GAPSTART = new Map();      // erste Nacht der Luecke -> Abreisetag (Tag der naechsten Belegung)
+let SICHT = new Set();         // «Kurzfristig frei»: Nächte, die Airbnb nicht mehr verkaufen kann (Strecken ab 4 Nächten, dicker Rahmen)
+let SICHTSTART = new Map();    // erste Nacht der Strecke -> Ende der Strecke (erste Nacht, die Airbnb wieder verkaufen kann, oder nächste Belegung)
+let GAPDYN = new Set();        // erste Nacht einer später entstandenen Lücke (höchstens 3 Nächte, kein Rabatt)
+let GAPDYNN = new Set();       // alle Nächte der später entstandenen Lücken
+const sichtNacht = (k) => SICHT.has(k) || GAPDYNN.has(k);
+// Sichtbarkeitsregel: Von jeder freien Strecke wird der vordere Teil bestimmt, den Airbnb nicht mehr verkaufen kann
+// (frühester Check-in heute + Vorlauf, nie sonntags, mindestens AIRBNB_MIN Nächte bis zur nächsten Belegung). Ab 4 Nächten dicker Rahmen, bis 3 Nächte eine Lücke ohne Rabatt.
+function berechneSicht() {
+  SICHT = new Set(); SICHTSTART = new Map(); GAPDYN = new Set(); GAPDYNN = new Set();
+  if (!SICHT_AN || !BELEGT_OK) return;
+  const heute = heuteKey(), E = addDays(heute, VORLAUF);
+  const b = Array.from(BELEGT_AIR || BELEGT).sort();
+  if (!b.length) return;
+  const so = (k) => KEIN_CHECKIN_SO && dparse(k).getUTCDay() === 0;
+  const strecken = [];
+  if (b[0] > heute) strecken.push([heute, b[0]]);
+  for (let i = 0; i + 1 < b.length; i++) if (diffDays(b[i], b[i + 1]) > 1) strecken.push([addDays(b[i], 1), b[i + 1]]);
+  strecken.push([addDays(b[b.length - 1], 1), ""]);   // offene Strecke nach der letzten Belegung
+  strecken.forEach((s) => {
+    const a = s[0] < heute ? heute : s[0], e = s[1];
+    if (e && a >= e) return;
+    if (GAP.has(a) || GAPSTART.has(a) || GAP.has(addDays(a, 1))) return;   // das ist schon eine echte Lücke zwischen zwei Belegungen (mit Rabatt)
+    let d = a > E ? a : E;
+    for (let i = 0; i < 8 && so(d); i++) d = addDays(d, 1);   // früheste Anreise eines Airbnb-Gastes
+    if (e && diffDays(d, e) < AIRBNB_MIN) d = e;              // kein gültiger Aufenthalt mehr möglich: die ganze Strecke ist unverkäuflich
+    const L = diffDays(a, d);
+    if (L < P.minNaechte) return;
+    if (L > LUECKE_MAX) { SICHTSTART.set(a, d); for (let k = a; k < d; k = addDays(k, 1)) SICHT.add(k); }
+    else if (LUECKE_SPERR.indexOf(Number(a.slice(5, 7))) < 0) { GAPSTART.set(a, d); GAPDYN.add(a); for (let k = a; k < d; k = addDays(k, 1)) { GAP.add(k); GAPDYNN.add(k); } }
+  });
+}
 function berechneLuecken() {
   GAP = new Set(); GAPSTART = new Map(); GAPSPERR = new Set();
   const heute = heuteKey();
@@ -1415,6 +1463,7 @@ function berechneLuecken() {
       if (sonntag) { if (sperr) GAPSPERR.add(sonntag); else GAPSTART.set(sonntag, b[i + 1]); }   // Sonntag: die Familie kann auch dann anreisen (für die ganze Lücke), nur Airbnb hat sonntags keinen Check-in
     }
   }
+  berechneSicht();
 }
 // Freie Nächte zwischen zwei Belegungen, die für keinen Aufenthalt reichen (weniger als die Mindestnächte): Tag -> Anzahl freier Nächte. Lücken ab heute, begrenzt durch Belegungen auf beiden Seiten.
 let KURZ_KEY = "", KURZ_MAP = new Map();
@@ -1445,7 +1494,8 @@ function kalenderKlick(k) {
   S.festMin = !!(ARR && DEP && P.festMinGaeste > 0 && festStay(ARR, DEP));
   S.festBoden = !!(ARR && DEP && P.festBodenWoche > 0 && festStay(ARR, DEP));
   S.hochBoden = false;   // Hochsaison mit Vorbehalt: normaler Familienpreis. Der Preis pro Nacht (hochNachtMin) gilt nur für «verbindlich buchen» und wird dort eigens gerechnet
-  S.luecke = !!(ARR && DEP && P.lueckeRabatt > 0 && GAPSTART.get(ARR) === DEP);
+  S.luecke = !!(ARR && DEP && GAPSTART.get(ARR) === DEP && (P.lueckeRabatt > 0 || GAPDYN.has(ARR)));
+  S.lueckeDyn = !!(S.luecke && GAPDYN.has(ARR));   // später entstandene Lücke: Lückenregeln, aber kein Rabatt
   S.verbOK = !S.luecke && verbMoeglich(ARR, DEP);
   S.hochN = (ARR && DEP) ? hochNaechte(ARR, DEP) : 0;
   if (!S.verbOK) S.art = "";
@@ -1592,7 +1642,8 @@ function begriffeFuellen() {
   })();
   set("bc-prov", festUndVorbehaltTxt() + "<p><b>Mit Vorbehalt</b> heisst: Meldet sich ein Airbnb-Gast für dieselben Tage, hat er Vorrang und euer Aufenthalt muss weichen.</p><p>Habt ihr noch nicht begonnen, fällt nichts an. Seid ihr schon im Chalet, zahlt ihr die normalen Kosten für die Tage, die ihr dort wart. Plant deshalb eine Alternative ein, besonders in der Hochsaison.</p><p>In der Hochsaison (" + HOCH_MONATE.filter((m) => FEST_MONATE.indexOf(m) < 0).map((m) => MONATE[m - 1]).join(", ").replace(/, ([^,]*)$/, " und $1") + ") braucht ein Termin mit Vorbehalt mindestens " + P.hochMinNaechte + " Nächte (wie bei Airbnb). Wer dort Buchungssicherheit will, bucht <b>verbindlich</b> 🔒: Dann sperren die Eltern die Zeit in Airbnb. " + symBtn("b-hochsaison", "🏔️") + "</p><p><b>Praktisch gesichert 🔒:</b> Ein Airbnb-Gast kann jederzeit buchen, aber erst nach der Vorlaufzeit von " + VORLAUF + " Tagen einchecken (so ist es in Airbnb eingestellt). Nächte, die früher als " + VORLAUF + " Tage ab heute liegen, kann deshalb kein neuer Gast mehr belegen: Der Balken wird dort <b>grün</b> (gesichert 🔒) statt gelb (🔓) und der grüne Teil wächst jeden Tag. Endet euer Aufenthalt innerhalb der nächsten " + VORLAUF + " Tage, ist der ganze Balken grün. Je länger der Aufenthalt und je weiter voraus, desto später wird er gesichert.</p>" + bildVorbehalt() + "<p>In den Staffel-Zeiten, in der Nebensaison" + (FEST_MONATE.length ? " und im " + festTxt() : "") + " sind Termine <b>fest</b>. Balken von Terminen mit Vorbehalt sind im noch nicht gesicherten Teil gelb, ein roter Rand zeigt einen Konflikt mit einem Airbnb-Gast.</p>");
   set("bc-wunschtermin", "<p>Den Wunschtermin wählt ihr im Kalender. Wie das geht, steht unter «Erklärung Kalender». Die Farben stehen als Legende unter dem Kalender. " + symBtn("b-kalender", "🗓️") + "</p>");
-  set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Du kannst auch nur einen Teil der Lücke buchen (mindestens so viele Nächte wie sonst), dann gilt der normale Preis ohne Rabatt. Den Rabatt gibt es nur für die ganze Lücke.</p><p><b>Lücke am Sonntag:</b> Airbnb hat sonntags keinen Check-in. Endet ein Gast am Samstag (Abreise am Sonntag), kann Airbnb den Sonntag nicht vergeben. Ihr könnt dann schon am Sonntag anreisen. Die Lücke hat für euch eine Nacht mehr, zum Beispiel 4 statt 3 Nächte, und der Rabatt gilt auf alle Nächte.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
+  set("bc-sicht", "<p><b>Kurzfristig frei 🔔</b> Airbnb kann diese Nächte nicht mehr verkaufen: Ein Airbnb-Gast braucht " + VORLAUF + " Tage Vorlauf, er bleibt mindestens " + AIRBNB_MIN + " Nächte, und sonntags gibt es keinen Check-in. Darum steht diese Zeit euch offen: zum normalen Familienpreis, <b>ohne Vorbehalt</b>, auch in der Hochsaison. Mindestens " + Math.max(P.minNaechte, P.sichtMinNaechte) + " Nächte" + (P.hochMinNaechte > Math.max(P.minNaechte, P.sichtMinNaechte) ? ", in der Hochsaison mindestens " + P.hochMinNaechte : "") + ".</p><p>Im Kalender erkennt ihr es am <b>dicken Rahmen</b> in der Farbe der Zeit, das Datum steht in der offenen Mitte. Der Rahmen wandert täglich: Mit jedem Tag kann Airbnb weniger verkaufen, darum kommen Nächte dazu, und die vergangenen fallen weg.</p><p>Bleiben höchstens " + LUECKE_MAX + " Nächte übrig, wird daraus eine <b>Lücke</b> " + symBtn("b-luecke", "🧩") + " (grün) mit denselben Regeln, aber ohne Rabatt.</p>");
+  set("bc-luecke", "<p><b>Ein Angebot für kurze Lücken 🧩</b> Lücken bis " + LUECKE_MAX + " Nächte kann Airbnb nicht vermieten (Mindestaufenthalt dort " + (LUECKE_MAX + 1) + " Nächte). Wer die ganze Lücke bucht, vom ersten bis zum letzten freien Tag, zahlt für die Übernachtungen " + P.lueckeRabatt + " Prozent weniger. Du kannst auch nur einen Teil der Lücke buchen (mindestens so viele Nächte wie sonst), dann gilt der normale Preis ohne Rabatt. Den Rabatt gibt es nur für die ganze Lücke.</p><p><b>Lücke am Sonntag:</b> Airbnb hat sonntags keinen Check-in. Endet ein Gast am Samstag (Abreise am Sonntag), kann Airbnb den Sonntag nicht vergeben. Ihr könnt dann schon am Sonntag anreisen. Die Lücke hat für euch eine Nacht mehr, zum Beispiel 4 statt 3 Nächte, und der Rabatt gilt auf alle Nächte.</p><p><b>Später entstandene Lücke:</b> Auch Zeit, die erst durch den Vorlauf und den Mindestaufenthalt von Airbnb übrig bleibt, wird zur Lücke, sobald höchstens " + LUECKE_MAX + " Nächte bleiben (siehe «Kurzfristig frei» " + symBtn("b-sicht", "🔔") + "). Dafür gibt es keinen Rabatt, es gelten aber dieselben Regeln.</p>" + bildLuecke() + "<p>Es gilt:</p>" + lueckenRegeln());
   set("bc-ruhe", RUHE.length ? bildRuhe() + "<ul><li>Möglich vom " + ruhe.replace(" und ", " und vom ") + ".</li>" +
     "<li>Für euch Kinder mit Partnern und Kindern. Ohne Gäste wählt ihr beim Buchen «Staffel» und reinigt selbst. Mit Gästen wählt ihr «Normal», dann reinigen die Eltern. Das graue Feld «Wie möchtest du buchen?» wird erst frei, wenn Anreise und Abreise gewählt sind, denn ob eine Staffel geht, hängt vom Abreisetag ab.</li>" +
     "<li><b>Nicht jeder Termin geht als Staffel.</b> Eine Staffel beginnen kann nur, wer nach seiner Abreise noch eine weitere Familie anschliessen lassen kann: Bis zum nächsten Airbnb-Gast müssen mindestens " + P.minNaechte + " freie Nächte bleiben. Sonst trägt er die ganze Endreinigung allein, weil niemand seinen Anteil zahlt, und muss zusätzlich selbst putzen. Dann gilt der normale Termin, die Eltern reinigen. Wer eine laufende Staffel fortsetzt, kann immer mitmachen: Er zahlt die Endreinigung den Eltern und holt die Anteile der Familien davor zurück. Ob es geht, meldet euch der Rechner nach der Wahl des Datums («Keine Staffel möglich»).</li>" +
@@ -2074,6 +2125,7 @@ function monatBauen(g, calY, calM) {
     else if (!BELEGT.has(k) && k >= heute && GAP.has(k)) b.classList.add("gap");
     if (b.classList.contains("occ") && BELEGT_AIR && !BELEGT_AIR.has(k) && BUCH.some((x) => x.prov && x.arr <= k && k < x.dep)) { b.classList.remove("occ"); b.classList.add("provtag"); }   // Nacht eines Aufenthalts mit Vorbehalt: nicht wählbar, aber ohne Streichung
     if (k >= heute && nachtGebucht(k) && !b.classList.contains("occ")) b.classList.add("provtag");   // Nacht eines bestätigten Aufenthalts: nicht wählbar
+    if (SICHT.has(k) && k >= heute && !BELEGT.has(k) && !nachtGebucht(k) && !b.classList.contains("occ")) b.classList.add("sicht");   // Kurzfristig frei: dicker Rahmen, Mitte offen
     if (spitzVon(k)) b.classList.add("spitz");
     else if (istFest(k)) b.classList.add("fest");
     else if (istHoch(k)) b.classList.add("hoch");
@@ -2084,8 +2136,8 @@ function monatBauen(g, calY, calM) {
     b.disabled = !ok;
     let sm = istArr ? "An" : (istDep ? "Ab" : "");
     const rb = P.lueckeRabatt > 0 ? "−" + P.lueckeRabatt + "%" : "";
-    if (!sm && rb && !ARR && GAPSTART.has(k) && !GAPSPERR.has(k)) sm = rb;                       // Beginn einer Luecke
-    if (!sm && rb && ARR && !DEP && GAPSTART.get(ARR) === k) sm = rb;        // Abreisetag fuer die ganze Luecke
+    if (!sm && rb && !ARR && GAPSTART.has(k) && !GAPSPERR.has(k) && !GAPDYN.has(k)) sm = rb;                       // Beginn einer Luecke
+    if (!sm && rb && ARR && !DEP && GAPSTART.get(ARR) === k && !GAPDYN.has(ARR)) sm = rb;        // Abreisetag fuer die ganze Luecke
     b.dataset.k = k;
     b.innerHTML = '<span>' + d + '</span>' + (sm ? '<small>' + sm + '</small>' : '');
     b.setAttribute("aria-label", fmtTag(k) + (istArr ? ", Anreise" : istDep ? ", Abreise" : (BELEGT.has(k) || GAPSPERR.has(k)) ? ", nicht verfügbar" : "") + (spitzVon(k) ? ", Spitzenzeit" : "") + "");
@@ -2110,10 +2162,10 @@ function renderKalender() {
   zeichneBalken();
   const sel = document.getElementById("calSel");
   sel.classList.toggle("frag", !(ARR && DEP));
-  if (ARR && DEP) sel.textContent = fmtTag(ARR) + " bis " + fmtTag(DEP) + " = " + S.nights + " " + (S.nights === 1 ? "Nacht" : "Nächte") + (S.luecke ? " · Lückenpreis" : "");
+  if (ARR && DEP) sel.textContent = fmtTag(ARR) + " bis " + fmtTag(DEP) + " = " + S.nights + " " + (S.nights === 1 ? "Nacht" : "Nächte") + (S.luecke ? (S.lueckeDyn ? " · Lücke" : " · Lückenpreis") : "");
   else if (ARR) {
     sel.textContent = "Anreise: " + fmtTag(ARR) + ". Jetzt den Abreisetag antippen.";
-    if (GAPSTART.has(ARR) && P.lueckeRabatt > 0) sel.textContent += " Für den Lückenpreis (−" + P.lueckeRabatt + " %) Abreise am " + fmtTag(GAPSTART.get(ARR)) + " wählen.";
+    if (GAPSTART.has(ARR) && P.lueckeRabatt > 0 && !GAPDYN.has(ARR)) sel.textContent += " Für den Lückenpreis (−" + P.lueckeRabatt + " %) Abreise am " + fmtTag(GAPSTART.get(ARR)) + " wählen.";
   }
   else sel.textContent = "Tippe den Anreisetag an.";
   {
@@ -2129,6 +2181,7 @@ function renderKalender() {
     if (uebrigVorhanden()) h += '<p><i class="sw sw-normal"></i><b>Übrige Zeiten:</b> nur mit Endreinigung ' + symBtn("b-endrein", "🪣") + '</p>';
     h += '<p class="leg-h">Lücken-Hinweis</p>';
     if (P.lueckeRabatt > 0) h += '<p><i class="sw sw-gap"></i><b>Lücke</b> (' + P.lueckeRabatt + ' % Rabatt) ' + symBtn('b-luecke', '🧩') + '</p>';
+    if (SICHT_AN) h += '<p><i class="sw sw-sicht"></i><b>Kurzfristig frei</b> (Airbnb kann es nicht mehr verkaufen) ' + symBtn('b-sicht', '🔔') + '</p>';
     h += '<p><i class="sw sw-occ"></i>nicht verfügbar</p>';
     if (kurzMap().size) h += '<p><i class="sw sw-kurz"></i><b>Buchung unmöglich:</b> zwischen den Belegungen bleiben weniger als ' + P.minNaechte + ' Nächte</p>';
     el.innerHTML = h;
@@ -2162,7 +2215,8 @@ function renderKalender() {
   const warn = document.getElementById("calWarn");
   const msgs = [];
   if (ARR && DEP) {
-    if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k)) { if (P.hochNachtMin > 0 && !verbMoeglich(ARR, DEP)) { msgs.push('<div class="note h rot-warn"><b>⚠️ Nur mit Vorbehalt möglich:</b> Dieser Termin liegt in der Hochsaison' + fld("hoch") + '. Verbindlich buchen geht nur mit ' + P.verbMin + ' bis ' + P.verbMax + ' Nächten, alle in der Hochsaison (ohne Gäste, ' + chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung).</div>'); break; } msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison" + fld("hoch") + ", die Nächte sind bei Airbnb-Gästen gefragt. " + (P.hochNachtMin > 0 ? (verbMoeglich(ARR, DEP) ? "Du kannst verbindlich buchen (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung) oder mit Vorbehalt (ein Airbnb-Gast hat Vorrang)." : "Verbindlich buchen geht mit " + P.verbMin + " bis " + P.verbMax + " Nächten, alle in der Hochsaison (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Sonst ist eine Anfrage mit Vorbehalt möglich: ein Airbnb-Gast hat Vorrang.") : "Eine Anfrage ist trotzdem möglich.")); break; }
+    if (SICHT.size && inSicht(ARR, DEP)) msgs.push(HW + "🔔 <b>Kurzfristig frei:</b> Airbnb kann diese Nächte nicht mehr verkaufen. Normaler Familienpreis, ohne Vorbehalt. " + symBtn("b-sicht", "🔔"));
+    if (!festStay(ARR, DEP)) for (let k = ARR; k < DEP; k = addDays(k, 1)) if (istHoch(k) && !sichtNacht(k)) { if (P.hochNachtMin > 0 && !verbMoeglich(ARR, DEP)) { msgs.push('<div class="note h rot-warn"><b>⚠️ Nur mit Vorbehalt möglich:</b> Dieser Termin liegt in der Hochsaison' + fld("hoch") + '. Verbindlich buchen geht nur mit ' + P.verbMin + ' bis ' + P.verbMax + ' Nächten, alle in der Hochsaison (ohne Gäste, ' + chf(P.hochNachtMin) + ' pro Nacht plus Endreinigung).</div>'); break; } msgs.push(HW + "🧑‍🏫 Dieser Termin liegt in der Hochsaison" + fld("hoch") + ", die Nächte sind bei Airbnb-Gästen gefragt. " + (P.hochNachtMin > 0 ? (verbMoeglich(ARR, DEP) ? "Du kannst verbindlich buchen (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung) oder mit Vorbehalt (ein Airbnb-Gast hat Vorrang)." : "Verbindlich buchen geht mit " + P.verbMin + " bis " + P.verbMax + " Nächten, alle in der Hochsaison (ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Sonst ist eine Anfrage mit Vorbehalt möglich: ein Airbnb-Gast hat Vorrang.") : "Eine Anfrage ist trotzdem möglich.")); break; }
     if (festStay(ARR, DEP)) msgs.push(HW + fld("fest") + "<b>Skisaison (" + esc(festTxt()) + "):</b> Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Buchungssicherheit." + (minFuer(ARR, DEP) > P.minNaechte ? " Mindestens " + minFuer(ARR, DEP) + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️") + (P.festBodenWoche > 0 ? " <b>Preis:</b> Mindestens " + chf(P.festBodenWoche) + " pro 7 Nächte inklusive Endreinigung. Mit Kollegen sinkt dein Anteil." : P.mindestpreisWoche > 0 ? " <b>Mit Gästen sparst du:</b> Ab " + P.mindestpreisAbNaechte + " Nächten sinkt der Gesamtpreis nie unter " + chf(P.mindestpreisWoche) + " pro 7 Nächte, dein eigener Anteil entfällt, soweit es der Preis zulässt. " + symBtn("b-sparen", "💸") : ""));
     if (ruheStay() && !S.luecke && S.selbstOK !== true) msgs.push(HW + "<b>Keine Staffel möglich:</b> Nach eurer Abreise bleiben bis zum nächsten Airbnb-Gast weniger als " + P.minNaechte + " freie Nächte, es kann keine weitere Familie anschliessen. Ihr würdet die ganze Endreinigung allein tragen und zusätzlich selbst putzen. Darum gilt hier der normale Termin: die Eltern reinigen, Gäste sind möglich.");
     if (ruheStay() && !S.luecke && S.selbstOK === true && staffelUnterbruch(ARR).length === 0) {
@@ -2173,7 +2227,7 @@ function renderKalender() {
     if (S.verbOK === true && S.art === ART_V) msgs.push(HW + "<b>Verbindlich:</b> Dieser Termin ist fest und wird in Airbnb gesperrt, ihr habt damit Buchungssicherheit. " + symBtn("b-prov", "🔒"));
     if (provSel() && !(S.verbOK === true && S.art === "")) msgs.push(WA + "<b>Mit Vorbehalt:</b> Dieser Termin wird nicht in Airbnb gesperrt. Meldet sich ein Airbnb-Gast für diese Tage, hat er Vorrang und der Aufenthalt muss weichen. Plane eine Alternative ein. " + symBtn("b-prov", "🔓") + " <b>Buchungssicherheit:</b> " + provSicherZeile(ARR, DEP));
     const lg = lueckeVon(ARR);
-    if (lg && !S.luecke && P.lueckeRabatt > 0) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
+    if (lg && !S.luecke && P.lueckeRabatt > 0 && !GAPDYN.has(lg[0])) msgs.push(HW + "Dieser Termin liegt in einer Lücke, aber ohne Rabatt. Mit Anreise am " + fmtTag(lg[0]) + " und Abreise am " + fmtTag(lg[1]) + " (die ganze Lücke) wäre es " + P.lueckeRabatt + " Prozent günstiger auf die Übernachtungen.");
   }
   warn.hidden = msgs.length === 0;
   warn.innerHTML = msgs.join("<br>");
@@ -2708,6 +2762,8 @@ function wendeEinstellungenAn(j) {
   if (typeof j.keinCheckinSonntag === "boolean") KEIN_CHECKIN_SO = j.keinCheckinSonntag;
   if (Number.isInteger(j.lueckeVorlaufTage) && j.lueckeVorlaufTage >= 0) LUECKE_VORLAUF = j.lueckeVorlaufTage;
   if (typeof j.provisorisch === "boolean") PROV_AN = j.provisorisch;
+  if (typeof j.sichtbarkeitAn === "boolean") SICHT_AN = j.sichtbarkeitAn;
+  if (Number.isInteger(j.airbnbMinNaechte) && j.airbnbMinNaechte >= 1 && j.airbnbMinNaechte <= 14) AIRBNB_MIN = j.airbnbMinNaechte;
   if (Number.isInteger(j.airbnbVorlaufTage) && j.airbnbVorlaufTage >= 0 && j.airbnbVorlaufTage <= 30) VORLAUF = j.airbnbVorlaufTage;
   const cl = (a) => Array.isArray(a) ? a.filter((s) => typeof s === "string" && s.trim()).map((s) => s.trim()) : null;
   if (cl(j.checklisteSelbst)) CHECK_SELBST = cl(j.checklisteSelbst);
@@ -3779,7 +3835,7 @@ function jahrKlasse(k, heute) {   // Rahmen = Farbe der Zeit; frei = gefüllt, b
   const vorbei = k < heute;
   const z = !vorbei && GAP.has(k) ? "gap" : zoneVon(k);
   const belegt = !vorbei && (BELEGT.has(k) || GAPSPERR.has(k) || nachtGebucht(k) || kurzMap().has(k));
-  return "z-" + z + (vorbei ? " st-p" : belegt ? " st-b" : "");
+  return "z-" + z + (vorbei ? " st-p" : belegt ? " st-b" : SICHT.has(k) ? " st-s" : "");
 }
 function jahrZeigen() {
   const heute = heuteKey(), n0 = heuteDate();
@@ -3802,6 +3858,7 @@ function jahrZeigen() {
   if (uebrigVorhanden()) l += lz("n", "Übrige Zeit");
   let r = "";
   if (P.lueckeRabatt > 0) r += lz("gap", "Lücke");
+  if (SICHT_AN) r += '<span><i class="z-n st-s"></i>Kurzfristig frei</span>';
   r += lz("fest", "frei") + '<span><i class="z-fest st-b"></i>belegt</span><span><i class="z-n st-p"></i>vergangen, nicht buchbar</span>';
   h += '</div><div class="jahr-leg" id="jahrLeg"><div>' + l + "</div><div>" + r + "</div></div>";
   document.getElementById("ovJahrIn").innerHTML = h;
@@ -4193,9 +4250,11 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       z.push("<b>Buchung unmöglich:</b> Zwischen den Belegungen " + (n === 1 ? "bleibt nur 1 freie Nacht" : "bleiben nur " + n + " freie Nächte") + ", mindestens " + P.minNaechte + " Nächte sind nötig.");
     } else if (!BELEGT.has(k)) {
       if (GAPSPERR.has(k)) zb.push("Gesperrt: Lücke zwischen zwei Gästen, hier nicht buchbar.");
+      else if (GAPDYNN.has(k)) zb.push("<b>Lücke, ohne Rabatt:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und ohne Vorbehalt. Es gelten die Lückenregeln. " + symBtn("b-luecke", "🧩") + symBtn("b-sicht", "🔔"));
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: Wer die ganze Lücke bucht, erhält " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. Ein Teil davon geht auch, dann zum normalen Preis. " + symBtn("b-luecke", "🧩"));
+      if (SICHT.has(k)) zb.push("<b>Kurzfristig frei:</b> Airbnb kann diese Nächte nicht mehr verkaufen (Vorlauf, Mindestaufenthalt, sonntags kein Check-in). Ihr bucht sie zum normalen Familienpreis und <b>ohne Vorbehalt</b>, mindestens " + sichtMinFuer(k) + " Nächte. " + symBtn("b-sicht", "🔔"));
       if (spitzVon(k)) mon.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
-      else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) mon.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen, du hast die Wahl:<br><span class=\"hl\">Verbindlich</span>: Nur ab " + P.verbMin + " Nächten (bis " + P.verbMax + ", ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Der Termin ist fest und in Airbnb gesperrt.<br><span class=\"hl\">Mit Vorbehalt</span>: " + (P.hochMinNaechte > 0 ? "Ab " + P.hochMinNaechte + " Nächten" : "Bei jeder Dauer") + ", Gäste möglich. Ein Airbnb-Gast hat Vorrang." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
+      else if (istHoch(k) && !sichtNacht(k)) { if (!festStay(k, addDays(k, 1))) mon.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen, du hast die Wahl:<br><span class=\"hl\">Verbindlich</span>: Nur ab " + P.verbMin + " Nächten (bis " + P.verbMax + ", ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung). Der Termin ist fest und in Airbnb gesperrt.<br><span class=\"hl\">Mit Vorbehalt</span>: " + (P.hochMinNaechte > 0 ? "Ab " + P.hochMinNaechte + " Nächten" : "Bei jeder Dauer") + ", Gäste möglich. Ein Airbnb-Gast hat Vorrang." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
       else if (istRuhe(k) && !GAP.has(k) && !stay.length) mon.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Du hast die Wahl:<br><span class=\"hl\">Staffel</span>: Nur ohne Gäste, ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + (istStaffelStart(ARR || k) ? ". Ihr beginnt eine Staffel: Das Chalet ist gereinigt und bezogen, ihr bringt keine eigene Wäsche mit, besorgt aber die Rückgabe der benutzten Wäsche" : " und bringt eigene Wäsche mit") + ". Die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ".<br><span class=\"hl\">Normal</span>: Die Eltern reinigen, das geht auch mit Gästen." + (ARR && DEP && istStaffelStart(ARR) && schweifStop({ arr: ARR, dep: DEP }).stopper && schweifStop({ arr: ARR, dep: DEP }).stopper.sb ? " Direkt danach folgt die Staffel von " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + ": Mit «Staffel» beginnt ihr die Kette, mit «Normal» ändert sich für " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + " nichts." : ""));
       else if (!stay.length) mon.push("Nur mit Endreinigung: Normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Staffel-Zeit" + fld("ruhe") + ".") + "");
       if (festStay(k, addDays(k, 1))) mon.push(fld("fest") + "<b>Skisaison:</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
