@@ -1,6 +1,6 @@
 {
   "_hinweis": "Nur die Zahlen und die Version ändern, sonst nichts. Beträge in CHF. Nach dem Speichern dauert es etwa eine Minute, bis alle die neuen Werte sehen.",
-  "version": "2.82.0.0",
+  "version": "2.83.0.0",
   "gueltigAb": "01.01.2027",
   "famPausch": 70,
   "gast": 70,
@@ -30,6 +30,7 @@
   "sichtbarkeitAn": true,
   "sichtMinNaechte": 2,
   "airbnbMinNaechte": 4,
+  "airbnbMinNaechteMonat": {},
   "festMonate": [2],
   "minNaechteMonat": { "2": 7 },
   "provisorisch": true,
