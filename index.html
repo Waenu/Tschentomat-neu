@@ -974,7 +974,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.79.1.0";
+let VERSION = "2.80.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -988,7 +988,7 @@ let BELEGT_AIR = null;
 let GAESTE = [];            // Namen der Airbnb-Gäste (Vorname und Initiale) aus gaeste.json: {arr, name}
 let MIN_MONATE = {};   // Mindestnächte pro Monat (Monat der Nacht), z.B. {2: 7}
 let FEST_MONATE = [];  // Monate, in denen Familien-Aufenthalte nie mit Vorbehalt stehen (immer fest, in Airbnb gesperrt)       // Airbnb-Belegung ohne Aufenthalte mit Vorbehalt
-let LUECKE_VORLAUF = 4;      // Lücken ausserhalb der Selbstreinigungs-Zeiten sind erst so viele Tage vor Beginn für die Familie sichtbar
+let LUECKE_VORLAUF = 0;      // 0 = Lücken sind sofort für die Familie buchbar. Wert > 0: Lücken ausserhalb der Staffel-Zeit erst so viele Tage vor Beginn
 let LUECKE_SPERR = [1, 2];  // Lücken, deren erste Nacht in diesen Monaten liegt, sind für die Familie immer gesperrt (nie freigegeben)
 let LUECKE_MAX = 3;  // Luecken zwischen zwei Buchungen bis zu dieser Zahl Naechte gelten als "Luecke" (Airbnb verlangt mindestens 4)
 let HOCH_MONATE = [];  // Hochsaison: ganze Monate, z.B. [2] fuer Februar (jedes Jahr)
@@ -1405,7 +1405,7 @@ function berechneLuecken() {
       GAPSTART.set(start, b[i + 1]);
       const letzte = addDays(b[i + 1], -1);
       const staffelZeit = istRuhe(start) && istRuhe(letzte);   // nur dort ist die Familienstaffel möglich
-      const sperr = LUECKE_SPERR.indexOf(Number(start.slice(5, 7))) >= 0 || (!staffelZeit && diffDays(heute, start) > LUECKE_VORLAUF);
+      const sperr = LUECKE_SPERR.indexOf(Number(start.slice(5, 7))) >= 0 || (LUECKE_VORLAUF > 0 && !staffelZeit && diffDays(heute, start) > LUECKE_VORLAUF);
       for (let k = start; k < b[i + 1]; k = addDays(k, 1)) { GAP.add(k); if (sperr) GAPSPERR.add(k); }
       if (sonntag) { if (sperr) GAPSPERR.add(sonntag); else GAPSTART.set(sonntag, b[i + 1]); }   // Sonntag: die Familie kann auch dann anreisen (für die ganze Lücke), nur Airbnb hat sonntags keinen Check-in
     }
