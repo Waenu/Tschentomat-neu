@@ -601,7 +601,8 @@
   #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
   .jahr-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .jahr-x { font: inherit; font-size: 1.3rem; min-width: 44px; min-height: 44px; border: 2px solid var(--accent); border-radius: 8px; background: var(--surface); color: var(--fg); cursor: pointer; }
-  .jahr-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .jahr-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  #ovJahrIn { gap: 10px; padding-bottom: 8px; }
   .jahr-m { display: grid; grid-template-rows: 20px auto; align-content: start; font: inherit; background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 6px; color: var(--fg); cursor: pointer; text-align: left; min-width: 0; }
   .jahr-m b { display: block; font-size: .78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .jahr-t { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
@@ -611,7 +612,7 @@
   .jahr-t i.st-p, .jahr-leg i.st-p { --zc: var(--line); background: transparent; }
   .jahr-t i.leer { border: 0; background: none; }
   .jahr-m b em { font-style: normal; font-weight: 400; color: var(--muted); }
-  .jahr-leg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: .85rem; } .jahr-leg div > span { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; } .jahr-leg i { width: 16px; height: 16px; flex: none; border-radius: 3px; border: 2px solid var(--zc, var(--line)); box-sizing: border-box; background: var(--zc, var(--line)); } .jahr-leg[hidden] { display: none; }
+  .jahr-leg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-size: .78rem; line-height: 1.2; } .jahr-leg div > span { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; } .jahr-leg i { width: 14px; height: 14px; flex: none; border-radius: 3px; border: 2px solid var(--zc, var(--line)); box-sizing: border-box; background: var(--zc, var(--line)); } .jahr-leg[hidden] { display: none; }
   .ov-in { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
   .ov h2 { margin: 0; font-size: 1.35rem; }
   #bestKasten .vk-sec { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; font-weight: 700; }
@@ -973,7 +974,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.79.0.0";
+let VERSION = "2.79.1.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3802,7 +3803,7 @@ function jahrZeigen() {
   ovOeffnen("ovJahr", true);
   const ov = document.getElementById("ovJahr"), leg = document.getElementById("jahrLeg");
   leg.hidden = false;
-  if (ov.scrollHeight > ov.clientHeight + 1) leg.hidden = true;   // Legende nur, wenn unten Platz ist
+  if (leg.getBoundingClientRect().bottom > ov.clientHeight - 4) leg.hidden = true;   // Legende nur, wenn unten Platz ist
 }
 document.getElementById("jahrBtn").addEventListener("click", jahrZeigen);
 document.getElementById("ovJahr").addEventListener("click", (e) => {
