@@ -2,13 +2,15 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.78.0.0",
+      "v": "2.75.0.0 bis 2.79.0.0",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
         "Funktion",
         "Layout",
-        "Text"
+        "Text",
+        "Neues Farbsystem: Hochsaison ist jetzt violett, Februar ist als eigene «Skisaison» orange (Monatstitel «Februar 2027 (Skisaison)»), die Lücke ist grün. Alle Texte, Legenden, Beispielbilder und Hinweisboxen folgen dieser Logik.",
+        "Jahresübersicht neu: 12 Monate ab heute, jeder Tag mit Rahmen in der Farbe der Zeit (frei = gefüllt, belegt = grau, vergangen = leer), Jahreszahl hinter jedem Monat, Legende in zwei Spalten nur bei genug Platz. Tipp auf einen Monat springt dorthin."
       ],
       "punkte": [
         "Kalender-Box: Zuoberst steht immer die Farbe des Monats bzw. der Zeit, der Rahmen der Box hat diese Farbe. Beim Monatswechsel erklärt die Box sofort den neuen Monat.",
