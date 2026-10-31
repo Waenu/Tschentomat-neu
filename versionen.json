@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.83.0.0",
+      "v": "2.75.0.0 bis 2.83.0.1",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -29,7 +29,8 @@
         "Text: Glossar «Lücke» erklärt den Sonntagsfall (Airbnb hat sonntags keinen Check-in, die Familie kann schon am Sonntag anreisen, die Lücke hat dann eine Nacht mehr).",
         "Neu: In einer Lücke kann auch nur ein Teil gebucht werden (zum normalen Preis, ohne Lücken-Rabatt). Den Rabatt gibt es weiter nur für die ganze Lücke. Mindestnächte wie sonst, Anreise und Abreise im Kalender passen sich an. Glossar und Hinweise angepasst.",
         "Neu «Kurzfristig frei» (2.82): Zeit, die Airbnb nicht mehr verkaufen kann (3 Tage Vorlauf, mindestens 4 Nächte, sonntags kein Check-in), steht der Familie zum normalen Preis und ohne Vorbehalt offen. Strecken ab 4 Nächten erscheinen im Kalender mit dickem Rahmen in der Farbe der Zeit (Datum in der offenen Mitte), auch in der Jahresübersicht. Bleiben höchstens 3 Nächte, wird daraus eine grüne Lücke mit denselben Regeln, aber ohne Rabatt. Glossar «Kurzfristig frei», Legende und Hinweisbox ergänzt. Einstellungen: sichtbarkeitAn, sichtMinNaechte, airbnbMinNaechte.",
-        "Kurzfristig frei verfeinert: Rahmen immer, solange Airbnb dahinter noch verkaufen kann (auch bei 2 oder 3 Nächten); grün nur, wenn bis zur nächsten Belegung höchstens 3 Nächte bleiben. Gebuchte Nächte der Familie bekommen weder Rahmen noch Grün. Airbnb-Mindestaufenthalt pro Monat einstellbar."
+        "Kurzfristig frei verfeinert: Rahmen immer, solange Airbnb dahinter noch verkaufen kann (auch bei 2 oder 3 Nächten); grün nur, wenn bis zur nächsten Belegung höchstens 3 Nächte bleiben. Gebuchte Nächte der Familie bekommen weder Rahmen noch Grün. Airbnb-Mindestaufenthalt pro Monat einstellbar.",
+        "Wartefrist für echte Lücken wieder eingeschaltet: sichtbar erst 4 Tage vor Beginn, damit Airbnb zuerst verkaufen kann."
       ]
     },
     {
