@@ -594,6 +594,16 @@
   .cp-zeile code { flex: 1 1 150px; min-width: 0; font-size: .72rem; line-height: 1.3; word-break: normal; overflow-wrap: break-word; }
   .cp-zeile .btn { flex: none; width: auto; padding: .35rem .6rem; }
   #btnAnreise[hidden], #btnCheck[hidden] { display: none; }
+  .jahr-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .jahr-x { font: inherit; font-size: 1.3rem; min-width: 44px; min-height: 44px; border: 2px solid var(--accent); border-radius: 8px; background: var(--surface); color: var(--fg); cursor: pointer; }
+  .jahr-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .jahr-m { font: inherit; background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 6px; color: var(--fg); cursor: pointer; text-align: left; min-width: 0; }
+  .jahr-m b { display: block; font-size: .78rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .jahr-t { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .jahr-t i { aspect-ratio: 1; border-radius: 2px; background: var(--note-bg); outline: 1px solid var(--line); outline-offset: -1px; }
+  .jahr-t i.hoch { background: #C98A1B; outline: 0; } .jahr-t i.spitz { background: var(--spitz-line); outline: 0; } .jahr-t i.rosa { background: var(--rosa-line); outline: 0; } .jahr-t i.ruhe { background: var(--ruhe-line); outline: 0; } .jahr-t i.gap { background: var(--sperr-line); outline: 0; }
+  .jahr-t i.b { background: var(--muted); opacity: .4; outline: 0; } .jahr-t i.p { opacity: .22; } .jahr-t i.leer { background: none; outline: 0; }
+  .jahr-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; } .jahr-leg span { display: inline-flex; align-items: center; gap: 5px; }
   .ov-in { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; padding-bottom: 40px; }
   .ov h2 { margin: 0; font-size: 1.35rem; }
   #bestKasten .vk-sec { display: flex; align-items: center; gap: 8px; margin: 12px 0 4px; font-weight: 700; }
@@ -870,7 +880,7 @@
   <div id="notice" class="notice" role="status" hidden></div>
 
   <section id="cal" class="card cal" aria-label="Wunschtermin">
-    <h2>Wunschtermin finden <button type="button" class="sym" data-info="b-kalender" aria-label="Zur Erklärung des Kalenders springen">📖</button></h2>
+    <h2>Wunschtermin finden <button type="button" class="sym" data-info="b-kalender" aria-label="Zur Erklärung des Kalenders springen">📖</button> <button type="button" class="sym" id="jahrBtn" aria-label="Jahresübersicht zeigen">🗓️</button></h2>
     <div class="cal-nav">
       <div class="cal-links"><button type="button" id="calPrev" aria-label="Vorheriger Monat">‹</button><button type="button" id="calHeute" class="cal-heute" aria-label="Zum aktuellen Monat">Heute</button></div>
       <strong id="calTitle"></strong>
@@ -943,6 +953,7 @@
 <button type="button" id="nachOben" hidden aria-label="Nach oben zum Menü">↑ Menü</button>
 <div class="bar" id="bar" role="status"><div class="in"><span class="lab" id="barLab"></span><span class="val" id="barVal"></span></div></div>
 
+<div class="ov" id="ovJahr" hidden role="dialog" aria-label="Jahresübersicht"><div class="ov-in" id="ovJahrIn"></div></div>
 <div class="ov" id="ovSuche" hidden role="dialog" aria-label="Suche"><div class="ov-in" id="ovSucheIn"></div></div>
 <div class="ov" id="ovVer" hidden role="dialog" aria-label="Versionshistorie"><div class="ov-in" id="ovVerIn"></div></div>
 <div class="ov" id="ovAnreise" hidden role="dialog" aria-label="Anreise: Wäsche mitnehmen"><div class="ov-in" id="ovAnreiseIn"></div></div>
@@ -953,7 +964,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.77.0.0";
+let VERSION = "2.78.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -3738,6 +3749,42 @@ function suchMarkieren(wurzel, terme) {   // Treffer im geöffneten Hilfekapitel
   });
 }
 function suchMarkenWeg() { document.querySelectorAll("span.such-w").forEach((sp) => sp.replaceWith(document.createTextNode(sp.textContent))); }
+function jahrKlasse(k, heute) {   // Farbe eines Tages in der Jahresübersicht, dieselbe Logik wie im Kalender
+  const c = k < heute ? " p" : "";
+  const belegt = BELEGT.has(k) || GAPSPERR.has(k) || nachtGebucht(k) || (kurzMap().has(k) && k >= heute);
+  if (belegt && k >= heute) return "b";
+  if (GAP.has(k) && k >= heute) return "gap";
+  return (spitzVon(k) ? "spitz" : istHoch(k) ? "hoch" : istRuhe(k) ? "ruhe" : istNeben(k) ? "rosa" : "n") + c;
+}
+function jahrZeigen() {
+  const heute = heuteKey(), n0 = heuteDate();
+  let h = '<div class="jahr-kopf"><h2>🗓️ Jahresübersicht</h2><button type="button" class="jahr-x" id="jahrX" aria-label="Schliessen">✕</button></div><div class="jahr-g">';
+  for (let i = 0; i < 12; i++) {
+    const m0 = n0.getMonth() + i, y = n0.getFullYear() + Math.floor(m0 / 12), m = m0 % 12;
+    const lead = (new Date(Date.UTC(y, m, 1)).getUTCDay() + 6) % 7, nt = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+    h += '<button type="button" class="jahr-m" data-y="' + y + '" data-m="' + m + '" aria-label="' + MONATE[m] + " " + y + ' öffnen"><b>' + MONATE[m] + (m === 0 || i === 0 ? " " + String(y).slice(2) : "") + '</b><span class="jahr-t">';
+    for (let j = 0; j < lead; j++) h += '<i class="leer"></i>';
+    for (let d = 1; d <= nt; d++) h += '<i class="' + jahrKlasse(dkey(y, m, d), heute) + '"></i>';
+    h += "</span></button>";
+  }
+  h += '</div><div class="jahr-leg" id="jahrLeg"><span><i class="sw sw-hoch"></i>Hochsaison</span><span><i class="sw sw-ruhe"></i>Staffel-Zeit</span><span><i class="sw sw-rosa"></i>Nebensaison</span>' + (SPITZ.length ? '<span><i class="sw sw-spitz"></i>Spitzenzeit</span>' : "") + '<span><i class="sw sw-normal"></i>Übrige Zeit</span>' + (P.lueckeRabatt > 0 ? '<span><i class="sw sw-gap"></i>Lücke</span>' : "") + '<span><i class="sw sw-occ"></i>belegt</span></div>';
+  document.getElementById("ovJahrIn").innerHTML = h;
+  ovOeffnen("ovJahr", true);
+  const ov = document.getElementById("ovJahr"), leg = document.getElementById("jahrLeg");
+  leg.hidden = false;
+  if (ov.scrollHeight > ov.clientHeight + 1) leg.hidden = true;   // Legende nur, wenn unten Platz ist
+}
+document.getElementById("jahrBtn").addEventListener("click", jahrZeigen);
+document.getElementById("ovJahr").addEventListener("click", (e) => {
+  if (e.target.closest("#jahrX")) { ovOeffnen("ovJahr", false); return; }
+  const m = e.target.closest(".jahr-m");
+  if (!m) return;
+  calY = Number(m.dataset.y); calM = Number(m.dataset.m);
+  ovOeffnen("ovJahr", false);
+  renderKalender();
+  if (window._monatWechsel) window._monatWechsel();
+  const cal = document.getElementById("cal"); if (cal) cal.scrollIntoView({ block: "start" });
+});
 function sucheZeigen() {
   document.getElementById("ovSucheIn").innerHTML = '<button type="button" class="ov-back" data-ov="ovSuche">← Zurück</button><h2>🔍 Suche</h2><input id="suchFeld" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" placeholder="z. B. Jerome, Vorbehalt, fest" aria-label="Suchbegriff"><div id="suchErg"></div>';
   ovOeffnen("ovSuche", true); sucheLos();
@@ -4147,7 +4194,8 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
   grid.addEventListener("click", () => { arrAlt = ARR; }, true);   // Anreise vor dem Klick merken: wird sie abgewählt, geht die Box zurück zum Monat
   grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(c && c.dataset.k && (c.classList.contains("occ") || c.classList.contains("provtag") || BUCH.some((b) => b.arr <= c.dataset.k && c.dataset.k <= b.dep)))) return; if (c && c.dataset.k && !ARR && arrAlt && arrAlt === c.dataset.k) { zeigen(monatText(), null, true); return; } if (c && c.dataset.k) { zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); eigenMerken(c.dataset.k); } });
   blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; return; } const vw = e.target.closest("[data-vw]"); if (vw && TOKEN && !ABSENDER) { window._zurVerwaltung(vw.getAttribute("data-vw"), lastK); return; } const ip = e.target.closest("[data-ip]"); if (ip) { const auf = ip.getAttribute("aria-expanded") !== "true"; blase.querySelectorAll("[data-ip]").forEach((x) => { x.setAttribute("aria-expanded", "false"); x.classList.remove("on"); }); blase.querySelectorAll("[data-ipan]").forEach((x) => { x.hidden = true; }); if (auf) { ip.setAttribute("aria-expanded", "true"); ip.classList.add("on"); const pn = blase.querySelector('[data-ipan="' + ip.dataset.ip + '"]'); if (pn) pn.hidden = false; } } });
-  document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && (!zu || !blase.hidden)) zeigen(monatText(), null, true); });
+  window._monatWechsel = () => { if (an && (!zu || !blase.hidden)) zeigen(monatText(), null, true); };
+  document.querySelector("#cal .cal-nav").addEventListener("click", () => window._monatWechsel());
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });
   grid.classList.toggle("hilfe", an);
   knopf.setAttribute("aria-pressed", an ? "true" : "false");
