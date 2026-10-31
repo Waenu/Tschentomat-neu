@@ -953,7 +953,7 @@
    Nach jeder Änderung die Versionsnummer erhöhen und das Datum anpassen.
    ============================================================ */
 // Standardwerte (Reserve). Die gültigen Werte stehen in der Datei einstellungen.json.
-let VERSION = "2.75.0.1";
+let VERSION = "2.76.0.0";
 let GUELTIG_AB = "01.01.2027";
 let IBAN = "CH25 0878 4046 4374 6612 8";
 let BANK = "Spar- und Leihkasse Frutigen (SLF)";
@@ -2533,7 +2533,8 @@ function render() {
     const wrap = document.getElementById("f-" + f.id);
     const sel = document.getElementById("s-" + f.id);
     const vis = f.visible ? f.visible(d) : true;
-    wrap.hidden = !vis;
+    const vorab = f.id === "art" && !vis && !(ARR && DEP);   // Termin noch nicht komplett: Feld zeigen, aber sperren
+    wrap.hidden = !vis && !vorab;
     const cur = S[f.id] === null || S[f.id] === undefined ? "" : String(S[f.id]);
     const list = f.opts(d).map(String);
     const sig = list.join("|");
@@ -2546,15 +2547,17 @@ function render() {
     if (sel.value !== cur) sel.value = cur;
     const chosen = cur !== "";
     const locked = f.id === "spar" && d.sparLock;
-    sel.disabled = locked;
-    wrap.classList.toggle("done", chosen && !locked);
-    wrap.classList.toggle("missing", !chosen && !locked);
-    wrap.classList.toggle("locked", locked);
-    sel.classList.toggle("done", chosen && !locked);
-    sel.classList.toggle("missing", !chosen && !locked);
-    sel.classList.toggle("locked", locked);
+    const sperr = locked || vorab;
+    sel.disabled = sperr;
+    wrap.classList.toggle("done", chosen && !sperr);
+    wrap.classList.toggle("missing", !chosen && !sperr);
+    wrap.classList.toggle("locked", sperr);
+    sel.classList.toggle("done", chosen && !sperr);
+    sel.classList.toggle("missing", !chosen && !sperr);
+    sel.classList.toggle("locked", sperr);
     const hEl = document.getElementById("h-" + f.id);
     if (f.id === "selbst") { hEl.textContent = ""; const r = document.createElement("span"); r.className = "rot"; r.textContent = "Selbst reinigen geht nur ohne Gäste (für euch Kinder mit Partnern und Kindern). Mit Gästen reinigen immer die Eltern."; hEl.appendChild(r); hEl.appendChild(document.createTextNode(" " + f.hint(d))); }
+    else if (vorab) hEl.textContent = "Wähle zuerst Anreise und Abreise im Kalender.";
     else hEl.innerHTML = esc(f.hint(d)).replace(/\{\{(.+?)\}\}/g, '<span class="hl">$1</span>');   // {{Wort}} im Hinweis = hervorgehoben
     if (f.id === (d.SM ? "art" : (d.frei > 0 ? "gaeste" : "wer"))) { const w = staffelWarnung(d); if (w) { const sp = document.createElement("span"); sp.className = "note h gelb-warn"; sp.style.display = "block"; sp.style.marginTop = "8px"; sp.innerHTML = WA + esc(w); hEl.appendChild(sp); } }
   });
@@ -4000,7 +4003,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     const c = catKey(k);
     if (c === "spitz") return fld("spitz") + "<b>Spitzenzeit:</b> hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.";
     if (c === "hoch") return festStay(k, addDays(k, 1)) ? "<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Aufenthalte sind <b>fest</b> und in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + " " + symBtn("b-februar", "⛷️") : fld("hoch") + "<b>Hochsaison:</b> Airbnb-Zeit, die Nächte sind bei Gästen gefragt. " + symBtn("b-hochsaison", "🏔️");
-    if (c === "ruhe") return fld("ruhe") + "<b>Staffel-Zeit:</b> Ohne Gäste kannst du die Staffel wählen, ihr reinigt selbst. " + symBtn("b-ruhe", "🧹");
+    if (c === "ruhe") return fld("ruhe") + "<b>Staffel-Zeit:</b> Hier kannst du <span class=\"hl\">Staffel</span> oder <span class=\"hl\">Normal</span> wählen. <span class=\"hl\">Staffel</span> geht nur ohne Gäste (ihr reinigt selbst), bei <span class=\"hl\">Normal</span> reinigen die Eltern. " + symBtn("b-ruhe", "🧹");
     if (c === "rosa") return fld("rosa") + "<b>Nebensaison:</b> Aufenthalte sind <b>fest</b> und in Airbnb gesperrt. Es gelten die normalen Familienpreise.";
     return "<b>Übrige Zeit:</b> Normale Familienpreise, nur mit Endreinigung. " + symBtn("b-endrein", "🪣");
   }
@@ -4009,11 +4012,22 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (catKey(k) === "rosa" || !rest.length) return [monKurz(k)].concat(rest);
     return rest;
   }
-  function monatText() {   // Box beim Monatswechsel: die Farben dieses Monats, sofort
-    const heute = heuteKey(), n = new Date(Date.UTC(calY, calM + 1, 0)).getUTCDate(), zl = [], zaehl = {};
-    for (let d = 1; d <= n; d++) { const k = dkey(calY, calM, d); if (k < heute) continue; const l = monKurz(k); if (zl.indexOf(l) < 0) zl.push(l); const c = catKey(k); zaehl[c] = (zaehl[c] || 0) + 1; }
-    letzteMon = Object.keys(zaehl).sort((a, b) => zaehl[b] - zaehl[a])[0] || "";
-    return "<b>" + esc(MONATE[calM]) + " " + calY + "</b>" + (zl.length ? zl.map((l) => "<p>" + l + "</p>").join("") : "<p>Dieser Monat liegt in der Vergangenheit.</p>");
+  function monatText() {   // ohne berührten Tag: dieselbe Box wie bei einem Tag, aber mit dem Monatsnamen als Titel
+    const heute = heuteKey(), n = new Date(Date.UTC(calY, calM + 1, 0)).getUTCDate(), tage = [];
+    for (let d = 1; d <= n; d++) { const k = dkey(calY, calM, d); if (k >= heute) tage.push(k); }
+    const kopf = "<b>" + esc(MONATE[calM]) + "</b>";
+    if (!tage.length) { letzteMon = ""; return kopf + "<p>Dieser Monat liegt in der Vergangenheit.</p>"; }
+    const rep = tage.find((k) => !BELEGT.has(k) && !nachtGebucht(k) && k !== DEP) || tage[0];
+    const vorLast = lastK;
+    let h = text(rep) || "";
+    lastK = vorLast;
+    h = h.replace(/^<b>[^<]*<\/b>/, kopf).replace(/^<b>[^<]*<\/b>/, kopf);
+    const gesehen = [catKey(rep)];
+    let c0 = catKey(rep);
+    tage.forEach((k) => { const c = catKey(k); if (c !== c0) { c0 = c; if (gesehen.indexOf(c) < 0) { gesehen.push(c); h += "<p><b>Ab " + k.slice(8) + "." + k.slice(5, 7) + ".:</b> " + monKurz(k) + "</p>"; } } });
+    const zaehl = {}; tage.forEach((k) => { const c = catKey(k); zaehl[c] = (zaehl[c] || 0) + 1; });
+    letzteMon = catKey(rep);
+    return h;
   }
   function iconLeiste(k, stay, zs, zh) {   // gebuchter Tag: ausklappbare Zeilen mit Symbol und Text, nur eine offen; Papi zusätzlich «Nur für dich»
     if (!stay.length) return "";
@@ -4080,7 +4094,7 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
       else if (GAP.has(k) && P.lueckeRabatt > 0) zb.push("Lücke zwischen zwei Gästen: nur die ganze Lücke ist buchbar, " + P.lueckeRabatt + " % Rabatt auf die Übernachtungen. " + symBtn("b-luecke", "🧩"));
       if (spitzVon(k)) mon.push(fld("spitz") + "Spitzenzeit: hohe Preise, kein Familienpreis. Eine Anfrage ist trotzdem möglich.");
       else if (istHoch(k)) { if (!festStay(k, addDays(k, 1))) mon.push(fld("hoch") + "Hochsaison: Airbnb-Zeit, die Nächte sind bei Gästen gefragt." + (P.hochNachtMin > 0 && !(ARR && DEP && k >= ARR && k <= DEP) ? " Du kannst trotzdem buchen: <b>verbindlich</b> nur ab " + P.verbMin + " Nächten (bis " + P.verbMax + ", ohne Gäste, " + chf(P.hochNachtMin) + " pro Nacht plus Endreinigung, der Termin ist fest und in Airbnb gesperrt) oder <b>mit Vorbehalt</b> " + (P.hochMinNaechte > 0 ? "ab " + P.hochMinNaechte + " Nächten" : "bei jeder Dauer") + " (ein Airbnb-Gast hat Vorrang)." : (ARR && DEP && k >= ARR && k <= DEP ? " " + symBtn("b-hochsaison", "🏔️") : " Eine Anfrage ist trotzdem möglich."))); }
-      else if (istRuhe(k) && !GAP.has(k) && !stay.length) mon.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Ohne Gäste kannst du die Staffel wählen: ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + (istStaffelStart(ARR || k) ? " und beginnt damit eine Staffel: Das Chalet ist gereinigt und bezogen, ihr bringt keine eigene Wäsche mit, besorgt aber die Rückgabe der benutzten Wäsche" : " und bringt eigene Wäsche mit") + ", die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ". Mit Gästen reinigen die Eltern (Normal)." + (ARR && DEP && istStaffelStart(ARR) && schweifStop({ arr: ARR, dep: DEP }).stopper && schweifStop({ arr: ARR, dep: DEP }).stopper.sb ? " Direkt danach folgt die Staffel von " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + ": Mit «Staffel» beginnt ihr die Kette, mit «Normal» ändert sich für " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + " nichts." : ""));
+      else if (istRuhe(k) && !GAP.has(k) && !stay.length) mon.push(fld("ruhe") + "<b>Staffel-Zeit:</b> Hier kannst du <span class=\"hl\">Staffel</span> oder <span class=\"hl\">Normal</span> wählen. <span class=\"hl\">Staffel</span> geht nur ohne Gäste: ihr reinigt selbst " + symBtn("b-ruhe", "🧹") + (istStaffelStart(ARR || k) ? " und beginnt damit eine Staffel: Das Chalet ist gereinigt und bezogen, ihr bringt keine eigene Wäsche mit, besorgt aber die Rückgabe der benutzten Wäsche" : " und bringt eigene Wäsche mit") + ", die Reinigung kostet dann " + chf(P.reinigungSelbst) + ". Damit beginnst oder führst du die Familienstaffel weiter " + symBtn("b-staffel", "🔗") + ". Bei <span class=\"hl\">Normal</span> reinigen die Eltern, das geht auch mit Gästen." + (ARR && DEP && istStaffelStart(ARR) && schweifStop({ arr: ARR, dep: DEP }).stopper && schweifStop({ arr: ARR, dep: DEP }).stopper.sb ? " Direkt danach folgt die Staffel von " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + ": Mit «Staffel» beginnt ihr die Kette, mit «Normal» ändert sich für " + esc(schweifStop({ arr: ARR, dep: DEP }).stopper.name) + " nichts." : ""));
       else if (!stay.length) mon.push("Nur mit Endreinigung: Normale Familienpreise, Endreinigung nach den Regeln " + symBtn("b-endrein", "🪣") + ". " + (GAP.has(k) ? "In der Lücke reinigen immer die Eltern, selbst reinigen geht hier nicht." : "Selbst reinigen geht hier nicht, nur in der Staffel-Zeit" + fld("ruhe") + ".") + "");
       if (festStay(k, addDays(k, 1))) mon.push("<b>" + esc(MONATE[monatVon(k) - 1]) + ":</b> Hier ist ein Aufenthalt <b>fest</b> und wird in Airbnb gesperrt, ihr habt volle Buchungssicherheit." + (MIN_MONATE[monatVon(k)] ? " Mindestens " + MIN_MONATE[monatVon(k)] + " Nächte." : "") + (P.festMinGaeste > 0 ? " Mindestens " + P.festMinGaeste + " Gäste." : "") + " " + symBtn("b-februar", "⛷️"));
       else if (ARR && DEP && k >= ARR && k <= DEP && istHoch(k)) { /* Möglichkeiten und Warnung stehen im Hinweis unter dem Kalender */ }
@@ -4111,7 +4125,9 @@ document.getElementById("tokPanel").addEventListener("click", (e) => {
     if (an) { zu = false; zeigen(START); } else blase.hidden = true;
     speichern();
   }
-  grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(c && c.dataset.k && (c.classList.contains("occ") || c.classList.contains("provtag") || BUCH.some((b) => b.arr <= c.dataset.k && c.dataset.k <= b.dep)))) return; if (c && c.dataset.k) { zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); eigenMerken(c.dataset.k); } });
+  let arrAlt = "";
+  grid.addEventListener("click", () => { arrAlt = ARR; }, true);   // Anreise vor dem Klick merken: wird sie abgewählt, geht die Box zurück zum Monat
+  grid.addEventListener("click", (e) => { if (GFORM && (GFORM.mode || GFORM.justSet)) { if (GFORM.mode) { const c0 = zelle(e); if (c0 && c0.dataset.k) gastTagWahl(c0.dataset.k); } return; } const c = zelle(e); if (!an && !(c && c.dataset.k && (c.classList.contains("occ") || c.classList.contains("provtag") || BUCH.some((b) => b.arr <= c.dataset.k && c.dataset.k <= b.dep)))) return; if (c && c.dataset.k && !ARR && arrAlt && arrAlt === c.dataset.k) { zeigen(monatText(), null, true); return; } if (c && c.dataset.k) { zeigen(text(c.dataset.k), grid.querySelector('[data-k="' + c.dataset.k + '"]')); eigenMerken(c.dataset.k); } });
   blase.addEventListener("click", (e) => { if (e.target.closest("#calBlaseZu")) { blase.hidden = true; zu = true; return; } const vw = e.target.closest("[data-vw]"); if (vw && TOKEN && !ABSENDER) { window._zurVerwaltung(vw.getAttribute("data-vw"), lastK); return; } const ip = e.target.closest("[data-ip]"); if (ip) { const auf = ip.getAttribute("aria-expanded") !== "true"; blase.querySelectorAll("[data-ip]").forEach((x) => { x.setAttribute("aria-expanded", "false"); x.classList.remove("on"); }); blase.querySelectorAll("[data-ipan]").forEach((x) => { x.hidden = true; }); if (auf) { ip.setAttribute("aria-expanded", "true"); ip.classList.add("on"); const pn = blase.querySelector('[data-ipan="' + ip.dataset.ip + '"]'); if (pn) pn.hidden = false; } } });
   document.querySelector("#cal .cal-nav").addEventListener("click", () => { if (an && (!zu || !blase.hidden)) zeigen(monatText(), null, true); });
   knopf.addEventListener("click", () => { knopf.classList.remove("neu"); setze(!an); });

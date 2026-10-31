@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.75.0.1",
+      "v": "2.75.0.0 bis 2.76.0.0",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -14,7 +14,10 @@
         "Kalender-Box: Zuoberst steht immer die Farbe des Monats bzw. der Zeit, der Rahmen der Box hat diese Farbe. Beim Monatswechsel erklärt die Box sofort den neuen Monat.",
         "Der Hinweis «Tippe einen belegten Tag oder Balken an» steht jetzt in der Legende, direkt nach dem Satz über die bestätigten Aufenthalte. In der Box steht bei der Nebensaison zuerst die rosa Erklärung, wie in der Monatsbox.",
         "Legende: Mit Vorbehalt ist nicht gesichert und wird grün, sobald gesichert.",
-        "Ansicht als Kind (nur Papi): bleibt 15 Minuten, übersteht ein Neuladen, schmale feste Leiste oben, bleibende Meldung beim Verlassen."
+        "Ansicht als Kind (nur Papi): bleibt 15 Minuten, übersteht ein Neuladen, schmale feste Leiste oben, bleibende Meldung beim Verlassen.",
+        "Die Monatsbox entfällt: Ohne berührten Tag zeigt die Box dasselbe wie bei einem Tag, mit dem Monatsnamen als Titel; wechselt die Zeit im Monat, folgt eine Zeile mit dem Beginn. Wird die Anreise wieder abgewählt, geht die Box zurück zum Monat.",
+        "Staffel-Zeit: Der Text nennt beide Möglichkeiten, Staffel und Normal, gelb hinterlegt.",
+        "Die Frage «Wie möchtest du buchen?» steht schon vor der Datumswahl da, grau und gesperrt."
       ]
     },
     {
