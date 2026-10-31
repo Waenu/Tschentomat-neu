@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.75.0.0",
+      "v": "2.75.0.0 bis 2.75.0.1",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -12,7 +12,7 @@
       ],
       "punkte": [
         "Kalender-Box: Zuoberst steht immer die Farbe des Monats bzw. der Zeit, der Rahmen der Box hat diese Farbe. Beim Monatswechsel erklärt die Box sofort den neuen Monat.",
-        "Der Hinweis «Tippe einen belegten Tag oder Balken an» steht jetzt in der Legende über den Balken und nicht mehr unter dem Kalender.",
+        "Der Hinweis «Tippe einen belegten Tag oder Balken an» steht jetzt in der Legende, direkt nach dem Satz über die bestätigten Aufenthalte. In der Box steht bei der Nebensaison zuerst die rosa Erklärung, wie in der Monatsbox.",
         "Legende: Mit Vorbehalt ist nicht gesichert und wird grün, sobald gesichert.",
         "Ansicht als Kind (nur Papi): bleibt 15 Minuten, übersteht ein Neuladen, schmale feste Leiste oben, bleibende Meldung beim Verlassen."
       ]
