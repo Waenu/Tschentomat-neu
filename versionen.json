@@ -2,7 +2,7 @@
   "_hinweis": "Neueste Version zuoberst. Ziffern: 1. neue Funktionen, 2. funktionelle Änderungen, 3. Layout, 4. Texte und Tippfehler. Optional «arten»: Neu, Funktion, Fehler, Layout, Text (ohne Angabe wird sie aus der Versionsnummer abgeleitet). Keine geheimen Zugänge hier eintragen.",
   "versionen": [
     {
-      "v": "2.75.0.0 bis 2.80.1.1",
+      "v": "2.75.0.0 bis 2.81.0.0",
       "datum": "2026-10-31",
       "titel": "Änderungen vom 31.10.2026",
       "arten": [
@@ -26,7 +26,8 @@
         "Neu: Jahresübersicht. Das Symbol 🗓️ beim Kalender zeigt die nächsten 12 Monate, jeder Tag in der Farbe seiner Zeit (belegte Tage grau). Tippen auf einen Monat springt dorthin, ✕ schliesst. Die Legende erscheint nur, wenn unten Platz ist.",
         "Jahresübersicht: Legende kompakter, damit sie auf dem Handy erscheint. Sie wird nur ausgeblendet, wenn wirklich kein Platz ist.",
         "Lücken sind jetzt sofort für die Familie buchbar, auch weit voraus. Die Wartefrist von 4 Tagen entfällt (Einstellung lueckeVorlaufTage steht auf 0). Eine Lücke ist ja gerade dafür da, an die Familie vermietet zu werden.",
-        "Text: Glossar «Lücke» erklärt den Sonntagsfall (Airbnb hat sonntags keinen Check-in, die Familie kann schon am Sonntag anreisen, die Lücke hat dann eine Nacht mehr)."
+        "Text: Glossar «Lücke» erklärt den Sonntagsfall (Airbnb hat sonntags keinen Check-in, die Familie kann schon am Sonntag anreisen, die Lücke hat dann eine Nacht mehr).",
+        "Neu: In einer Lücke kann auch nur ein Teil gebucht werden (zum normalen Preis, ohne Lücken-Rabatt). Den Rabatt gibt es weiter nur für die ganze Lücke. Mindestnächte wie sonst, Anreise und Abreise im Kalender passen sich an. Glossar und Hinweise angepasst."
       ]
     },
     {
